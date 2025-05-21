@@ -1,5 +1,5 @@
 summary: Test Lab
-id: 0
+id: export
 categories: Testing, Compilation
 status: Published
 authors: Ondřej Kyzr
@@ -32,7 +32,7 @@ This will appear in a negative info box.
 
 <!-- ------------------------ -->
 ## Heading 
-Duration: 12:mm:ss
+Duration: hh:mm:ss
 
 ### Hyperlinking
 <video id=VNMms_zGbnI></video>
