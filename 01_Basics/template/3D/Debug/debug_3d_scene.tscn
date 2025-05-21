@@ -1,0 +1,46 @@
+[gd_scene load_steps=7 format=3 uid="uid://chnffv2lmano5"]
+
+[ext_resource type="PackedScene" uid="uid://44guktn5iwdy" path="res://3D/WorldObjects/resistor.tscn" id="1_8km36"]
+[ext_resource type="PackedScene" uid="uid://cwcvo74fuibvv" path="res://3D/WorldObjects/coil.tscn" id="2_krwbd"]
+
+[sub_resource type="Environment" id="Environment_ndwkr"]
+background_color = Color(1, 1, 1, 1)
+fog_enabled = true
+fog_light_color = Color(0.0283474, 0.0790988, 0.0304754, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ndwkr"]
+size = Vector3(70, 1, 70)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kelvc"]
+albedo_color = Color(0.151953, 0.309407, 0.152003, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_aq7nb"]
+size = Vector3(70, 1, 70)
+
+[node name="Debug3dScene" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ndwkr")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.98751, 0.0273591, 0.155161, -0.155404, 0.331289, 0.930643, -0.0259417, -0.943133, 0.331403, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Enviroment" type="Node3D" parent="."]
+
+[node name="Ground" type="StaticBody3D" parent="Enviroment"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Enviroment/Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0638943, 0, 0.00795937)
+shape = SubResource("BoxShape3D_ndwkr")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Enviroment/Ground/CollisionShape3D"]
+material_override = SubResource("StandardMaterial3D_kelvc")
+mesh = SubResource("BoxMesh_aq7nb")
+skeleton = NodePath("../..")
+
+[node name="Resistor" parent="Enviroment" instance=ExtResource("1_8km36")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.73306, 1.5, -1.44443)
+
+[node name="Coil" parent="Enviroment" instance=ExtResource("2_krwbd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.9982, 6.5, 6.75083)
