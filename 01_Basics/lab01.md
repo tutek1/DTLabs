@@ -146,6 +146,14 @@ After you are happy with the scene you can continue. Mine looks like this:
 
 ![](img/DebugScenePopulated.png)
 
+### World Environment
+The visual look of a game is very important. Let's change the World Environment node and play around with the visual style of the scene.
+
+![](img/WorldEnvironment.png)
+
+1. Select the `World Environment` node.
+2. Click on the Environment Resource box
+3. Change the settings of the world to your liking. There are many settings that can be changed, try to play around with it, don't dwell on it too much.
 
 
 
@@ -159,7 +167,7 @@ You can think of a node as ingredients in a recipe having a singular purpose. On
 
 Each node can only have one script attached, which supports the theory of each node having one functionality. 
 
-### Hierarchy
+### Scene Hierarchy
 In the image below you can see that some nodes are "inside" others. This structure follows the logical ordering of the nodes and their functionalities. For example:
 - `Player` node (type CharacterBody2D) handles all player movement and controls
     - `AnimatedSprite2D` handles the animations of the player sprite
@@ -170,7 +178,71 @@ In the image below you can see that some nodes are "inside" others. This structu
 ![](img/GD_nodes_and_scenes_nodes.webp)
 
 This hierarchy also keeps many properties consistent.
-- **Transform** - if `Player` node is moved/rotated/scaled the transformation is applied to all the nodes inside it.
+- **Transform** - if `Player` node is moved/rotated/scaled the transformation is applied to all the nodes inside it (children).
 - **Visibility** - if `Player` is hidden all children nodes are also hidden (eye icon next to the node)
-- many others ...
+- and many others ...
 
+
+
+## Add your own object
+Duration: hh:mm:ss
+
+One of the last things I would like to cover in this lab is how to create your own object with collisions (will come in handy later). So let's make a bigger version of the resistor.
+
+### StaticBody3D
+Since the resistor will not move let's add a `StaticBody3D` node.
+![](img/AddNode.png)
+
+1. Right click the Environment node (container for all the objects)
+2. Press the `Add a child` button
+3. Since we want to add a mesh (3D model),search for `StaticBody3D` and press `Create`
+
+Now we have a new node in the scene. Let's add a cube mesh to it.
+
+### MeshInstance3D
+Using the same process as before add a `MeshInstance3D` node as a child of the `StaticBody3D`. Now let's configure the mesh.
+
+![](img/Mesh.png)
+1. In the inspector with the new node selected, press the empty mesh resource box
+2. Press `New BoxMesh` to create a new cube.
+
+Now there is a white cube placed in the ground. Let's make it big and change it's color.
+
+![](img/MeshManipulation.png)
+1. Click the cube mesh in the inspector
+2. Change the size (I changed it to 10x10x10 meters)
+3. Add a `StandardMaterial3D` which defines how the surface of objects will look like
+4. Change the albedo color to black
+5. You can see the resulting mesh
+
+### CollisionShape3D
+After this we can see that the `StaticBody3D` has a warning next to it.
+![](img/StaticBodyWarning.png)
+
+The warning tells us that it needs a collision shape. Let's add one so that later on our player cannot go through the object and collides with it.
+
+![](img/CollisionShape.png)
+1. Let's start by adding a new node as a child of the `StaticBody3D` of type ` CollisionObject3D`
+2. Click the empty shape resource box
+3. Choose the `BoxShape3D` since our mesh is a box
+4. Now click on the BoxShape3D and set the size to the same as the mesh
+
+Now you have a cube object with collision. 
+
+### Bonus
+If you are up to the challenge you can add the yellow cables to the sides in the same way as the cube. Although keep to a single StaticBody3D node. Here is how my solution looks like.
+
+![](img/FinalBox.png)
+
+
+## Recap
+Duration: hh:mm:ss
+
+Let's look at what we did in this lab.
+- First we downloaded the Godot Engine and setup the template project
+- Next up we looked at the Godot UI and got ourselves familiar with it.
+- We also learned how to move in the 3D scene and how to manipulate objects in a scene.
+- Then we learned a bit of theory about nodes, the hierarchy of nodes and how changes of a parent propagate to children
+- Lastly we tried adding our own bigger `Resistor` object, where we learned about `StaticBody3D` node, `MeshInstance3D` node, and `CollisionShape3D` node.
+
+In the next lab, we will create a player character a third person camera and finally play the game we are making.
