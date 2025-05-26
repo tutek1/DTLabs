@@ -31,7 +31,7 @@ shadow_enabled = true
 [node name="Ground" type="StaticBody3D" parent="Enviroment"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Enviroment/Ground"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0638943, 0, 0.00795937)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0500813, 0.0300798, -0.0110531)
 shape = SubResource("BoxShape3D_ndwkr")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Enviroment/Ground/CollisionShape3D"]
@@ -40,7 +40,7 @@ mesh = SubResource("BoxMesh_aq7nb")
 skeleton = NodePath("../..")
 
 [node name="Resistor" parent="Enviroment" instance=ExtResource("1_8km36")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.73306, 1.5, -1.44443)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.58842, 1.5, -1.32505)
 
 [node name="Coil" parent="Enviroment" instance=ExtResource("2_krwbd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.9982, 6.5, 6.75083)
