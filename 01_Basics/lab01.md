@@ -74,7 +74,7 @@ Now with the project open it might a bit overwhelming to orient yourself in the 
     <aside class="negative">
     Note that 3D scenes cannot be viewed in 2D using these tabs and vice versa.
     </aside>
-7. This is the Play panel. We will be mainly interested in the first button, which starts the full game (a set main scene) then the next 2 buttons for control and the fifth button for playing the current scene.
+7. This is the Play panel. We will be mainly interested in the first button, which starts the full game (a set main scene), then the next 2 buttons for control, and the fifth button for playing the current scene.
 
 Don't worry if you feel lost. We will go though all these parts in much more detail later. This is just an overview.
 
@@ -83,7 +83,7 @@ Don't worry if you feel lost. We will go though all these parts in much more det
 ## 3D Navigation
 Duration: hh:mm:ss
 
-In this section we will learn several ways how to move in the 3D scene view (for 2D it is very similar). There are 2 main ways:
+In this section we will learn several ways how to move in the 3D scene view (for 2D it is very similar). Let's first open our testing scene. In the FileSystem open the folder `3D` -> `Debug` and open the `debug_3d_scene.tscn` file. Now there are 2 main ways to move in the scene view:
 
 ### Middle Mouse Button (MMB)
 You can hold the middle mouse button to move in different ways in the scene and can be seen in this video:
