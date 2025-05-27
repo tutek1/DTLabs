@@ -83,7 +83,11 @@ Don't worry if you feel lost. We will go though all these parts in much more det
 ## 3D Navigation
 Duration: hh:mm:ss
 
-In this section we will learn several ways how to move in the 3D scene view (for 2D it is very similar). Let's first open our testing scene. In the FileSystem open the folder `3D` -> `Debug` and open the `debug_3d_scene.tscn` file. Now there are 2 main ways to move in the scene view:
+<aside class="negative">
+If you don't see the testing scene in the scene view (the one in the video below) let's open it. In the FileSystem open the folder "3D" -> "Debug" and double click the "debug_3d_scene.tscn" file. 
+</aside>
+
+In this section we will learn several ways how to move in the 3D scene view (for 2D it is very similar). Now there are 2 main ways to move in the scene view:
 
 ### Middle Mouse Button (MMB)
 You can hold the middle mouse button to move in different ways in the scene and can be seen in this video:
@@ -104,8 +108,7 @@ The second way, and in my opinion the best way, to move is using the flying came
 - `SHIFT` to move faster
 - `MMB scroll` to control the speed
 
-
-Please try to move in the scene using this method.
+Please try to move around in the scene using this method.
 
 
 
@@ -153,7 +156,9 @@ The visual look of a game is very important. Let's change the World Environment 
 
 1. Select the `World Environment` node.
 2. Click on the Environment Resource box
-3. Change the settings of the world to your liking. There are many settings that can be changed, try to play around with it, don't dwell on it too much.
+3. Change the settings of the world to your liking. There are many settings that can be changed, try to play around with it.
+
+You can look up what each setting does in the [documentation](https://docs.godotengine.org/en/stable/classes/class_environment.html#class-environment). If you feel lost or confused don't dwell on it too much and move to the next section.
 
 
 
