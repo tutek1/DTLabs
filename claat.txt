@@ -31,7 +31,7 @@ Duration: hh:mm:ss
 --------------------------------------------------
 Image
 
-![alt-text-here](img/test.png)
+![](img/test.png)
 
 --------------------------------------------------
 Button
@@ -57,4 +57,7 @@ text
 --------------------------------------------------
 Video
 
-<video id=VNMms_zGbnI></video>
+<video id=></video>
+
+
+✔️ ❌
