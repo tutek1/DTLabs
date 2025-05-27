@@ -1,0 +1,201 @@
+[gd_scene load_steps=16 format=3 uid="uid://chnffv2lmano5"]
+
+[ext_resource type="PackedScene" uid="uid://44guktn5iwdy" path="res://3D/WorldObjects/resistor.tscn" id="1_8km36"]
+[ext_resource type="PackedScene" uid="uid://cwcvo74fuibvv" path="res://3D/WorldObjects/coil.tscn" id="2_krwbd"]
+
+[sub_resource type="Environment" id="Environment_ndwkr"]
+background_color = Color(1, 1, 1, 1)
+fog_enabled = true
+fog_light_color = Color(0.0666667, 0.145098, 0.0745098, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ndwkr"]
+size = Vector3(70, 1, 70)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kelvc"]
+albedo_color = Color(0.151953, 0.309407, 0.152003, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_aq7nb"]
+size = Vector3(70, 1, 70)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nqv4f"]
+size = Vector3(10, 10, 10)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nqv4f"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_nqv4f"]
+material = SubResource("StandardMaterial3D_nqv4f")
+size = Vector3(10, 10, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hn7em"]
+size = Vector3(1, 5, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g7e0o"]
+albedo_color = Color(1, 1, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_8km36"]
+material = SubResource("StandardMaterial3D_g7e0o")
+size = Vector3(1, 5, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_krwbd"]
+size = Vector3(1, 7, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b5ujk"]
+albedo_color = Color(1, 1, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_72jxc"]
+material = SubResource("StandardMaterial3D_b5ujk")
+size = Vector3(1, 7, 1)
+
+[node name="Debug3dScene" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ndwkr")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.98751, 0.027359, 0.155161, -0.107526, 0.836839, 0.536786, -0.115158, -0.546766, 0.829328, 0, 0, 0)
+light_energy = 3.226
+shadow_enabled = true
+
+[node name="Enviroment" type="Node3D" parent="."]
+
+[node name="Ground" type="StaticBody3D" parent="Enviroment"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Enviroment/Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0500813, 0.0300798, -0.0110531)
+shape = SubResource("BoxShape3D_ndwkr")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Enviroment/Ground/CollisionShape3D"]
+material_override = SubResource("StandardMaterial3D_kelvc")
+mesh = SubResource("BoxMesh_aq7nb")
+skeleton = NodePath("../..")
+
+[node name="Resistor" parent="Enviroment" instance=ExtResource("1_8km36")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -17.184, 2.53008, -15.7378)
+
+[node name="Resistor22" parent="Enviroment" instance=ExtResource("1_8km36")]
+transform = Transform3D(-8.74228e-08, 0, -2, 0, 2, 0, 2, 0, -8.74228e-08, 3.37131, 2.53008, -27.3628)
+
+[node name="Resistor15" parent="Enviroment" instance=ExtResource("1_8km36")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 29.4645, 2.53008, 23.7879)
+
+[node name="Resistor2" parent="Enviroment" instance=ExtResource("1_8km36")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.8663, 1.53008, -14.1434)
+
+[node name="Resistor3" parent="Enviroment" instance=ExtResource("1_8km36")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.3665, 1.53008, -5.86578)
+
+[node name="Resistor23" parent="Enviroment" instance=ExtResource("1_8km36")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.7917, 1.53008, -26.7726)
+
+[node name="Resistor4" parent="Enviroment" instance=ExtResource("1_8km36")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.7131, 1.53008, 7.2)
+
+[node name="Resistor5" parent="Enviroment" instance=ExtResource("1_8km36")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 22.2995, 1.53008, -2.40133)
+
+[node name="Resistor6" parent="Enviroment" instance=ExtResource("1_8km36")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 14.142, 1.53008, 18.086)
+
+[node name="Resistor7" parent="Enviroment" instance=ExtResource("1_8km36")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 6.44294, 1.53008, 4.21322)
+
+[node name="Resistor10" parent="Enviroment" instance=ExtResource("1_8km36")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 11.8043, 1.53008, -19.2873)
+
+[node name="Resistor11" parent="Enviroment" instance=ExtResource("1_8km36")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 20.598, 1.53008, 31.1228)
+
+[node name="Resistor12" parent="Enviroment" instance=ExtResource("1_8km36")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 28.7556, 1.53008, 10.6354)
+
+[node name="Resistor13" parent="Enviroment" instance=ExtResource("1_8km36")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -13.0938, 1.53008, 23.6267)
+
+[node name="Resistor8" parent="Enviroment" instance=ExtResource("1_8km36")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.78771, 1.53008, 12.2509)
+
+[node name="Resistor9" parent="Enviroment" instance=ExtResource("1_8km36")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -1.04796, 1.53008, 21.1183)
+
+[node name="Resistor16" parent="Enviroment" instance=ExtResource("1_8km36")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.13907, 1.53008, -16.3575)
+
+[node name="Resistor17" parent="Enviroment" instance=ExtResource("1_8km36")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -14.8381, 1.53008, -30.2303)
+
+[node name="Resistor18" parent="Enviroment" instance=ExtResource("1_8km36")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -29.0688, 1.53008, -22.1926)
+
+[node name="Resistor19" parent="Enviroment" instance=ExtResource("1_8km36")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -6.28201, 1.53008, -4.77803)
+
+[node name="Resistor21" parent="Enviroment" instance=ExtResource("1_8km36")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -19.9776, 1.53008, 5.4762)
+
+[node name="Resistor20" parent="Enviroment" instance=ExtResource("1_8km36")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -29.7515, 1.53008, -28.7482)
+
+[node name="Resistor14" parent="Enviroment" instance=ExtResource("1_8km36")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 8.91697, 1.53008, 28.2256)
+
+[node name="Coil" parent="Enviroment" instance=ExtResource("2_krwbd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.9056, 6.5, -10.6679)
+
+[node name="Coil2" parent="Enviroment" instance=ExtResource("2_krwbd")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, -27.9056, 7.73008, 4.33209)
+
+[node name="Coil3" parent="Enviroment" instance=ExtResource("2_krwbd")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -27.9056, 9.53008, 21.3321)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Enviroment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.1605, 5.53008, -27.805)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Enviroment/StaticBody3D"]
+shape = SubResource("BoxShape3D_nqv4f")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Enviroment/StaticBody3D/CollisionShape3D"]
+mesh = SubResource("BoxMesh_nqv4f")
+skeleton = NodePath("../../..")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Enviroment/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, -2.5, 2.55043)
+shape = SubResource("BoxShape3D_hn7em")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Enviroment/StaticBody3D/CollisionShape3D2"]
+mesh = SubResource("BoxMesh_8km36")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="Enviroment/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, -2.5, -2.52669)
+shape = SubResource("BoxShape3D_hn7em")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Enviroment/StaticBody3D/CollisionShape3D3"]
+mesh = SubResource("BoxMesh_8km36")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="Enviroment/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, -1.5, 0.0796051)
+shape = SubResource("BoxShape3D_krwbd")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Enviroment/StaticBody3D/CollisionShape3D4"]
+mesh = SubResource("BoxMesh_72jxc")
+
+[node name="CollisionShape3D5" type="CollisionShape3D" parent="Enviroment/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.50464, -2.5, 2.55043)
+shape = SubResource("BoxShape3D_hn7em")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Enviroment/StaticBody3D/CollisionShape3D5"]
+mesh = SubResource("BoxMesh_8km36")
+
+[node name="CollisionShape3D6" type="CollisionShape3D" parent="Enviroment/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.50464, -2.5, -2.52669)
+shape = SubResource("BoxShape3D_hn7em")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Enviroment/StaticBody3D/CollisionShape3D6"]
+mesh = SubResource("BoxMesh_8km36")
+
+[node name="CollisionShape3D7" type="CollisionShape3D" parent="Enviroment/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.50464, -1.5, 0.0796051)
+shape = SubResource("BoxShape3D_krwbd")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Enviroment/StaticBody3D/CollisionShape3D7"]
+mesh = SubResource("BoxMesh_72jxc")

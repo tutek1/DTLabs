@@ -1,0 +1,72 @@
+[gd_scene load_steps=7 format=3 uid="uid://44guktn5iwdy"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kelvc"]
+size = Vector3(3, 2, 6)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bc6cy"]
+albedo_color = Color(0.103743, 0.103744, 0.103744, 1)
+roughness = 0.15
+
+[sub_resource type="BoxMesh" id="BoxMesh_kelvc"]
+material = SubResource("StandardMaterial3D_bc6cy")
+size = Vector3(3, 2, 6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_aq7nb"]
+size = Vector3(0.5, 1, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fr313"]
+albedo_color = Color(1, 1, 0, 1)
+roughness = 0.15
+
+[sub_resource type="BoxMesh" id="BoxMesh_odb74"]
+material = SubResource("StandardMaterial3D_fr313")
+size = Vector3(0.5, 1, 0.5)
+
+[node name="Resistor" type="StaticBody3D"]
+
+[node name="Base" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_kelvc")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Base"]
+mesh = SubResource("BoxMesh_kelvc")
+skeleton = NodePath("../..")
+
+[node name="Pin1" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.468, -0.5, -3.252)
+shape = SubResource("BoxShape3D_aq7nb")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Pin1"]
+mesh = SubResource("BoxMesh_odb74")
+skeleton = NodePath("../..")
+
+[node name="Pin2" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.556629, -0.5, -3.252)
+shape = SubResource("BoxShape3D_aq7nb")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Pin2"]
+mesh = SubResource("BoxMesh_odb74")
+skeleton = NodePath("../..")
+
+[node name="Pin3" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.819682, -0.5, 3.24637)
+shape = SubResource("BoxShape3D_aq7nb")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Pin3"]
+mesh = SubResource("BoxMesh_odb74")
+skeleton = NodePath("../..")
+
+[node name="Pin4" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0362197, -0.5, 3.24637)
+shape = SubResource("BoxShape3D_aq7nb")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Pin4"]
+mesh = SubResource("BoxMesh_odb74")
+skeleton = NodePath("../..")
+
+[node name="Pin5" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.837108, -0.5, 3.24637)
+shape = SubResource("BoxShape3D_aq7nb")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Pin5"]
+mesh = SubResource("BoxMesh_odb74")
+skeleton = NodePath("../..")
