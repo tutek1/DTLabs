@@ -200,4 +200,20 @@ Let's now look back at the script:
 
 ![](img/BaseScript.png)
 
-We can see that the `_ready()` and `_process()` just use the keyword `pass`, meaning that nothing happens in the function. 
+We can see that the `_ready()` and `_process()` just use the keyword `pass`, meaning that nothing happens in the function. However, the function `_physics_process()`, which is called every time the physics engine updates. It does two things:
+- Sets the variable `velocity = speed`
+- Calls the function `move_and_slide()`
+
+The variable `velocity` is declared by the `CharacterBody3D`, that we are extending and represents how fast and in what direction the character is currently moving in.
+
+The function `move_and_slide()` is also declared by the `CharacterBody3D`. It is responsible for moving the character based on the current value in `velocity`.
+
+<aside class="negative">
+If we only set the "velocity" of the player and didn't call the "move_and_slide()" function. The player would not move at all. 
+</aside>
+
+
+
+
+## Player input
+Duration: hh:mm:ss
