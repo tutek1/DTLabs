@@ -1,7 +1,9 @@
-[gd_scene load_steps=20 format=3 uid="uid://chnffv2lmano5"]
+[gd_scene load_steps=23 format=3 uid="uid://chnffv2lmano5"]
 
 [ext_resource type="PackedScene" uid="uid://44guktn5iwdy" path="res://3D/WorldObjects/resistor.tscn" id="1_8km36"]
 [ext_resource type="PackedScene" uid="uid://cwcvo74fuibvv" path="res://3D/WorldObjects/coil.tscn" id="2_krwbd"]
+[ext_resource type="Script" uid="uid://bsumix7xtjux1" path="res://3D/Player/player_controller.gd" id="3_hn7em"]
+[ext_resource type="Material" uid="uid://d1xu766jnbqqd" path="res://3D/Player/player_material.tres" id="4_g7e0o"]
 
 [sub_resource type="Environment" id="Environment_ndwkr"]
 background_color = Color(1, 1, 1, 1)
@@ -48,13 +50,20 @@ material = SubResource("StandardMaterial3D_b5ujk")
 size = Vector3(1, 7, 1)
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_nqv4f"]
+material = ExtResource("4_g7e0o")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hn7em"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_hn7em"]
+material = ExtResource("4_g7e0o")
+size = Vector3(0.3, 0.8, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_krwbd"]
+material = ExtResource("4_g7e0o")
 size = Vector3(0.3, 0.8, 0.3)
 
 [sub_resource type="BoxMesh" id="BoxMesh_g7e0o"]
+material = ExtResource("4_g7e0o")
 size = Vector3(0.6, 0.7, 0.3)
 
 [node name="Debug3dScene" type="Node3D"]
@@ -212,6 +221,7 @@ mesh = SubResource("BoxMesh_72jxc")
 
 [node name="Player" type="CharacterBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.60169, 0)
+script = ExtResource("3_hn7em")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
 mesh = SubResource("CapsuleMesh_nqv4f")
@@ -225,8 +235,11 @@ mesh = SubResource("BoxMesh_hn7em")
 
 [node name="Hand2" type="MeshInstance3D" parent="Player"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.63, 0.04, 0)
-mesh = SubResource("BoxMesh_hn7em")
+mesh = SubResource("BoxMesh_krwbd")
 
 [node name="Backpack" type="MeshInstance3D" parent="Player"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0797353, 0.549897)
 mesh = SubResource("BoxMesh_g7e0o")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.958437, 0.285304, 0, -0.285304, 0.958437, 0, 4.08629, 3.69073)

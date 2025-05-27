@@ -5,9 +5,9 @@ extends CharacterBody3D
 func _ready() -> void:
 	pass
 
-func _process(delta) -> void:
+func _process(delta : float) -> void:
 	pass
 
-func _physics_process(delta) -> void:
+func _physics_process(delta : float) -> void:
 	velocity = speed
 	move_and_slide()
