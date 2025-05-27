@@ -5,7 +5,7 @@ status: Published
 authors: Ondřej Kyzr
 Feedback Link: https://google.com
 
-# Basics of Godot and 3D
+# Lab01 - Basics of Godot and 3D
 
 ## Getting Godot Engine 
 Duration: hh:mm:ss
