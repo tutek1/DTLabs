@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://chnffv2lmano5"]
+[gd_scene load_steps=20 format=3 uid="uid://chnffv2lmano5"]
 
 [ext_resource type="PackedScene" uid="uid://44guktn5iwdy" path="res://3D/WorldObjects/resistor.tscn" id="1_8km36"]
 [ext_resource type="PackedScene" uid="uid://cwcvo74fuibvv" path="res://3D/WorldObjects/coil.tscn" id="2_krwbd"]
@@ -46,6 +46,16 @@ albedo_color = Color(1, 1, 0, 1)
 [sub_resource type="BoxMesh" id="BoxMesh_72jxc"]
 material = SubResource("StandardMaterial3D_b5ujk")
 size = Vector3(1, 7, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_nqv4f"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hn7em"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_hn7em"]
+size = Vector3(0.3, 0.8, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_g7e0o"]
+size = Vector3(0.6, 0.7, 0.3)
 
 [node name="Debug3dScene" type="Node3D"]
 
@@ -199,3 +209,24 @@ shape = SubResource("BoxShape3D_krwbd")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Enviroment/StaticBody3D/CollisionShape3D7"]
 mesh = SubResource("BoxMesh_72jxc")
+
+[node name="Player" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.60169, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
+mesh = SubResource("CapsuleMesh_nqv4f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+shape = SubResource("CapsuleShape3D_hn7em")
+
+[node name="Hand1" type="MeshInstance3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.65, 0, 0)
+mesh = SubResource("BoxMesh_hn7em")
+
+[node name="Hand2" type="MeshInstance3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.63, 0.04, 0)
+mesh = SubResource("BoxMesh_hn7em")
+
+[node name="Backpack" type="MeshInstance3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0797353, 0.549897)
+mesh = SubResource("BoxMesh_g7e0o")
