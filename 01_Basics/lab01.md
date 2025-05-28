@@ -7,6 +7,20 @@ Feedback Link: https://google.com
 
 # Lab01 - Basics of Godot and 3D
 
+## Introduction
+Duration: hh:mm:ss
+
+This tutorial should provide a surface level overview of how to use Godot Engine to make games. It won't cover everything there is to cover and will only show a small number of ways how to program or create stuff. I suggest everyone to lookup other more detailed tutorials if a topic interests them in more depth than was covered.
+
+In this first lab we will cover:
+- Downloading the **Godot Engine**
+- Downloading and opening a **Template Project**
+- Overview of the Godot Engine **UI**
+- 3D scene **navigation** in the editor
+- How to **manipulate objects** in the scene
+- How the node **hierarchy** works
+- **Creating** our own object and **saving** it
+
 ## Getting Godot Engine 
 Duration: hh:mm:ss
 
@@ -17,9 +31,9 @@ First we need to download the Godot Engine itself. Each Godot release has two ve
 
 This tutorial will use the standard version using GDScript, which is a python-like scripting language made specifically for Godot. You can use C# and GDScript interchangeably in one project (with some minor restrictions) but this tutorial will be done entirely in GDScript for simplicity.
 
-<aside class="positive">
-To maximize performance of a project you would ideally use C# for complex algorithms (such as pathfinding or other complex calculations) and GDScript for interfacing with the engine and calling engine functions.  
-</aside>
+> aside positive
+> To maximize performance of a project you would ideally use **C#** for complex algorithms (such as pathfinding or other complex calculations) and **GDScript** for interfacing with the engine and calling engine functions.  
+
 
 ### Engine Version
 This tutorial will be done using the engine version `4.4.1` and I suggest you do the same, but any newer version can be used.
@@ -29,10 +43,11 @@ Please download the Godot engine using the following link and place it into a fo
   [Godot 4.4.1](https://godotengine.org/download/archive/4.4.1-stable/)
 </button>
 
-<aside class="negative">
-Beware that the differences in major Godot versions may be significant. So if you plan on using a newer version not all things said in this tutorial might be completely correct.  
-</aside>
+> aside negative
+> Beware that the differences in major Godot versions may be significant. So if you plan on using a newer version not all things said in this tutorial might be completely correct.  
 
+> aside positive
+> However, I recommend using the newest stable version for your own project.
 
 ## The Project
 Duration: hh:mm:ss
@@ -71,9 +86,9 @@ Now with the project open it might a bit overwhelming to orient yourself in the 
     - The 2D/3D tabs shows you the current scene from that perspective
     - The Script tab hosts the in engine IDE for writing scripts.
     - The Game tab has the game window, where you can try the game once you run it.
-    <aside class="negative">
-    Note that 3D scenes cannot be viewed in 2D using these tabs and vice versa.
-    </aside>
+    > aside negative
+    > Note that 3D scenes cannot be viewed in 2D and vice versa by using these tabs .
+
 7. This is the Play panel. We will be mainly interested in the first button, which starts the full game (a set main scene), then the next 2 buttons for control, and the fifth button for playing the current scene.
 
 Don't worry if you feel lost. We will go though all these parts in much more detail later. This is just an overview.
@@ -83,9 +98,8 @@ Don't worry if you feel lost. We will go though all these parts in much more det
 ## 3D Navigation
 Duration: hh:mm:ss
 
-<aside class="negative">
-If you don't see the testing scene in the scene view (the one in the video below) let's open it. In the FileSystem open the folder "3D" -> "Debug" and double click the "debug_3d_scene.tscn" file. 
-</aside>
+> aside negative
+> If you don't see the testing scene in the scene view (the one in the video below) let's open it. In the **FileSystem** open the folder `3D/Debug` and double click the `debug_3d_scene.tscn` file. 
 
 In this section we will learn several ways how to move in the 3D scene view (for 2D it is very similar). Now there are 2 main ways to move in the scene view:
 
@@ -117,9 +131,9 @@ Duration: hh:mm:ss
 
 Let's learn how you can manipulate objects (nodes) in the scene. Find and Select the `Resistor` node in the scene hierarchy on the left.
 
-<aside class="positive">
-If the resistor is out of view or you are far away you can press F to focus on it. 
-</aside>
+> aside positive
+> If the resistor is out of view or you are far away you can press `F` to focus on it. 
+
 
 Now with the `Resistor` selected and in view you can move it, rotate it or scale it. You can do that using several ways.
 
@@ -128,18 +142,18 @@ Now with the `Resistor` selected and in view you can move it, rotate it or scale
 2. Grab the colorful parts of the "Gizmo" seen in the image (2.), then hold left mouse button and drag.
 3. Directly change the coordinates/degrees/scale of the object in the inspector
 
-<aside class="positive">
-You can hold CTRL and SHIFT while manipulating with objects to snap them to a grid.
-</aside>
+> aside positive
+> You can hold `CTRL` or `SHIFT` while manipulating with objects to snap them to a grid.
+
 
 ### Object duplication
 Our scene is looking a little sad so let's add a big more resistors. Select the `Resistor` node and press `CTRL+D` to duplicate. Now repeat this step and move, scale, and rotate it to make the scene look nicer.
 
 Try to use all three ways to manipulate the objects.
 
-<aside class="positive">
-You can select multiple resistors and duplicate them all. So that you don't have to duplicate them one by one.
-</aside>
+> aside positive
+> You can select multiple resistors and duplicate all of them at once. So that you don't have to duplicate them one by one.
+
 
 If you played with the scale of objects you might have noticed that they are no longer placed precisely on the ground. They are either a above/below ground or partway in the ground. You can use:
 - `PAGEDOWN` key to snap an object to the ground.
@@ -187,6 +201,8 @@ This hierarchy also keeps many properties consistent.
 - **Visibility** - if `Player` is hidden all children nodes are also hidden (eye icon next to the node)
 - and many others ...
 
+> aside positive
+> Remember that every node in Godot is a scene and can be loaded as the main scene or created/destroyed at will.
 
 
 ## Add your own object
@@ -234,11 +250,34 @@ The warning tells us that it needs a collision shape. Let's add one so that late
 
 Now you have a cube object with collision. 
 
+### Saving the object as a scene
+Having this `Big Resistor` saved as a reusable object will be useful. Imagine you have 20 of them in a scene and you want to change some property on all of them. You would have to go and individually change every single one. This would be inefficient and time consuming. Let's instead save the `Big Resistor` as a scene.
+
+1. Right-click the `StaticBody3D` of the `Big resistor`, select rename, and give it the **"BigResistor"** name
+2. Right-click it again and select **Save Branch as Scene**
+3. Navigate to `3D/WorldObjects` and press **Save**
+
+Now the `BigResistor` node in the scene no longer has its children visible and has a "movie flap" icon next to it.
+
+![](img/ResistorSceneIcon.png)
+
+If you click on the icon. It opens up in a new tab in the scene view. In this tab the root of the scene is the `StaticBody3D ` named `BigResistor` and all changes made to it here are propagated to all instances of this scene. Meaning if you have two of these resistors scenes in the `debug_3d_scene` and you for example add a new `MeshInstance3D` to it, both of them will have this change.
+
+### Adding a scene to a scene
+Now with the `BigResistor` scene saved you can instantiate/add more copies of it to the debug scene. There are two way:
+1. Simply press the ![](img/ChainIcon.png) button and select it.
+2. Drag and drop the saved scene file `big_resistor.tscn` from the **FileSystem** tab into the scene
+
+> aside negative
+> Don't forget to put the newly created resistor as a child of the `Environment` node. This keeps our scene clean and easy to navigate.
+
 ### Bonus
-If you are up to the challenge you can add the yellow cables to the sides in the same way as the cube. Although keep to a single StaticBody3D node. Here is how my solution looks like.
+If you are up to the challenge, with the `big_resistor.tscn` scene open, you can add the yellow cables with collision shapes to the sides in the same way as we added the main cube. Although keep to a single StaticBody3D node. Here is how my solution looks like:
 
 ![](img/FinalBox.png)
 
+> aside positive
+> Be sure to check the instantiated resistors in the scene to see if they also changed.
 
 ## Recap
 Duration: hh:mm:ss
@@ -249,5 +288,10 @@ Let's look at what we did in this lab.
 - We also learned how to move in the 3D scene and how to manipulate objects in a scene.
 - Then we learned a bit of theory about nodes, the hierarchy of nodes and how changes of a parent propagate to children
 - Lastly we tried adding our own bigger `Resistor` object, where we learned about `StaticBody3D` node, `MeshInstance3D` node, and `CollisionShape3D` node.
+
+If you want to see, how the filled in template looks like you can download it here:
+<button>
+  [Template Done Project](link)
+</button>
 
 In the next lab, we will create a player character a third person camera and finally play the game we are making.
