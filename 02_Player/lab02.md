@@ -5,24 +5,29 @@ status: Published
 authors: Ondřej Kyzr
 Feedback Link: https://google.com
 
-# Lab02 - Player Character and Camera
+# Lab02 - 3D Player Character and Camera
 
 ## Overview
 Duration: hh:mm:ss
 
 In this tutorial we will:
 - Create a debug character model
-- Learn about `CharacterBody3D`
-- Learn the basics of programming in GDScript
+- Learn about different Godot bodies `CharacterBody3D`, `RigidBody3D`, `StaticBody3D`
+- Learn the basics of programming in **GDScript**
+- Learn about the **Game** window and how to start the game
 - Add a camera to the scene
-- Learn about the `Game` window and how to start the game
-- Create several different player controllers (all can be used depending on the game type)
-- Make the camera follow the player (in 2 different ways)
+- Learn how to gather input from the player
+- Create two different **player controllers** (both can be used depending on the game type)
+- Make the **camera** follow the player (in 2 different ways)
+
+Please download the template project, that we will be using in this lab:
+<button>
+  [Template Project](link)
+</button>
 
 
 
-
-## Add a player character
+## Add a Player Character
 Duration: hh:mm:ss
 
 ### Types of bodies
@@ -38,17 +43,16 @@ Both `RigidBody3D` and `CharacterBody3D` are solid choices for us. The better ch
 Now that we know what node type the player will be, let's add it.
 1. Add a `CharacterBody3D` node in the scene hierarchy as a child of the scene node ("Debug3dScene")
 2. Rename it to **"Player"** (Right-click and select rename)
-3. Add a `MeshInstance3D` node as a child of the player with a `CapsuleMesh`
-4. Add a `CollisionShape3D` node as a child of the player with a `CapsuleShape3D`
+3. Add a `MeshInstance3D` node as a child of the player and set the mesh to a `CapsuleMesh`
+4. Add a `CollisionShape3D` node as a child of the player and set the collision shape to a `CapsuleShape3D`
 
 The result should look something like this:
 ![](img/BasePlayerSetup.png)
 
 Let's move the player a bit up so that they are not in the ground.
 
-<aside class="negative">
-Be careful to move the "Player" node and not the mesh or collider of the player.
-</aside>
+> aside negative
+> Be careful to move the `Player` node and **NOT** the mesh or collider of the player.
 
 
 ### Nicer player model
@@ -68,20 +72,20 @@ The main reason for adding a backpack is so that we can easily tell which way is
 
 Use the same process we did in adding hands to add a new BoxMesh, scale it, and move it.
 
-<aside class="negative">
-The coordinate system in Godot Engine uses the Z-axis in a way that -Z == Forwards and +Z == Backwards. So be sure to place the backpack on the +Z side of the player.
-</aside>
+> aside negative
+> The coordinate system in Godot Engine uses the **Z-axis** in a way that `-Z == Forwards` and `+Z == Backwards`. So be sure to place the backpack on the **+Z** side of the player.
 
-The player should look like this now (mind direction of the Z-axis).
+
+The player should look like this now (mind the direction of the Z-axis).
 ![](img/PlayerBackpack.png)
 
-#### Using a shared material
+#### Giving the player some color
 Let's give the player capsule some color.
 
 1. Click on to the `MeshInstance3D` with the capsule mesh in the scene hierarchy.
-2. Click on the capsule mesh in the inspector.
+2. Click on the **CapsuleMesh** in the **inspector**.
 3. Add a new `StandardMaterial3D` to the Material slot
-4. Click on the new material
+4. Click on the created material
 5. Set albedo to gray
 6. Set Roughness to `0.3`
 7. Set Metallic to `0.5`
@@ -90,39 +94,45 @@ This makes the capsule look gray and shiny as a metal robots body should be. How
 
 I could manually set all the properties on each material of each object but what if later on I would like to change to robots color? -> I would have to modify all the parts of the robot, which is not ideal.
 
+#### Saving materials
 Let's learn how to save a material and share it with other meshes.
 
 ![](img/MaterialResourceSave.PNG)
 1. Select the Capsule `MeshInstance3D`
-2. Open the CapsuleMesh menu
+2. Click on the **CapsuleMesh** in the **inspector**
 3. Click on the small arrow next to the material that you created in the steps in the 7 steps sequence above
-4. Select `Save As`
-5. Change the name to `player_material.tres`
+4. Select **Save As**
+5. In the new popup window: change the name to `player_material.tres`
 6. Navigate to folder `3D/Player`
-7. Click `Save`
+7. Click **Save**
 
 Now we have saved the material as a Resource.
 
-<aside class="positive">
-Resources can represent many types of data (materials, shaders, tile sets, fonts, scenes etc.). They can be instantiated (created/spawned in) to any scene and deleted at will. Saved scenes (PackedScene) in Godot are also Resources. This allows us to use them to represent common objects (bullets, enemies, collectibles etc.) that need to be created/deleted at runtime, with them. 
-</aside>
+> aside positive
+> Resources can represent many types of data (materials, shaders, tile sets, fonts, scenes etc.). They can be instantiated (created/spawned in) to any scene and deleted at will. Saved scenes (`PackedScene`) in Godot are also Resources. This allows us to use them to represent common objects (bullets, enemies, collectibles etc.) that need to be created/deleted at runtime, with them. 
 
-Now we can apply the material to the hands and backpack.
+
+#### Applying materials
+Now we can apply the material to the hands and backpack. Please follow the steps in this video.
 <video id=AVk8pqCkRpA></video>
 
-<aside class="negative">
-If you only needed to use the material one of the hands of the robot, it means that you use the same mesh for both of them. This is not wrong, since we want both hands to look the same. 
-</aside>
+> aside negative
+> If you only needed to use the material one of the hands of the robot, it means that you used the same mesh for both of them, probably because you duplicated the first hand. This is not wrong, since we want both hands to look the same. However, keep it in mind.
 
 
 
-## Entering play mode
+
+## Entering Play Mode
 Duration: hh:mm:ss
 
 ### Pressing play
 In this section we will take a bit of a detour and look at how to play and test our game. It can be done easily by pressing the **Run current scene** button at the top right. ![](img/Play.png)
 
-However, right now if you press the button all you can see is a gray screen (ALT+F4 if you are stuck there). This happens because there is no camera in the scene though which we would be able to see in the game world.
+However, right now if you press the button all you can see is a gray screen. This happens because there is no camera in the scene though which we would be able to see in the game world.
+
+> aside positive
+> Press `ALT+F4` if all you can see is a fullscreen of gray.
+
 
 ### Adding a camera
 To solve this add a new `Camera3D` node to the scene as a child of the root (Debug3dScene) and move/rotate it so that the player is in view. For example like this:
@@ -130,7 +140,7 @@ To solve this add a new `Camera3D` node to the scene as a child of the root (Deb
 
 Now if you press play you can see the game world. Yippee!
 
-If your game is still in a kind of a "fullscreen" I recommend setting the embedding options same as in the next image. It makes the game window embed inside the editor.
+If your game still starts in "fullscreen" I recommend setting the embedding options same as in the next image. It makes the game window embed inside the editor.
 ![](img/EmbedSettings.png)
 
 ### Making something happen
@@ -142,11 +152,10 @@ Now if you enter play mode, we can change(drag your mouse or type values) the Sp
 <video id=cKfvzk0Y6uo></video>
 
 
-This is far from perfect or even playable (since the inspector is not available in the final game), but for messing around right before the next section it will suffice.
+This is far from perfect or even playable (since the **inspector** is not available in the final game), but for messing around right before the next section it will suffice.
 
-<aside class="negative">
-Notice that the changes made in "Play" mode to the Speed parameter are still present even after exiting.
-</aside>
+> aside negative
+> Notice that the changes made in **Play** mode to the `Speed` parameter are still present even after exiting.
 
 
 
@@ -154,28 +163,26 @@ Notice that the changes made in "Play" mode to the Speed parameter are still pre
 ## Basics of GDScript
 Duration: hh:mm:ss
 
-Let's open the script I have prepared and look what is inside. You can do that by:
+Let's open the script we have added to the player in the previous section. You can do that by:
 1. Either by clicking the ![](img/ScriptIcon.png) next to the `Player` node in the scene hierarchy.
-2. Or double click the script file in the `FileSystem`
+2. Or double click the script file in the **FileSystem**
 
 ![](img/BaseScript.png)
 
-As you can see the syntax of **GDScript** is very similar to **Python**. Each script can be thought of as class that extends the functionality of the node. The first line tells us, what node functionality does the script *extend*. In our case it is the player and their type is a `CharacterBody3D`. On line 3 you can see that the variable `speed`, which we used in the previous section is declared.
+As you can see the syntax of **GDScript** is very similar to **Python**. Each script can be thought of as class that extends the functionality of the node. The first line tells us, what node functionality does the script *extend*. In our case it is the player and their class type is a `CharacterBody3D`. On line 3 you can see that the variable `speed`, which we used in the previous section is declared.
 
 ### Variables
 Every variable declaration needs to start with the keyword `var`. The name of the variable is written next and is followed by `:` with a type declaration.
 
 There are many variable types from the classic float, bool, int, Vector to more specialized ones. You can see all the base types here in the documentation [Variant class](https://docs.godotengine.org/en/stable/contributing/development/core_and_modules/variant_class.html).
 
-The variable on line 3 is declared with an annotation `@export`. This annotation tells the engine, that it should be visible and changeable from the inspector. If is wasn't there we wouldn't be able to change the variable value like we did in the last section. We will come across different annotations in due time.
+The variable on line 3 is declared with an annotation `@export`. This annotation tells the engine, that it should be visible and changeable from the **inspector**. If is wasn't there we wouldn't be able to change the variable value like we did in the last section. We will come across different annotations in due time.
 
 ### Functions
-In GDScript a function is declared with the keyword `func` (same as in Python). The keyword is follow by the name of the function and parameters its in brackets. Before closing the function header with `:` it is a good practice to declare the return type with `-> type`.
+In GDScript a function is declared with the keyword `func` (same as in Python). The keyword is followed by the name of the function and parameters its in brackets. Before closing the function header with `:` it is a good practice to declare the return type with `-> type`.
 
-
-<aside class="negative">
-GDScript does not have private/protected/public modifiers for functions or variables. The styling guide suggests, that the name of the variable should reflect its access. Private functions and variables should start with an "_".
-</aside>
+> aside negative
+> GDScript does not have private/protected/public modifiers for functions or variables. The styling guide suggests, that the name of the variable should reflect its access. Private functions and variables should start with an `_`.
 
 ### Lifecycle of a Godot node
 You might be wondering, what do the functions in the script do and when they are called. That is, where the Godot lifecycle comes in play.
@@ -187,7 +194,7 @@ In Godot every node automatically calls a number of virtual functions as it gets
 
 Ok, what are the functions? Here is a list of them in the order that they are called:
 - `_init()` is called **once** when the node is created, it is the same as a constructor in OOP
-- `_enter_tree()` is called *every time* the node is added as a child of another node in the scene tree
+- `_enter_tree()` is called **every time** the node is added as a child of another node in the scene tree
 - `_ready()` is called **once** when the node and all of it's children have been created and are also ready
 - `_process()` is called **every frame** and depends on the current framerate of the game (how many FPS does the game run at)
 - `_physics_process()` is called **every physics frame**, that means that every time the physics in the game are updated this function is called, it depends on the set FPS of the physics engine
@@ -204,16 +211,320 @@ We can see that the `_ready()` and `_process()` just use the keyword `pass`, mea
 - Sets the variable `velocity = speed`
 - Calls the function `move_and_slide()`
 
-The variable `velocity` is declared by the `CharacterBody3D`, that we are extending and represents how fast and in what direction the character is currently moving in.
+The variable `velocity` is declared by the `CharacterBody3D` class, that we are extending. It is a Vector3 that represents how fast in each cardinal direction the character should be currently moving.
 
-The function `move_and_slide()` is also declared by the `CharacterBody3D`. It is responsible for moving the character based on the current value in `velocity`.
+The function `move_and_slide()` is also declared by the `CharacterBody3D` class. It is responsible for moving the character based on the current value in `velocity`.
 
-<aside class="negative">
-If we only set the "velocity" of the player and didn't call the "move_and_slide()" function. The player would not move at all. 
-</aside>
-
+> aside negative
+> If we only set the `velocity` of the player and didn't call the `move_and_slide()` function. The player would not move at all. 
 
 
 
-## Player input
+
+## Basic Player Input Pt.1
 Duration: hh:mm:ss
+
+Now we know how to move the player on a given axis by manually by setting it in the **inspector**, let's make it so that it responds to **W,A,S,D** instead. Almost all games respond to the player's input and in this section we will look at how to gather the input from the player.
+
+
+### Adding actions and keys to the Input map
+You can follow this video or the step by step below to add the keys we want to listen for.
+
+<video id=xlwMBYhpBUE></video>
+
+1. On top left panel click on **Project**.
+2. Click on **Project Settings**.
+3. Switch the tab (if not the already) to **Input Map**.
+
+Now we are in the input map. Here you can add all the actions and keys the game should be listening for. An action should correspond to a type of input you want to detect. For example: Jumping will be its own action "jump" and in a 2D game it can be triggered by `W` or `SPACE`. This way we don't have to remember what keys are set for each action, we just have to remember, what action we want to check for. It also allows us to change/add keybindings easily without writing code.
+
+1. Click on the text input box with **Add New Action** text.
+2. Let's start with moving right. Write `right` in the box and press the **+ Add** button.
+3. Now click the **+** next to the newly added action.
+4. Now press the key that you want the player to press to move right (I suggest `D`)
+5. Press **Ok**
+
+This way we added the action `right`, which will be responsible for moving the player right, with the keybinding of `D`. Please continue in the same way and add actions `left`, `forward`, and `backward` with the corresponding keys. The result should look like this:
+
+![](img/InputMap.png)
+
+### Using the input in code
+Now close the **Project Settings** window and let's get back to the **player_controller.gd** script.
+
+If we want to know if a action is pressed we can use `Input.is_action_pressed("action")`, which returns a `bool`. However, we are checking for player movement. Since this movement is along an axis it is better to use `Input.get_axis("negative_action", "positive_action")`. Let's try to call it with the X-axis movement and print its value.
+
+#### Getting the input
+Add these two lines at the beginning of the `_physics_process()` function:
+```GDScript
+var x_axis : float = Input.get_axis("left", "right")
+print(x_axis)
+```
+
+Now start the game with ![](img/PlayScene.png), try pressing `A` and `D`, and watch the **Output** console window.
+
+You should see:
+- `1.0` being printed when `D` is pressed
+- `-1.0` being printed when `A` is pressed
+- `0.0` being printed when nothing is pressed or both `D` and `A` is pressed
+
+#### Apply the input
+Ok, this should helps us move the player and it will be easier than to check each one of two 2 inputs separately. Let's set the `velocity` on the **X-axis** to this value like this:
+```GDScript
+velocity.x = x_axis
+```
+Now when you start the game the player should react to pressing `D` and `A` by slowly move left and right. 
+
+> aside positive
+> Notice, that we our code runs in the `_physics_porcess()` function. This is because of 2 reasons:
+> 1. We want the player to respond to our inputs. That means we need to check for changes every frame.
+> 2. We could just use the `_process()` function but since we are working with a `CharacterBody3D`, that uses physics, we use the `_physics_process()` to synchronize our changes with the physics engine. This avoids visual artifacts and physics glitches.
+
+#### Task
+Let's do the same with the **Z-axis** but try it on your own. If you are stuck, continue to the next section that has the solution.
+
+
+
+## Basic Player Input Pt.2
+Duration: hh:mm:ss
+
+### Solution
+Ok, the full `_physics_process()` function should look like this:
+
+```GDScript
+func _physics_process(delta : float) -> void:
+    var x_axis : float = Input.get_axis("left", "right")
+    var z_axis : float = Input.get_axis("backward", "forward")
+	
+    velocity.x = x_axis
+    velocity.z = -z_axis
+    move_and_slide()
+```
+
+> aside positive
+> Notice, that we used `-z_axis` instead of `z_axis`. That is because in the **negative Z-axis** is considered as the **forward** direction in Godot Engine. 
+
+### Make the player faster
+We can see that the player moves quite slowly. To change this we can multiply the values that are set to the `velocity` variable. Multiply both of these values by `5` and try it in the game. I would say this speed seems fine, however what if wanted to change it later on? We would have to find all lines where we multiply the velocity by `5`, that is not ideal.
+
+Let's change the export variable `speed` to a float (since we no longer use it), set its default value to `5`, and replace the `* 5` with it.
+```GDScript
+@export var speed : float = 5
+...
+func _physics_process(delta : float) -> void:
+...
+    velocity.x = x_axis * speed
+    velocity.z = -z_axis * speed
+```
+Now if we look in the **inspector** with the `Player` node selected, we can see the `Speed` parameter and we can change it. Start the game, move around, and change the value of `Speed` to see how the player responds to the changes.
+
+![](img/PlayerSpeed.png)
+
+
+## Simple Player Controller - Rotation
+Duration: hh:mm:ss
+
+Let's make a few tweaks to create a simple player controller. It won't be pretty, but it could be easily used in simpler games.
+
+### Camera follow
+You probably noticed that the player can easily run away from the camera. To make the camera follow the player in a very simple way, drag and drop the `Camera3D` node in the **scene hierarchy**, so that it is a child of the `Player` node. Now when you start the game, the camera stiffly follows the player around. Try it!
+
+![](img/CameraChild.png)
+
+### Rotate the player
+It would be nice if the player would look in the direction they are moving. Let's add this functionality.
+
+#### Cleanup
+First we should cleanup our code a bit. Since the code we have written handles movement let's create a function called `_movement()` and move all of the code there and call it in `_physics_process()`. We can also do the same for the for the code that we are about to write for player rotation.
+
+This should be the resulting code.
+```GDScript
+func _physics_process(delta : float) -> void:
+    _movement()
+    _rotate_player()
+
+    move_and_slide()
+
+func _movement() -> void:
+    var x_axis : float = Input.get_axis("left", "right")
+    var z_axis : float = Input.get_axis("backward", "forward")
+
+    velocity.x = x_axis * speed
+    velocity.z = -z_axis * speed
+
+func _rotate_player() -> void:
+    pass
+```
+
+> aside positive
+> Always try to split up the code into robust, logical, and reusable functions. You will thank yourself later ;)
+
+#### The rotation angle
+Using linear algebra we can calculate the angle that the player should be rotated by. We are interested in the `X` and `Z` direction of the player velocity. Place the following code snippet in the `_rotate_player()` function.
+
+```GDScript
+var angle : float = atan2(velocity.x, velocity.z) - PI
+```
+
+This gives us the degrees by which the player should be rotated. It might be more clear looking at the image below, where the value we are calculating is the `45°`.
+![](img/RotationAngle.png)
+
+#### The rotation axis
+Now we have the angle that the player needs to be rotated by, where do we set it? Let's find it out experimentally.
+1. Go in the 3D scene view.
+2. Select the `Player` node in the **scene hierarchy** and look at the **inspector**
+3. Try to rotate the player manually using the **Rotation** property, to find out which axis makes the player look left and right.
+
+![](img/PlayerRotation.png)
+
+If you followed my instructions (and didn't just skip here) you can see that we want to change the `Y-axis`.
+
+#### Setting the rotation by code
+Now let's change the rotation in code. We can use the variable `rotation` (same name as the property in the inspector), which is declared by the `Node3D` class. 
+
+> aside positive
+> You might say, that our `Player` node is a `CharacterBody3D` and not a `Node3D`, so how can it use `rotation`. If you `CTRL+Click` on the `CharacterBody3D` text on the first line of the script, the documentation opens up. Here you can see the inheritance chain and that `CharacterBody3D` class inherits from `Node3D` class. That is why we can use the variables declared by it.
+> 
+> ![](img/CharacterDocumentation.png)
+> To go back to the code simply click on it on the left panel (the left column on the image).
+
+If we simply change the value of `rotation.y`. With the function looking like this:
+```GDScript
+func _rotate_player(delta) -> void:
+    var angle : float = atan2(velocity.x, velocity.z) - PI
+    rotation.y = angle
+```
+
+You might notice the player is rotating as they should but, the camera also rotates with them. That is because the `Camera3D` node is a child of the `Player` node, so all transformations are propagated.
+
+#### Lerp - Theory
+Right now the rotation is way too fast and disorienting, let's smooth it out over multiple frames. We can use what's called a `lerp()` function. Basically it calculates a value between `start_value` and `end_value` based on a coefficient from `0.0` to `1.0`. It is called like this `lerp(start_value, end_value, [0.0 - 1.0])` and the values do not have to be floats, it works with vectors, colors, etc.
+
+Here are some examples:
+- `lerp(0, 10, 0.4) = 4`.
+- `lerp(-2, 6, 0.35) = 0.8`.
+- `lerp(-70, 124, 1.0) = 124`.
+
+> aside positive
+> The underlying formula is `lerp(A, B, t) = (1-t)*A + B*t`. If you are interested and want to understand more I recommend watching this video: <video id=YJB1QnEmlTs></video>
+
+#### Lerp - Rotate Smoothly
+So, now instead of setting the angle directly, let's interpolate from the current `rotation` to the new one we want.
+```GDScript
+rotation.y = lerp(rotation.y, angle, ?)
+```
+However, what will the parameter `t` be? One option is to "just use some constant between `0.0 - 1.0`, so it looks good". This is a good idea, but it isn't framerate independent. If we run the `_physics_process()` at 60FPS the interpolation will be much faster than at 30FPS. (nice example can be seen in the video above at 6:58)
+
+We need to compensate for the actual time, that has passed between the last call of the `_physics_process()` and now. That is exactly where **delta** comes in. The parameter that can be seen in `_process()` and `_physics_process` called `delta` is the time in seconds that has passed between the last and current frame.
+
+Ok, so delete the line:
+```GDScript
+rotation.y = angle
+```
+and replace it with:
+```GDScript
+rotation.y = lerp_angle(rotation.y, angle, rotation_speed * delta)
+```
+> aside positive
+> We used `lerp_angle` instead of `lerp` because we are interpolating angles. The angle variant of `lerp` works the same way with the added benefit of handling edge cases, where the object crosses a full circle rotation (going from `360°` to `0°`). 
+
+Where `delta` is the parameter from `_physics_process()` passed into the `_rotate_player()` function, and `rotation_speed` is a new new `@export` variable, that will control how fast the player rotates. 
+
+#### Task
+So additionally to make it all work:
+1. Change the `_rotate_player()` function header and call to include `delta`.
+2. Add the a new `@export` variable called `rotation_speed` of type `float`
+
+Try to do it yourself and experiment with different `rotation_speed` values. Once you are done or stuck you can continue to the solution, which is in the next section.
+
+
+
+## Simple Player Controller - Corrections
+Duration: hh:mm:ss
+
+### Solution
+```GDScript
+
+...
+@export var rotation_speed : float = 4
+
+...
+
+func _physics_process(delta : float) -> void:
+    _movement()
+    _rotate_player(delta)
+	
+    move_and_slide()
+
+...
+
+func _rotate_player(delta : float) -> void:
+    var angle : float = atan2(velocity.x, velocity.z) - PI
+	
+    rotation.y = lerp_angle(rotation.y, angle, rotation_speed * delta)
+```
+### Forward Correct Movement
+Right now if you try to play the game, the player does rotate according to the direction they move. However, you might notice that the forward direction is always the`-Z-axis`. To change this, so that `W` (and `S`) will always move the player forward in the direction they are facing, we need to have a look at the `_movement()` function again.
+
+Let's create a `Vector3` from the axes we saved from the input. We will do this in a way, that it will represent the direction we want to move in the coordinate space of the player.
+
+```GDScript
+var direction : Vector3 = Vector3(x_axis, 0, -z_axis)
+```
+
+Now we need to transform this `direction` based on how the player is rotated/scaled/sheered in the world. Luckily the `Node3D` class has just the thing for us and that is the **basis** of the node.
+
+> aside positive
+> If you don't remember, what a **basis** is from your linear algebra class. In short, it is a matrix, that represent the transformation from the Standard/Canonical Basis to our new basis (in this case the basis of the `Player` node).
+
+If we multiply the **basis** with the the `direction` of movement it will be transformed in to the coordinate space of the player. This new transformed direction can be used to move the player forward (in relation to their rotation). Making these changes to our `_movement()` function looks like this:
+
+```GDScript
+func _movement() -> void:
+    var x_axis : float = Input.get_axis("left", "right")
+    var z_axis : float = Input.get_axis("backward", "forward")
+	
+    var direction : Vector3 = Vector3(x_axis, 0, -z_axis)
+    direction = basis * direction
+	
+    velocity = direction * speed
+```
+> aside negative
+> Mind that, we can use the whole `direction` vector multiplied with speed and set it directly to `velocity` instead of doing it per axis.
+
+### Rotation Correction
+Try to play the game and see how it handles. You might notice that, while you are moving everything seems to work fine. Once you stop moving though, the player rotates back to face the `+Z-axis`. If we look at the implementation of our `_rotate_player()` function, you might notice the culprit.
+
+When we are not moving the `angle` variable is always set to `-PI`. That is why the player always rotates to face the `+Z-axis`. The fix is straightforward. We will simply not rotate the player, if they are not moving. You can do that by adding the following line at the start of the `_rotate_player()` function:
+```GDScript
+if abs(velocity.x) < 0.01 and abs(velocity.z) < 0.01: return
+```
+
+> aside positive
+> A few notes to the line above:
+> 1. The constant `0.01` is just an arbitrarily small number, since comparing float number directly with `== 0` does not work due to their imprecise nature.
+> 2. We need use the absolute value of the velocity. If we didn't the problem would still be present when moving in the negative axes.
+
+### Speed Correction
+You might have or might have not noticed, that moving diagonally is faster than moving in just one direction. The code for movement looks correct, so where is the problem? 
+
+![](img/DirectionNormalize.png)
+Looking at this image we can see
+- vector `a` = negative Z-axis input
+- vector `b` = positive X-axis input
+- vector `c` = `a`+`b`, which we are doing in code
+- vector `d` = our ideal `direcion` vector
+
+The problem should be apparent right now. While we are moving only in one direction the `direction` vector has the length of `1`, but when moving diagonally the `direction` vector has the length of `√2`. To fix this we will simply **normalize** the `direction` vector before we set it to velocity.
+
+```GDScript
+direction = direction.normalized()
+```
+
+The final resulting code should look like this and the Player Controller should behave like this:
+
+<video id=Vb7btu0sYBg></video>
+
+
+## Simple Player Controller - Gravity
+Duration: hh:mm:ss
+
