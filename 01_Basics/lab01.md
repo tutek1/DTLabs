@@ -10,7 +10,7 @@ Feedback Link: https://google.com
 ## Introduction
 Duration: hh:mm:ss
 
-This tutorial should provide a surface level overview of how to use Godot Engine to make games. It won't cover everything there is to cover and will only show a small number of ways how to program or create stuff. I suggest everyone to lookup other more detailed tutorials if a topic interests them in more depth than was covered.
+This tutorial should provide a surface level overview of how to use the open-source game engine **Godot Engine** to make games. It won't cover everything there is to cover and will only show a small number of ways how to program or create stuff. I suggest everyone to lookup other more detailed tutorials if a topic interests them in more depth than was covered.
 
 In this first lab we will cover:
 - Downloading the **Godot Engine**
