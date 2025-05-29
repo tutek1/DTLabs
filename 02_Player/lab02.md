@@ -528,3 +528,220 @@ The final resulting code should look like this and the Player Controller should 
 ## Simple Player Controller - Gravity
 Duration: hh:mm:ss
 
+If you tried to go over the edge of the platform or you moved the player high enough, you might have noticed, that the player doesn't fall down.
+
+This is because `CharacterBody3D` does not account for **gravity** by default and you need to add it manually in a script. Let's do it.
+
+### Gravity Code
+1. Add an another `@export` variable called `gravity` (default value `-9.81`)
+2. Create a new function called `_apply_gravity` with a float parameter of `delta`
+3. Call the new function in `_physics_process()`
+
+Now applying gravity the gravity can be done by adding this line to the new function.
+```GDScript
+velocity.y += gravity * delta
+```
+
+### Movement Correction
+If you play the game now, the player falls very slowly and with a constant speed. That is not how it should work. If you were to print out the value of velocity at the beginning and end of the `_physics_process()` function, you would see that the `y` component is constant, which confirms our suspicion.
+
+How to fix this? If we look at the `_movement()` function, we can see that we are setting the value of `velocity`, even the `y` component. Since this function only handles horizontal movement we should not change the `y` component. Here is the old line:
+```GDScript
+velocity = direction * speed
+```
+replace it with these lines:
+```GDScript
+velocity.x = direction.x * speed
+velocity.z = direction.z * speed
+```
+
+Now if you start the game and go off the edge of the platform the player falls.
+
+> aside positive
+> Usually games have higher gravity than the one on earth. It is more fun that way. If you want to play with the gravity parameter I recommend placing the player high up or close to the edge.
+
+### Why are we adding gravity every frame?
+Gravity is a force that **continuously** accelerates a body. In a game engine we can only apply forces (or run code) on a per frame basis -> **discrete**. However, with the parameter of `delta` we can compensate for the time that has passed between the frames.
+
+`delta` tells us how much time in seconds had passed since the last frame and the `gravity` variable we declared is in units of `m/s`.
+
+
+## Simple Player Controller - Jump
+Duration: hh:mm:ss
+
+Now that our player falls, let's make him jump!
+
+### Another functionality, another function
+Same as with the applying of the gravity we want to create a new function `_jump()` and a new `@export` variable `jump_force`.
+
+```
+@export var jump_force : float = 10
+...
+
+func _physics_process(delta : float) -> void:
+    ...
+    _jump()
+...
+
+func _jump() -> void:
+    pass
+```
+
+### New input
+We would like to make the player jump with `SPACE`, so let's add a new input action `jump` with this keybinding in the **Project Settings**.
+![](img/SpaceInput.png)
+
+
+### How to jump?
+Jumping can be implemented in many different ways and it always depends on the game, that we are making. One way is to apply a **continuous force** while the player is holding the jump button (for a limited time), which makes the jump very responsive. Another, simpler way, which we will implement, is to apply an **instant force** as the jump.
+
+
+### Jump Function Code
+#### Jump Force
+To apply the jump force we will simply set the the `velocity.y` to the value. Like this:
+```GDScript
+velocity.y = jump_force
+```
+
+However, this just sets the force every frame. We want to set it only when certain **conditions** are met. We will structure the function in a way, where we will first check all the conditions, return if they are not met and then apply the jump force.
+
+#### Input
+The first condition will be if the player has just pressed the jump button. In Godot there is a neat function `Input.is_action_just_pressed()` for it, which will tell us just that. So the first condition will look like:
+```GDScript
+if not Input.is_action_just_pressed("jump"): return
+```
+> aside positive
+> - ` Input.is_action_just_pressed()` tests if the action was pressed this frame.
+> - `Input.is_action_pressed()` tests if the action.
+
+
+#### Ground
+If you play the game now, you might notice, that you can jump as many times as you want, even in the air. So the second condition we would like to check is if we are on the ground. Luckily `CharacterBody3D` provides is with a function called `is_on_floor()`, which tells us exactly that. The condition will look like this:
+
+```GDScript
+if not is_on_floor(): return
+```
+
+> aside positive
+> Some of you might be wondering if calling the `is_on_floor()` every frame is hindering our performance in any way. Well, since Godot is open-source, we can check the [Source Code](https://github.com/godotengine/godot/blob/master/scene/3d/physics/character_body_3d.cpp#L633), and see what is happening behind the scenes. 
+>
+> Looking at the source code, we can see that it only returns a boolean `collision_state.floor`, so no expensive computation is happening here :)
+
+#### Full function
+The fully implemented jumping function should look like this:
+```GDScript
+func _jump() -> void:
+    if not Input.is_action_just_pressed("jump"): return
+    if not is_on_floor(): return
+	
+    velocity.y = jump_force
+```
+
+I suggest you play the game for a bit and test different values for the `gravity` and `jump_force` parameters, so that you can see how the values influence the player character.
+
+<video id=3H-gvI9vTFc></video>
+
+
+
+## Better Camera - Follow the Player
+Duration: hh:mm:ss
+
+Right now the behavior of the camera that follows the player is suboptimal. It could work for some games but I want the camera in this game to follow the player more smoothly.
+
+### Separate the Camera
+Let's remove the `Camera3D` node from the `Player` node and move it one step up, so that it is a **sibling** of the `Player` and not a child. This way it won't rotate and move the same way as the player and we will have to control this ourselves.
+
+![](img/CameraSeparate.png)
+
+### Create a Camera Script
+To control the camera ourselves, we need to create a new script.
+1. Select the `Camera3D` node in the scene hierarchy
+2. Press the ![](img/AttachScriptIcon.png) button on top of the scene hierarchy
+3. Click the ![](img/FolderIcon.png) in the popup window to change the path to `3D/Camera` (create the folder `Camera` if needed)
+4. Rename the script (end of the path) to `player_camera_3d.gd`
+5. The full path should look like `res://3D/Camera/player_camera_3d.gd`
+6. Press **Create**
+
+The script should open with just one line:
+```GDScript
+extends Camera3D
+```
+
+### Write the Camera Script
+Now we need to fill out the script so that our camera **follows** the player and **rotates** with mouse movement. Let's split this up and focus on following the player for now.
+
+#### Base framework
+This is the base setup of the script for the camera to follow the player (or any target). Please **copy and paste** it into your script.
+```GDScript
+extends Camera3D
+
+@export var camera_target : Node3D
+@export var follow_speed : float = 2
+
+
+func _physics_process(delta : float) -> void:
+    _follow_target(delta)
+
+func _follow_target(delta : float) -> void:
+    pass
+```
+> aside positive
+> We could have chosen `CharacterBody3D` instead of `Node3D` for the `camera_target` variable, because our camera will follow the player. However, it is always a good idea to use the **highest possible parent class** in the inheritance chain. In our case it is the `Node3D` class, since it stores 3D **position/rotation/scale** and allows the camera to follow any 3D object (it will come in handy ;) )
+
+#### Follow the player
+Now we need to implement the `_follow_target()` function. The camera should **smoothly follow** the player across multiple frames. If this rings a bell, it’s because linear interpolation (**lerp**) is ideal for this task. We used it when we wanted to rotate the player in the direction of their movement.
+
+To change the position of a `Node3D` node (`Camera3D` class also inherits from it), we can modify the property/variable `position`. We did the same with rotation in the `_rotate_player()` function.
+
+> aside negative
+> The `position` variable handles the local position of a node. You can think of it as an offset from the parent node.
+>
+> If you want to change the location of a node in relation to the scene root you can use `global_position` instead.
+
+If we put all of this together, the resulting line will be:
+```GDScript
+position = lerp(position, camera_target.position, follow_speed * delta)
+```
+You can think of it as moving the current `position` a bit closer to the `camera_target.position` every frame with a set speed.
+
+#### Adding an offset
+Try running the game. You might notice that the camera does indeed smoothly follow the player. The problem is that it goes inside the player. The solution is to add an **offset**, which will dictate how far away the camera should stay from the player.
+
+Declare a new `@export` variable `camera_offset` of type `Vector3`:
+
+```GDScript
+@export var camera_offset : Vector3 = Vector3(0, 2, 5)
+```
+and add it to the **target position** that we want the camera to be in:
+```GDScript
+position = lerp(..., camera_target.position + camera_offset, ...)
+```
+
+> aside positive
+> Not all variables should have the `@export` annotation. However, we will want to easily change this parameter, to find the value that fits the game the best.
+
+
+## Better Camera - Rotate with Mouse
+Duration: hh:mm:ss
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Bonus - Player Controller - Velocity 
+Duration: hh:mm:ss
+
+This is a **optional** section, where we will expand on the Player Controller from previous sections. This version will not just override the **velocity** every frame but add to it. This will make the player have acceleration, deceleration, and inertia, which will feel more natural while remaining responsive.
+
+TODO
