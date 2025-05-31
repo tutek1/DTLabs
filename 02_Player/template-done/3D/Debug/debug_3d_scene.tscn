@@ -142,16 +142,20 @@ transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, -27.9056, 7.73008, 4.33
 [node name="Coil3" parent="Enviroment" instance=ExtResource("2_krwbd")]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -27.9056, 9.53008, 21.3321)
 
-[node name="Camera3D" type="Camera3D" parent="." node_paths=PackedStringArray("camera_target")]
-transform = Transform3D(1, 0, 0, 0, 0.958437, 0.285304, 0, -0.285304, 0.958437, 0, 14.1815, 3.69073)
+[node name="CameraPivot" type="Node3D" parent="." node_paths=PackedStringArray("camera_target")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 14.1815, 22.4002)
 script = ExtResource("4_krwbd")
 camera_target = NodePath("../Player")
 
-[node name="Player" type="CharacterBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.6969, 0)
+[node name="Camera3D" type="Camera3D" parent="CameraPivot"]
+
+[node name="Player" type="CharacterBody3D" parent="." node_paths=PackedStringArray("camera_pivot")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.29822, 0)
 script = ExtResource("3_hn7em")
+camera_pivot = NodePath("../CameraPivot")
+acceleration = 20.0
 gravity = -29.43
-jump_force = 15.0
+jump_force = 11.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
 mesh = SubResource("CapsuleMesh_nqv4f")

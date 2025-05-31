@@ -704,6 +704,9 @@ position = lerp(position, camera_target.position, follow_speed * delta)
 ```
 You can think of it as moving the current `position` a bit closer to the `camera_target.position` every frame with a set speed.
 
+> aside positive
+> Remember to drag the `Player` node into the `Camera Target` property in the **Inspector**.
+
 #### Adding an offset
 Try running the game. You might notice that the camera does indeed smoothly follow the player. The problem is that it goes inside the player. The solution is to add an **offset**, which will dictate how far away the camera should stay from the player.
 
@@ -721,27 +724,247 @@ position = lerp(..., camera_target.position + camera_offset, ...)
 > Not all variables should have the `@export` annotation. However, we will want to easily change this parameter, to find the value that fits the game the best.
 
 
+
+
 ## Better Camera - Rotate with Mouse
 Duration: hh:mm:ss
 
+The camera should rotate around the player like in any **third-person** game.
+
+### Getting the mouse input
+The easiest way to gather how much the mouse has moved is to use the `_input()` function. This function is also part of the Godot lifecycle and is called every time on every node in the tree, when an user input happens.
+
+The `_input()` function has a parameter `event` of type `InputEvent`, which tells us information about the input. In our case we will first check, if the input is of class type `InputEventMouseMotion` (mouse movement) and then we will call a new function `_rotate_camera`. We will also pass into the function, how much has the mouse moved since the last frame using `event.relative`.
+
+```GDScript
+func _input(event : InputEvent) -> void:
+    if event is InputEventMouseMotion: 
+        _rotate_camera(event.relative.x, event.relative.y)
+```
+
+### Rotate function
+We can simply change the rotation of the camera using the property `rotation`. Let's also add an `@export` parameter for the camera sensitivity:
+
+```GDScript
+@export var camera_sens : Vector2 = Vector2(0.005, 0.003)
+
+...
+
+func _rotate_camera(x : float, y : float) -> void:
+    rotation.x -= y * camera_sens.x
+    rotation.y -= x * camera_sens.y
+```
+
+> aside negative
+> The **X-axis** of the camera should be rotated by moving the mouse up and down - **Y-axis** of the mouse.
+>
+> The **Y-axis** of the camera should be rotated by moving the mouse left and right - **X-axis** of the mouse.
+
+### Camera pivot scene setup
+If you play the game now, the camera does rotate in place (ideal for **first-person** games). However, we are making a **third-person** game. In third person games the camera should rotate around the player (more abstractly a pivot point). Since we want the camera to follow smoothly after the player, let's add a pivot point `Node3D`. This pivot will have the camera as a child and will smoothly follow the player.
+
+This should be the setup:
+
+![](img/CameraPivot.png)
+
+> aside negative
+> Please **move** to script to the pivot and change the first line to extend `Node3D` instead of `Camera3D`.
+
+### Camera offset correction
+Now we also need to change how we use the `camera_offset` variable, so that it reflects our new setup. The offset should be applied to the child of the pivot - `Camera3D`. To access the child node we need a reference to it. We could make an another `@export` variable but the following way is easier and less error prone. Write this line just below the export variables:
+
+```GDScript
+@onready var camera_3d : Camera3D = $Camera3D
+```
+
+> aside positive
+> The `@onready` annotation makes the variable assignment run in `_ready()` function. It is the same as doing:
+> ```GDScript
+> func _ready() -> void:
+>   camera_3d = get_node("Camera3D")
+> ```
+
+> aside positive
+> It is recommended to use these absolute node references `$node_name` if we are referencing a **child** of the current node and `@export` is we are referencing a node outside of the subtree of the current node.
+
+Now we need to modify the `_follow_target()` function.
+1. Remove the `camera_offset` addition in the lerp
+2. Add the following line below the lerp
+```GDScript
+camera_3d.position = camera_offset
+```
+
+Try playing the game and the values of `camera_offset` and `follow_speed`.
+
+### Camera limit
+If you played around with the camera, you might have noticed that you can rotate the camera all the way around. Even to the point where it is **upside-down**. Let's add limits to the camera.
+
+```GDScript
+@export var camera_limit : Vector2 = Vector2(-60,60)
+
+...
+func _rotate_camera(x : float, y : float) -> void:
+
+    ...
+    rotation_degrees.x = clamp(rotation_degrees.x, camera_limit.x, camera_limit.y)
+```
+
+### Locking the mouse
+The camera only responds to the mouse if the mouse is inside the **Game** view. Let's lock the mouse inside it, so that we can easily look around.
+
+This part is quite easy just add this function to the camera script:
+```GDScript
+func _ready() -> void:
+    Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+```
+
+> aside positive
+> To stop playing the game press **F8** or press the **Windows Key** to escape the mouse.
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-## Bonus - Player Controller - Velocity 
+## Player Controller - Camera forward 
 Duration: hh:mm:ss
 
-This is a **optional** section, where we will expand on the Player Controller from previous sections. This version will not just override the **velocity** every frame but add to it. This will make the player have acceleration, deceleration, and inertia, which will feel more natural while remaining responsive.
+Now the player does not handle very well. I would like the player to move forward in the direction of the camera, not the player themselves.
 
-TODO
+### Change the basis
+Open the `player_controller.gd` file and look in the `_movement()` function. If you remember, the movement direction is adjusted by the **basis** of the player. Let's try to change it to the basis of the camera.
+1. Add an `@export` variable as a reference to the camera pivot.
+2. Change the `direction` calculation to use the **basis** of the camera pivot
+
+If we run the game now, it crashes with an error
+![](img/ReferenceError.png)
+
+If we look at the error and the line it tells us the error is at, we can deduce that the `camera_pivot` must be `Nil` (null). That is indeed the case, because we forgot to set the reference to the camera pivot in the **Inspector** of the player script. Please set it.
+
+### Wrong direction
+If you are very observant, you might have noticed that when you are looking down, the player moves **slower** than when you are looking forward. This happens due to the way we are calculating the **direction** vector. Since the forward vector of the camera pivots basis can point down/up the resulting direction will be skewed by this.
+
+An easy fix is to ignore the `y` component, while still normalizing the direction. The whole direction calculation will look like this:
+
+```GDScript
+var direction : Vector3 = Vector3(x_axis, 0, -z_axis)
+direction = camera_pivot.basis * direction
+direction.y = 0
+direction = direction.normalized()
+```
+
+### The result
+With all of this done, we have a pretty solid player controller and a third-person camera. You can always make it more responsive, more robust etc. (see bonus sections) but this is a very usable setup.
+
+<video id=FGj33txMw3g></video>
+
+
+
+## Bonus Task - Double jump 
+Duration: hh:mm:ss
+
+As a bonus let's add a double jump to our player. You can try it on your own.
+1. Create a new function `_double_jump()` to handle this functionality
+2. Create a "private" bool `_has_double_jumped` to remember if double jump has already happened
+3. Reset the bool upon touching the floor
+4. Check the double jump conditions
+
+
+
+## Bonus Solution - Double jump 
+Duration: hh:mm:ss
+
+```GDScript
+# Handles the double jump of the player, conditions, reset, and apply
+func _double_jump() -> void:
+    # Double jump reset when on ground
+    if is_on_floor():
+        _has_double_jumped = false
+        return
+	
+    # Conditions
+    if _has_double_jumped: return
+    if not Input.is_action_just_pressed("jump"): return
+	
+    # Jump
+    _has_double_jumped = true
+    velocity.y = jump_force
+```
+
+
+
+## Bonus - Velocity-based player 
+Duration: hh:mm:ss
+
+This is a **optional** section, where we will expand on the Player Controller from previous sections. This version will not just override the **velocity** every frame but add to it. This will make the player have acceleration, deceleration, and inertia, which will feel more natural while remaining responsive. It is not strictly better or worse than the controller we already have. It always depends on the games you are making.
+
+### Additional parameters
+First, let's define some more `@export` variables.
+
+```GDScript
+@export var acceleration : float = 75
+@export var dampening : float = 7
+```
+
+- **Acceleration** will control how fast will the player reach the max speed (`speed` parameter).
+- **Dampening** will control how fast will the player slow down, when not pressing inputs.
+
+### Add force to velocity
+Next go to the `_movement()` function. Let's **add** the speed change of this frame to the velocity. Since we want add acceleration (meters per second) we need to pass the `delta` time.
+
+Replace the:
+```GDScript
+velocity.x = direction.x * speed
+velocity.z = direction.z * speed
+```
+
+with:
+```GDScript
+velocity.x += direction.x * delta * acceleration
+velocity.z += direction.z * delta * acceleration
+```
+
+Playing the game now, you can see that the player easily accelerates the crazy speeds. It feels like being on an extremely slippery ice.
+
+### Max speed
+Now we need to clamp (limit) the max speed of the player based on the `speed` parameter. We also need to be careful not to limit the `Y` component, since that is controlled by gravity and jumping, not the `_movement()` function.
+
+Let's create a new velocity variable with only the `x` and `z` components to test the max speed. Paste this code under the `velocity` change we added above:
+
+```GDScript
+var horizontal_velocity : Vector3 = Vector3(velocity.x, 0, velocity.z)
+if horizontal_velocity.length() > speed:
+    horizontal_velocity = horizontal_velocity.normalized() * speed
+    velocity.x = horizontal_velocity.x
+    velocity.z = horizontal_velocity.z
+```
+
+Now the player is much more controllable. However, the player still needs to decelerate because now the player just keeps sliding forever.
+
+### Dampening
+Simplest way to apply the dampening is to multiply the `velocity` with some number just under 1 (for example `0.998`). But of course we need to account for `delta` since this way the dampening would be much stronger with higher framerates.
+
+Let's also check if the player wants to move `x_axis` and `z_axis` variables. So that we apply dampening only when the player doesn't want to move. This way the max speed will be consistent. Add this code below clamping of the max speed:
+
+```GDScript
+if abs(z_axis) < 0.01 and abs(x_axis) < 0.01:
+    velocity.x *= 1 - dampening * delta
+    velocity.z *= 1 - dampening * delta
+```
+
+### The Result
+Now the player handles much better in my opinion. Try to play with the `acceleration`, `dampening`, and `speed` parameters to see how they influence the gameplay feel of the game.
+
+<video id=4gKj2mov560></video>
+
+
+
+## Recap
+Duration: hh:mm:ss
+
+Let's look at what we did in this lab.
+- We added a `CharacterBody3D` with a test model, composed of several `MeshInstance3D` nodes 
+- We learned how to **enter** our game
+- Then we looked at the **GDScript** language and learned how to get the **player input**
+- We finished the player controller with **rotation** in the movement direction, application of **gravity**, and **jumping** functionality
+- Last thing we did in the mandatory part was making the **camera** follow the player and **rotate** it with mouse movements around a pivot point
+- In the first **bonus** part we added **double jump** to our game
+- Lastly in the second **bonus** part we implemented a **velocity-based** player controller
