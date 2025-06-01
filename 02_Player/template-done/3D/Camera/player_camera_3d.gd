@@ -7,6 +7,7 @@ extends Node3D
 @export var camera_limit : Vector2 = Vector2(-60,60)
 
 @onready var camera_3d : Camera3D = $Camera3D
+@onready var shapecast_3d : ShapeCast3D = $ShapeCast3D
 
 
 func _ready() -> void:
@@ -21,7 +22,17 @@ func _input(event : InputEvent) -> void:
 
 func _follow_target(delta : float) -> void:
 	position = lerp(position, camera_target.position, follow_speed * delta)
-	camera_3d.position = camera_offset
+	
+	shapecast_3d.target_position = camera_offset
+	
+	if not shapecast_3d.is_colliding():
+		camera_3d.position = camera_offset
+		return
+	
+	var point : Vector3 = shapecast_3d.get_collision_point(0)
+	point += shapecast_3d.get_collision_normal(0) * (shapecast_3d.shape as SphereShape3D).radius
+	point = to_local(point)
+	camera_3d.position = point
 
 func _rotate_camera(x : float, y : float) -> void:
 	rotation_degrees.x -= y * camera_sens.x

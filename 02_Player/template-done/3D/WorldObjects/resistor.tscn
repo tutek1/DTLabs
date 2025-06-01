@@ -23,6 +23,7 @@ material = SubResource("StandardMaterial3D_fr313")
 size = Vector3(0.5, 1, 0.5)
 
 [node name="Resistor" type="StaticBody3D"]
+collision_mask = 3
 
 [node name="Base" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_kelvc")

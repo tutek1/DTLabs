@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://chnffv2lmano5"]
+[gd_scene load_steps=17 format=3 uid="uid://chnffv2lmano5"]
 
 [ext_resource type="PackedScene" uid="uid://44guktn5iwdy" path="res://3D/WorldObjects/resistor.tscn" id="1_8km36"]
 [ext_resource type="PackedScene" uid="uid://co65xg3ltrdrq" path="res://3D/WorldObjects/big_resistor.tscn" id="2_8km36"]
@@ -20,6 +20,9 @@ albedo_color = Color(0.151953, 0.309407, 0.152003, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_aq7nb"]
 size = Vector3(70, 1, 70)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_krwbd"]
+radius = 0.3
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_nqv4f"]
 material = ExtResource("4_g7e0o")
@@ -51,6 +54,7 @@ shadow_enabled = true
 [node name="Enviroment" type="Node3D" parent="."]
 
 [node name="Ground" type="StaticBody3D" parent="Enviroment"]
+collision_mask = 3
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Enviroment/Ground"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0500813, 0.0300798, -0.0110531)
@@ -149,11 +153,14 @@ camera_target = NodePath("../Player")
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot"]
 
+[node name="ShapeCast3D" type="ShapeCast3D" parent="CameraPivot"]
+shape = SubResource("SphereShape3D_krwbd")
+
 [node name="Player" type="CharacterBody3D" parent="." node_paths=PackedStringArray("camera_pivot")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.29822, 0)
+collision_layer = 2
 script = ExtResource("3_hn7em")
 camera_pivot = NodePath("../CameraPivot")
-acceleration = 20.0
 gravity = -29.43
 jump_force = 11.0
 

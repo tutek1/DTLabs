@@ -1,6 +1,6 @@
 summary: Player Character and Camera
 id: export
-categories: Player Controller, Camera, Materials, GDScript
+categories: 3D, Player Controller, Camera, Materials, GDScript
 status: Published
 authors: Ondřej Kyzr
 Feedback Link: https://google.com
@@ -820,6 +820,99 @@ func _ready() -> void:
 
 > aside positive
 > To stop playing the game press **F8** or press the **Windows Key** to escape the mouse.
+
+
+
+
+## Better Camera - Raycast
+Duration: hh:mm:ss
+
+Right now if you move the camera, it can go inside of objects and walls. This is can be fixed by **raycasting**. Raycasting is the process of shooting a ray from a given position in a given direction until it reaches its maximum distance or a physics object.
+
+We will use **raycasting** to shoot a ray from the `CameraPivot` to the `Camera3D` and if any object is in the way, we will set the camera offset to that point.
+
+### RayCast3D
+Let's add a `RayCast3D` node as a child of the `CameraPivot`. Now we will interact with it in the `player_camera_3d.gd` script. To get the reference to it. add the following line to the top of the script:
+
+```GDScript
+@onready var raycast_3d : RayCast3D = $RayCast3D
+```
+
+
+Delete the following line:
+```GDScript
+camera_3d.position = camera_offset
+```
+and paste these lines instead of it:
+```GDScript
+raycast_3d.target_position = camera_offset
+	
+if not raycast_3d.is_colliding():
+    camera_3d.position = camera_offset
+    return
+	
+var point : Vector3 = raycast_3d.get_collision_point()
+point = to_local(point)
+camera_3d.position = point
+```
+
+Let's go though the code and explain, what is happening.
+1. First we set the `raycast_3d.target_position` to the camera offset.
+2. Then we check if the raycast has hit something or if we should just use the camera offset.
+3. Then we get the point (position), where the ray has hit the terrain.
+4. Transform the point into the local coordinates of the camera pivot.
+5. Then we set the offset.
+
+### Problem 1 - Offset from surface
+The raycasting now works pretty solidly, however you still might see inside the terrain when moving the camera close to the edges.
+
+This can be fixed by moving the `point` in the direction of the normal vector of the hit terrain.
+
+![](img/RaycastCamera.png)
+
+Add this line before the `to_local()` call:
+```GDScript
+point += raycast_3d.get_collision_normal() * 0.5
+```
+
+### Problem 2 - Change to ShapeCast3D
+However, this only fixes our problem only partway. A better solution is to change `RayCast3D` to `ShapeCast3D`. This node works in a similar way to a raycast. Instead of shooting a ray in a direction, it shoots a shape in that direction and checks if it collides with anything.
+
+These are the changes to be made:
+
+![](img/Shapecast2.png) ![](img/Shapecast.png)
+
+```GDScript
+@onready var shapecast_3d : ShapeCast3D = $ShapeCast3D
+
+...
+
+func _follow_target(delta : float) -> void:
+    position = lerp(position, camera_target.position, follow_speed * delta)
+
+    shapecast_3d.target_position = camera_offset
+	
+    if not shapecast_3d.is_colliding():
+        camera_3d.position = camera_offset
+        return
+	
+    var point : Vector3 = shapecast_3d.get_collision_point(0)
+    point += shapecast_3d.get_collision_normal(0) * (shapecast_3d.shape as SphereShape3D).radius
+    point = to_local(point)
+    camera_3d.position = point
+```
+
+### Problem 3 - Player collisions
+Now the setup seems even more broken because it just shows the backpack of the player. This is because the `ShapeCast3D` is colliding with the player. We need to learn a bit about collision masks and layers.
+
+#### Collision layer and mask
+Each physics object has a physics layer and a physics mask. The **physics layer** tells the physics engine, what kind of physics object it is. The **physics mask** tells the physics engine, which physics layers is the object interested in (wants to be updated upon collision update with that layer).
+
+Let's setup the layers and masks of the scene objects so that the shapecast only cares about the terrain (which is the default). Please use this video to set it up:
+<video id=g9lYt3jF950></video>
+
+
+The video also shows the result of this section.
 
 
 
