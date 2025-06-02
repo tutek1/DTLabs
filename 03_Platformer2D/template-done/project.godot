@@ -64,11 +64,11 @@ jump={
 
 [layer_names]
 
-2d_physics/layer_1="Ground"
+2d_physics/layer_1="Terrain"
 3d_physics/layer_1="Terrain"
 2d_physics/layer_2="Player"
 3d_physics/layer_2="Player"
-2d_physics/layer_3="Spikes"
+2d_physics/layer_3="Layer 3"
 
 [physics]
 

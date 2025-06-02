@@ -51,8 +51,11 @@ func _movement(delta : float) -> void:
 	
 	# Dampening if not moving
 	if abs(z_axis) < 0.01 and abs(x_axis) < 0.01:
-		velocity.x *= 1 - dampening * delta
-		velocity.z *= 1 - dampening * delta
+		var damp_coef : float = 1 - dampening * delta
+		damp_coef = clamp(damp_coef, 0, 1)
+		
+		velocity.x *= damp_coef
+		velocity.z *= damp_coef
 
 # Rotates the player based on the direction they are moving on the Y-axis
 func _rotate_player(delta : float) -> void:
