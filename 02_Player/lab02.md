@@ -906,7 +906,7 @@ func _follow_target(delta : float) -> void:
 Now the setup seems even more broken because it just shows the backpack of the player. This is because the `ShapeCast3D` is colliding with the player. We need to learn a bit about collision masks and layers.
 
 #### Collision layer and mask
-Each physics object has a physics layer and a physics mask. The **physics layer** tells the physics engine, what kind of physics object it is. The **physics mask** tells the physics engine, which physics layers is the object interested in (wants to be updated upon collision update with that layer).
+Each physics object has a collision layer and a collision mask. The **collision layer** tells the physics engine, what kind of physics object it is. The **collision mask** tells the physics engine, which collision layers is the object interested in (wants to be updated upon collision update with that layer).
 
 Let's setup the layers and masks of the scene objects so that the shapecast only cares about the terrain (which is the default). Please use this video to set it up:
 <video id=g9lYt3jF950></video>
