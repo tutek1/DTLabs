@@ -171,6 +171,10 @@ Let's set up the player node:
 
 ![](img/CharacterBodySetup.png)
 
+Let's also rename the second collision layer/mask to **"Player"** and change the collision layer and mask of the player in this way:
+
+![](img/CollisionLayerMask.png)
+
 
 ### Sprite2D setup
 A sprite is basically an image/texture that is show to the screen. Sprites in Godot allow us to use a **"region"** of an image. We will use this to get the player sprite from the `spritesheet.png` file. With the `Sprite2D` node **selected**:
@@ -208,6 +212,7 @@ If you play the game, the base camera is very zoomed out. Add a new `Camera2D` n
 
 > aside positive
 > Adjust the `Zoom` property of the camera if it is too zoomed out.
+
 
 
 ### Task - Player Controller 2D
@@ -311,7 +316,24 @@ func _double_jump() -> void:
 ## Functional Jump Pad
 Duration: hh:mm:ss
 
+If you placed the **jump pad tile** in to the environment you might notice, that it does not work. This is because we have not given the tile any functionality.
 
+One option would be to make it a **separate scene**, code a script that would detect the player, and apply force to the player.
+
+The second and much easier option is to paint the physics property of `linear_velocity` to the tile in the `TileSet`. This will apply velocity to every body, that is touching the tile.
+
+![](img/LinearVelocity.png)
+1. Open the `platforming_tileset.tres` file
+2. Make sure you have the **TileSet** tab opened
+3. Select the **Select** tab
+4. Select the **jump pad tile**
+5. Open the dropdown **Physics** and then **Physics Layer 0**
+6. Set the `Y` component of the property `Linear Velocity` to `-500` for example.
+
+> aside positive
+> Remember, that in 2D the **up-direction** is in the direction of negative `Y`.
+
+Now if you play the game and step on the **jump pad** the player will be pushed upwards.
 
 
 
@@ -319,6 +341,108 @@ Duration: hh:mm:ss
 ## Functional Electric Cables/Spikes
 Duration: hh:mm:ss
 
+Now let's look at the **electric cable** sprites, that are in the sprite sheet. I want them to act like spikes in any other 2D platforming games. You might also notice, that there are several tile with them. That is because I made an animation and we will also learn how to create an **animated tile**.
+
+### Animated Tile
+First, we need to only keep the first sprite as a tile. So with the `TileSet` open:
+
+1. Go in the `Setup` tab
+2. **Right-click** on the second cable tile
+3. Press **Delete**
+4. Repeat for the 3rd and 4th cable tile
+
+Next up:
+
+![](img/CableTile.png)
+
+1. Go into the **Select** tab
+2. Select the **first cable tile**
+3. Open the **Animation** -> **Frames** dropdown and add `4` frames
+
+You can further adjust the **duration** of the frames. Something around `0.15 s` looks good.
+
+
+### Tile Custom Data and Physics Shape
+We will detect if the player is touching the spikes with **Custom Data** of a tile. With the `TileSet` selected:
+
+![](img/DamageOnTouch.png)
+
+1. Add a custom data layer **"DamageOnTouch"** of type `bool`
+2. Go into the **Select** tab
+3. Select the **cable tile**
+4. Under the dropdown **Custom Data** set **"DamageOnTouch"** to `On`
+
+Now to detect the collision, the electric cables need a physics shape. Add it in the **select** tab so it looks similar to this:
+
+![](img/CablePhysics.png)
+
+> aside positive
+> I recommend setting the collider a bit lower than the highest pixels of the sprite. It gives the player a bit of leeway when trying to dodge them.
+
+
+### Process Collision
+Now we need to go though at all the **collisions** of the player to see, if any collision with a tile with the Custom Data "DamageOnTouch" set has happened.
+
+To find the collision that happened this frame in the `CharacterBody2D`, we can call `get_slide_collision(idx)` function to get a collision. However, this function needs to be called **AFTER** the function `move_and_slide()`, since it handles the collisions.
+
+Add a call to a function `_process_new_collision()` after the `move_and_slide()` call. Now add the following function at the end of the script:
+
+```GDScript
+func _process_new_collision():
+    for i in get_slide_collision_count():
+        var collision : KinematicCollision2D = get_slide_collision(i)
+        var collider : Object = collision.get_collider()
+		
+        if collider is TileMapLayer:
+            var tile_rid : RID = collision.get_collider_rid()
+            var tile_coords : Vector2 = collider.get_coords_for_body_rid(tile_rid)
+            if collider.get_cell_tile_data(tile_coords).get_custom_data("DamageOnTouch"):
+                print("cable touch")
+```
+
+- The `for cycle` goes through each new collision that happened after the `move_and_slide()` call, which applies the `velocity`.
+- We get the **collision** that happened with `get_slide_collision(i)`.
+- We get the **collider** that the player collided with using `collision.get_collider()`.
+- Next we check if the collider `is` a `TileMapLayer` -> if the player collided with the tilemap.
+- Then we get the `RID`, which is the **unique Resource ID** of the tile we collided with.
+- We use this RID to get the **coordinates** of tile in the `TileSet`
+- Lastly, we get the `TileData` of the tile using its coordinates and we get the **Custom Data** of the tile to check if it has `DamageOnTouch` turned on.
+
+> aside positive
+> The keyword `is` is be used to check the class type.
+
+
+For now, it just print **"cable touch"**. **Place** some cables in the scene, play the game, and try to jump on them. The **"cable touch"** should be printed in the `Output` console.
+
+
+### Reset on collision
+You can decide, what happens when the player touches the cables. For now, before we add the **2DPlatforming** game to **3D** game, I want to just reset the scene.
+
+We can do this by changing the `print` line with:
+```GDScript
+get_tree().reload_current_scene()
+```
+
+If you try to just on the cables now, you can see that it works. The more observant of you might notice that the `Debugger` throws this error:
+
+`player_controller_2d.gd:75 @ _process_new_collision(): Parameter "found" is null.`
+
+Looking at the code, the issue might not be so obvious. The problem arises, if there are **multiple collisions** with the cables in one frame. The first collision **resets** the scene and then the other collisions try to interact with the deleted scene. To fix this, we can easily **add** a
+```GDScript
+return
+```
+statement after the scene reload line.  
+
+
+
+
+
+## Correct Viewport Scale
+Duration: hh:mm:ss
+
+Right now if you change the **window size**, the size of objects stay the same on the monitor. You might think that this is what we want, but consider someone with a bigger monitor resolution. In this case the game would not show as it should. Let's change it in the **Project Settings**. Watch this video and follow it step by step:
+
+<video id=srwBrfGeiKs></video>
 
 
 
@@ -328,9 +452,10 @@ Duration: hh:mm:ss
 Duration: hh:mm:ss
 
 Let's look at what we did in this lab.
--s
--s
--s
--s
--s
-
+- We looked at **project organization** and folder management
+- Then we learned what **sprite sheets** are and how to setup a `TileSet` from one
+- We used the created `TileSet` in a `TileMapLayer` and drew an **environment**
+- Next I tasked you to create a **2D player controller**
+- Then we make the **jump pad** functional using the `Linear Velocity` property in tiles
+- We added **electric cables**, which reset the level on touch, while learning about **Custom Data** in tiles and how to get them.
+- Lastly, we set up the camera to **correctly scale** with the window size

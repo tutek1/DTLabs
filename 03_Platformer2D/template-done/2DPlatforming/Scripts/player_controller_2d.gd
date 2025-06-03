@@ -22,6 +22,7 @@ func _physics_process(delta : float) -> void:
 	_double_jump()
 	
 	move_and_slide()
+	_process_new_collision()
 
 # Handles the horizontal movement of the player
 func _movement(delta : float) -> void:
@@ -63,3 +64,15 @@ func _double_jump() -> void:
 	# Jump
 	_has_double_jumped = true
 	velocity.y = jump_force
+
+func _process_new_collision():
+	for i in get_slide_collision_count():
+		var collision : KinematicCollision2D = get_slide_collision(i)
+		var collider : Object = collision.get_collider()
+		
+		if collider is TileMapLayer:
+			var tile_rid : RID = collision.get_collider_rid()
+			var tile_coords : Vector2 = collider.get_coords_for_body_rid(tile_rid)
+			if collider.get_cell_tile_data(tile_coords).get_custom_data("DamageOnTouch"):
+				get_tree().reload_current_scene()
+				return
