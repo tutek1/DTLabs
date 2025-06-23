@@ -1,0 +1,33 @@
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://bvc2nov1ftb8f"]
+
+[ext_resource type="Texture2D" uid="uid://b54uubuck7wy4" path="res://2DPlatforming/Sprites/spritesheet.png" id="1_2drve"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7oxwy"]
+texture = ExtResource("1_2drve")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, -16, 16, 16, 16, 16, -16)
+2:0/next_alternative_id = 2
+2:0/animation_frame_0/duration = 0.15
+2:0/animation_frame_1/duration = 0.15
+2:0/animation_frame_2/duration = 0.15
+2:0/animation_frame_3/duration = 0.15
+2:0/0 = 0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, 16, -16, 4, 16, 4, 16, 16)
+2:0/0/custom_data_0 = true
+2:0/1 = 1
+2:0/1/flip_v = true
+2:0/1/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, -4, -16, -4)
+2:0/1/custom_data_0 = true
+6:0/0 = 0
+6:0/0/physics_layer_0/linear_velocity = Vector2(0, -500)
+6:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-10, 12, -14, 16, 14, 16, 10, 12)
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -8, -16, 8, 16, 8, 16, -8)
+
+[resource]
+tile_size = Vector2i(32, 32)
+physics_layer_0/collision_layer = 1
+custom_data_layer_0/name = "DamageOnTouch"
+custom_data_layer_0/type = 1
+sources/0 = SubResource("TileSetAtlasSource_7oxwy")
