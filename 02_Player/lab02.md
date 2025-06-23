@@ -1,6 +1,6 @@
 summary: Player Character and Camera
 id: export
-categories: 3D, Player Controller, Camera, Materials, GDScript
+categories: 3D, CharacterBody3D, 3D Player Controller, Camera3D, Materials, GDScript
 status: Published
 authors: Ondřej Kyzr
 Feedback Link: https://google.com
@@ -97,7 +97,8 @@ I could manually set all the properties on each material of each object but what
 #### Saving materials
 Let's learn how to save a material, so that we can then use it on other meshes.
 
-![](img/MaterialResourceSave.PNG)
+
+[<img src="img/MaterialResourceSave.PNG"/>](https://raw.githubusercontent.com/tutek1/DTLabs/refs/heads/main/02_Player/img/MaterialResourceSave.PNG)
 1. **Select** the `MeshInstance3D` with the capsule
 2. Click on the `Mesh` property with the **CapsuleMesh** in the **inspector**
 3. Click on the **small arrow** next to the material that you created in the 7 steps sequence above

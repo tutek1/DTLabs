@@ -1,6 +1,6 @@
 summary: 2D Platformer
 id: export
-categories: 2D,, Compilation
+categories: 2D, Tilemap, Tileset, Sprite, 2D Player Controller, CharacterBody2D
 status: Published
 authors: Ondřej Kyzr
 Feedback Link: https://google.com
