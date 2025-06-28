@@ -154,9 +154,6 @@ transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -27.9056, 9.53008, 21.3
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 19.1114, 5.62296, -22.6739)
 texture_filter = 0
 
-[node name="SubViewport" type="SubViewport" parent="Enviroment/2DPlatforming/Sprite3D"]
-size = Vector2i(448, 640)
-
 [node name="CameraPivot" type="Node3D" parent="." node_paths=PackedStringArray("camera_target")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 14.1815, 22.4002)
 script = ExtResource("4_krwbd")

@@ -7,7 +7,7 @@
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ttbc4"]
 height = 27.0
 
-[node name="Debug2dScene" type="Node2D"]
+[node name="LevelTemplate" type="Node2D"]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 texture_filter = 1
