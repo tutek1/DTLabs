@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=4 uid="uid://b1uab5wsn60o4"]
+[gd_scene load_steps=4 format=4 uid="uid://b1uab5wsn60o4"]
 
 [ext_resource type="TileSet" uid="uid://bvc2nov1ftb8f" path="res://2DPlatforming/Sprites/platforming_tileset.tres" id="1_3uhmu"]
+[ext_resource type="Script" uid="uid://djvvib0kx8ltx" path="res://2DPlatforming/Scripts/player_controller_2d.gd" id="1_eibq5"]
 [ext_resource type="PackedScene" uid="uid://bc3u5o4st51ng" path="res://2DPlatforming/Scenes/player_2d.tscn" id="2_vcg0f"]
 
-[node name="Debug2dScene" type="Node2D"]
+[node name="LevelCodelabs" type="Node2D"]
+script = ExtResource("1_eibq5")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 texture_filter = 1

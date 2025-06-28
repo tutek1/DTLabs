@@ -1,9 +1,10 @@
-[gd_scene load_steps=17 format=3 uid="uid://chnffv2lmano5"]
+[gd_scene load_steps=19 format=3 uid="uid://chnffv2lmano5"]
 
 [ext_resource type="PackedScene" uid="uid://44guktn5iwdy" path="res://3D/WorldObjects/resistor.tscn" id="1_8km36"]
 [ext_resource type="PackedScene" uid="uid://co65xg3ltrdrq" path="res://3D/WorldObjects/big_resistor.tscn" id="2_8km36"]
 [ext_resource type="PackedScene" uid="uid://cwcvo74fuibvv" path="res://3D/WorldObjects/coil.tscn" id="2_krwbd"]
 [ext_resource type="Script" uid="uid://bsumix7xtjux1" path="res://3D/Player/player_controller.gd" id="3_hn7em"]
+[ext_resource type="PackedScene" uid="uid://b1uab5wsn60o4" path="res://2DPlatforming/Levels/level_codelab.tscn" id="4_b5ujk"]
 [ext_resource type="Material" uid="uid://d1xu766jnbqqd" path="res://3D/Player/player_material.tres" id="4_g7e0o"]
 [ext_resource type="Script" uid="uid://cxr26cu7py7mo" path="res://3D/Camera/player_camera_3d.gd" id="4_krwbd"]
 
@@ -20,6 +21,9 @@ albedo_color = Color(0.151953, 0.309407, 0.152003, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_aq7nb"]
 size = Vector3(70, 1, 70)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_b5ujk"]
+viewport_path = NodePath("Enviroment/2DPlatforming/Sprite3D/SubViewport")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_krwbd"]
 radius = 0.3
@@ -153,6 +157,13 @@ transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -27.9056, 9.53008, 21.3
 [node name="Sprite3D" type="Sprite3D" parent="Enviroment/2DPlatforming"]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 19.1114, 5.62296, -22.6739)
 texture_filter = 0
+texture = SubResource("ViewportTexture_b5ujk")
+
+[node name="SubViewport" type="SubViewport" parent="Enviroment/2DPlatforming/Sprite3D"]
+transparent_bg = true
+size = Vector2i(448, 640)
+
+[node name="Debug2dScene" parent="Enviroment/2DPlatforming/Sprite3D/SubViewport" instance=ExtResource("4_b5ujk")]
 
 [node name="CameraPivot" type="Node3D" parent="." node_paths=PackedStringArray("camera_target")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 14.1815, 22.4002)
