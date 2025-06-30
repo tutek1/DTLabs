@@ -1,9 +1,10 @@
-[gd_scene load_steps=19 format=3 uid="uid://chnffv2lmano5"]
+[gd_scene load_steps=24 format=3 uid="uid://chnffv2lmano5"]
 
 [ext_resource type="PackedScene" uid="uid://44guktn5iwdy" path="res://3D/WorldObjects/resistor.tscn" id="1_8km36"]
 [ext_resource type="PackedScene" uid="uid://co65xg3ltrdrq" path="res://3D/WorldObjects/big_resistor.tscn" id="2_8km36"]
 [ext_resource type="PackedScene" uid="uid://cwcvo74fuibvv" path="res://3D/WorldObjects/coil.tscn" id="2_krwbd"]
-[ext_resource type="Script" uid="uid://bsumix7xtjux1" path="res://3D/Player/player_controller.gd" id="3_hn7em"]
+[ext_resource type="Script" uid="uid://bsumix7xtjux1" path="res://3D/Player/player_controller_3d.gd" id="3_hn7em"]
+[ext_resource type="Script" uid="uid://c4r63jgjgyev1" path="res://2DPlatforming/Scripts/platforming_section.gd" id="4_72jxc"]
 [ext_resource type="PackedScene" uid="uid://b1uab5wsn60o4" path="res://2DPlatforming/Levels/level_codelab.tscn" id="4_b5ujk"]
 [ext_resource type="Material" uid="uid://d1xu766jnbqqd" path="res://3D/Player/player_material.tres" id="4_g7e0o"]
 [ext_resource type="Script" uid="uid://cxr26cu7py7mo" path="res://3D/Camera/player_camera_3d.gd" id="4_krwbd"]
@@ -24,6 +25,21 @@ size = Vector3(70, 1, 70)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_b5ujk"]
 viewport_path = NodePath("Enviroment/2DPlatforming/Sprite3D/SubViewport")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_b2o0j"]
+size = Vector3(1, 1, 0.692505)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_72jxc"]
+albedo_color = Color(1, 1, 0, 1)
+
+[sub_resource type="TextMesh" id="TextMesh_b2o0j"]
+material = SubResource("StandardMaterial3D_72jxc")
+text = "2D"
+pixel_size = 0.04
+depth = 0.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_72jxc"]
+size = Vector3(0.2, 0.2, 0.2)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_krwbd"]
 radius = 0.3
@@ -158,12 +174,31 @@ transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -27.9056, 9.53008, 21.3
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 19.1114, 5.62296, -22.6739)
 texture_filter = 0
 texture = SubResource("ViewportTexture_b5ujk")
+script = ExtResource("4_72jxc")
 
 [node name="SubViewport" type="SubViewport" parent="Enviroment/2DPlatforming/Sprite3D"]
 transparent_bg = true
 size = Vector2i(448, 640)
 
-[node name="Debug2dScene" parent="Enviroment/2DPlatforming/Sprite3D/SubViewport" instance=ExtResource("4_b5ujk")]
+[node name="LevelCodelabs" parent="Enviroment/2DPlatforming/Sprite3D/SubViewport" instance=ExtResource("4_b5ujk")]
+
+[node name="Area3D" type="Area3D" parent="Enviroment/2DPlatforming/Sprite3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.77356, -2.89525, 0.130077)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Enviroment/2DPlatforming/Sprite3D/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.153748)
+shape = SubResource("BoxShape3D_b2o0j")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Enviroment/2DPlatforming/Sprite3D/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.126373)
+mesh = SubResource("TextMesh_b2o0j")
+
+[node name="CameraTarget" type="Node3D" parent="Enviroment/2DPlatforming/Sprite3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Enviroment/2DPlatforming/Sprite3D/CameraTarget"]
+mesh = SubResource("BoxMesh_72jxc")
 
 [node name="CameraPivot" type="Node3D" parent="." node_paths=PackedStringArray("camera_target")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 14.1815, 22.4002)
@@ -200,3 +235,5 @@ mesh = SubResource("BoxMesh_krwbd")
 [node name="Backpack" type="MeshInstance3D" parent="Player"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0797353, 0.549897)
 mesh = SubResource("BoxMesh_g7e0o")
+
+[connection signal="body_entered" from="Enviroment/2DPlatforming/Sprite3D/Area3D" to="Enviroment/2DPlatforming/Sprite3D" method="_on_area_3d_body_entered"]

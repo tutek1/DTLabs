@@ -1,3 +1,4 @@
+class_name PlayerCamera3D
 extends Node3D
 
 @export var camera_target : Node3D
@@ -9,6 +10,7 @@ extends Node3D
 @onready var camera_3d : Camera3D = $Camera3D
 @onready var shapecast_3d : ShapeCast3D = $ShapeCast3D
 
+var _do_rotate_camera : bool = true
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -17,11 +19,11 @@ func _physics_process(delta : float) -> void:
 	_follow_target(delta)
 
 func _input(event : InputEvent) -> void:
-	if event is InputEventMouseMotion: 
+	if event is InputEventMouseMotion:
 		_rotate_camera(event.relative.x, event.relative.y)
 
 func _follow_target(delta : float) -> void:
-	position = lerp(position, camera_target.position, follow_speed * delta)
+	position = lerp(position, camera_target.global_position, follow_speed * delta)
 	
 	shapecast_3d.target_position = camera_offset
 	
@@ -35,7 +37,12 @@ func _follow_target(delta : float) -> void:
 	camera_3d.position = point
 
 func _rotate_camera(x : float, y : float) -> void:
+	if not _do_rotate_camera: return
 	rotation_degrees.x -= y * camera_sens.x
 	rotation_degrees.y -= x * camera_sens.y
 	
 	rotation_degrees.x = clamp(rotation_degrees.x, camera_limit.x, camera_limit.y)
+
+func set_user_rotation_control(value : bool, fixed_rotation : Vector3) -> void:
+	_do_rotate_camera = value
+	rotation_degrees = fixed_rotation

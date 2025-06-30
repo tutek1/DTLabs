@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-@export var camera_pivot : Node3D
+@export var camera_pivot : PlayerCamera3D
 
 @export var speed : float = 7
 @export var acceleration : float = 75

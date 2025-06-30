@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://44guktn5iwdy" path="res://3D/WorldObjects/resistor.tscn" id="1_8km36"]
 [ext_resource type="PackedScene" uid="uid://co65xg3ltrdrq" path="res://3D/WorldObjects/big_resistor.tscn" id="2_8km36"]
 [ext_resource type="PackedScene" uid="uid://cwcvo74fuibvv" path="res://3D/WorldObjects/coil.tscn" id="2_krwbd"]
-[ext_resource type="Script" uid="uid://bsumix7xtjux1" path="res://3D/Player/player_controller.gd" id="3_hn7em"]
+[ext_resource type="Script" uid="uid://bsumix7xtjux1" path="res://3D/Player/player_controller_3d.gd" id="3_hn7em"]
 [ext_resource type="Material" uid="uid://d1xu766jnbqqd" path="res://3D/Player/player_material.tres" id="4_g7e0o"]
 [ext_resource type="Script" uid="uid://cxr26cu7py7mo" path="res://3D/Camera/player_camera_3d.gd" id="4_krwbd"]
 

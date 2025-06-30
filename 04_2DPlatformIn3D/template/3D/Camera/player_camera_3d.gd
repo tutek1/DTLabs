@@ -1,3 +1,4 @@
+class_name PlayerCamera3D
 extends Node3D
 
 @export var camera_target : Node3D
@@ -21,7 +22,7 @@ func _input(event : InputEvent) -> void:
 		_rotate_camera(event.relative.x, event.relative.y)
 
 func _follow_target(delta : float) -> void:
-	position = lerp(position, camera_target.position, follow_speed * delta)
+	position = lerp(position, camera_target.global_position, follow_speed * delta)
 	
 	shapecast_3d.target_position = camera_offset
 	
