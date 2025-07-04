@@ -1,6 +1,9 @@
 extends Sprite3D
 
 @export var camera_angle : Vector3
+@export var success_push_force : Vector3
+@export var failure_push_force : Vector3
+@export var push_time : float = 0.3
 
 @onready var platforming_manager : PlatformingManager2D = $SubViewport/LevelCodelabs
 @onready var camera_target : Node3D = $CameraTarget
@@ -10,6 +13,7 @@ var _is_in_2d : bool = false
 
 func _ready() -> void:
 	platforming_manager.turn_off()
+	platforming_manager.platforming_complete.connect(_exit2D)
 
 func _physics_process(delta):
 	_update_camera_target()
@@ -32,13 +36,39 @@ func _enter2D() -> void:
 	# Turn on the 2D level
 	platforming_manager.turn_on()
 	
-	# Disable the 3D Player
-	_player_3d.process_mode = Node.PROCESS_MODE_DISABLED
-	_player_3d.scale = Vector3.ZERO
+	# Move the player right
+	_player_3d.position += Vector3.RIGHT * 2
 	
 	# Change the camera target
 	_player_3d.camera_pivot.camera_target = camera_target
 	_player_3d.camera_pivot.set_user_rotation_control(false, camera_angle)
+	
+	# Wait a frame before disabling
+	await get_tree().process_frame
+	_player_3d.scale = Vector3.ZERO
+	_player_3d.process_mode = Node.PROCESS_MODE_DISABLED
+
+# Handles the transition from 2D platforming to 3D 
+func _exit2D(success : bool) -> void:
+	if not _is_in_2d: return
+	_is_in_2d = false
+	
+	# Turn off the 2D level
+	platforming_manager.turn_off()
+	
+	# Enable the 3D Player
+	_player_3d.scale = Vector3.ONE
+	_player_3d.process_mode = Node.PROCESS_MODE_INHERIT
+	_player_3d.global_position = camera_target.global_position
+	_player_3d.velocity = success_push_force if success else failure_push_force
+	
+	# Change the camera target
+	_player_3d.camera_pivot.camera_target = _player_3d
+	_player_3d.camera_pivot.set_user_rotation_control(true, camera_angle)
+	
+	_player_3d.set_do_movement(false)
+	await get_tree().create_timer(push_time).timeout
+	_player_3d.set_do_movement(true)
 
 # Upon body collision, check if it is the player and enter2D
 func _on_area_3d_body_entered(body : Node3D) -> void:

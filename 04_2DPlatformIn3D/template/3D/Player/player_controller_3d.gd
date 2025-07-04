@@ -11,6 +11,7 @@ extends CharacterBody3D
 @export var jump_force : float = 10
 
 var _has_double_jumped : bool = false
+var _do_movement : bool = true
 
 func _ready() -> void:
 	pass
@@ -29,6 +30,8 @@ func _physics_process(delta : float) -> void:
 
 # Handles the horizontal movement of the player
 func _movement(delta : float) -> void:
+	if not _do_movement: return
+
 	var x_axis : float = Input.get_axis("left", "right")
 	var z_axis : float = Input.get_axis("backward", "forward")
 	
@@ -89,3 +92,6 @@ func _double_jump() -> void:
 	# Jump
 	_has_double_jumped = true
 	velocity.y = jump_force
+
+func set_do_movement(value : bool) -> void:
+	_do_movement = value

@@ -1,8 +1,11 @@
-[gd_scene load_steps=4 format=4 uid="uid://b1uab5wsn60o4"]
+[gd_scene load_steps=5 format=4 uid="uid://b1uab5wsn60o4"]
 
 [ext_resource type="TileSet" uid="uid://bvc2nov1ftb8f" path="res://2DPlatforming/Sprites/platforming_tileset.tres" id="1_3uhmu"]
 [ext_resource type="Script" uid="uid://cunfe8xhs5y3n" path="res://2DPlatforming/Scripts/platforming_manager_2d.gd" id="1_eibq5"]
 [ext_resource type="PackedScene" uid="uid://bc3u5o4st51ng" path="res://2DPlatforming/Scenes/player_2d.tscn" id="2_vcg0f"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3uhmu"]
+size = Vector2(103, 45)
 
 [node name="LevelCodelabs" type="Node2D" node_paths=PackedStringArray("player")]
 script = ExtResource("1_eibq5")
@@ -14,4 +17,15 @@ tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAABEAAAAAAAA
 tile_set = ExtResource("1_3uhmu")
 
 [node name="Player" parent="." instance=ExtResource("2_vcg0f")]
-position = Vector2(65, 585)
+position = Vector2(53, 47)
+
+[node name="WinArea" type="Area2D" parent="."]
+position = Vector2(2, -10)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WinArea"]
+position = Vector2(58.5, -22.5)
+shape = SubResource("RectangleShape2D_3uhmu")
+
+[connection signal="body_entered" from="WinArea" to="." method="_on_win_area_body_entered"]

@@ -5,7 +5,7 @@ extends CharacterBody2D
 @export var dampening : float = 30
 
 @export var gravity : float = 627.84
-@export var jump_force : float = -240.0
+@export var jump_force : float = -250.0
 
 var _has_double_jumped : bool = false
 

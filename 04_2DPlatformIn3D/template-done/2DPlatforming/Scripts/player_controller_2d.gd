@@ -1,4 +1,7 @@
+class_name PlayerController2D
 extends CharacterBody2D
+
+signal player2D_died
 
 @export var speed : float = 175
 @export var acceleration : float = 1200
@@ -78,5 +81,6 @@ func _process_new_collision():
 			
 			# Check if the collided tile should damage the player
 			if collider.get_cell_tile_data(tile_coords).get_custom_data("DamageOnTouch"):
-				get_tree().reload_current_scene()
+				player2D_died.emit()
+				#get_tree().reload_current_scene()
 				return

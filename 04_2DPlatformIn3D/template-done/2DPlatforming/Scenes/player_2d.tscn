@@ -10,6 +10,7 @@ height = 27.0
 texture_filter = 1
 collision_layer = 2
 script = ExtResource("1_lufha")
+jump_force = -250.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_uvl5n")
