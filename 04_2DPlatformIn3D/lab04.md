@@ -557,31 +557,14 @@ func _exit2D(success : bool) -> void:
 ```
 
 > aside positive
-> We also needed to **match** the parameters of the function the signal, that calls it `platforming_complete(bool)` hence the `success : bool` parameter.
+> We also needed to **match** the parameters of the function with the signal, that calls it `platforming_complete(bool)` hence the `success : bool` parameter.
 
 
 
 ### Player 2D Death Glitch
-If you run the game and die on the spikes in the 2D level. You start going **back and forth** between 2D and 3D. To fix this we will need to do 2 things.
+If you run the game and die on the spikes in the 2D level. You start going **back and forth** between 2D and 3D. To fix this we will need to do 3 things.
 
-#### Reset Player 2D Position
-The first problem is that once the 2D player dies, they stay on the spikes and constantly **die over and over**. To fix this we need to reset the 2D player position upon **losing or winning** the 2D level. We will do this by **caching** the position of the player at the beginning of the game and then **moving** the 2D player to that position once end the 2D game.
-
-Apply these changes to the `platforming_manager_2d.gd`:
-```GDScript
-...
-var start_pos : Vector2
-...
-func _ready():
-    ...
-    start_pos = player.position
-
-func turn_off() -> void:
-    ...
-	player.position = start_pos
-```
-
-#### Move Player Outside of the `Area3D`
+#### Move Player 3D Outside of the `Area3D`
 The second problem is, that the player 3D stays in the `Area3D` and is disabled. This is problematic, since once they are enabled,the collision is triggered again resulting in constant exiting and entering loop. To fix this we will **move** the player 3D out of the `Area3D` and **wait** one frame with disabling them.
 
 ```GDScript
@@ -611,6 +594,33 @@ The **`await`** keyword pauses the execution of the function until the signal af
 > We need to use `get_tree().process_frame` since it we are setting the `process_mode` property and `process` updates more frequently than `physics_process`.
 
 
+#### Move Player 2D Outside of the `WinArea`
+The first problem is that once the 2D player dies, they stay on the spikes and constantly **die over and over**. To fix this we need to reset the 2D player position upon **losing or winning** the 2D level. We will do this by **caching** the position of the player at the beginning of the game and then **moving** the 2D player to that position once end the 2D game.
+
+Apply these changes to the `platforming_manager_2d.gd`:
+```GDScript
+...
+var start_pos : Vector2
+...
+func _ready():
+    ...
+    start_pos = player.position
+
+func turn_off() -> void:
+    ...
+	player.position = start_pos
+```
+
+The second problem is with the `WinArea`. The same thing as in the player 3D case happens and we will fix this in the same way. Please apply this fix to the `platforming_manager.gd` script:
+```GDScript
+func turn_off() -> void:
+    player.scale = Vector2.ZERO
+    player.position = start_pos
+
+    await get_tree().process_frame
+    process_mode = Node.PROCESS_MODE_DISABLED
+```
+
 
 ### Error in Debugger
 If you try playing the game, everything seems to work perfectly well. However, looking at the `Debugger` you can see these errors:
@@ -632,6 +642,7 @@ func _enter2D() -> void:
     _player_3d.scale = Vector3.ZERO
     _player_3d.process_mode = Node.PROCESS_MODE_DISABLED
 ```
+
 
 ### Move and push the 3D Player
 Now, let's **move** the 3D player to the position the 2D one ended in and **push** them based on the 2D level result.
@@ -683,55 +694,72 @@ func _exit2D(success : bool) -> void:
     _player_3d.set_do_movement(true)
 ```
 
+Try using different values for the push forces to make them feel right. I set them up like this:
+
+![](img/PushForce.png)
 
 
-## TODO Error line 
+
+## Win Error
+Duration: hh:mm:ss
+
+If you play the game and manage to exit the 2D level by entering the `WinArea`. The **Debugger** shows this error:
 ```
 E 0:00:36:347   platforming_manager_2d.gd:19 @ turn_off(): Disabling a CollisionObject node during a physics callback is not allowed and will cause undesired behavior. Disable with call_deferred() instead.
-  <C++ Source>  scene/2d/physics/collision_object_2d.cpp:244 @ _apply_disabled()
-  <Stack Trace> platforming_manager_2d.gd:19 @ turn_off()
-                platforming_section.gd:58 @ _exit2D()
-                platforming_manager_2d.gd:28 @ _on_win_area_body_entered()
+    <C++ Source>  scene/2d/physics/collision_object_2d.cpp:244 @ _apply_disabled()
+    <Stack Trace> platforming_manager_2d.gd:19 @ turn_off()
+                  platforming_section.gd:58 @ _exit2D()
+                  platforming_manager_2d.gd:28 @ _on_win_area_body_entered()
 ```
 
+> aside positive
+> For easier testing of the `WinArea`, you can move the 2D player closer to it.
+
+### Cause
+
+Going over the error, we can see that the "Disabling a CollisionObject node" happens in the `turn_off()` function on this line:
+```GDscript
+process_mode = Node.PROCESS_MODE_DISABLED
+```
+
+The "... during a physics callback" part happens because the previous line is called from the `_on_win_area_body_entered()` signal function in the `platforming_manager_2d.gd`.
 
 
+### Deferred Calls
+We can fix this by postponing the this signal emit `platforming_complete.emit(true)` in the `_on_win_area_body_entered()` function. To do this we will need to learn about `deferred` **calling** and **setting**.
+
+Calling a function or setting a variable **deferred** makes the action take place during idle time, which takes place after the `process` and `physics_process`. This is useful when you want something to happen at the end of the frame. This will make our signal emit after the physics have been resolved this frame. Calling a **function deferred** can be done like this:
+
+```GDScript
+# Template, [var] is a placeholder for a real value
+[node].call_deferred( "[function_name]" , [parameter1], [parameter2] ... )
+
+# Examples
+call_deferred("rotate", Vector3(1, 0, 0), 30)
+platforming_manager.call_deferred("turn_off")
+...
+```
+
+Setting a variable value can be done the same way using `set_deferred("[var_name]", [value])`.
 
 
+### Fix - Deferred Signal
+Signals are a bit different. To make a signal **emit deferred**, we need to set a **flag** when we are connecting it. When we connect a signal in the editor, we can set it to **deferred** in the pop-up window after toggling the `advanced` option.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+When we connect a signal using code, like in our case in `_ready()` function in `platforming_section.gd`, we can add a flags as parameters. **Replace** the signal connection line with this:
+```GDScript
+func _ready() -> void:
+    ...
+    platforming_manager.platforming_complete.connect(_exit2D, ConnectFlags.CONNECT_DEFERRED)
+```
 
 
 
 ## Bonus: Entering and Exiting 2D Smoothly
 Duration: hh:mm:ss
 
-The instant pop-in and pop-out of the players when 
-
+The instant pop-in and pop-out of the players when they enter and exit the 2D does not look very good.
+TODO
 
 
 

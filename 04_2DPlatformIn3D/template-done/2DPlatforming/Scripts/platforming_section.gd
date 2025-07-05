@@ -13,7 +13,7 @@ var _is_in_2d : bool = false
 
 func _ready() -> void:
 	platforming_manager.turn_off()
-	platforming_manager.platforming_complete.connect(_exit2D)
+	platforming_manager.platforming_complete.connect(_exit2D, ConnectFlags.CONNECT_DEFERRED)
 
 func _physics_process(delta):
 	_update_camera_target()

@@ -16,9 +16,11 @@ func turn_on() -> void:
 	player.scale = Vector2.ONE
 
 func turn_off() -> void:
-	process_mode = Node.PROCESS_MODE_DISABLED
 	player.scale = Vector2.ZERO
 	player.position = start_pos
+	
+	await get_tree().process_frame
+	process_mode = Node.PROCESS_MODE_DISABLED
 
 func get_player2D() -> Node2D:
 	return player
