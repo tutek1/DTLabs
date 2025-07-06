@@ -700,7 +700,7 @@ Try using different values for the push forces to make them feel right. I set th
 
 
 
-## Win Error
+## WinArea Error
 Duration: hh:mm:ss
 
 If you play the game and manage to exit the 2D level by entering the `WinArea`. The **Debugger** shows this error:
@@ -728,7 +728,7 @@ The "... during a physics callback" part happens because the previous line is ca
 ### Deferred Calls
 We can fix this by postponing the this signal emit `platforming_complete.emit(true)` in the `_on_win_area_body_entered()` function. To do this we will need to learn about `deferred` **calling** and **setting**.
 
-Calling a function or setting a variable **deferred** makes the action take place during idle time, which takes place after the `process` and `physics_process`. This is useful when you want something to happen at the end of the frame. This will make our signal emit after the physics have been resolved this frame. Calling a **function deferred** can be done like this:
+Calling a function or setting a variable **deferred** makes the action take place during idle time, which takes place after the `process` and `physics_process`. This is useful when you want or need something to happen at the **end of the frame**. In our case we will use it to make our signal emit after the physics have been resolved in this frame. Calling a **function deferred** can be done like this:
 
 ```GDScript
 # Template, [var] is a placeholder for a real value
@@ -740,7 +740,11 @@ platforming_manager.call_deferred("turn_off")
 ...
 ```
 
-Setting a variable value can be done the same way using `set_deferred("[var_name]", [value])`.
+Setting a variable value can be done the same way using:s
+```GDScrip
+# [var] is a placeholder for a real value
+set_deferred("[var_name]", [value])`
+```
 
 
 ### Fix - Deferred Signal
@@ -755,64 +759,135 @@ func _ready() -> void:
 
 
 
-## Bonus: Entering and Exiting 2D Smoothly
+## Bonus: Enter2D and Exit2D Smoothly + Task
 Duration: hh:mm:ss
 
-The instant pop-in and pop-out of the players when they enter and exit the 2D does not look very good.
-TODO
+The instant pop-in and pop-out of the players when they enter and exit the 2D does not look very good. Let's make it smooth by using **Tweens**.
+
+### Tweens
+What are tweens? Here is an excerpt from the [Godot Documentation](https://docs.godotengine.org/en/4.4/classes/class_tween.html):
+
+*Tweens are mostly useful for animations requiring a numerical property to be interpolated over a range of values. The name tween comes from in-betweening, an animation technique where you specify keyframes and the computer interpolates the frames that appear between them. Animating something with a Tween is called tweening. ...*
+
+Overall, they are a very powerful tool for making **small animations** or things that happen instantly **more smooth** such as UI bars, text micro movements, fade in/out character bobbing, screen transitions, recoil, static camera movements, rotating/scaling objects, moving objects to mouse, and much more.
+
+
+### Tweens in Godot
+To create a tween in Godot, you can simply call the `create_tween()` function, which will return a **`Tween`** object. The `Tween` class has a two important functions for us:
+- `tween_property(node, "property", final_value, time)` - tweens a property (variable) from its current value to a given value taking given time
+- `tween_method(function, start, end, time)` - tweens a value from `start` to `end` and calls a given function with that value (useful for more complex scenarios, where you don't just set a value)
+
+These function return a variable of type **`Tweener`**. This variable tells you everything about the animation you created. You can change the `easing` and `transition`, which determine **how the value** will be interpolated (changed in time). An example of how these settings change the animation can be seen in this [cheatsheet](https://easings.net/en#) (I recommend bookmarking it).
+
+
+### Enter2D
+Let's start in the `_enter2D()` function in the `platforming_section.gd` script. I would like the player to slowly **scale down** to 0 and **move** to the position of the 2D player. The tweens will take some time to play out and this **time** should be easily configurable.
+
+**Add** another `export` variable called `tween_time` of type `float`.
+
+We will also need to rewrite more parts of the `_enter2D()` function, so here is the **new version**:
+
+```GDScript
+# Handles the transition from 3D to 2D platforming
+func _enter2D() -> void:
+    if _is_in_2d: return
+    _is_in_2d = true
+
+    # Turn on the 2D level
+    platforming_manager.turn_on()
+
+    # Change the camera target
+    _player_3d.camera_pivot.camera_target = camera_target
+    _player_3d.camera_pivot.set_user_rotation_control(false, camera_angle)
+
+    # Manual update to get Player2D position
+    _update_camera_target()
+
+    # Create Position and Scale tweens
+    var scale_tween : Tweener = create_tween().tween_property(_player_3d, "scale", Vector3.ZERO, tween_time)
+    var pos_tween : Tweener = create_tween().tween_property(_player_3d, "global_position", camera_target.global_position, tween_time)
+
+    # Wait for tween before disable
+    await pos_tween.finished
+    _player_3d.process_mode = Node.PROCESS_MODE_DISABLED
+```
+1. **Manual update** of the `CameraTarget` so that it has correct position for the Tween.
+2. **Creation** of two Tweens (position and scale) and storing them in variables.
+3. **Awaiting** the end of the Tweens (only the position one, but they takes the same time to complete).
+4. **Disabling** the process mode of the player after waiting.
+
+Try to play the game and see how it looks like. We will now try to use `easings` and `transtions` to make it look much better.
+
+Simply **add** these lines above the `await`:
+```GDScript
+pos_tween.set_trans(Tween.TRANS_EXPO)
+pos_tween.set_ease(Tween.EASE_OUT)
+scale_tween.set_trans(Tween.TRANS_CUBIC)
+scale_tween.set_ease(Tween.EASE_IN)
+```
+
+The tweens should look much better now. Here is a video of the difference:
+<video id=10Lpj4ArnxU></video>
+
+You can see in the video, that even when we place the 2D player far away, it works quite well.
+
+
+### Exit2D
+The exiting of 2D will be very similar. This time we only care about the **scale** of the 3D player. Let's just try to reverse the **scale tween** in the enter function.
+
+#### Task
+Try to do this part of the codelab it yourself.
+1. **Create** the scale tween
+2. **Set** transition
+3. **Set** easing
+
+> aside negative
+> **Change** the current scale line to this:
+>```GDScript
+>_player_3d.scale = Vector3(0.001, 0.001, 0.001)
+>```
+> Not doing this will cause a physics error since for a few frames the players scale will be `0`.
 
 
 
+## Task Exit2D Solution 
+Duration: hh:mm:ss
 
+Here is the solution to the task from the previous section:
+```GDScript
+func _exit2D(success : bool) -> void:
+    ...
+    platforming_manager.turn_off()
 
+    # Scale the player back up
+    _player_3d.scale = Vector3(0.001, 0.001, 0.001)
+    var scale_tween : Tweener = create_tween().tween_property(_player_3d, "scale", Vector3.ONE, tween_time)
+    scale_tween.set_trans(Tween.TRANS_CUBIC)
+    scale_tween.set_ease(Tween.EASE_OUT)
 
+    # Enable the 3D Player
+    _player_3d.process_mode = Node.PROCESS_MODE_INHERIT
+    ...
+```
 
+> aside positive
+> I used `EASE_OUT` instead of `EASE_IN`, which makes the effect look much better
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+### Afterword about Tweens
+As you can see, Tweening can make a huge difference in the feel and look of your game. More importantly, choosing the wrong `transition` or `easing` can have the exact opposite visual effect that you were going for. You can spend a lot of time tweaking and perfecting tweens but I personally think that they are worth it.
 
 
 ## Recap TODO
 Duration: hh:mm:ss
 
 Let's look at what we did in this lab.
-- We looked at **project organization** and folder management
-- Then we learned what **sprite sheets** are and how to setup a `TileSet` from one
-- We used the created `TileSet` in a `TileMapLayer` and drew an **environment**
-- Next I tasked you to create a **2D player controller**
-- Then we made the **jump pad** functional using the `Linear Velocity` property in tiles
-- We added **electric cables**, which reset the level on touch, while learning about **Custom Data** in tiles and how to get them.
-- Lastly, we set up the camera to **correctly scale** with the window size
+- We looked at the changes I made between the last codelab and this one
+- Then, we learned the importance of reusing scenes by saving them (Player2D)
+- We used the 
+- Next I 
+- Then we made 
+- We added 
+- Lastly, we set 
 
 
 If you want to see how the finished template after this lab looks like, you can download it here:
