@@ -7,14 +7,18 @@ Feedback Link: https://google.com
 
 # Lab04 - 2D Platformer in 3D
 
-## Overview TODO
+## Overview
 Duration: hh:mm:ss
 
-This lab will combine the 2D minigame created in the previous lab with the 3D game we were making before. We will look at how to use `SubViewports` and how to stop and resume a subtree (the 2D game).
+This lab will combine the 2D minigame created in the previous lab with the 3D game we were making before. We will look at how to use `SubViewports`.
 
 Today we will look over:
 - See the **changes** I made from the last lab and save the **2D player scene**
-- TODO
+- How to setup a `SubViewport` and **view a 2D scene in 3D**
+- Learn about **signals**, how to **create** them and **use** them
+- How to **"turn off"** a subtree
+- The process
+- Bonus: Try out **Tweens** by making entering and exiting 2D smoothly animated
 
 
 Here is the template for this lab. Please download it, there are new scenes and folders.
@@ -877,17 +881,26 @@ func _exit2D(success : bool) -> void:
 As you can see, Tweening can make a huge difference in the feel and look of your game. More importantly, choosing the wrong `transition` or `easing` can have the exact opposite visual effect that you were going for. You can spend a lot of time tweaking and perfecting tweens but I personally think that they are worth it.
 
 
-## Recap TODO
+### One more thing
+Don't forget to hide the cube mesh of the `CameraTarget`. We had it there only for testing of the player 2D position.
+
+![](img/HideHelper.png)
+
+
+
+
+## Recap
 Duration: hh:mm:ss
 
 Let's look at what we did in this lab.
-- We looked at the changes I made between the last codelab and this one
-- Then, we learned the importance of reusing scenes by saving them (Player2D)
-- We used the 
-- Next I 
-- Then we made 
-- We added 
-- Lastly, we set 
+- We looked at the **changes I made** between the last codelab and this one
+- Then, we learned the importance of **reusing scenes** by saving them (Player2D)
+- We made **managers** for the 2D game and for the 2D section in 3D, which made **entering and exiting 2D** possible
+- Next, we learned about what are **signals**, how to **create** them, and **use** them
+- Then, we made the **camera follow** the 2D player by **recalculating 2D coordinates** to 3D
+- We made the **result** of the 2D game **propagate upwards** the tree to the section manager
+- Next, we fixed many different **errors** that sprung up
+- Lastly, we made the **entering** and **exiting** 2D smoothly animated using **Tweens**
 
 
 If you want to see how the finished template after this lab looks like, you can download it here:

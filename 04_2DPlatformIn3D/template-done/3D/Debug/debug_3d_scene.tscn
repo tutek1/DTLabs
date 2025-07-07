@@ -171,7 +171,7 @@ transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -27.9056, 9.53008, 21.3
 [node name="2DPlatforming" type="Node3D" parent="Enviroment"]
 
 [node name="Sprite3D" type="Sprite3D" parent="Enviroment/2DPlatforming"]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 19.1114, 5.62296, -22.6739)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 19.111, 5.623, -22.8)
 texture_filter = 0
 texture = SubResource("ViewportTexture_b5ujk")
 script = ExtResource("4_72jxc")
@@ -200,6 +200,7 @@ mesh = SubResource("TextMesh_b2o0j")
 [node name="CameraTarget" type="Node3D" parent="Enviroment/2DPlatforming/Sprite3D"]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Enviroment/2DPlatforming/Sprite3D/CameraTarget"]
+visible = false
 mesh = SubResource("BoxMesh_72jxc")
 
 [node name="CameraPivot" type="Node3D" parent="." node_paths=PackedStringArray("camera_target")]
