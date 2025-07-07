@@ -604,22 +604,22 @@ The first problem is that once the 2D player dies, they stay on the spikes and c
 Apply these changes to the `platforming_manager_2d.gd`:
 ```GDScript
 ...
-var start_pos : Vector2
+var _start_pos : Vector2
 ...
 func _ready():
     ...
-    start_pos = player.position
+    _start_pos = player.position
 
 func turn_off() -> void:
     ...
-	player.position = start_pos
+	player.position = _start_pos
 ```
 
 The second problem is with the `WinArea`. The same thing as in the player 3D case happens and we will fix this in the same way. Please apply this fix to the `platforming_manager.gd` script:
 ```GDScript
 func turn_off() -> void:
     player.scale = Vector2.ZERO
-    player.position = start_pos
+    player.position = _start_pos
 
     await get_tree().process_frame
     process_mode = Node.PROCESS_MODE_DISABLED
