@@ -313,7 +313,7 @@ Let's look at what we did in this lab.
 - Then we learned the theory behind **nodes**, **the scene hierarchy** and how changes of a parent **propagate** to children
 - Lastly we tried **adding** our own bigger `Resistor` object, where we learned about the `StaticBody3D` node, `MeshInstance3D` node, and `CollisionShape3D` node.
 
-If you want to see how the finished template after this lab looks like, you can download it here:
+If you want to see how the finished template looks like after this lab, you can download it here:
 <button>
   [Template Done Project](link)
 </button>

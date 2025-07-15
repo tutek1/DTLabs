@@ -1,4 +1,4 @@
-summary: 2D Platformer
+summary: 2D Platformer in 3D
 id: export
 categories: 2D, 3D, SubViewport, Area3D, Camera3D
 status: Published
@@ -10,16 +10,16 @@ Feedback Link: https://google.com
 ## Overview
 Duration: hh:mm:ss
 
-This lab will combine the 2D minigame created in the previous lab with the 3D game we were making before. We will look at how to use `SubViewports`.
+This lab will combine the 2D minigame created in the previous lab with the 3D game we were making before. We will do this using `SubViewports` and learn how to use them.
 
 Today we will look over:
 - See the **changes** I made from the last lab and save the **2D player scene**
 - How to setup a `SubViewport` and **view a 2D scene in 3D**
 - Learn about **signals**, how to **create** them and **use** them
 - How to **"turn off"** a subtree
-- The process
+- The process of **entering** and **exiting** 2D
+- Encounter many **errors** and learn how to **deal** with them and **fix** them
 - Bonus: Try out **Tweens** by making entering and exiting 2D smoothly animated
-
 
 Here is the template for this lab. Please download it, there are new scenes and folders.
 <button>
@@ -903,7 +903,7 @@ Let's look at what we did in this lab.
 - Lastly, we made the **entering** and **exiting** 2D smoothly animated using **Tweens**
 
 
-If you want to see how the finished template after this lab looks like, you can download it here:
+If you want to see how the finished template looks like after this lab, you can download it here:
 <button>
   [Template Done Project](link)
 </button>

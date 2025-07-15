@@ -1,4 +1,4 @@
-summary: Player Character and Camera
+summary: 3D Player Character and Camera
 id: export
 categories: 3D, CharacterBody3D, 3D Player Controller, Camera3D, Materials, GDScript
 status: Published
@@ -1111,7 +1111,7 @@ Let's look at what we did in this lab.
 - In the first **bonus** part we added **double jump** to our game
 - Lastly in the second **bonus** part we implemented a **velocity-based** player controller
 
-If you want to see, how the finished template after this lab looks like you can download it here:
+If you want to see how the finished template looks like after this lab, you can download it here:
 <button>
   [Template Done Project](link)
 </button>

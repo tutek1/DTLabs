@@ -464,7 +464,7 @@ Let's look at what we did in this lab.
 - Lastly, we set up the camera to **correctly scale** with the window size
 
 
-If you want to see how the finished template after this lab looks like, you can download it here:
+If you want to see how the finished template looks like after this lab, you can download it here:
 <button>
   [Template Done Project](link)
 </button>
