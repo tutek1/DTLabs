@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Lab05-Template"
+config/name="Lab05-TemplateDone"
 run/main_scene="uid://chnffv2lmano5"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
