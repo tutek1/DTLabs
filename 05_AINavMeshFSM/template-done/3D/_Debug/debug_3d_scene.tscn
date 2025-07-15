@@ -1,0 +1,322 @@
+[gd_scene load_steps=24 format=3 uid="uid://chnffv2lmano5"]
+
+[ext_resource type="PackedScene" uid="uid://44guktn5iwdy" path="res://3D/WorldObjects/resistor.tscn" id="1_oikrr"]
+[ext_resource type="PackedScene" uid="uid://co65xg3ltrdrq" path="res://3D/WorldObjects/big_resistor.tscn" id="2_kdw4m"]
+[ext_resource type="PackedScene" uid="uid://cwcvo74fuibvv" path="res://3D/WorldObjects/coil.tscn" id="3_kai6n"]
+[ext_resource type="Script" uid="uid://c4r63jgjgyev1" path="res://2DPlatforming/Scripts/platforming_section.gd" id="4_7xjr7"]
+[ext_resource type="PackedScene" uid="uid://b1uab5wsn60o4" path="res://2DPlatforming/Levels/level_codelab.tscn" id="5_xbdsv"]
+[ext_resource type="Script" uid="uid://cxr26cu7py7mo" path="res://3D/Camera/player_camera_3d.gd" id="6_itcoc"]
+[ext_resource type="Script" uid="uid://bsumix7xtjux1" path="res://3D/Player/player_controller_3d.gd" id="7_vdnx2"]
+[ext_resource type="Material" uid="uid://d1xu766jnbqqd" path="res://3D/Player/player_material.tres" id="8_x3b60"]
+
+[sub_resource type="Environment" id="Environment_ndwkr"]
+background_color = Color(1, 1, 1, 1)
+fog_enabled = true
+fog_light_color = Color(0.0666667, 0.145098, 0.0745098, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ndwkr"]
+size = Vector3(70, 1, 70)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kelvc"]
+albedo_color = Color(0.151953, 0.309407, 0.152003, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_aq7nb"]
+size = Vector3(70, 1, 70)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_b5ujk"]
+viewport_path = NodePath("Enviroment/2DPlatforming/Sprite3D/SubViewport")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_b2o0j"]
+size = Vector3(1, 1, 0.692505)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_72jxc"]
+albedo_color = Color(1, 1, 0, 1)
+
+[sub_resource type="TextMesh" id="TextMesh_b2o0j"]
+material = SubResource("StandardMaterial3D_72jxc")
+text = "2D"
+pixel_size = 0.04
+depth = 0.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_72jxc"]
+size = Vector3(0.2, 0.2, 0.2)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_krwbd"]
+radius = 0.3
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_nqv4f"]
+material = ExtResource("8_x3b60")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hn7em"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_hn7em"]
+material = ExtResource("8_x3b60")
+size = Vector3(0.3, 0.8, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_krwbd"]
+material = ExtResource("8_x3b60")
+size = Vector3(0.3, 0.8, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_g7e0o"]
+material = ExtResource("8_x3b60")
+size = Vector3(0.6, 0.7, 0.3)
+
+[node name="Debug3dScene" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ndwkr")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.98751, 0.027359, 0.155161, -0.107526, 0.836839, 0.536786, -0.115158, -0.546766, 0.829328, 0, 0, 0)
+light_energy = 3.226
+shadow_enabled = true
+
+[node name="Enviroment" type="Node3D" parent="."]
+
+[node name="Ground" type="StaticBody3D" parent="Enviroment"]
+collision_mask = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Enviroment/Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0500813, 0.0300798, -0.0110531)
+shape = SubResource("BoxShape3D_ndwkr")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Enviroment/Ground/CollisionShape3D"]
+material_override = SubResource("StandardMaterial3D_kelvc")
+mesh = SubResource("BoxMesh_aq7nb")
+skeleton = NodePath("../..")
+
+[node name="Obstacles" type="Node3D" parent="Enviroment"]
+
+[node name="Resistor" parent="Enviroment/Obstacles" instance=ExtResource("1_oikrr")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -17.184, 2.52495, -15.7378)
+
+[node name="Resistor22" parent="Enviroment/Obstacles" instance=ExtResource("1_oikrr")]
+transform = Transform3D(-8.74228e-08, 0, -2, 0, 2, 0, 2, 0, -8.74228e-08, 3.37131, 2.53008, -27.3628)
+
+[node name="Resistor15" parent="Enviroment/Obstacles" instance=ExtResource("1_oikrr")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 29.4645, 2.53008, 23.7879)
+
+[node name="Resistor2" parent="Enviroment/Obstacles" instance=ExtResource("1_oikrr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.6714, 1.53008, -14.1434)
+
+[node name="Resistor3" parent="Enviroment/Obstacles" instance=ExtResource("1_oikrr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.3665, 1.53008, -5.86578)
+
+[node name="Resistor23" parent="Enviroment/Obstacles" instance=ExtResource("1_oikrr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.7917, 1.53008, -26.7726)
+
+[node name="Resistor4" parent="Enviroment/Obstacles" instance=ExtResource("1_oikrr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.7131, 1.53008, 7.2)
+
+[node name="Resistor5" parent="Enviroment/Obstacles" instance=ExtResource("1_oikrr")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 22.2995, 1.53008, -2.40133)
+
+[node name="Resistor6" parent="Enviroment/Obstacles" instance=ExtResource("1_oikrr")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 14.142, 1.53008, 18.086)
+
+[node name="Resistor7" parent="Enviroment/Obstacles" instance=ExtResource("1_oikrr")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 6.44294, 1.53008, 4.21322)
+
+[node name="Resistor10" parent="Enviroment/Obstacles" instance=ExtResource("1_oikrr")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3.25454, 1.53008, -3.54231)
+
+[node name="Resistor11" parent="Enviroment/Obstacles" instance=ExtResource("1_oikrr")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 20.598, 1.53008, 31.1228)
+
+[node name="Resistor12" parent="Enviroment/Obstacles" instance=ExtResource("1_oikrr")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 28.7556, 1.53008, 10.6354)
+
+[node name="Resistor13" parent="Enviroment/Obstacles" instance=ExtResource("1_oikrr")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -13.0938, 1.53008, 23.6267)
+
+[node name="Resistor8" parent="Enviroment/Obstacles" instance=ExtResource("1_oikrr")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.78771, 1.53008, 12.2509)
+
+[node name="Resistor9" parent="Enviroment/Obstacles" instance=ExtResource("1_oikrr")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -1.04796, 1.53008, 21.1183)
+
+[node name="Resistor16" parent="Enviroment/Obstacles" instance=ExtResource("1_oikrr")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -10.7814, 1.53008, 4.84368)
+
+[node name="Resistor17" parent="Enviroment/Obstacles" instance=ExtResource("1_oikrr")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -14.8381, 1.53008, -30.2303)
+
+[node name="Resistor18" parent="Enviroment/Obstacles" instance=ExtResource("1_oikrr")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -29.0688, 1.53008, -22.1926)
+
+[node name="Resistor19" parent="Enviroment/Obstacles" instance=ExtResource("1_oikrr")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -6.28201, 1.53008, -4.77803)
+
+[node name="Resistor21" parent="Enviroment/Obstacles" instance=ExtResource("1_oikrr")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -19.9776, 1.53008, 5.4762)
+
+[node name="Resistor20" parent="Enviroment/Obstacles" instance=ExtResource("1_oikrr")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -29.7515, 1.53008, -28.7482)
+
+[node name="Resistor14" parent="Enviroment/Obstacles" instance=ExtResource("1_oikrr")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 8.91697, 1.53008, 28.2256)
+
+[node name="BigResistor" parent="Enviroment/Obstacles" instance=ExtResource("2_kdw4m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.1605, 5.53008, -27.805)
+
+[node name="Coil" parent="Enviroment/Obstacles" instance=ExtResource("3_kai6n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.9056, 6.5, -10.6679)
+
+[node name="Coil2" parent="Enviroment/Obstacles" instance=ExtResource("3_kai6n")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, -27.9056, 7.73008, 4.33209)
+
+[node name="Coil3" parent="Enviroment/Obstacles" instance=ExtResource("3_kai6n")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -27.9056, 9.53008, 21.3321)
+
+[node name="Stairs" type="Node3D" parent="Enviroment/Obstacles"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.8424, 0, -16.2626)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Enviroment/Obstacles/Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.915, 0.65508, -4.5)
+use_collision = true
+size = Vector3(2.5, 0.25, 2)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Enviroment/Obstacles/Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.915, 0.78008, -2.5)
+use_collision = true
+size = Vector3(2.5, 0.5, 2)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Enviroment/Obstacles/Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.915, 0.90508, -0.5)
+use_collision = true
+size = Vector3(2.5, 0.75, 2)
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="Enviroment/Obstacles/Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.915, 1.03008, 1.5)
+use_collision = true
+size = Vector3(2.5, 1, 2)
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="Enviroment/Obstacles/Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.915, 1.15508, 3.5)
+use_collision = true
+size = Vector3(2.5, 1.25, 2)
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="Enviroment/Obstacles/Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.915, 1.28008, 5.5)
+use_collision = true
+size = Vector3(2.5, 1.5, 2)
+
+[node name="CSGBox3D7" type="CSGBox3D" parent="Enviroment/Obstacles/Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.915, 1.40508, 7.75)
+use_collision = true
+size = Vector3(2.5, 1.75, 2.5)
+
+[node name="CSGBox3D8" type="CSGBox3D" parent="Enviroment/Obstacles/Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.335, 1.53008, 7.75)
+use_collision = true
+size = Vector3(2, 2, 2.5)
+
+[node name="CSGBox3D9" type="CSGBox3D" parent="Enviroment/Obstacles/Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.335, 1.65508, 7.75)
+use_collision = true
+size = Vector3(2, 2.25, 2.5)
+
+[node name="CSGBox3D10" type="CSGBox3D" parent="Enviroment/Obstacles/Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.335, 1.78008, 7.75)
+use_collision = true
+size = Vector3(2, 2.5, 2.5)
+
+[node name="CSGBox3D11" type="CSGBox3D" parent="Enviroment/Obstacles/Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.585, 1.90508, 7.75)
+use_collision = true
+size = Vector3(2.5, 2.75, 2.5)
+
+[node name="CSGBox3D12" type="CSGBox3D" parent="Enviroment/Obstacles/Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.585, 2.03008, 5.5)
+use_collision = true
+size = Vector3(2.5, 3, 2)
+
+[node name="CSGBox3D13" type="CSGBox3D" parent="Enviroment/Obstacles/Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.585, 2.15508, 3.5)
+use_collision = true
+size = Vector3(2.5, 3.25, 2)
+
+[node name="CSGBox3D14" type="CSGBox3D" parent="Enviroment/Obstacles/Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.585, 2.28008, 1.5)
+use_collision = true
+size = Vector3(2.5, 3.5, 2)
+
+[node name="CSGBox3D15" type="CSGBox3D" parent="Enviroment/Obstacles/Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.585, 2.40508, -0.75)
+use_collision = true
+size = Vector3(2.5, 3.75, 2.5)
+
+[node name="2DPlatforming" type="Node3D" parent="Enviroment"]
+
+[node name="Sprite3D" type="Sprite3D" parent="Enviroment/2DPlatforming"]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 19.111, 5.623, -22.8)
+texture_filter = 0
+texture = SubResource("ViewportTexture_b5ujk")
+script = ExtResource("4_7xjr7")
+success_push_force = Vector3(0, 12, -5)
+failure_push_force = Vector3(0, 3, 5)
+
+[node name="SubViewport" type="SubViewport" parent="Enviroment/2DPlatforming/Sprite3D"]
+transparent_bg = true
+size = Vector2i(448, 640)
+
+[node name="LevelCodelabs" parent="Enviroment/2DPlatforming/Sprite3D/SubViewport" instance=ExtResource("5_xbdsv")]
+
+[node name="Area3D" type="Area3D" parent="Enviroment/2DPlatforming/Sprite3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.77356, -2.89525, 0.130077)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Enviroment/2DPlatforming/Sprite3D/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.153748)
+shape = SubResource("BoxShape3D_b2o0j")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Enviroment/2DPlatforming/Sprite3D/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.126373)
+mesh = SubResource("TextMesh_b2o0j")
+
+[node name="CameraTarget" type="Node3D" parent="Enviroment/2DPlatforming/Sprite3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Enviroment/2DPlatforming/Sprite3D/CameraTarget"]
+visible = false
+mesh = SubResource("BoxMesh_72jxc")
+
+[node name="CameraPivot" type="Node3D" parent="." node_paths=PackedStringArray("camera_target")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.8935, 14.1815, 2.42364)
+script = ExtResource("6_itcoc")
+camera_target = NodePath("../Player")
+
+[node name="Camera3D" type="Camera3D" parent="CameraPivot"]
+
+[node name="ShapeCast3D" type="ShapeCast3D" parent="CameraPivot"]
+shape = SubResource("SphereShape3D_krwbd")
+target_position = Vector3(0, 0, 0)
+
+[node name="Player" type="CharacterBody3D" parent="." node_paths=PackedStringArray("camera_pivot")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.7747, 2.29822, -15.5146)
+collision_layer = 2
+floor_max_angle = 1.0472
+script = ExtResource("7_vdnx2")
+camera_pivot = NodePath("../CameraPivot")
+gravity = -29.43
+jump_force = 9.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
+mesh = SubResource("CapsuleMesh_nqv4f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+shape = SubResource("CapsuleShape3D_hn7em")
+
+[node name="Hand1" type="MeshInstance3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.63, 0, 0)
+mesh = SubResource("BoxMesh_hn7em")
+
+[node name="Hand2" type="MeshInstance3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.63, 0.04, 0)
+mesh = SubResource("BoxMesh_krwbd")
+
+[node name="Backpack" type="MeshInstance3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0797353, 0.549897)
+mesh = SubResource("BoxMesh_g7e0o")
+
+[connection signal="body_entered" from="Enviroment/2DPlatforming/Sprite3D/Area3D" to="Enviroment/2DPlatforming/Sprite3D" method="_on_area_3d_body_entered"]
