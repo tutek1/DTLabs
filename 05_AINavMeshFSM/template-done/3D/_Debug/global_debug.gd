@@ -23,6 +23,8 @@ func _switch_mouse_mode() -> void:
 		else:
 			Input.mouse_mode =Input.MOUSE_MODE_CAPTURED
 			print("DEBUG: Mouse captured")
+			var node : Node
+			
 
 # Changes the engine time scale (too high or too low may break physics)
 func _time_change() -> void:

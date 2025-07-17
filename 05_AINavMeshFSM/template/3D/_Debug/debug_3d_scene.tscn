@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://chnffv2lmano5"]
+[gd_scene load_steps=31 format=3 uid="uid://chnffv2lmano5"]
 
 [ext_resource type="PackedScene" uid="uid://44guktn5iwdy" path="res://3D/WorldObjects/resistor.tscn" id="1_oikrr"]
 [ext_resource type="PackedScene" uid="uid://co65xg3ltrdrq" path="res://3D/WorldObjects/big_resistor.tscn" id="2_kdw4m"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://cxr26cu7py7mo" path="res://3D/Camera/player_camera_3d.gd" id="6_itcoc"]
 [ext_resource type="Script" uid="uid://bsumix7xtjux1" path="res://3D/Player/player_controller_3d.gd" id="7_vdnx2"]
 [ext_resource type="Material" uid="uid://d1xu766jnbqqd" path="res://3D/Player/player_material.tres" id="8_x3b60"]
+[ext_resource type="PackedScene" uid="uid://cd0nqh3i1p18o" path="res://3D/Enemies/GroundEnemy/FSM/ground_enemy_fsm.tscn" id="9_kdw4m"]
 
 [sub_resource type="Environment" id="Environment_ndwkr"]
 background_color = Color(1, 1, 1, 1)
@@ -22,6 +23,28 @@ albedo_color = Color(0.151953, 0.309407, 0.152003, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_aq7nb"]
 size = Vector3(70, 1, 70)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kelvc"]
+size = Vector3(3, 2, 6)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bc6cy"]
+albedo_color = Color(0.103743, 0.103744, 0.103744, 1)
+roughness = 0.15
+
+[sub_resource type="BoxMesh" id="BoxMesh_kelvc"]
+material = SubResource("StandardMaterial3D_bc6cy")
+size = Vector3(3, 2, 6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_aq7nb"]
+size = Vector3(0.5, 1, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fr313"]
+albedo_color = Color(1, 1, 0, 1)
+roughness = 0.15
+
+[sub_resource type="BoxMesh" id="BoxMesh_odb74"]
+material = SubResource("StandardMaterial3D_fr313")
+size = Vector3(0.5, 1, 0.5)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_b5ujk"]
 viewport_path = NodePath("Enviroment/2DPlatforming/Sprite3D/SubViewport")
@@ -87,14 +110,134 @@ skeleton = NodePath("../..")
 
 [node name="Obstacles" type="Node3D" parent="Enviroment"]
 
-[node name="Resistor" parent="Enviroment/Obstacles" instance=ExtResource("1_oikrr")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -17.184, 2.52495, -15.7378)
+[node name="Resistor" type="StaticBody3D" parent="Enviroment/Obstacles"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -17.184, 2.564, -15.738)
+collision_mask = 3
 
-[node name="Resistor22" parent="Enviroment/Obstacles" instance=ExtResource("1_oikrr")]
+[node name="Base" type="CollisionShape3D" parent="Enviroment/Obstacles/Resistor"]
+shape = SubResource("BoxShape3D_kelvc")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Enviroment/Obstacles/Resistor/Base"]
+mesh = SubResource("BoxMesh_kelvc")
+skeleton = NodePath("../..")
+
+[node name="Pin1" type="CollisionShape3D" parent="Enviroment/Obstacles/Resistor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.468, -0.5, -3.252)
+shape = SubResource("BoxShape3D_aq7nb")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Enviroment/Obstacles/Resistor/Pin1"]
+mesh = SubResource("BoxMesh_odb74")
+skeleton = NodePath("../..")
+
+[node name="Pin2" type="CollisionShape3D" parent="Enviroment/Obstacles/Resistor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.556629, -0.5, -3.252)
+shape = SubResource("BoxShape3D_aq7nb")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Enviroment/Obstacles/Resistor/Pin2"]
+mesh = SubResource("BoxMesh_odb74")
+skeleton = NodePath("../..")
+
+[node name="Resistor22" type="StaticBody3D" parent="Enviroment/Obstacles"]
 transform = Transform3D(-8.74228e-08, 0, -2, 0, 2, 0, 2, 0, -8.74228e-08, 3.37131, 2.53008, -27.3628)
+collision_mask = 3
 
-[node name="Resistor15" parent="Enviroment/Obstacles" instance=ExtResource("1_oikrr")]
+[node name="Base" type="CollisionShape3D" parent="Enviroment/Obstacles/Resistor22"]
+shape = SubResource("BoxShape3D_kelvc")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Enviroment/Obstacles/Resistor22/Base"]
+mesh = SubResource("BoxMesh_kelvc")
+skeleton = NodePath("../..")
+
+[node name="Pin1" type="CollisionShape3D" parent="Enviroment/Obstacles/Resistor22"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.468, -0.5, -3.252)
+shape = SubResource("BoxShape3D_aq7nb")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Enviroment/Obstacles/Resistor22/Pin1"]
+mesh = SubResource("BoxMesh_odb74")
+skeleton = NodePath("../..")
+
+[node name="Pin2" type="CollisionShape3D" parent="Enviroment/Obstacles/Resistor22"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.556629, -0.5, -3.252)
+shape = SubResource("BoxShape3D_aq7nb")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Enviroment/Obstacles/Resistor22/Pin2"]
+mesh = SubResource("BoxMesh_odb74")
+skeleton = NodePath("../..")
+
+[node name="Pin3" type="CollisionShape3D" parent="Enviroment/Obstacles/Resistor22"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.819682, -0.5, 3.24637)
+shape = SubResource("BoxShape3D_aq7nb")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Enviroment/Obstacles/Resistor22/Pin3"]
+mesh = SubResource("BoxMesh_odb74")
+skeleton = NodePath("../..")
+
+[node name="Pin4" type="CollisionShape3D" parent="Enviroment/Obstacles/Resistor22"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0362197, -0.5, 3.24637)
+shape = SubResource("BoxShape3D_aq7nb")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Enviroment/Obstacles/Resistor22/Pin4"]
+mesh = SubResource("BoxMesh_odb74")
+skeleton = NodePath("../..")
+
+[node name="Pin5" type="CollisionShape3D" parent="Enviroment/Obstacles/Resistor22"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.837108, -0.5, 3.24637)
+shape = SubResource("BoxShape3D_aq7nb")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Enviroment/Obstacles/Resistor22/Pin5"]
+mesh = SubResource("BoxMesh_odb74")
+skeleton = NodePath("../..")
+
+[node name="Resistor15" type="StaticBody3D" parent="Enviroment/Obstacles"]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 29.4645, 2.53008, 23.7879)
+collision_mask = 3
+
+[node name="Base" type="CollisionShape3D" parent="Enviroment/Obstacles/Resistor15"]
+shape = SubResource("BoxShape3D_kelvc")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Enviroment/Obstacles/Resistor15/Base"]
+mesh = SubResource("BoxMesh_kelvc")
+skeleton = NodePath("../..")
+
+[node name="Pin1" type="CollisionShape3D" parent="Enviroment/Obstacles/Resistor15"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.468, -0.5, -3.252)
+shape = SubResource("BoxShape3D_aq7nb")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Enviroment/Obstacles/Resistor15/Pin1"]
+mesh = SubResource("BoxMesh_odb74")
+skeleton = NodePath("../..")
+
+[node name="Pin2" type="CollisionShape3D" parent="Enviroment/Obstacles/Resistor15"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.556629, -0.5, -3.252)
+shape = SubResource("BoxShape3D_aq7nb")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Enviroment/Obstacles/Resistor15/Pin2"]
+mesh = SubResource("BoxMesh_odb74")
+skeleton = NodePath("../..")
+
+[node name="Pin3" type="CollisionShape3D" parent="Enviroment/Obstacles/Resistor15"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.819682, -0.5, 3.24637)
+shape = SubResource("BoxShape3D_aq7nb")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Enviroment/Obstacles/Resistor15/Pin3"]
+mesh = SubResource("BoxMesh_odb74")
+skeleton = NodePath("../..")
+
+[node name="Pin4" type="CollisionShape3D" parent="Enviroment/Obstacles/Resistor15"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0362197, -0.5, 3.24637)
+shape = SubResource("BoxShape3D_aq7nb")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Enviroment/Obstacles/Resistor15/Pin4"]
+mesh = SubResource("BoxMesh_odb74")
+skeleton = NodePath("../..")
+
+[node name="Pin5" type="CollisionShape3D" parent="Enviroment/Obstacles/Resistor15"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.837108, -0.5, 3.24637)
+shape = SubResource("BoxShape3D_aq7nb")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Enviroment/Obstacles/Resistor15/Pin5"]
+mesh = SubResource("BoxMesh_odb74")
+skeleton = NodePath("../..")
 
 [node name="Resistor2" parent="Enviroment/Obstacles" instance=ExtResource("1_oikrr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.6714, 1.53008, -14.1434)
@@ -295,6 +438,7 @@ target_position = Vector3(0, 0, 0)
 [node name="Player" type="CharacterBody3D" parent="." node_paths=PackedStringArray("camera_pivot")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.7747, 2.29822, -15.5146)
 collision_layer = 2
+collision_mask = 5
 floor_max_angle = 1.0472
 script = ExtResource("7_vdnx2")
 camera_pivot = NodePath("../CameraPivot")
@@ -318,5 +462,7 @@ mesh = SubResource("BoxMesh_krwbd")
 [node name="Backpack" type="MeshInstance3D" parent="Player"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0797353, 0.549897)
 mesh = SubResource("BoxMesh_g7e0o")
+
+[node name="GroundEnemyFSM" parent="." instance=ExtResource("9_kdw4m")]
 
 [connection signal="body_entered" from="Enviroment/2DPlatforming/Sprite3D/Area3D" to="Enviroment/2DPlatforming/Sprite3D" method="_on_area_3d_body_entered"]

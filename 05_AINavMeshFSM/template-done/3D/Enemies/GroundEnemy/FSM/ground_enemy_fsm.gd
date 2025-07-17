@@ -2,14 +2,14 @@ class_name GroundEnemyFSM
 extends CharacterBody3D
 
 @export var speed : float = 5.0
-@export var up_speed : float = 5.0
+@export var up_speed : float = 25.0
 @export var rotation_speed : float = 7
 
-
+@onready var navigation_agent_3d : NavigationAgent3D = $NavigationAgent3D
 
 func _physics_process(delta : float) -> void:
 	_gravity(delta)
-	_movement()
+	_movement(delta)
 	_rotate_enemy(delta, velocity)
 	
 	move_and_slide()
@@ -21,14 +21,15 @@ func _gravity(delta : float) -> void:
 	velocity += get_gravity() * delta
 
 # Handles movement of the player
-func _movement() -> void:
-	# TEMPORARY until navmesh setup
-	var target_pos : Vector3 = global_position + Vector3.FORWARD
+func _movement(delta : float) -> void:
+	var target_pos : Vector3 = navigation_agent_3d.get_next_path_position()
 	
 	var direction : Vector3 = target_pos - global_position
 	direction = direction.normalized()
 	velocity.x = direction.x * speed
 	velocity.z = direction.z * speed
+	
+	velocity.y += direction.y * up_speed * delta
 
 # Rotates the enemy based on direction and delta
 func _rotate_enemy(delta: float, direction : Vector3) -> void:
@@ -53,5 +54,4 @@ func _input(event : InputEvent):
 		var result : Dictionary = space_state.intersect_ray(query)
 		
 		if result:
-			# TODO go there
-			pass
+			navigation_agent_3d.target_position = result.position

@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://cd0nqh3i1p18o"]
+
+[ext_resource type="Script" uid="uid://4sib7pm671ol" path="res://3D/Enemies/GroundEnemy/FSM/ground_enemy_fsm.gd" id="1_gegtn"]
+[ext_resource type="ArrayMesh" uid="uid://6f6y5ljqa4ss" path="res://3D/Enemies/GroundEnemy/GORODITH_ground_enemy_corrupted.obj" id="2_xj6rk"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_0ytt0"]
+radius = 1.0
+
+[node name="GroundEnemyFSM" type="CharacterBody3D"]
+collision_layer = 4
+collision_mask = 7
+script = ExtResource("1_gegtn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_0ytt0")
+
+[node name="GorodithGroundEnemyCorrupted" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
+mesh = ExtResource("2_xj6rk")
+skeleton = NodePath("../..")
