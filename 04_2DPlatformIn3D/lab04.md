@@ -735,8 +735,8 @@ We can fix this by postponing the this signal emit `platforming_complete.emit(tr
 Calling a function or setting a variable **deferred** makes the action take place during idle time, which takes place after the `process` and `physics_process`. This is useful when you want or need something to happen at the **end of the frame**. In our case we will use it to make our signal emit after the physics have been resolved in this frame. Calling a **function deferred** can be done like this:
 
 ```GDScript
-# Template, [var] is a placeholder for a real value
-[node].call_deferred( "[function_name]" , [parameter1], [parameter2] ... )
+# Template, {var} is a placeholder for a real value
+{node}.call_deferred( "{function_name}", {parameter1}, {parameter2} ... )
 
 # Examples
 call_deferred("rotate", Vector3(1, 0, 0), 30)
@@ -746,8 +746,8 @@ platforming_manager.call_deferred("turn_off")
 
 Setting a variable value can be done the same way using:s
 ```GDScrip
-# [var] is a placeholder for a real value
-set_deferred("[var_name]", [value])`
+# {var} is a placeholder for a real value
+set_deferred("{var_name}", {value})`
 ```
 
 
