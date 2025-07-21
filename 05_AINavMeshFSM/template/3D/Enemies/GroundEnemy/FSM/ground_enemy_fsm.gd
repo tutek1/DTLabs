@@ -5,12 +5,12 @@ extends CharacterBody3D
 @export var up_speed : float = 25.0
 @export var rotation_speed : float = 7
 
-
+var _player : PlayerController3D = null
 
 func _physics_process(delta : float) -> void:
 	_gravity(delta)
 	_movement(delta)
-	_rotate_enemy(delta, velocity)
+	rotate_enemy(delta, velocity)
 	
 	move_and_slide()
 
@@ -30,10 +30,10 @@ func _movement(delta : float) -> void:
 	velocity.x = direction.x * speed
 	velocity.z = direction.z * speed
 	
-	velocity.y += direction.y * speed * delta
+	velocity.y += direction.y * up_speed * delta
 
 # Rotates the enemy based on direction and delta
-func _rotate_enemy(delta: float, direction : Vector3) -> void:
+func rotate_enemy(delta: float, direction : Vector3) -> void:
 	if Vector2(direction.x, direction.z).length() < 0.1: return
 	var angle : float = atan2(direction.x, direction.z) - PI
 	
@@ -57,3 +57,7 @@ func _input(event : InputEvent):
 		if result:
 			# TODO go there
 			pass
+
+
+func get_player() -> PlayerController3D:
+	return _player

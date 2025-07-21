@@ -5,12 +5,24 @@ extends CharacterBody3D
 @export var up_speed : float = 25.0
 @export var rotation_speed : float = 7
 
+@export var patrol_state : PatrolState
+@export var chase_state : ChaseState
+
+
 @onready var navigation_agent_3d : NavigationAgent3D = $NavigationAgent3D
+
+var _player : PlayerController3D = null
+var _curr_state : AbstractFSMState
+
+func _ready():
+	patrol_state.state_enter(self)
 
 func _physics_process(delta : float) -> void:
 	_gravity(delta)
 	_movement(delta)
-	_rotate_enemy(delta, velocity)
+	rotate_enemy(delta, velocity)
+	
+	patrol_state.state_physics_process(self, delta)
 	
 	move_and_slide()
 
@@ -31,27 +43,41 @@ func _movement(delta : float) -> void:
 	
 	velocity.y += direction.y * up_speed * delta
 
+# Switches the private variable of current state to a new one
+# Calls the appropriate state enter and exit functions
+func _switch_state(new_state : AbstractFSMState) -> void:
+	if _curr_state != null: _curr_state.state_exit(self)
+	_curr_state = new_state
+	_curr_state.state_enter(self)
+
 # Rotates the enemy based on direction and delta
-func _rotate_enemy(delta: float, direction : Vector3) -> void:
+func rotate_enemy(delta: float, direction : Vector3) -> void:
 	if Vector2(direction.x, direction.z).length() < 0.1: return
 	var angle : float = atan2(direction.x, direction.z) - PI
 	
 	rotation.y = lerp_angle(rotation.y, angle, rotation_speed * delta)
 
 # DEBUG function to test out the navmesh
-func _input(event : InputEvent):
-	if event is InputEventMouseButton:
-		
-		# Get mouse and create raycast ray
-		var mouse_pos : Vector2 = get_viewport().get_mouse_position()
-		var ray_origin : Vector3 = get_viewport().get_camera_3d().project_ray_origin(mouse_pos)
-		var ray_direction : Vector3 = get_viewport().get_camera_3d().project_ray_normal(mouse_pos)
-		var ray_end = ray_origin + ray_direction * 1000.0
-		
-		# Query the physics server if we collided
-		var space_state = get_world_3d().direct_space_state
-		var query = PhysicsRayQueryParameters3D.create(ray_origin, ray_end)
-		var result : Dictionary = space_state.intersect_ray(query)
-		
-		if result:
-			navigation_agent_3d.target_position = result.position
+#func _input(event : InputEvent):
+	#if event is InputEventMouseButton:
+		#
+		## Get mouse and create raycast ray
+		#var mouse_pos : Vector2 = get_viewport().get_mouse_position()
+		#var ray_origin : Vector3 = get_viewport().get_camera_3d().project_ray_origin(mouse_pos)
+		#var ray_direction : Vector3 = get_viewport().get_camera_3d().project_ray_normal(mouse_pos)
+		#var ray_end = ray_origin + ray_direction * 1000.0
+		#
+		## Query the physics server if we collided
+		#var space_state = get_world_3d().direct_space_state
+		#var query = PhysicsRayQueryParameters3D.create(ray_origin, ray_end)
+		#var result : Dictionary = space_state.intersect_ray(query)
+		#
+		#if result:
+			#navigation_agent_3d.target_position = result.position
+
+func get_player() -> PlayerController3D:
+	return _player
+
+
+func _on_vision_area_body_entered(body):
+	pass # Replace with function body.

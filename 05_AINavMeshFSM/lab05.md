@@ -394,16 +394,215 @@ This will be our **parent class**, meeting our definitions, for **all the states
 
 
 
+## Task: Patrol State 
+Duration: hh:mm:ss
+
+Let's first tackle the **patrol state** of our FSM, so that we can then create the **brain** of the FSM in the **enemy script**.
+
+Start by:
+1. **Creating** a new script called `patrol_state.gd` in the `FSM` folder
+2. **Set** the `class_name` to `PatrolState`
+3. **Set** `extend` to `AbstractFSMState`
+4. **Copy** the **three empty functions** from the `abstract_fsm_state.gd`
+5. **Remove** the `assert` lines and put `pass` instead of them
+
+Additionally, we will need to be able to **set and store** the points of the **patrol path**. Let's **add** an `export` variable and an **index**, so that we know which point we are targeting:
+```GDScript
+@export var patrol_points : Array[Vector3]
+
+var _curr_patrol_idx : int = 0
+```
+
+I will leave the **implementation** of the patrol state **to you**. The next few paragraphs outline what each function should do and the **solution** will be in the **next section**. Before you start, let's make the enemy **use the state** by default, so that you can** easily test** it out, while implementing. Change the `ground_enemy_fsm.gd` like this:
+
+```GDScript
+@export var patrol_state : PatrolState
+...
+func _ready():
+    patrol_state.state_enter(self)
+...
+func _physics_process(delta : float) -> void:
+    ...
+    _rotate_enemy(delta, velocity)
+    
+    patrol_state.state_physics_process(self, delta)
+    ...
+...
+# Comment out the whole function
+#func _input(event : InputEvent):
+    #...
+```
+
+Also in the **Inspector** of the `GroundEnemyFSM` node, **add** the `Patrol State` resource and **set** some **patrol points**. Without seeing the points, it is **difficult** to set the coordinates, so you can just **use these** for now (we will make debugging the patrol path easier later):
+
+![](img/PatrolPoints.png)
+
+
+### **`state_enter(...)`**
+When **entering the patrol state**, the enemy should **pick a patrol point** that is the **closest** to them and **set it** as the target of `NavigationAgent`.
+
+
+### **`state_physics_process(...)`**
+What should the patrol state do **every frame**? Well since the **navigation** is handled by the `NavigationAgent` and the enemy currently just **walks** to the **position we set** in the agent (recall the `_input()` function in `GroundEnemyFSM`) we only need to handle the **patrol points**.
+
+Each frame, we will **check** if the enemy has **reached the target** we set (patrol point). If the target was **reached**, we will pick the **next point** from the `patrol_points`. If there are **no more patrol points**, just start from **the beginning**.
+
+
+### **`state_exit(...)`**
+The patrol state doesn't need to do anything here but for clarity, we should **reset** the `target_position` of the `NavigationAgent`, so that the enemy stops on the spot.
+
+
+
+
+## Solution: Patrol State and Path debugging
+Duration: hh:mm:ss
+
+My solution looks like this:
+```GDScript
+class_name PatrolState
+extends AbstractFSMState
+
+@export var patrol_points : Array[Vector3]
+@export var dist_treshold : float = 1.5
+
+
+var _curr_patrol_idx : int = 0
+
+# Called upon transition into the state
+func state_enter(enemy : GroundEnemyFSM) -> void:
+	var best_dist : float = enemy.global_position.distance_to(patrol_points[0])
+	var best_idx : int = 0
+	
+	# Find the closest patrol point
+	for idx in range(0, patrol_points.size()):
+		var dist : float = enemy.global_position.distance_to(patrol_points[idx])
+		
+		if dist < best_dist:
+			best_dist = dist
+			best_idx = idx
+	
+	_curr_patrol_idx = best_idx
+	enemy.navigation_agent_3d.target_position = patrol_points[best_idx]
+
+# Called every physics process frame
+func state_physics_process(enemy : GroundEnemyFSM, _delta : float) -> void:
+	var curr_point : Vector3 = patrol_points[_curr_patrol_idx]
+	
+    # Alternative: enemy.navigation_agent_3d.is_target_reached()
+    # + change the distance threshold of the `NavigationAgent3D` node
+
+	# Check if the target is reached -> set a new one
+	if enemy.global_position.distance_to(curr_point) < dist_treshold:
+		_curr_patrol_idx += 1
+		if _curr_patrol_idx >= len(patrol_points):
+			_curr_patrol_idx = 0
+		
+		enemy.navigation_agent_3d.target_position = patrol_points[_curr_patrol_idx]
+
+# Called upon transition from the state
+func state_exit(enemy : GroundEnemyFSM) -> void:
+	enemy.navigation_agent_3d.target_position = enemy.global_position
+
+```
+
+Don't worry if your solution is **different**, many things in **Game Development** can be done almost **infinite number of ways**. The important thing is that it **works**.
+
+
+
+
+### Path debugging 
+
+It would be helpful if we could **see the patrol path**. There is a very good **plugin** for Godot, that has just the tools we need for **visualizing stuff** in 3D called **Debug Draw 3D**. Let's use it, while also learning about plugins.
+
+#### Get the plugin
+To download plugins, you can simply navigate to the `AssetLib` tab next to `Game` at the top center of the Godot editor.
+
+1. **Search** for `Debug Draw 3D`
+2. **Click** on it and **press** `Download`
+3. **Wait** for a while and **press** `Install`
+4. **Press** `Ok`
+
+![](img/AssetLib.png)
+
+
+#### Debug Draw Path
+I have already prepared the script and node, that will visualize the path.
+
+1. **Add** the `debug_draw_path.tscn` node into our scene
+2. **Go** into the script of the node
+3. **Uncomment** the `for loop` and `if condition` at the end of the `process`
+4. In the **Inspector** of the `DebugDrawPath` node **add** the `GroundEnemyFSM` to the `Node` property
+5. Still in the **Inspector**, put `patrol_state.patrol_points` in the `Property` property
+
+Now if you look into the 3D scene, you should see a **red line** connecting all the patrol points. Feel free to **add more** patrol points and **space them out** in some interesting pattern.
+
+![](img/PatrolPointsDebugView.png)
+
+
+> aside positive
+> Most plugins for Godot are **free** to use even in **commercial products** (MIT license) and can be downloaded for free.
 
 
 
 
 
+## Chase State 
+Duration: hh:mm:ss
+
+The chase state is mostly **already implemented**. We will just quickly **go through** the state **script** to see what is it approximately doing. Please **open** the `chase_state.gd`.
+- `state_enter(...)` 
+    - Makes the enemy **stretch up** for `0.2 sec` and then **back down** to create an interesting visual effect.
+- `state_physics_process(...)` 
+    - Sets the players position as the `NavigationAgent` target every `2 sec` (no need to recalculate the path every frame).
+    - Rotates the enemy, so that they are partway looking at the player and partway in the direction of movement.
+- `state_exit(...)`
+    - Does nothing.
 
 
+### GroundEnemyFSM framework
+Now we will need to update the FSM code in the `GroundEnemyFSM` so that it works with **multiple states**, **state switching**, and **transitions**.
+
+#### Adding Chase State as a Resource
+In a similar way to the **Patrol State** we will add an `export` variable of the type `ChaseState` to the enemy.
+```GDScript
+@export var chase_state : ChaseState
+```
+
+#### Switch State Function
+Let's add a function that will handle **switching the current state** to a new one. First we need to **track** the **current state**, that we are in.
+```GDScript
+var _curr_state : AbstractFSMState
+```
+
+Then the function will handle the `state_enter` and `state_exit` like this:
+```GDScript
+func _switch_state(new_state : AbstractFSMState) -> void:
+    if _curr_state != null: _curr_state.state_exit(self)
+    _curr_state = new_state
+    _curr_state.state_enter(self)
+```
+
+#### Enemy vision
+The enemy needs to somehow **detect the player** and **see them**. The most straightforward way is to **add** an `Area3D` to the enemy and **check all bodies** that **enter** this area. If the entered body is the **player**, the enemy can **see them**.
+
+1. **Add** an `Area3D` to the `ground_enemy_fsm.tscn` scene (rename to `VisionArea`)
+2. **Add** a `CollisionShape3D` as a child of the `Area3D`
+3. **Add** a new `ConvexPolygonShape3D` as the `Shape` property of the `CollisionShape3D`
+
+We added a `ConvexPolygonShape3D`, because we want to create a **custom shape** for the vision of the enemy. **Add** the points to the **shape** in a similar way as the image below:
+
+![](img/VisionCone.png)
+
+Now connect the signal `body_entered()` to the enemy script using the **Inspector** in the **Node** -> **Signal** tab.
 
 
+TODO add chase_state to enemy
+TODO add switch_state function
 
+
+TODO vision maskhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+TODO add enemy vision
+TODO add transition checker function and transitions
 
 
 

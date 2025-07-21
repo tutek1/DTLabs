@@ -2,7 +2,7 @@ class_name AbstractFSMState
 extends Resource
 
 # Called upon transition into the state
-func state_entered(_enemy : GroundEnemyFSM) -> void:
+func state_enter(_enemy : GroundEnemyFSM) -> void:
 	assert(false, "Do not use this abstract class!")
 
 # Called every physics process frame
