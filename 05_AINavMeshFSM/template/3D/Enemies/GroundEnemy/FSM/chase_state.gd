@@ -9,7 +9,7 @@ extends AbstractFSMState
 
 var _last_update : float = -INF
 
-func state_entered(enemy : GroundEnemyFSM) -> void:
+func state_enter(enemy : GroundEnemyFSM) -> void:
 	var tween : Tween = enemy.create_tween()
 	
 	# Tween up
@@ -36,7 +36,7 @@ func state_physics_process(enemy : GroundEnemyFSM, delta : float) -> void:
 	
 	# Recalculate path every so often
 	if _last_update + update_time * 1000 < Time.get_ticks_msec():
-		enemy.set_enemy_target(player.position)
+		enemy.navigation_agent_3d.target_position = player.global_position
 		_last_update = Time.get_ticks_msec()
 
 func state_exit(_enemy : GroundEnemyFSM) -> void:

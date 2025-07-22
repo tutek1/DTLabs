@@ -30,7 +30,11 @@ func _movement(delta : float) -> void:
 	velocity.x = direction.x * speed
 	velocity.z = direction.z * speed
 	
-	velocity.y += direction.y * up_speed * delta
+	# Used for the robot to fly up and down on navmesh links later on
+	if direction.y > 0:
+		velocity.y += direction.y * up_speed * delta
+	else:
+		velocity.y += -direction.y * up_speed/4 * delta
 
 # Rotates the enemy based on direction and delta
 func rotate_enemy(delta: float, direction : Vector3) -> void:

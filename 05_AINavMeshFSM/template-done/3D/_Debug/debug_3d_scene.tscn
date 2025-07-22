@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://chnffv2lmano5"]
+[gd_scene load_steps=33 format=3 uid="uid://chnffv2lmano5"]
 
 [ext_resource type="PackedScene" uid="uid://44guktn5iwdy" path="res://3D/WorldObjects/resistor.tscn" id="1_oikrr"]
 [ext_resource type="PackedScene" uid="uid://co65xg3ltrdrq" path="res://3D/WorldObjects/big_resistor.tscn" id="2_kdw4m"]
@@ -9,7 +9,6 @@
 [ext_resource type="Script" uid="uid://bsumix7xtjux1" path="res://3D/Player/player_controller_3d.gd" id="7_vdnx2"]
 [ext_resource type="Material" uid="uid://d1xu766jnbqqd" path="res://3D/Player/player_material.tres" id="8_x3b60"]
 [ext_resource type="PackedScene" uid="uid://waqesjsv3mko" path="res://3D/Enemies/GroundEnemy/FSM/ground_enemy_fsm.tscn" id="9_kdw4m"]
-[ext_resource type="Script" uid="uid://tb2xm1fgg578" path="res://3D/Enemies/GroundEnemy/FSM/patrol_state.gd" id="10_kai6n"]
 [ext_resource type="PackedScene" uid="uid://1ps1fcn15ft3" path="res://3D/_Debug/debug_draw_path.tscn" id="11_7xjr7"]
 
 [sub_resource type="Environment" id="Environment_ndwkr"]
@@ -92,12 +91,6 @@ polygons = [PackedInt32Array(0, 2, 1), PackedInt32Array(4, 3, 5), PackedInt32Arr
 geometry_source_geometry_mode = 1
 geometry_source_group_name = &"NavMeshSource"
 agent_radius = 1.0
-
-[sub_resource type="Resource" id="Resource_7xjr7"]
-script = ExtResource("10_kai6n")
-patrol_points = Array[Vector3]([Vector3(-16.43, 5.625, -11.37), Vector3(-12.795, 1, 18.91), Vector3(12.38, 1, 0), Vector3(11.19, 1, -23.265)])
-dist_treshold = 1.5
-metadata/_custom_type_script = "uid://tb2xm1fgg578"
 
 [node name="Debug3dScene" type="Node3D"]
 
@@ -498,7 +491,6 @@ end_position = Vector3(-16.9594, 1.07147, 0.691738)
 
 [node name="GroundEnemyFSM" parent="." instance=ExtResource("9_kdw4m")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.842, 0)
-patrol_state = SubResource("Resource_7xjr7")
 
 [node name="DebugDrawPath" parent="." node_paths=PackedStringArray("node") instance=ExtResource("11_7xjr7")]
 node = NodePath("../GroundEnemyFSM")

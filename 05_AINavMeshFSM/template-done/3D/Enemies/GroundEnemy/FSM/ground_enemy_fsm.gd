@@ -7,22 +7,26 @@ extends CharacterBody3D
 
 @export var patrol_state : PatrolState
 @export var chase_state : ChaseState
-
+@export var shoot_state : ShootState
 
 @onready var navigation_agent_3d : NavigationAgent3D = $NavigationAgent3D
+@onready var shoot_cooldown_timer : Timer = $ShootCooldownTimer
+@onready var shoot_cast : RayCast3D = $ShootCast
 
 var _player : PlayerController3D = null
+var _trigger_player_seen : bool = false
 var _curr_state : AbstractFSMState
+var _can_shoot : bool = true
 
 func _ready():
-	patrol_state.state_enter(self)
+	_switch_state(patrol_state)
 
 func _physics_process(delta : float) -> void:
 	_gravity(delta)
 	_movement(delta)
-	rotate_enemy(delta, velocity)
 	
-	patrol_state.state_physics_process(self, delta)
+	_curr_state.state_physics_process(self, delta)
+	_check_transitions()
 	
 	move_and_slide()
 
@@ -41,11 +45,66 @@ func _movement(delta : float) -> void:
 	velocity.x = direction.x * speed
 	velocity.z = direction.z * speed
 	
-	velocity.y += direction.y * up_speed * delta
+	# Used for the robot to fly up and down on navmesh links
+	if direction.y > 0:
+		velocity.y += direction.y * up_speed * delta
+	else:
+		velocity.y += -direction.y * up_speed/4 * delta
+
+# Checks all possible transitions from the current state
+func _check_transitions() -> void:
+	match _curr_state:
+		patrol_state:
+			if _trans_patrol_to_chase():
+				_switch_state(chase_state)
+		chase_state:
+			if _trans_chase_to_patrol():
+				_switch_state(patrol_state)
+			if _trans_chase_to_shoot():
+				_switch_state(shoot_state)
+		shoot_state:
+			if _trans_shoot_to_chase():
+				_switch_state(chase_state)
+	
+	# Reset triggers
+	_trigger_player_seen = false
+
+# Checks if we have started seeing the player this frame
+func _trans_patrol_to_chase() -> bool:
+	return _trigger_player_seen
+
+# Checks if the player is too far away from the enemy
+func _trans_chase_to_patrol() -> bool:
+	var dist_to_player : float = _player.global_position.distance_to(global_position)
+	if dist_to_player > chase_state.chase_max_dist:
+		return true
+	
+	return false
+
+# Checks we can shoot the player
+func _trans_chase_to_shoot() -> bool:
+	if _player == null: return false
+	if not _can_shoot: return false
+	
+	shoot_cast.enabled = true
+	shoot_cast.target_position = shoot_cast.to_local(_player.global_position)
+	shoot_cast.force_raycast_update()
+	shoot_cast.enabled = false
+	
+	if shoot_cast.get_collider() is PlayerController3D:
+		return true
+	
+	return false
+
+# Checks we can go back to chase from shooting the player
+func _trans_shoot_to_chase() -> bool:
+	return not _can_shoot
 
 # Switches the private variable of current state to a new one
 # Calls the appropriate state enter and exit functions
 func _switch_state(new_state : AbstractFSMState) -> void:
+	if new_state == _curr_state: return
+	
 	if _curr_state != null: _curr_state.state_exit(self)
 	_curr_state = new_state
 	_curr_state.state_enter(self)
@@ -78,6 +137,14 @@ func rotate_enemy(delta: float, direction : Vector3) -> void:
 func get_player() -> PlayerController3D:
 	return _player
 
+func set_can_shoot(value : bool) -> void:
+	_can_shoot = value
 
-func _on_vision_area_body_entered(body):
-	pass # Replace with function body.
+func _on_vision_area_body_entered(body : Node3D):
+	if not body is PlayerController3D: return
+	
+	_player = body
+	_trigger_player_seen = true
+
+func _on_shoot_cooldown_timer_timeout():
+	set_can_shoot(true)

@@ -24,7 +24,9 @@ func state_enter(enemy : GroundEnemyFSM) -> void:
 	enemy.navigation_agent_3d.target_position = patrol_points[best_idx]
 
 # Called every physics process frame
-func state_physics_process(enemy : GroundEnemyFSM, _delta : float) -> void:
+func state_physics_process(enemy : GroundEnemyFSM, delta : float) -> void:
+	enemy.rotate_enemy(delta, enemy.velocity)
+	
 	var curr_point : Vector3 = patrol_points[_curr_patrol_idx]
 	
 	# Alternative: enemy.navigation_agent_3d.is_target_reached()

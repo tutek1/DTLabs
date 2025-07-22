@@ -97,5 +97,10 @@ func _double_jump() -> void:
 	velocity.y = jump_force
 
 # Sets a control variable if the _movement() function should be run or not
-func set_do_movement(value : bool) -> void:
+func set_do_movement(value : bool, delay : float = 0) -> void:
+	if delay == 0:
+		_do_movement = value
+		return
+	
+	await get_tree().create_timer(delay).timeout
 	_do_movement = value
