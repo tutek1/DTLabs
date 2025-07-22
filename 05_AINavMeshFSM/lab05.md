@@ -757,7 +757,7 @@ func _on_shoot_cooldown_timer_timeout():
 To check if the player is in **direct sight**, we will use a `RayCast3D` node. The node will be **disabled by default** and we will enable it and check the result, only when checking the **transition conditions**. This will save us some performance, as the enemy will not shoot raycasts every frame, but only when they want to shoot a projectile.
 
 1. **Add** a `RayCast3D` node and call it `ShootCast`.
-2. **Set** the `enabled` property to `false` and **set the collision mask** to only check the player.
+2. **Set** the `enabled` property to `false` and **set the collision mask** to check `Player`, `Terrain`, `Enemy`.
 3. **Add** a reference to the `ShootCast` to the `GroundEnemyFSM` script 
 
 (`@onready var shoot_cast : RayCast3D = $ShootCast`)
