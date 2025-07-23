@@ -59,7 +59,7 @@ Currently, if we wanted to change a property of the 2D player, for example the s
 7. **Instantiate** the saved `player_2d.tscn` scene using the ![](img/SceneInstantiate.png) icon above the scene hierarchy
 
 > aside negative
-> Remember to move to newly instantiated player node to the position where the deleted one was.
+> Remember to move the newly instantiated player node to the position where the deleted one was.
 
 The resulting scene hierarchy in `debug_2d_scene.tscn` should look like this:
 
@@ -95,7 +95,7 @@ If you look at the `Sprite3D` now, there are 3 issues:
 3. The level has a gray background. We need to toggle **transparent background** ON.
 
 To fix them do:
-1. In the **Inspector** of the `SubViewport` change the size to `x=448` and `y=640`.
+1. In the **Inspector** of the `SubViewport` change the `Size` property, so the whole level is in view.
 2. In the **Inspector** of the `Sprite3D` change the `Texture Filter` property to `Nearest`.
 3. In the **Inspector** of the `SubViewport` switch the `Transparent BG` on. 
 
@@ -103,7 +103,7 @@ The result should look like this:
 ![](img/2DIn3D.png)
 
 > aside positive
-> The size of the `SubViewport` is in multiples of `32px` because the size of a single tile in `32px` by `32px`.
+> The size of the `SubViewport` should be in multiples of `32px` because the size of a single tile is `32px` by `32px`. That way there can't be any cut off tiles.
 
 
 
@@ -113,7 +113,7 @@ Duration: hh:mm:ss
 
 Try to play the game now. You can see that you can control **both** the 2D and 3D player at the same time. This is not how the game is supposed to work. Let's make a script called `PlatformingManager2D`, which will control the winning, losing, starting, and ending the 2D platforming level.
 
-1. **Create** a new script `platforming_manager_2d.gd` it the folder `2DPlatforming/Scripts`
+1. **Create** a new script `platforming_manager_2d.gd` in the folder `2DPlatforming/Scripts`
 2. **Add** a function `turn_on()` and `turn_off()` with no parameters and return type of `void`
 3. **Add** the script to the `LevelCodelabs` node in `level_codelabs.tscn`
 3. **Add** the script to the `LevelTemplate` node in `_level_template.tscn`
@@ -156,17 +156,17 @@ For now, the script doesn't do much. We will fix it in the next section, where w
 ## Area3D, PlatformingSection, and Signals
 Duration: hh:mm:ss
 
-Let's setup the rest of the platforming section so that the player enters the 2D platforming once they touch an enter area in space. That is where the `Area3D` (and `Area2D` for 2D) node comes in.
+Let's set up the rest of the platforming section so that the player enters the 2D platforming level upon touching a set area in the world. That is where the `Area3D` (and `Area2D` for 2D) node comes in.
 
 1. **Add** an `Area3D` node as a child of the `Sprite3D`
 2. As the `Area3D` warning suggests, **add** a `CollisionShape3D` as a child of the `Area3D`
 3. **Fill in** the `Shape` property of the `CollisionShape3D` with a `BoxShape3D`
 4. **Move** the `Area3D` to the bottom left corner of the `BigResistor` object
-5. **Adjust** the collision **layer** of the `Area3D` like this:
+5. **Adjust** the collision **layer** of the `Area3D` like this (no need for others to detect it):
 
 ![](img/Area3DLayer.png)
 
-6. **Adjust** the collision **mask** of the `Area3D` like this:
+6. **Adjust** the collision **mask** of the `Area3D` like this (only detecting the player):
 
 ![](img/Area3DMask.png)
 
@@ -177,7 +177,7 @@ Here is what the resulting scene should look like.
 ![](img/Area3D.png)
 
 > aside positive
-> I chose a text mesh to show you, that you can easily create 3D text meshes from any fonts.
+> I chose a text mesh to show you that you can easily create 3D text meshes from any fonts.
 
 
 
@@ -197,12 +197,12 @@ If you select the `Area3D`, you can switch the tab at the top of the **inspector
 
 ![](img/Area3DSignals.png)
 
-The `Area3D` has many different signals that can be connected. We are interested in the signal `body_entered(body: Node3D)` since our player is a `CharacterBody3D` -> `body_entered`.
+The `Area3D` has many different signals that can be connected. We are interested in the signal `body_entered(body: Node3D)` since we want to detect the player entering and our player is a `CharacterBody3D`.
 
 1. **Select** the `body_entered(body: Node3D)` signal
 2. **Press** the `Connect...` button on the bottom right
 3. In the pop-up window, **select** the `Sprite3D` with the `platforming_section.gd` script
-4. Press the `Connect` button
+4. **Press** the `Connect` button
 
 The script should open with a new function `_on_area_3d_body_entered(body)`, let's change it up and test it out with a print like this:
 ```GDScript
