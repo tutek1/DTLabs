@@ -73,7 +73,7 @@ Autoload/Singletons are very useful for **tracking global values** (max reached 
 
 
 
-## Theory: NavMesh
+## NavMesh
 Duration: hh:mm:ss
 
 Imagine you have a **NPC character** and you want them to navigate through a **maze**. We need to know where they **can and cannot walk** and then somehow **plan a path** through the maze. We can solve this problem easily with a **NavMesh** and a **NavMeshAgent**:
@@ -92,7 +92,7 @@ A **NavMesh** is usually "baked" or calculated in the editor, so naturally it is
 
 
 
-## Practice: NavMesh
+## NavMesh in Godot Engine
 Duration: hh:mm:ss
 
 Now that we know what a **NavMesh** is, we can try and use it in our project. Open the project and our `debug_3d_scene.tscn` scene.
@@ -333,7 +333,7 @@ You can **try to make** a similar one and see how the enemy handles it.
 
 
 
-## Theory: Finite-State Machines (FSM)
+## Finite-State Machines (FSM)
 Duration: hh:mm:ss
 
 I would like our Ground Enemy to work like this:
