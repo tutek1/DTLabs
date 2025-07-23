@@ -1,0 +1,70 @@
+[gd_scene load_steps=11 format=3 uid="uid://waqesjsv3mko"]
+
+[ext_resource type="Script" uid="uid://4sib7pm671ol" path="res://3D/Enemies/GroundEnemy/FSM/ground_enemy_fsm.gd" id="1_gegtn"]
+[ext_resource type="Script" uid="uid://tb2xm1fgg578" path="res://3D/Enemies/GroundEnemy/FSM/patrol_state.gd" id="2_0ytt0"]
+[ext_resource type="ArrayMesh" uid="uid://6f6y5ljqa4ss" path="res://3D/Enemies/GroundEnemy/GORODITH_ground_enemy_corrupted.obj" id="2_xj6rk"]
+[ext_resource type="Script" uid="uid://bdsgodlyxyqse" path="res://3D/Enemies/GroundEnemy/FSM/chase_state.gd" id="3_vxf3t"]
+[ext_resource type="Script" uid="uid://m0xrclej1eas" path="res://3D/Enemies/GroundEnemy/FSM/shoot_state.gd" id="4_vxf3t"]
+
+[sub_resource type="Resource" id="Resource_138s8"]
+script = ExtResource("2_0ytt0")
+patrol_points = Array[Vector3]([Vector3(-16.43, 5.625, -11.37), Vector3(-12.795, 1, 18.91), Vector3(12.38, 1, 0), Vector3(11.19, 1, -23.265)])
+dist_treshold = 1.5
+metadata/_custom_type_script = "uid://tb2xm1fgg578"
+
+[sub_resource type="Resource" id="Resource_06emb"]
+script = ExtResource("3_vxf3t")
+enter_scale_up = 1.5
+enter_pos_up = 0.6
+enter_tween_time = 0.2
+update_time = 1.0
+chase_max_dist = 30.0
+metadata/_custom_type_script = "uid://bdsgodlyxyqse"
+
+[sub_resource type="Resource" id="Resource_3boy5"]
+script = ExtResource("4_vxf3t")
+shoot_cooldown = 3.0
+shoot_wait = 0.5
+metadata/_custom_type_script = "uid://m0xrclej1eas"
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_0ytt0"]
+radius = 1.0
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_gegtn"]
+points = PackedVector3Array(0, 0, 4, 10, 5, -10, -10, 5, -10, 10, -5, -10, -10, -5, -10)
+
+[node name="GroundEnemyFSM" type="CharacterBody3D"]
+collision_layer = 4
+collision_mask = 7
+floor_max_angle = 1.0472
+script = ExtResource("1_gegtn")
+patrol_state = SubResource("Resource_138s8")
+chase_state = SubResource("Resource_06emb")
+shoot_state = SubResource("Resource_3boy5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_0ytt0")
+
+[node name="GorodithGroundEnemyCorrupted" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
+mesh = ExtResource("2_xj6rk")
+skeleton = NodePath("../..")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+debug_enabled = true
+
+[node name="VisionArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="VisionArea"]
+shape = SubResource("ConvexPolygonShape3D_gegtn")
+
+[node name="ShootCooldownTimer" type="Timer" parent="."]
+
+[node name="ShootCast" type="RayCast3D" parent="."]
+enabled = false
+collision_mask = 2
+
+[connection signal="body_entered" from="VisionArea" to="." method="_on_vision_area_body_entered"]
+[connection signal="timeout" from="ShootCooldownTimer" to="." method="_on_shoot_cooldown_timer_timeout"]

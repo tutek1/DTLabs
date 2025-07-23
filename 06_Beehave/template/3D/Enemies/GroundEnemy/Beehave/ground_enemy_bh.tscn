@@ -1,0 +1,44 @@
+[gd_scene load_steps=5 format=3 uid="uid://byh0a2vnett5q"]
+
+[ext_resource type="Script" uid="uid://dr03ohsx2gb65" path="res://3D/Enemies/GroundEnemy/Beehave/ground_enemy_bh.gd" id="1_bkr7a"]
+[ext_resource type="ArrayMesh" uid="uid://6f6y5ljqa4ss" path="res://3D/Enemies/GroundEnemy/GORODITH_ground_enemy_corrupted.obj" id="2_afujw"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_dytxf"]
+radius = 1.0
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_vg4k8"]
+points = PackedVector3Array(0, 0, 2, 10, -5, -10, -10, -5, -10, 10, 5, -10, -10, 5, -10)
+
+[node name="GroundEnemyBeehave" type="CharacterBody3D"]
+collision_layer = 4
+collision_mask = 6
+floor_max_angle = 1.0472
+script = ExtResource("1_bkr7a")
+patrol_points = Array[Vector3]([Vector3(0, 1, 0), Vector3(-0.565, 1, 29), Vector3(13.635, 1, 22.36), Vector3(15.995, 1, -15.48)])
+update_time = 1.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_dytxf")
+
+[node name="GorodithGroundEnemyCorrupted" type="MeshInstance3D" parent="CollisionShape3D"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+mesh = ExtResource("2_afujw")
+skeleton = NodePath("../..")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+debug_enabled = true
+
+[node name="VisionArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="VisionArea"]
+shape = SubResource("ConvexPolygonShape3D_vg4k8")
+
+[node name="ShootCast" type="RayCast3D" parent="."]
+enabled = false
+target_position = Vector3(0, 10, 0)
+collision_mask = 7
+debug_shape_thickness = 5
+
+[connection signal="body_entered" from="VisionArea" to="." method="_on_vision_area_body_entered"]
