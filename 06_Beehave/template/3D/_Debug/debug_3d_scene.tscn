@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://chnffv2lmano5"]
+[gd_scene load_steps=33 format=3 uid="uid://chnffv2lmano5"]
 
 [ext_resource type="PackedScene" uid="uid://44guktn5iwdy" path="res://3D/WorldObjects/resistor.tscn" id="1_oikrr"]
 [ext_resource type="PackedScene" uid="uid://co65xg3ltrdrq" path="res://3D/WorldObjects/big_resistor.tscn" id="2_kdw4m"]
@@ -8,7 +8,6 @@
 [ext_resource type="Script" uid="uid://cxr26cu7py7mo" path="res://3D/Camera/player_camera_3d.gd" id="6_itcoc"]
 [ext_resource type="Script" uid="uid://bsumix7xtjux1" path="res://3D/Player/player_controller_3d.gd" id="7_vdnx2"]
 [ext_resource type="Material" uid="uid://d1xu766jnbqqd" path="res://3D/Player/player_material.tres" id="8_x3b60"]
-[ext_resource type="PackedScene" uid="uid://waqesjsv3mko" path="res://3D/Enemies/GroundEnemy/FSM/ground_enemy_fsm.tscn" id="9_kdw4m"]
 [ext_resource type="PackedScene" uid="uid://1ps1fcn15ft3" path="res://3D/_Debug/debug_draw_path.tscn" id="11_7xjr7"]
 [ext_resource type="PackedScene" uid="uid://byh0a2vnett5q" path="res://3D/Enemies/GroundEnemy/Beehave/ground_enemy_bh.tscn" id="11_xbdsv"]
 
@@ -489,9 +488,6 @@ end_position = Vector3(-27.9202, 15.0198, 1.8941)
 bidirectional = false
 start_position = Vector3(-25.3929, 15.1189, 4.05409)
 end_position = Vector3(-16.9594, 1.07147, 0.691738)
-
-[node name="GroundEnemyFSM" parent="." instance=ExtResource("9_kdw4m")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.842, 0)
 
 [node name="DebugDrawPath" parent="." node_paths=PackedStringArray("node") instance=ExtResource("11_7xjr7")]
 node = NodePath("../GroundEnemyBeehave")
