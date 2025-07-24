@@ -729,7 +729,7 @@ The "... during a physics callback" part happens because the previous line is ca
 
 
 ### Deferred Calls
-We can fix this by postponing the this signal emit `platforming_complete.emit(true)` in the `_on_win_area_body_entered()` function. To do this we will need to learn about `deferred` **calling** and **setting**.
+We can fix this by postponing the signal emission `platforming_complete.emit(true)` in the `_on_win_area_body_entered()` function. To do this we will need to learn about `deferred` **calling** and **setting**.
 
 Calling a function or setting a variable **deferred** makes the action take place during idle time, which takes place after the `process` and `physics_process`. This is useful when you want or need something to happen at the **end of the frame**. In our case we will use it to make our signal emit after the physics have been resolved in this frame. Calling a **function deferred** can be done like this:
 
@@ -743,7 +743,7 @@ platforming_manager.call_deferred("turn_off")
 ...
 ```
 
-Setting a variable value can be done the same way using:s
+Setting a variable value can be done the same way using:
 ```GDScrip
 # {var} is a placeholder for a real value
 set_deferred("{var_name}", {value})`
@@ -753,7 +753,7 @@ set_deferred("{var_name}", {value})`
 ### Fix - Deferred Signal
 Signals are a bit different. To make a signal **emit deferred**, we need to set a **flag** when we are connecting it. When we connect a signal in the editor, we can set it to **deferred** in the pop-up window after toggling the `advanced` option.
 
-When we connect a signal using code, like in our case in `_ready()` function in `platforming_section.gd`, we can add a flags as parameters. **Replace** the signal connection line with this:
+When we connect a signal using code, like in our case in `_ready()` function in `platforming_section.gd`, we can add the flags as parameters. **Replace** the signal connection line with this:
 ```GDScript
 func _ready() -> void:
     ...
@@ -776,11 +776,11 @@ Overall, they are a very powerful tool for making **small animations** or things
 
 
 ### Tweens in Godot
-To create a tween in Godot, you can simply call the `create_tween()` function, which will return a **`Tween`** object. The `Tween` class has a two important functions for us:
+To create a tween in Godot, you can simply call the `create_tween()` function, which will return a **`Tween`** object. The `Tween` class has two functions that are relevant to us:
 - `tween_property(node, "property", final_value, time)` - tweens a property (variable) from its current value to a given value taking given time
 - `tween_method(function, start, end, time)` - tweens a value from `start` to `end` and calls a given function with that value (useful for more complex scenarios, where you don't just set a value)
 
-These function return a variable of type **`Tweener`**. This variable tells you everything about the animation you created. You can change the `easing` and `transition`, which determine **how the value** will be interpolated (changed in time). An example of how these settings change the animation can be seen in this [cheatsheet](https://easings.net/en#) (I recommend bookmarking it).
+These functions return a variable of type **`Tweener`**. This variable tells you everything about the animation you created. You can change the `easing` and `transition`, which determine **how the value** will be interpolated (changed in time). An example of how these settings change the animation can be seen in this [cheatsheet](https://easings.net/en#) (I recommend bookmarking it).
 
 
 ### Enter2D
@@ -814,12 +814,12 @@ func _enter2D() -> void:
     await pos_tween.finished
     _player_3d.process_mode = Node.PROCESS_MODE_DISABLED
 ```
-1. **Manual update** of the `CameraTarget` so that it has correct position for the Tween.
+1. **Manual update** of the `CameraTarget` so that it has the correct position for the Tween.
 2. **Creation** of two Tweens (position and scale) and storing them in variables.
-3. **Awaiting** the end of the Tweens (only the position one, but they takes the same time to complete).
+3. **Awaiting** the end of the Tweens (only the position one, but both take the same time to complete).
 4. **Disabling** the process mode of the player after waiting.
 
-Try to play the game and see how it looks like. We will now try to use `easings` and `transtions` to make it look much better.
+Try to play the game and see how it looks. We will now try to use `easings` and `transtions` to make it look much better.
 
 Simply **add** these lines above the `await`:
 ```GDScript
@@ -839,7 +839,7 @@ You can see in the video, that even when we place the 2D player far away, it wor
 The exiting of 2D will be very similar. This time we only care about the **scale** of the 3D player. Let's just try to reverse the **scale tween** in the enter function.
 
 #### Task
-Try to do this part of the codelab it yourself.
+Try to do this part of the codelab yourself.
 1. **Create** the scale tween
 2. **Set** transition
 3. **Set** easing
@@ -849,7 +849,7 @@ Try to do this part of the codelab it yourself.
 >```GDScript
 >_player_3d.scale = Vector3(0.001, 0.001, 0.001)
 >```
-> Not doing this will cause a physics error since for a few frames the players scale will be `0`.
+> Not doing this will cause a physics error since for a few frames the player's scale will be `0`.
 
 
 
@@ -895,7 +895,7 @@ Let's look at what we did in this lab.
 - We looked at the **changes I made** between the last codelab and this one
 - Then, we learned the importance of **reusing scenes** by saving them (Player2D)
 - We made **managers** for the 2D game and for the 2D section in 3D, which made **entering and exiting 2D** possible
-- Next, we learned about what are **signals**, how to **create** them, and **use** them
+- Next, we learned about what **signals** are, how to **create** them, and **use** them
 - Then, we made the **camera follow** the 2D player by **recalculating 2D coordinates** to 3D
 - We made the **result** of the 2D game **propagate upwards** the tree to the section manager
 - Next, we fixed many different **errors** that sprung up
