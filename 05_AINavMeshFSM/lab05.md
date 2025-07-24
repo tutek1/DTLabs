@@ -10,7 +10,7 @@ Feedback Link: https://google.com
 ## Overview
 Duration: hh:mm:ss
 
-This lab will focus on creating a **Ground Enemy** for our game. We will need to create an AI for them with a behavior, so that they can interact with the player and the environment.
+This lab will focus on creating a **Ground Enemy** for our game including their behavior and navigation, so that they can interact with the player and the environment.
 
 Today we will look over:
 - Changes made in the project between the codelabs. 
@@ -37,14 +37,14 @@ One of the more important additions is the `global_debug.gd` script. You can mak
 - `F2` - slows down time by 1/2
 - `F3` - speeds up time by 2
 
-Having a script like this in your project is **extremely useful** for fast and easy **debugging**. More over you can easily expand it to solve your project specific debugging issues. I **recommend** copying it into your project if you plan on using Godot. 
+Having a script like this in your project is **extremely useful** for fast and easy **debugging**. Moreover you can easily expand it to solve your project-specific debugging issues. I **recommend** copying it into your project if you plan on using Godot. 
 
 However, firstly we need to learn about **Singletons** and **Autoload**!
 
 ### Singleton Pattern and Autoload
-The Singleton pattern is a software design pattern that **restricts a class**, so that there cannot be more than a **singular instance**. In most other game engines you would have to use Singletons for scripts like the `global_debug.gd`.
+The Singleton pattern is a software design pattern that **restricts a class**, so that there cannot be more than a **singular instance** of it. In most other game engines you would have to use Singletons for scripts like the `global_debug.gd`.
 
-In **Godot** you could also use Singletons but there is an easier way. Godot allows you to set **scripts** or even **node trees** as **Autoload**. If you add a node/script as **Autoload** it will be automatically created and added above the scene tree upon start. The usual **Godot Lifecycle** functions are still run and you can access the class from anywhere in code.
+In **Godot** you could also use Singletons but there is an easier way. Godot allows you to set **scripts** or even **node trees** as **Autoload**. If you add a node/script as **Autoload** it will be automatically created and added above the scene tree upon start. This makes the node accessible from anywhere, which is useful for many reasons. The usual **Godot Lifecycle** functions are still run.
 
 Let's add the `global_debug.gd` as an **Autoload**:
 1. **Open** the `Project Settings`
@@ -57,7 +57,7 @@ The result should look like this:
 ![](img/GlobalsAutoload.png)
 
 > aside negative
-> If you plan to use this or a similar script in your own project, you will also need to add the script `Autoload`.
+> If you plan to use this or a similar script in your own project, you will also need to add the script to `Autoload` in **Project Settings**.
 
 
 ### Globals in Remote Scene Tree View
@@ -69,7 +69,7 @@ Autoload/Singletons are very useful for **tracking global values** (max reached 
 
 
 > aside positive
-> One small note: The script **only works in the editor**. When running a build of the game (compiled .exe file) the node automatically deletes itself (see `_ready()` function of the `global_debug.gd`).
+> One small note: The `global_debug.gd` **only works in the editor**. When running a build of the game (compiled .exe file) the node automatically deletes itself (see `_ready()` function of the script).
 
 
 
@@ -84,7 +84,7 @@ Imagine you have a **NPC character** and you want them to navigate through a **m
 Here is an example of a **NavMesh** in Godot. The light-blue areas are walkable by an agent. 
 ![](img/NavmeshExample.png)
 
-A **NavMesh** is usually "baked" or calculated in the editor, so naturally it is **NOT** suitable for **highly dynamic** environments. If you really need to, you can bake a NavMesh while the **game is running**, but be aware that the computation is quite **costly**.
+A **NavMesh** is usually "baked" or calculated in the editor, so naturally it is **NOT** suitable for **highly dynamic** environments since you would need to rebake the **NavMesh** every time something would change. If you really need to, you can bake a NavMesh while the **game is running**, but be aware that the computation is quite **costly**.
 
 > aside positive
 > Depending on the engine or literature the **NavMeshAgent** and **NavMesh** may be called by different names. In Godot it is a **NavigationAgent** and **NavigationRegion**. Both version of these terms are correct and I will use them interchangeably.
@@ -101,13 +101,13 @@ Now that we know what a **NavMesh** is, we can try and use it in our project. Op
 2. In the **Inspector** of the new node **add** a new `NavigationMesh`
 3. **Open** the created `NavigationMesh`
 
-There are many settings that you can change here and I will not go through all of them. I will show you the basics and you can look up the rest. 
+There are many settings that you can change here and it would take too much time to go through them all. I will show you the basics and you can look up the rest. 
 
-First, we need to specify, which **meshes/colliders** should be considered during the **NavMesh** calculation. We can do that in the `Geometry` category. This can be set in the `Source Geometry Mode` property. I find the most manageable to be the `Group With Children` setting, so please set it. Also set the property `Source Group Name` to `NavMeshSource`.
+First, we need to specify, which **meshes/colliders** should be considered during the **NavMesh** calculation. We can do that in the `Geometry` category with the `Source Geometry Mode` property. I find the `Group With Children` option to be the most manageable, so let's use it. Also set the property `Source Group Name` to `NavMeshSource`.
 
 
 ### Groups
-Now we have set a **Group Name** but what are groups? Each node can be a part of any number of **Groups**. They can be used to easily **tag** nodes. For example you can tag **boxes and barrels** in your game as **"Destructible"** and then when the player attacks an object, you can **check** if the object is in the group "Destructible", if yes then you can **delete** the object.
+Now we have set the `Source Group Name` property but what are the **groups**? Each node can be a part of any number of **Groups**. They can be used to easily **tag** nodes. For example you can tag **boxes and barrels** in your game as **"Destructible"** and then when the player attacks an object, you can **check** if the object is in the group "Destructible", if yes then you can **delete** the object.
 
 Every node has a function to check if it is in a group: 
 ```GDScript
@@ -117,7 +117,7 @@ Every node has a function to check if it is in a group:
 
 
 ### Back to NavigationRegion3D
-With the `Source Group Name` set the NavigationRegion will **only consider** nodes (and their children) that are in the group `NavMeshSource`. Let's set the **group** to the correct nodes.
+With the `Source Group Name` set, the NavigationRegion will **only consider** nodes (and their children) that are in the group `NavMeshSource`. Let's set the **group** to the correct nodes.
 
 1. In the **Inspector** of the `Ground` node, **select** the **Node** tab
 2. **Click** on the **Groups** button next to Signals
@@ -166,7 +166,7 @@ To fix this we will learn about the **Import** tab.
 
 1. **Select** the `GORODITH_ground_enemy_corrupted.obj` in the folder `3D/Enemies/GroundEnemy`
 2. **Switch** to the **Import** tab at the top of the **Scene Hierarchy**
-3. **Set** the `Offset Mesh` property to `(-1.05, -2, 1.1)`
+3. **Set** the `Offset Mesh` property to `(-1.05, -2, 1.1)` to center the mesh
 4. **Press** the `Reimport` button
 
 ![](img/GroundEnemyReimported.png)
@@ -187,11 +187,11 @@ This problem comes from how the modelling program uses textures. The colors are 
 
 <img src="img/GORODITH_ground_enemy_corrupted.png" width="1800"/>
 
-However, by default Godot **compresses a texture** upon importing to save **memory and computational power**. Our textures are so small (256x1 px) that we so not need to compress them.
+However, by default Godot **compresses a texture** upon importing to save **memory and computational power**. Our textures are so small (256x1 px) that we do not need to compress them.
 
 1. **Select** the `GORODITH_ground_enemy_corrupted.png` in the folder `3D/Enemies/GroundEnemy`
 2. **Switch** to the **Import** tab at the top of the **Scene Hierarchy**
-3. **Change** the in the `Compress` category the `Mode` to **Lossless** 
+3. In the `Compress` category **change** the `Mode` to **Lossless** 
 4. **Press** the `Reimport` button
 
 ![](img/GroundEnemyTextureLossless.png)
@@ -217,7 +217,7 @@ You can either **drag the node**, then **press CTRL**, and **drop it** in the co
 ```
 
 ### Move the Enemy in Scene
-Now let's **open** our favorite `debug_3d_scene.tscn`. We can see that the enemy is already instantiated in the scene. **Playing** the game, you can see that the enemy just **moves forward** into the wall. Let's **look at code** controlling the enemy.
+Now let's **open** our favorite `debug_3d_scene.tscn`. We can see that the enemy is already instantiated in the scene. **Playing** the game, you can see that the enemy just **moves forward** into the wall. Let's **look at the code** controlling the enemy.
 
 Most of the code is very similar to the player's movement code. To test out the `NavMesh` we just need to change 2 lines of code. First, we would like to set the target of the agent to the position, where we click with the mouse. 
 
@@ -237,17 +237,17 @@ The second change is at the top of the `_movement()` function. We need to change
 var target_pos : Vector3 = navigation_agent_3d.get_next_path_position()
 ```
 
-Try to **play the game** and click somewhere. If the position was on the `NavMesh` the enemy should go there.
+Try to **play the game** and click somewhere. If the clicked position was on the `NavMesh` the enemy should go there.
 
 
 
 ## NavMesh and Enemy Fixes 
 Duration: hh:mm:ss
 
-If you played around with our current setup enough you might have noticed, that the enemy can get **stuck on walls**, cannot **climb the steps**, etc. We will go through these issues and fix them.
+If you played around with our current setup enough you might have noticed that the enemy can get **stuck on corners**, cannot **climb the steps**, etc. We will go through these issues and fix them.
 
 ### Debug View
-For easier debugging, let's open the enemy scene and and look in the `NavigationAgent3D`'s **Inspector**.
+For easier debugging, let's open the enemy scene and look in the `NavigationAgent3D`'s **Inspector**.
 
 There in the `Debug` category **turn on** the `Enabled` property.
 
@@ -262,46 +262,46 @@ Now if you **play the game** and click somewhere, you can see the **path** (red 
 > Don't forget to **save** the **enemy scene** every time we change something!
 
 
-### Stuck on Walls
-The reason the enemy is getting **stuck on walls** is because they are **wider** than the `radius` property that the `NavMesh` was baked with. Our enemy has a `SphereShape` with radius of `1m` as the collider. Let's go into the `NavigationMesh` settings and **change** the `radius` property:
+### Stuck on Corners
+The reason the enemy is getting **stuck on corners** is because the enemy is **wider** than the `radius` property that the `NavMesh` was baked with. The `radius` property controls how much space is between the edge of the `NavMesh` and the edge of the obstacle. Our enemy has a `SphereShape` with radius of `1m` as the collider. Let's go into the `NavigationMesh` settings and **change** the `radius` property:
 
 ![](img/NavMeshRadius.png)
 
 Every time you change something in the `NavigationMesh` you need to bake it again. So press the `Bake NavigationMesh` button again from the **context menu**.
 
 > aside positive
-> There are many more settings in `NavigationMesh`, that completely change how it is created. I suggest you try out different setting. In the end almost **every enemy type** needs slightly **different settings**.
+> There are many more settings in `NavigationMesh`, that completely change how it is created. I suggest you try out different settings. In the end almost **every enemy type** needs slightly **different settings**.
 
 
 
 ### Stuck on the Stairs
-This problem is a bit different since it does not originate from the any of the **navigation nodes**, but from the `CharacterBody3D` itself. The `CharacterBody3D` considers the steps as a **wall**, so it does not allow movement up the steps. The **solution** I found (there may be other and even better) is to set the `Max Angle` property in the `Floor` category of the `CharacterBody3D` to `60`. So please **set** it:
+This problem is a bit different since it does not originate from any of the **navigation nodes**, but from the `CharacterBody3D` itself. The `CharacterBody3D` considers the steps as a **wall**, so it does not allow movement up the steps. The **solution** I found (there may be other and even better) is to set the `Max Angle` property in the `Floor` category of the `CharacterBody3D` to `60`. So please **set** it:
 
 ![](img/FloorAngle.png)
 
 
 > aside positive
-> If your game needs to have different `NavMeshes` for different enemies, you can add more `NavigationRegion` nodes and toggle, which enemy can use which `NavMeshes` with the `Navigation Layers` property.
+> If your game needs to have different `NavMeshes` for different enemies, you can add more `NavigationRegion` nodes and toggle which enemy can use which `NavMeshes` with the `Navigation Layers` property.
 
 
 
 
 
-## Extra NavMesh Nodes
+## Extra Navigation Nodes
 Duration: hh:mm:ss
 
 There are **2 extra nodes** related to `NavMeshes`/`NavigationRegions`, that can be used. This chapter is a bit **optional** but I recommend at least looking through it, so that you know that these nodes exist.
 
 
 ### NavigationObstacle3D
-This node is useful when you want an to mark and area as **unwalkable** on the `NavMesh`. We will use it to get rid of these **small patches** on top of the resistors.
+This node is useful when you want to mark an area as **unwalkable** on the `NavMesh`. We will use it to get rid of these **small patches** on top of the resistors.
 
 ![](img/SmallAreas.png)
 
 To do this:
 1. **Open** the `resistor.tscn` scene
 2. **Add** a `NavigationObstacle3D` as a child of the root
-3. **Open** the `verticies` property and **add** 4 vertices
+3. **Open** the `vertices` property and **add** 4 vertices
 4. **Set** the **coordinates** of vertices so it matches the bounds of the grey square
 5. **Set** the `height` property to `1.5m` (needed so that the top of the object is unwalkable)
 6. **Toggle** the property `Affect Navigation Mesh` ON in the `Navigation Mesh` category
@@ -342,14 +342,14 @@ I would like our Ground Enemy to work like this:
 - When the player is **spotted** -> **Chase** the player
 - When **chasing** the player -> Go to the **player position** and periodically **shoot a projectile** at them
 
-This behavior can be expressed as the graph below. Where each **box is a state** in which the enemy can be in and each **arrow is a transition** from one state to another. These transitions are taken, when the **conditions are met** (red squares).
+This behavior can be expressed as the graph below. Where each **box is a state** the enemy can be in and each **arrow is a transition** from one state to another. These transitions are taken when the **conditions are met** (red squares).
 
 ![](img/FiniteStateMachinePlan.png)
 
-This makes our **enemy AI** very readable and easy to understand. We will now recreate this structure in our project, so that the enemy will behave exactly like that.
+This makes our **enemy AI** very readable and easy to understand. We will now recreate this structure in our project.
 
 ### Definitions
-Let's first make a few definitions, that will hold true for our implementation (and most implementations of FSMs):
+Let's first outline a few definitions, that will hold true for our implementation (and most implementations of FSMs):
 - The enemy can be **only in one state** at a time.
 - The enemy **starts in one** defined state.
 - States can be **changed** (transitioned from one to another) only upon **meeting set conditions**.
@@ -359,7 +359,7 @@ s `state_process()` **function is called**.
 - When a state is **exited**, its `state_exit()` **function is called**.
 
 
-### What we have so far?
+### What do we have so far?
 If you look in the folder `3D/Enemies/GroundEnemy/FSM` you can see a **script** called `abstract_fsm_state.gd`. Here is the full script, just in case:
 ```GDScript
 class_name AbstractFSMState
@@ -401,7 +401,7 @@ Start by:
 2. **Set** the `class_name` to `PatrolState`
 3. **Set** `extend` to `AbstractFSMState`
 4. **Copy** the **three empty functions** from the `abstract_fsm_state.gd`
-5. **Remove** the `assert` lines and put `pass` instead of them
+5. **Replace** the `assert` lines with `pass` instead
 
 Additionally, we will need to be able to **set and store** the points of the **patrol path**. Let's **add** an `export` variable and an **index**, so that we know which point we are targeting:
 ```GDScript
@@ -410,7 +410,7 @@ Additionally, we will need to be able to **set and store** the points of the **p
 var _curr_patrol_idx : int = 0
 ```
 
-I will leave the patrol state **implementation to you**. The next few paragraphs outline what each function should do. The **solution** will be in the **next section**. Before you start, let's make the enemy **use the patrol state by default**, so that you can easily test it out, while implementing. Change the `ground_enemy_fsm.gd` like this:
+I will leave the patrol state **implementation to you**. The next few paragraphs outline what each function should do. The **solution** will be in the **next section**. Before you start, let's make the enemy **use the patrol state by default**, so that you can easily test it out while implementing. Change the `ground_enemy_fsm.gd` like this:
 
 ```GDScript
 @export var patrol_state : PatrolState
@@ -441,7 +441,7 @@ When **entering the patrol state**, the enemy should **pick a patrol point** tha
 
 
 ### **`state_physics_process(...)`**
-What should the patrol state do **every frame**? Well since the navigation is handled by the `NavigationAgent` and the enemy currently just **walks to the position we set** in the agent (recall the `_input()` function in `GroundEnemyFSM`), so we only need to handle the **patrol points**.
+What should the patrol state do **every frame**? Well since the navigation is handled by the `NavigationAgent` and the enemy currently just **walks to the set position** (recall the `_input()` function in `GroundEnemyFSM`), we only need to handle the **patrol points**.
 
 Each frame, we will rotate the enemy (`enemy.rotate_enemy()` function) and **check** if the enemy has **reached the target** we set (patrol point). If the target was **reached**, we will **pick the next point** from the `patrol_points`. If there are **no more patrol points**, just start from **the beginning**.
 
@@ -514,7 +514,7 @@ It would be helpful if we could **see the patrol path**. There is a very good pl
 
 
 #### Get the Plugin
-To download the plugin (or any other ones), you can simply navigate to the `AssetLib` tab next to `Game` at the top center of the Godot editor.
+To download the plugin, you can simply navigate to the `AssetLib` tab next to `Game` at the top center of the Godot editor.
 
 1. **Search** for `Debug Draw 3D`
 2. **Click** on it and **press** `Download`
@@ -524,7 +524,8 @@ To download the plugin (or any other ones), you can simply navigate to the `Asse
 ![](img/AssetLib.png)
 
 > aside positive
-> Most plugins for Godot are **free** under the `MIT license`. Meaning you can use them even in **commercial products**, if you include of the original **copyright notice and the license text**.
+> Most plugins for Godot are **free** under the `MIT license`. Meaning you can use them even in **commercial products**, if you include the original **copyright notice and the license text**.
+
 
 #### Debug Draw Path
 I have already prepared the script and node, that will visualize the path.
@@ -602,8 +603,8 @@ func _on_vision_area_body_entered(body : Node3D):
     _trigger_player_seen = true
 ```
 - First, we **check** if the body the enemy sees is **the player**
-- Then, we **set** the **reference to the player** (which the `ChaseState` uses though the `get_player()` function)
-- Lastly, we **set** the **player seen trigger** (`bool`) to true, so that we know, that we have started to **see the player** (will be important in the next part for **transitions**)
+- Then, we **set** the **reference to the player** (which the `ChaseState` uses through the `get_player()` function)
+- Lastly, we **set** the **player seen trigger** (`bool`) to true, so that we know that we have started to **see the player** (will be important in the next part for **transitions**)
 
 
 
@@ -611,7 +612,7 @@ func _on_vision_area_body_entered(body : Node3D):
 Now we will need to update the FSM code in the `GroundEnemyFSM` so that it works with **multiple states**, **state switching**, and **state transitions**.
 
 #### Switch State Function
-Let's add a function that will handle **switching the current state** to a new one. First we need to **track the current state**, that we are in.
+Let's add a function that will handle **switching the current state** to a new one. First we need to **track the current state**.
 ```GDScript
 var _curr_state : AbstractFSMState
 ```
@@ -632,7 +633,7 @@ func _ready():
     _switch_state(patrol_state)
 ```
 
-Let's also **change** the `_physiscs_process()` function so it updates the `_curr_state` instead of the `patrol_state`.
+Let's also **change** the `_physics_process()` function so it updates the `_curr_state` instead of the `patrol_state`.
 ```GDScript
 func _physics_process(delta : float) -> void:
     ...
@@ -857,7 +858,7 @@ The projectile already flies towards the player. **Check** `electric_projectile.
 
 
 #### **`state_physics_process()`**
-Every frame we want to just **look at the player**. So we can get the reference to them from the enemy and use the `rotate_enemy()` function.
+Every frame we want to **look at the player**, so we can get the reference to the player from the enemy and use the player's position in the `rotate_enemy()` function.
 ```GDScript
 func state_physics_process(enemy : GroundEnemyFSM, delta : float) -> void:
     var player : Node3D = enemy.get_player()
@@ -880,7 +881,7 @@ func state_exit(enemy : GroundEnemyFSM) -> void:
 ## Bonus: Projectile Knockback 
 Duration: hh:mm:ss
 
-It would be nice if the projectile did something to the player, before we implement player HP, stats, etc. in future codelabs. For now, it could knockback the player with given force and time.
+It wouldn't be bad if the projectile did something to the player, before we implement player HP, stats, etc. in future codelabs. For now, it could knockback the player with given force and time.
 
 ### ElectricProjectile
 We need two parameters to have the knockback configurable:
@@ -926,7 +927,7 @@ func set_do_movement(value : bool, delay : float = 0) -> void:
 ```
 
 > aside positive
-> The delay parameter has a **default value** of `0` meaning, that if you call the function without specifying the parameter an error is NOT thrown but it is called with a delay of `0`
+> The delay parameter has a **default value** of `0`, meaning that if you call the function without specifying the parameter an error is NOT thrown but it is called with a delay of `0`
 
 
 
@@ -941,10 +942,10 @@ Let's look at what we did in this lab.
 - Next, we correctly **set the parameters** of the `NavMesh` based on our enemy/agent and **baked it**.
 - Then, we looked at extra navigation nodes `NavigationObstacle3D` and `NavigationLink3D`.
 - After that we looked at **Finite-State Machines (FSM)** and implemented it in our **Ground Enemy**.
-- Next, we created all 3 states of our FSM:
-    - Patrol - walking from point to point
-    - Chase - upon seeing the player (`Area3D`), run towards them
-    - Shoot - wait and spawn a projectile and start a cooldown using the `Timer` node
+- Next, we created **all 3 states** of our FSM:
+    - **Patrol** - walking from point to point
+    - **Chase** - upon seeing the player (`Area3D`), run towards them
+    - **Shoot** - wait and spawn a projectile and start a cooldown using the `Timer` node
 - Lastly in the bonus section, we added **knockback** to the projectiles.
 
 
