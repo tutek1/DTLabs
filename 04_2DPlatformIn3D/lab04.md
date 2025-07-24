@@ -308,18 +308,18 @@ Remember to set the `export` variable in the **inspector** in all the 2D platfor
 ## Camera Follow 2D Player
 Duration: hh:mm:ss
 
-Playing the game in seems as if the player enters the 2D world, which is nice. One problem is that the camera stays on the position of the 3D Player. We would like it to follow the 2D player.
+Playing the game it looks like the player enters the 2D world. One problem is that the camera stays on the position of the 3D Player. We would like it to follow the 2D player.
 
 
 ### Dummy target
-So that we can easily see and debug the position translation from 2D to 3D, let's add a `Node3D` with a mesh, which will act as our new camera target.
+To easily see and debug the position translation from 2D to 3D, let's add a `Node3D` with a mesh, which will act as our new camera target.
 
 **Recreate** this setup:
 ![](img/TestCube.png)
 
 
 ### Player2D position
-How do we get the 2D player position in the `platforming_section.gd` script? Well we have a reference to the `PlatformingManager2D` and the manager has a reference to the player. Let's add a function to the manager to get the reference to the player 2D.
+How do we get the 2D player position in the `platforming_section.gd` script? We have a reference to the `PlatformingManager2D` and it has a reference to the 2D player. Let's add a function to the `PlatformingManager2D`, that will return the player 2D reference.
 
 ```GDScript
 func get_player2D() -> Node2D:
@@ -327,10 +327,10 @@ func get_player2D() -> Node2D:
 ```
 
 
-### How to translate 2D position to 3D?
-The 2D world has the **origin** in the top left corner with the `Y-axis` going down and `X-axis` going right. So if we get the **player position**, we know how the player is translated in relation to the top left corner of the sprite.
+### How to translate the 2D position to 3D?
+The 2D world has its **origin** in the top left corner of the sprite with the `Y-axis` going down and `X-axis` going right. So if we get the **player 2D position**, we know how the player is translated in relation to the top left corner of the sprite.
 
-However, the `Sprite3D` is centered, so we also need to **offset** the position by half of the width and half of the height.
+Ok, but the `Sprite3D` is centered, meaning that we need to **offset** the player 2D position by half of the width and half of the height of the sprite.
 
 Another thing is that the units of the 2D player position are in **pixels** and the units of the 3D world are in **meters**. Luckily, the `Sprite3D` node has a property of `pixel_size`, which tells us how big in meters a single pixel is.
 
@@ -338,7 +338,7 @@ Another thing is that the units of the 2D player position are in **pixels** and 
 
 
 ### The code
-Since these changes are quite big and the codelab will be quite long already, I won't though the code in great detail. Here is the full `platforming_section.gd` script:
+Since these changes are quite big and the codelab will be quite long already, I won't through the code in great detail. Here is the full `platforming_section.gd` script:
 
 ```GDScript
 extends Sprite3D
@@ -388,22 +388,22 @@ func _on_area_3d_body_entered(body : Node3D) -> void:
 ```
 
 ### PlayerCamera3D changes
-Now if you play the game, the camera follows the 2D player with the cube pretty well. However the camera is too **zoomed** in (due to the shapecasting) and we can still **rotate** the camera.
+Now if you play the game, the camera follows the 2D player with the cube pretty well. However the camera is too **zoomed** in, due to the camera shapecasting in to the wall, and we can still **rotate** the camera.
 
 #### Shapecasting problem
-The easies way to fix this is to move the camera target a bit out of the wall, so that the shapecast does not hit it. We can easily adjust it in the function `_update_camera_target()` by setting:
+The easiest way to fix this is to move the camera target a bit out of the wall, so that the shapecast does not hit it. We can easily adjust it in the function `_update_camera_target()` by setting:
 ```GDScript
 camera_target.position.z = 0.5
 ```
 
 > aside positive
-> You can put a different number to the `position.z` than `0.5`. I just find this value to work and look well with out setup.
+> You can put a different number to the `position.z` than `0.5`. I just find this value to work and look well with our setup.
 
 
 #### Rotation problem
 We will fix this by adding a function to switch off and on the ability to rotate the camera with the mouse. 
 
-Let's add this "public" **function** in the `player_camera_3d.gd` script, a **new bool variable** so that we know if we should rotate or not, and a **check**:
+To do this we will need to expand the `player_camera_3d.gd` script with the following "public" **function**, a **new bool variable** so that we know if we should rotate or not, and a rotation **check**:
 ```GDScript
 ...
 var _do_rotate_camera : bool = true
@@ -413,13 +413,13 @@ func _rotate_camera(x : float, y : float) -> void:
     ...
 
 func set_user_rotation_control(value : bool, fixed_rotation : Vector3) -> void:
-	_do_rotate_camera = value
-	rotation_degrees = fixed_rotation
+    _do_rotate_camera = value
+    rotation_degrees = fixed_rotation
 ```
 - `value` will determine if we want the rotation to turn on or off
-- `fixed_rotation` will determine the rotation, which will be set and present throughout the 2D level
+- `fixed_rotation` will determine the rotation, which will be set and constant throughout the 2D level
 
-The rotation should be an `export` variable since some 2D platforming levels might be set at an different angle in the 3D space. **Add** this to the top of the script:
+Some 2D platforming levels might be set at a different angle in the 3D world, that is why we will add an `export` variable, that will be used as the `fixed_rotation` parameter. **Add** this to the top of the `platforming_section.gd` script:
 ```GDScript
 @export var camera_angle : Vector3 = Vector3.ZERO
 ```
@@ -429,9 +429,10 @@ The last thing to do is to **call** the function at the end of the `_enter2D()` 
 _player_3d.camera_pivot.set_user_rotation_control(false, camera_angle)
 ```
 
-You can of course play around with the angle in the **inspector** but I will keep it at `Vector3.ZERO`
+You can of course play around with the angle in the **Inspector** of the `Sprite3D` but our testing 2D platforming section looks fine with `Vector3.ZERO`.
 
-Playing the game now, you should be able to be transported into the 2D world upon touching the `Area3D`.
+Playing the game now and touching the `Area3D`, you should be transported into the 2D world and the camera should behave correctly.
+
 
 
 
@@ -440,7 +441,7 @@ Duration: hh:mm:ss
 
 Currently, if we run through the whole 2D level we can just fall out and if we jump on spikes the whole game reloads (even the 3D). Let's change this.
 
-We will add a **signal** to the 2D player, which will notify the platforming manager when the **player dies**. Then we will add a **`Area2D`**, which will notify the manager that the **player has won** (a sort of goal). Next, we will add another **signal** to the manager, which will notify the section manager (the one in 3D) that the **game ended** with a result (died or won). Here is a small diagram to better understand, what we are trying to do:
+We will add a **signal** to the 2D player, which will notify the platforming manager when the **player dies**. Then we will add a **`Area2D`**, which will notify the manager that the **player has won** (a sort of goal). Next, we will add another **signal** to the manager, which will notify the section manager (the one in 3D) that the **game ended** with a result (died or won). Here is a small diagram to better understand what we are trying to do:
 
 ![](img/SignalDiagram.png)
 
@@ -459,7 +460,7 @@ This signal is special, because it is called with a `bool` variable, which will 
 1. **Open** the `level_codelabs.tscn` scene
 2. **Add** a `Area2D` node and rename it to `WinArea`
 3. **Add** a `CollisionShape2D` as a child of the `Area2D`
-4. **Setup** the collision layer and mask of the `Area2D` same as the image below
+4. **Set up** the collision layer and mask of the `Area2D` same as the image below
 
 ![](img/WinAreaMask.png)
 
@@ -506,15 +507,15 @@ func _ready():
 - **`player`** is the reference to the `PlayerController2D`
 - **`player2D_died`** is the signal, which will be emitted when the player dies
 - **`connect()`** is a function of a signal, its parameter is the function, which will be called once the signal is emitted
-- **`platforming_complete.emit`** is the function that will be called once the `player2D_died` signal is emitted
-- **`bind(false)`** add the value `false` as the parameter of the function `emit` 
+- **`platforming_complete.emit`** is the function emitting the `platforming_complete` signal that will be called once the `player2D_died` signal is emitted
+- **`bind(false)`** adds the value `false` as the parameter of the function call of `platforming_complete.emit` (this will not call the function but only add the parameter once the function is called in the future)
 
 > aside negative
 > We cannot do:
 > ```GDScript
 > player.player2D_died.connect(platforming_complete.emit(false))
 > ```
-> Since that would call the function `platforming_complete.emit(false)` and put its return value as the function to call.
+> The expression `platforming_complete.emit(false)` would emit the signal during the connecting and return `null`. Which would cause the `player2D_died` signal to connect `null` as the function to be called upon firing/emitting. This would most likely cause an error.
 
 
 
@@ -535,8 +536,7 @@ For now, let's just print out the bool of the signal -> success or not. Try to p
 ## Exiting 2D
 Duration: hh:mm:ss
 
-Now it is time to make a function to **exit the 2D world**. It will work in a similar way as the enter function but in **reverse**. The result of the 2D platforming section will determine, if the player will be pushed **up and forward** (success) or **down and backwards** (failure).
-
+Now it is time to make a function to **exit the 2D world**. It will work in a similar way as the enter function but in **reverse**. The result of the 2D platforming section will determine if the player will be pushed **up and forward** (success) or **down and backwards** (failure).
 
 
 ### The Exit Function
@@ -561,15 +561,15 @@ func _exit2D(success : bool) -> void:
 ```
 
 > aside positive
-> We also needed to **match** the parameters of the function with the signal, that calls it `platforming_complete(bool)` hence the `success : bool` parameter.
+> We need to **match** the parameters of the function to be called by the signal with the signal's parameters. `platforming_complete(bool)` hence the `_exit2D(success : bool)` parameter.
 
 
 
 ### Player 2D Death Glitch
-If you run the game and die on the spikes in the 2D level. You start going **back and forth** between 2D and 3D. To fix this we will need to do 3 things.
+If you run the game and exit the 2D level, you can start looping **back and forth** between 2D and 3D. To correct this we will need to fix the following 3 problems.
 
-#### Move Player 3D Outside of the `Area3D`
-The second problem is, that the player 3D stays in the `Area3D` and is disabled. This is problematic, since once they are enabled,the collision is triggered again resulting in constant exiting and entering loop. To fix this we will **move** the player 3D out of the `Area3D` and **wait** one frame with disabling them.
+#### 1. Move Player 3D Outside of the `Area3D`
+The first problem is, that the player 3D stays in the `Area3D` and is disabled. This is problematic, since once they are enabled, the collision is triggered again resulting in constant exiting and entering loop. To fix this we will **move** the player 3D out of the `Area3D`, **wait** one frame, and then disable them.
 
 ```GDScript
 func _enter2D() -> void:
@@ -592,14 +592,13 @@ func _enter2D() -> void:
     _player_3d.process_mode = Node.PROCESS_MODE_DISABLED
 ```
 
-The **`await`** keyword pauses the execution of the function until the signal after the keyword emits. The signal here is the `get_tree().process_frame`, which is called before the next physics frame is called on all the nodes in the tree.
+The **`await`** keyword pauses the execution of the function (not the whole game) until the signal after the keyword emits. The signal here is the `get_tree().process_frame`, which is called before the next physics frame is called on all the nodes in the tree.
 
 > aside negative
-> We need to use `get_tree().process_frame` since it we are setting the `process_mode` property and `process` updates more frequently than `physics_process`.
+> We need to use `get_tree().process_frame` since we are setting the `process_mode` property and `process` updates more frequently than `physics_process`.
 
-
-#### Move Player 2D Outside of the `WinArea`
-The first problem is that once the 2D player dies, they stay on the spikes and constantly **die over and over**. To fix this we need to reset the 2D player position upon **losing or winning** the 2D level. We will do this by **caching** the position of the player at the beginning of the game and then **moving** the 2D player to that position once end the 2D game.
+#### 2. Reset Player 2D Position
+The second problem is that once the 2D player dies, they stay on the spikes and constantly **die over and over**. To fix this we need to reset the 2D player position upon **losing or winning** the 2D level. We will do this by **caching** the position of the player at the beginning of the game and then **moving** the 2D player to that position once the 2D game ends.
 
 Apply these changes to the `platforming_manager_2d.gd`:
 ```GDScript
@@ -615,7 +614,8 @@ func turn_off() -> void:
 	player.position = _start_pos
 ```
 
-The second problem is with the `WinArea`. The same thing as in the player 3D case happens and we will fix this in the same way. Please apply this fix to the `platforming_manager.gd` script:
+#### 3. Move Player 2D Outside of the `WinArea`
+The third problem is also with the `WinArea`. The problem here is identical to the one in player 3D and we will fix this in the same way. Please apply this fix to the `platforming_manager.gd` script:
 ```GDScript
 func turn_off() -> void:
     player.scale = Vector2.ZERO
@@ -631,13 +631,12 @@ If you try playing the game, everything seems to work perfectly well. However, l
 
 ![](img/ScaleError.png)
 
-This error `det==0` means that the **determinant** of the transformation matrix of a node (the player) is `0`. This is due to the fact that, we are **setting the scale** of the player to `(0, 0, 0)` and then some **physics frames** are still run until we **disable** the node later.
+This error `det==0` means that the **determinant** of the transformation matrix of a node (the player) is `0`. This is due to the fact that, we are **setting the scale** of the player to `(0, 0, 0)`. After that some **physics frames** still manage to run until we **disable** the node later.
 
-One fix is to **scale** the player to some small but non-zero number like `(0.001, 0.001, 0.001)`.
+- One fix is to **scale** the player to some small but non-zero number like `(0.001, 0.001, 0.001)`. This will make the determinant non-zero.
+- The second fix is to move the `_player_3d.scale = Vector3.ZERO` line **after the wait** and execute it at the same time as the disabling of the node. This way, there will be no physics updates, where the scale is `0`.
 
-The second fix, that we will apply, is to move the setting of **scale** to `0` to be also after the wait.
-
-Simple move the `_player_3d.scale = Vector3.ZERO` line below the `await` line like this:
+We will use the second fix. Simply move the `_player_3d.scale = Vector3.ZERO` line below the `await` line like this:
 ```GDScript
 func _enter2D() -> void:
     ...
@@ -654,7 +653,7 @@ Now, let's **move** the 3D player to the position the 2D one ended in and **push
 #### Moving the player
 This part will be very easy since the only thing we have to do is **set the right position** to the player when they exit the 2D level.
 
-How to get the position? That is simple, the `CameraTarget` node (the white box) already moves in a way that it is in the same place as the 2D player. We can simply set the 3D player position to the same position as the `CameraTarget`.
+How to get the position? That is simple, the `CameraTarget` node (the white box) already has the same position as the 2D player. We can simply set the 3D player position to the same position as the `CameraTarget`.
 
 ```GDScript
 func _exit2D(success : bool) -> void:
@@ -665,20 +664,20 @@ func _exit2D(success : bool) -> void:
 ```
 
 > aside positive
-> We use `global_position` instead of `position` to avoid unnecessary manual coordinate space calculation between the box and the 3D player. `global_position` tells us the position of a node in the relation to the scene tree root. 
+> We use `global_position` instead of `position` to avoid unnecessary manual coordinate space transformation between the `CameraTarget` basis and the 3D player basis. `global_position` tells us the position of a node in the relation to the scene tree root. 
 
 
 #### Pushing the player
-If we leave it like this, the player just **pops-out** based on the player 2D position. That's not very pretty and it can even make the player **fall off** the platforming they are trying to climb on using the 2D platforming section.
+Right now, when the player exits the 2D level, they just **pop out** based on the player 2D position. That's not very interesting and it can make the 3D player **fall off** the obstacle that they are climbed successfully using the platforming section. We will push (apply velocity) to the player in a given direction to make it more interesting.
 
-Let's define 3 `export` variables, that will determine the **success** and **failure** force the player should be pushed by and a variable that will determine for **how long** the player should be pushed for. Add this to the top of the `platforming_section.gd`:
+Let's define 3 `export` variables, that will determine the **success** (entered `WinArea`) and **failure** (fell on spikes) force the player should be pushed by and a variable that will determine for **how long** the player should be pushed for. Add this to the top of the `platforming_section.gd`:
 ```GDScript
 @export var success_push_force : Vector3
 @export var failure_push_force : Vector3
 @export var push_time : float = 0.3
 ```
 
-Now we can just **apply the velocity** to the player in the `_exit2D(...)` function:
+Now we can just **apply the corresponding velocity** to the player in the `_exit2D(...)` function based on the success of the 2D platforming section:
 ```GDScript
 func _exit2D(success : bool) -> void:
     ...
@@ -687,7 +686,7 @@ func _exit2D(success : bool) -> void:
     _player_3d.velocity = success_push_force if success else failure_push_force
 ```
 
-However, trying it now the velocity gets quickly **overridden** by the dampening of the player. We can fix this by using a function that I have added to the 3D player between the last codelab and this one. The function `set_do_movement(...)` sets a variable, that **disables/enables** the calling of the movement function of the player (handles WASD input, dampening, etc.). So the plan is to **disable the player** movement, then **wait a while** (`push_time`), and then **enable the player** movement. How do we wait?
+However trying it now, the force gets **overridden** by the velocity dampening of the player (`_movement()` function). We can fix this by using a function that I have added to the 3D player between the last codelab and this one. The function `set_do_movement(...)` sets a variable, that **disables/enables** the calling of the movement function of the player (handles WASD input, dampening, etc.). So the plan is to **disable the player** movement, then **wait a while** (`push_time`), and then **enable the player** movement. How do we wait?
 
 Waiting can be done either by the `Timer` node, which we will do in a later codelab, or by using `get_tree().create_time()` with `await`. Paste this code at the end of the `_exit2D(...)` function:
 ```GDScript
@@ -707,7 +706,7 @@ Try using different values for the push forces to make them feel right. I set th
 ## WinArea Error
 Duration: hh:mm:ss
 
-If you play the game and manage to exit the 2D level by entering the `WinArea`. The **Debugger** shows this error:
+If you play the game and manage to exit the 2D level by entering the `WinArea` the **Debugger** shows this error:
 ```
 E 0:00:36:347   platforming_manager_2d.gd:19 @ turn_off(): Disabling a CollisionObject node during a physics callback is not allowed and will cause undesired behavior. Disable with call_deferred() instead.
     <C++ Source>  scene/2d/physics/collision_object_2d.cpp:244 @ _apply_disabled()

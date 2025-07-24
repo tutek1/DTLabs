@@ -198,9 +198,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.126373)
 mesh = SubResource("TextMesh_b2o0j")
 
 [node name="CameraTarget" type="Node3D" parent="Enviroment/2DPlatforming/Sprite3D"]
+visible = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Enviroment/2DPlatforming/Sprite3D/CameraTarget"]
-visible = false
 mesh = SubResource("BoxMesh_72jxc")
 
 [node name="CameraPivot" type="Node3D" parent="." node_paths=PackedStringArray("camera_target")]
