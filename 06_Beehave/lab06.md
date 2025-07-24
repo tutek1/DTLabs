@@ -41,12 +41,12 @@ The choice of the architecture always depends on the complexity of the character
 > Behavior Trees are **very powerful** once you know how to use them. The ability to represent them visually makes them easy to debug. Most popular games use them, here are a few notable examples:
 > - **GTA V** - pedestrian NPCs reacting to players actions
 > - **The Sims** - each Sim manages their needs and interacts with objects
-> - **Kingdom Come: Deliverance** - for their life-like NPC behavior
+> - **Kingdom Come: Deliverance** - with their life-like NPC behavior
 > - Nearly all modern AAA games using the Unity Engine of the Unreal Engine use Behavior Trees
 
 
 
-### What are behavior trees?
+### What are ![](img/TreeIcon.png) Behavior Trees?
 Behavior trees are and alternative way to of creating AI for videogames. The whole behavior of the AI is divided into a **tree structure with many nodes**, that can have various types and purposes. The tree is run from **the root** and when there are sibling nodes, they are run left -> right, or top -> bottom (depends on the orientation of the tree).
 
 When a node is run, it **must return the state** that it is in. A node can be in one of these three states:
@@ -64,13 +64,13 @@ There are 3 base node types:
 Let's look how the two most basic composite nodes work.
 
 #### ![](img/Sequence.png) SequenceComposite
-Sequence node **runs all child nodes one by one** and decides based on the result of the child nodes like this:
+Sequence node runs all child nodes one by one until **one has failed or all have succeeded**:
 - Child node return `SUCCESS` -> run the next child node -> no more child nodes to run -> return `SUCCESS`
 - Child node return `FAILURE` -> return `FAILURE`
 - Child node return `RUNNING` -> return `RUNNING` (next frame/tick the child node is run again)
 
 #### ![](img/Selector.png) SelectorComposite
-Same as the sequence, the selector node **runs all child nodes one by one** and decides based on the result of the child nodes like this:
+Similar to sequence, the selector node runs all child nodes one by one until **one has succeeded or all have failed**:
 - Child node return `FAILURE` -> run the next child node -> no more child nodes to run -> return `FAILURE`
 - Child node return `SUCCESS` -> return `SUCCESS`
 - Child node return `RUNNING` -> return `RUNNING` (next frame/tick the child node is run again)
@@ -81,7 +81,7 @@ I think Behavior Trees are best shown on an example. This modified example was t
 
 ![](img/BTExampleModified.jpg)
 
-Here, the goal of the tree is to perform actions so that the character **goes through a door**. The execution starts in the **root of the tree**, in the top-most composite `Sequence` node. Let's take a scenario, where the door is locked.
+Here, the goal of the tree is to perform actions so that the character **goes through a door**. The execution starts in the **root of the tree**, in the top-most composite `RootSequence` node. Let's take a scenario, where the door is locked.
 
 1. **`RootSequence`** runs **`Walk to Door`** -> `SUCCESS`
 2. **`RootSequence`** runs the **`DoorSelector`**, which runs the **`Open Door`** node -> `FAILURE` (door is locked)
@@ -98,35 +98,109 @@ Try to walk through the tree with **other scenarios** (door is only closed or it
 > aside negative
 > **Small but important note:** "node -> SUCCESS" means that "node returns SUCCESS"
 
+### ![](img/Blackboard.png) Blackboard
+The last thing you should know about Behavior Trees for now is how to handle dynamic information. In the example above the dynamic information could be:
+- Position of the door
+- Does the AI have a key to the door?
+- etc.
+
+Behavior Trees use a **Blackboard** to store this information. Every node can **access, read, and write** into the Blackboard. In most frameworks it is implemented as a set of `{key} = {value}` pairs, the same way that the data structure `Dictionary` works.
+
+
+
+
+## Beehave Installation, Project Setup 
+Duration: hh:mm:ss
+
+The Godot Engine does not support Behavior Trees out of the box. To use them you either need to code them yourself or use a plugin. I have chosen the **Beehave** plugin, that implements Behavior Trees. The plugin is not perfect and has a few quirks and visual glitches. However, having the live visual debugging is perfect for our educational purposes.
+
+
+![](img/BeehaveLogo.png)
+
+### Beehave Installation
+I have already installed the plugin to save time. However, some more complex plugins, such as this one, need to be enabled in the **Project Settings**. Please do so:
+
+![](img/BeehavePluginEnable.png)
+
+
+### GroundEnemyBH script
+I have created a copy of the `GroundEnemyFSM` called `GroundEnemyBH` and replaced them in the `debug_3d_scene.tscn` scene. All relevant scripts and scenes can be found in the `3D/Enemies/GroundEnemy/Beehave/` folder. Please **open** the `ground_enemy_bh.gd` script and let's go through it:
+- At the top, there are all the **`@export` variables** from the `GroundEnemyFSM` and all of the FSM states. These variables are declared here in the enemy, because they are not dynamic data (during play time they do not change).
+- Then, there are several `enums`:
+    - **`BB_VAR`** - These are all the keys for the **Blackboard variables**, that we will need. Normally, you would use strings as keys but I feel like that leads to many bugs due to typos.
+    - **`ROTATE_MODE`** - You might have noticed that in the FSM version our enemy rotated differently in each state. For simplicity I decided to delegate the job back to the main enemy script and the Behavior Tree will only switch, which mode is currently running.
+    - **`ACTIONS`** - This will be used to easily detect what action (Patrol, Chase) the enemy is currently in. We will use it to detect that we started chasing the player and play the "pop up" tween animation. 
+- The `_ready()` function sets the **default values** of all the Blackboard variables.
+- Rest of the script is pretty much the same as the FSM variant, except for **storing and loading dynamic variables**, where the Blackboard is used.
+
+> aside positive
+> **Setting** and **Getting** the values of the Blackboard can be easily done with `blackboard.set_value(key, value)` and `blackboard.get_value(key)`
+
+
+### `bh_...` scripts
+You might have noticed that there quite a few `bh_...` scripts in the `GroundEnemy/Beehave/` folder. These are the **custom actions and decorators** that we will use as nodes in the Behavior Tree. Coding all of them from the ground up would take far too much time and this codelab would be very long. We will at least go through some of them and **create 2 actions** on our own later on.
+
+
+### GroundEnemyBH scene
+Now **open** the `ground_enemy_bh.tscn`. The scene is pretty much the same as the `ground_enemy_fsm.tscn` except for the missing `Timer` node. We will supplement its functionality by a Decorator node in the Behavior Tree.
+
+Let's create a basic Beehave setup, so that in the next section, we can start making the behavior already.
+1. **Add** a `Blackboard` node as a child of the `GroundEnemyBeehave`
+2. **Add** a `BeehaveTree` node as a child of the `GroundEnemyBeehave`
+3. **Set** the property of `Blackboard` in the `BeehaveTree` node the the `Blackboard` node
+
+<img src="img/GroundEnemyBHSetup.png" width="350"/>
+<img src="img/BeehaveTreeNodeSetup.png" width="400"/>
 
 
 
 
 
+## Patrolling Behavior
+Duration: hh:mm:ss
 
-SKIPK ISPSI
+Let's start by creating the **Patrolling behavior** of the enemy, since that is an easy place to start. In **Beehave** the Behavior Tree is build with nodes in the **Scene Hierarchy**. This works because the **Scene Hierarchy** is a tree-like structure with nodes and children. Don't worry about how adding the Chase behavior will work for now.
 
-1.  `SequenceRoot` runs 1st child: `Walk to Door` node (since it is not finished)
-2.  `Walk to Door` returns `SUCCESS`
-3.  `SequenceRoot` runs 2nd child: `Selector` node
-4.  `Selector` runs 1st child: `Open Door` node
-5.  `Open Door` node returns `FAILURE`
-6.  `Selector` runs 2nd child: `Sequence` node
-7.  `Sequence` runs 1st child: `Unlock Door` node
-8.  `Unlock Door` returns `SUCCESS`
-9.  `Sequence` runs 2st child: `Open Door` node
-10. `Open Door` returns `SUCCESS`
-11. `Sequence` returns `SUCCESS`
-12. `Selector` returns `SUCCESS`
-13. `SequenceRoot` runs 3rd child: `Walk through Door` node
-14. `Walk through Door` returns `SUCCESS`
-15. `SequenceRoot` runs 4th child: `Close Door` node
-16. `Close Door` returns `SUCCESS`
-17. `SequenceRoot` returns `SUCCESS`
-18. Tree ended with `SUCCESS`
-    
+### ![](img/Sequence.png) Patrol Sequence
+If you think about the behavior of **Patrolling** it is a **Sequence** of actions (Go to point -> Wait until there -> Update index -> Go to next point -> ...) by that logic, we should use a `SequenceComposite` node as the root of the tree. The `BeehaveTree` in `ground_enemy_bh.tscn` will be the **parent of the root of the tree**.
+
+1. **Add** a ![](img/SequenceSmall.png) `SequenceComposite` node as a child of the ![](img/TreeIconSmall.png) `BeehaveTree`
+2. **Rename** it to `PatrolSequence`
+
+Now what should the patrol sequence look like? Let's first set the action (Patrol/Chase) that we are in.
+
+1. **Add** a ![](img/Action.png) `ActionLeaf` node as a child of the ![](img/SequenceSmall.png) `PatrolSequence`
+2. **Rename** it to `SetAgentAction`
+3. **Add** the `bh_set_agent_action.gd` script from folder `GroundEnemy/Beehave/` to it
+
+Ok, next let's set the rotation mode of the enemy, so that it rotates based on velocity (looks the way it is walking).
+
+1. **Add** a ![](img/Action.png) `ActionLeaf` node as a child of the ![](img/SequenceSmall.png) `PatrolSequence`
+2. **Rename** it to `SetRotateModeVelocity`
+3. **Add** the `bh_set_rotation_mode.gd` script from folder `GroundEnemy/Beehave/` to it
+4. In the **Inspector** of the node **set** the property `Rotate Mode` to `Velocity` 
+
+Next, let's set the target of the `NavigationAgent` using another action node. The process will be basically the same as the nodes above, so I will shorten it:
+
+- **Node** ![](img/Action.png) `ActionLeaf` child of ![](img/SequenceSmall.png) `PatrolSequence` -> **Name** `SetNextPatrolPoint` -> **Script** `bh_set_next_patrol_point.gd`
+
+For **reference** the tree should look like this now, with custom scripts on all the action nodes:
+
+![](img/TreeBeforeUntilFail.png)
 
 
+
+#### ![](img/UntilFail.png) UntilFail decorator
+Now the interesting part come in. The sequence to this point sets the **agent action**, sets the **rotate mode**, and sets a **new target to walk to** for the enemy. If you remember how the `PatrolState` in the FSM worked, we want to wait now until the enemy reaches the patrol point. In Beehave we can do that using the Decorator `UntilFail`.
+
+Looking at the **Beehave [documentation](https://bitbra.in/beehave/#/manual/decorators)**, we can see that the decorator:
+- Executes its child and returns `RUNNING` as long as it returns either `RUNNING` or `SUCCESS`.
+- Once the child returns `FAILURE` it returns `SUCCESS`
+
+So if we add a **condition node** that checks if the enemy is NOT on the patrol point, the tree execution would be stuck here until then. Meaning we can effectively **wait** with the rest of the sequence (index update, next point set, etc.) until the enemy is at the currently set patrol point.
+
+1. **Node** ![](img/UntilFailSmall.png) `UntilFailDecorator` child of ![](img/SequenceSmall.png) `PatrolSequence` -> **Name** `UntilNotOnPatrolPoint` -> **Script** default
+2. **Node** ![](img/InverterSmall.png) `InverterDecorator` child of ![](img/UntilFailSmall.png) `UntilNotOnPatrolPoint` -> **Name** `NotOnPatrolPoint` -> **Script** default
 
 
 
@@ -140,7 +214,7 @@ Duration: hh:mm:ss
 
 Do on your own `bh_set_next_patrol_point.gd`, `bh_is_player_close_enough.gd`
 use user guide: [text](https://bitbra.in/beehave/#/manual/)
-`logan/login` something AI plugin
+`logan/login/lungo` something AI plugin
 
 
 
@@ -168,3 +242,5 @@ If you want to see how the finished template looks like after this lab, you can 
 </button>
 
 
+> aside positive
+> All custom icons used in headers taken from the free Godot plugin [Beehave](https://github.com/bitbrain/beehave).
