@@ -240,11 +240,14 @@ Now we have a new node in the scene. Let's add a cube mesh to it.
 
 
 ### MeshInstance3D
-Mesh is a representation of a 3D object composed of vertices/points and triangles/faces. Using the same process as above add a `MeshInstance3D` node as a child of the `StaticBody3D`. Now let's configure the mesh.
+Mesh is a representation of a 3D object composed of vertices/points and triangles/faces. Using the same process as above:
+
+1. **Add** a `MeshInstance3D` node as a child of the `StaticBody3D`.
+2. In the **inspector** with the `MeshInstance3D` node selected, **press** the empty mesh resource box
+3. **Press** `New BoxMesh` to create a new cube.
 
 ![](img/Mesh.png)
-1. In the **inspector** with the `MeshInstance3D` node selected, **press** the empty mesh resource box
-2. **Press** `New BoxMesh` to create a new cube.
+
 
 Now there is a white cube placed in the ground. Let's make it big and change it's color.
 
