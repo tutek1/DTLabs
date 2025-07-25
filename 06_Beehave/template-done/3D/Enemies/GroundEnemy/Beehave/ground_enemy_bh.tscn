@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://byh0a2vnett5q"]
+[gd_scene load_steps=15 format=3 uid="uid://byh0a2vnett5q"]
 
 [ext_resource type="Script" uid="uid://dr03ohsx2gb65" path="res://3D/Enemies/GroundEnemy/Beehave/ground_enemy_bh.gd" id="1_bkr7a"]
 [ext_resource type="ArrayMesh" uid="uid://6f6y5ljqa4ss" path="res://3D/Enemies/GroundEnemy/GORODITH_ground_enemy_corrupted.obj" id="2_afujw"]
@@ -10,6 +10,8 @@
 [ext_resource type="Script" uid="uid://dwghxxom6a82x" path="res://3D/Enemies/GroundEnemy/Beehave/bh_set_next_patrol_point.gd" id="8_04y8k"]
 [ext_resource type="Script" uid="uid://cfyrsnweej1vp" path="res://addons/beehave/nodes/decorators/until_fail.gd" id="9_mvpmm"]
 [ext_resource type="Script" uid="uid://dh8tg8vcpx8g3" path="res://addons/beehave/nodes/decorators/inverter.gd" id="10_30w6j"]
+[ext_resource type="Script" uid="uid://dsrvx55pij7l7" path="res://3D/Enemies/GroundEnemy/Beehave/bh_is_on_patrol_point.gd" id="11_bc0lw"]
+[ext_resource type="Script" uid="uid://cd86tif6t81jx" path="res://3D/Enemies/GroundEnemy/Beehave/bh_update_patrol_idx.gd" id="12_1fvjy"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_dytxf"]
 radius = 1.0
@@ -83,5 +85,13 @@ metadata/_custom_type_script = "uid://cfyrsnweej1vp"
 [node name="NotOnPatrolPoint" type="Node" parent="BeehaveTree/PatrolSequence/UntilNotOnPatrolPoint"]
 script = ExtResource("10_30w6j")
 metadata/_custom_type_script = "uid://dh8tg8vcpx8g3"
+
+[node name="IsOnPatrolPoint" type="Node" parent="BeehaveTree/PatrolSequence/UntilNotOnPatrolPoint/NotOnPatrolPoint"]
+script = ExtResource("11_bc0lw")
+metadata/_custom_type_script = "uid://exlhiklcd5sp"
+
+[node name="UpdatePatrolIdx" type="Node" parent="BeehaveTree/PatrolSequence"]
+script = ExtResource("12_1fvjy")
+metadata/_custom_type_script = "uid://of3nga1nubss"
 
 [connection signal="body_entered" from="VisionArea" to="." method="_on_vision_area_body_entered"]

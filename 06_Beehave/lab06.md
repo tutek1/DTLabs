@@ -182,7 +182,9 @@ Ok, next let's set the rotation mode of the enemy, so that it rotates based on v
 
 Next, let's set the target of the `NavigationAgent` using another action node. The process will be basically the same as the nodes above, so I will shorten it:
 
-- **Node** ![](img/Action.png) `ActionLeaf` child of ![](img/SequenceSmall.png) `PatrolSequence` -> **Name** `SetNextPatrolPoint` -> **Script** `bh_set_next_patrol_point.gd`
+- **Node** ![](img/Action.png) `ActionLeaf` child of ![](img/SequenceSmall.png) `PatrolSequence`
+    - **Name** `SetNextPatrolPoint`
+    - **Script** `bh_set_next_patrol_point.gd`
 
 For **reference** the tree should look like this now, with custom scripts on all the action nodes:
 
@@ -199,8 +201,88 @@ Looking at the **Beehave [documentation](https://bitbra.in/beehave/#/manual/deco
 
 So if we add a **condition node** that checks if the enemy is NOT on the patrol point, the tree execution would be stuck here until then. Meaning we can effectively **wait** with the rest of the sequence (index update, next point set, etc.) until the enemy is at the currently set patrol point.
 
-1. **Node** ![](img/UntilFailSmall.png) `UntilFailDecorator` child of ![](img/SequenceSmall.png) `PatrolSequence` -> **Name** `UntilNotOnPatrolPoint` -> **Script** default
-2. **Node** ![](img/InverterSmall.png) `InverterDecorator` child of ![](img/UntilFailSmall.png) `UntilNotOnPatrolPoint` -> **Name** `NotOnPatrolPoint` -> **Script** default
+1. **Node** ![](img/UntilFailSmall.png) `UntilFailDecorator` child of ![](img/SequenceSmall.png) `PatrolSequence` 
+    - **Name** `UntilNotOnPatrolPoint`
+    - **Script** default
+2. **Node** ![](img/InverterSmall.png) `InverterDecorator` child of ![](img/UntilFailSmall.png) `UntilNotOnPatrolPoint`
+    - **Name** `NotOnPatrolPoint`
+    - **Script** default
+3. **Node** ![](img/ConditionSmall.png) `ConditionLeaf` child of ![](img/InverterSmall.png) `NotOnPatrolPoint`
+    - **Name** `IsOnPatrolPoint`
+    - **Script** `bh_is_on_patrol_point.gd`
+
+> aside positive
+> We used the `InverterDecorator` node instead of making the inverse condition script `bh_is_not_on_patrol_point.gd` since it is easier and also in line with the modularity, that the Behavior Trees are known for. 
+
+
+#### Another action
+The last thing, we need to do, to complete the Behavior Tree setup of the Patrol Behavior, is to **update the patrol point index**.
+
+- **Node** ![](img/Action.png) `ActionLeaf` child of ![](img/SequenceSmall.png) `PatrolSequence` 
+    - **Name** `UpdatePatrolIdx`
+    - **Script** `bh_update_patrol_idx.gd`
+
+The whole tree should look like this:
+
+![](img/PatrolTree.png)
+
+
+### **`bh_set_next_patrol_point.gd`** Script
+Making the scripts of the **Action and Condition** nodes takes quite some time and as I have said before we will not code the them in this codelab. However, I would still like to create at least **two scripts** to show you how it is done. One of them is the `bh_set_next_patrol_point.gd` script, which we have to fill out to make the **Patrol Behavior** functional.
+
+The script looks like this now:
+```GDScript
+@tool
+extends ActionLeaf
+
+func tick(actor, blackboard: Blackboard):
+    if not actor is GroundEnemyBH: return FAILURE
+    var enemy : GroundEnemyBH = actor as GroundEnemyBH
+
+    # TODO Get patrol point idx and set target_position of the navigation agent
+
+    return SUCCESS
+```
+- `func tick(actor, blackboard: Blackboard):` - this function is called every frame similarly to `_process`
+- `actor` is the parent of the Behavior Tree, which in our case is the `GroundEnemyBH`
+- The first two lines of the `tick` function make sure that we are dealing with the `GroundEnemyBH` and makes them usable
+
+
+> aside positive
+> Beehave has its own Lifecycle functions:
+> - `tick()` - executes the node and returns a status code
+> - `before_run()` - called by the parent before it ticks (not called again when `tick` is returning `RUNNING`)
+> - `after_run()` - called after it ticks and returns `SUCCESS` or `FAILURE`
+
+
+Let's complete it. First, we need to get the **current index of the patrol point**. To do this, we need to interface with the **Blackboard**, where we store this index.
+```GDScript
+var patrol_point_idx : int = blackboard.get_value(GroundEnemyBH.BB_VAR.PATROL_POINT_IDX)
+```
+
+Then we can easily set the `NavigationAgent` target like this:
+```GDScript
+var patrol_point : Vector3 = enemy.patrol_points[patrol_point_idx]
+enemy.navigation_agent_3d.target_position = patrol_point
+```
+
+### Visual Debugging
+Now if you play the game, the enemy should patrol in the same way as the `GroundEnemyFSM` did. To see how the **Behavior Tree** is working in real time, you can follow the steps in the video below:
+
+<video id=VawO4Iq8NW0></video>
+
+(Changing the `Tick Rate` property to a higher number makes the tree update less often, making it easier for us to see, what is really happening in the tree)
+
+
+> aside positive
+> A better practice for making AI with **Behavior Trees** could be making an `AbstractEnemyBH`, that is not dependent on anything specific to any enemy type. Then the enemies would be defined entirely by their behavior using their Behavior Trees. However as always, this depends on the scale of the game you are making.
+
+
+
+
+## Heading 
+Duration: hh:mm:ss
+
 
 
 
