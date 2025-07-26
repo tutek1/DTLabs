@@ -24,16 +24,17 @@ func _gravity(delta : float) -> void:
 func _movement(delta : float) -> void:
 	# TEMPORARY until navmesh setup
 	var target_pos : Vector3 = global_position + Vector3.FORWARD
+	var distance_to_target : Vector3 = target_pos - global_position
 	
-	var direction : Vector3 = target_pos - global_position
+	var direction : Vector3 = distance_to_target.normalized()
 	direction = direction.normalized()
 	velocity.x = direction.x * speed
 	velocity.z = direction.z * speed
 	
-	# Used for the robot to fly up and down on navmesh links later on
-	if direction.y > 0:
+	# Used for the robot to fly up and down on navmesh links
+	if distance_to_target.y > 0.5:
 		velocity.y += direction.y * up_speed * delta
-	else:
+	elif distance_to_target.y < -0.5:
 		velocity.y += -direction.y * up_speed/4 * delta
 
 # Rotates the enemy based on direction and delta

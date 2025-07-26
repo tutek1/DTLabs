@@ -205,8 +205,8 @@ However, by default Godot **compresses a texture** upon importing to save **memo
 ### Navigation Agent Node
 Now we need the enemy/agent to communicate with the `NavigationRegion3D`. To do this, we can just add the `NavigationAgent3D` node to our enemy scene and then use it in the script. We **do not** need a reference to the `NavigationRegion3D` since all **navigation communication** happens through the `NavigationServer3D`, so our job is a bit easier. Think of it as a **magical black box**, that transmits all the necessary information between `NavMeshes` and `Agents`.
 
-Please **add** the `NavigationAgent3D` node as a child of the `GroundEnemyFSM`.
-
+1. **Add** the `NavigationAgent3D` node as a child of the `GroundEnemyFSM`.
+2. **Set** the property `Path Height Offset` to `-0.5` (since our player is `1m` tall)
 
 #### Agent Reference
 We will also need a reference to the `NavigationAgent3D` node in the script, so **open the script** on the enemy and add the reference to the top of the script using one of the **two following methods**:
