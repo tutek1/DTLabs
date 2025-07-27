@@ -39,16 +39,18 @@ func _gravity(delta : float) -> void:
 # Handles movement of the player
 func _movement(delta : float) -> void:
 	var target_pos : Vector3 = navigation_agent_3d.get_next_path_position()
+	var distance_to_target : Vector3 = target_pos - global_position
 	
-	var direction : Vector3 = target_pos - global_position
+	
+	var direction : Vector3 = distance_to_target.normalized()
 	direction = direction.normalized()
 	velocity.x = direction.x * speed
 	velocity.z = direction.z * speed
 	
 	# Used for the robot to fly up and down on navmesh links
-	if direction.y > 0:
+	if distance_to_target.y > 0.5:
 		velocity.y += direction.y * up_speed * delta
-	else:
+	elif distance_to_target.y < -0.5:
 		velocity.y += -direction.y * up_speed/4 * delta
 
 # Checks all possible transitions from the current state

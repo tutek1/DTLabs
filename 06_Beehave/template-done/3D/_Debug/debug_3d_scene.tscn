@@ -494,7 +494,7 @@ node = NodePath("../GroundEnemyBeehave")
 property = "patrol_points"
 
 [node name="GroundEnemyBeehave" parent="." instance=ExtResource("11_xbdsv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.71074, 2.19583, 24.0468)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.71074, 3.13949, 24.0468)
 collision_mask = 7
 
 [connection signal="body_entered" from="Enviroment/2DPlatforming/Sprite3D/Area3D" to="Enviroment/2DPlatforming/Sprite3D" method="_on_area_3d_body_entered"]

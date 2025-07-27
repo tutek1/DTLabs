@@ -271,7 +271,7 @@ Now if you play the game, the enemy should patrol in the same way as the `Ground
 
 <video id=VawO4Iq8NW0></video>
 
-(Changing the `Tick Rate` property to a higher number makes the tree update less often, making it easier for us to see, what is really happening in the tree)
+(Changing the `Tick Rate` property to a higher number makes the tree update less often, making it easier for us to see, what is really happening.)
 
 
 > aside positive
@@ -280,7 +280,174 @@ Now if you play the game, the enemy should patrol in the same way as the `Ground
 
 
 
-## Heading 
+## Chase Behavior 
+Duration: hh:mm:ss
+
+The chasing behavior will be a bit more complex. Let's first tackle how the switching between **Patrol Behavior** and **Chase Behavior** will work. Start by adding a sequence for the Chase Behavior.
+
+- **Node** ![](img/SequenceSmall.png) `SequenceComposite` child of ![](img/TreeIconSmall.png) `BeehaveTree` 
+    - **Name** `ChaseSequence`
+    - **Script** default
+
+Now we would like to **choose** between these two sequences. For this we can use the ![](img/SelectorSmall.png) `SelectorComposite` node.
+
+- **Node** ![](img/SelectorSmall.png) `SelectorComposite` child of ![](img/TreeIconSmall.png) `BeehaveTree` 
+    - **Name** `ActionSelector`
+    - **Script** default
+
+Put the `ChaseSequence` as the **first child** of the `ActionSelector` and the `PatrolSequence` as the **second child**. This should be the setup now:
+
+![](img/ActionSelector.png)
+
+
+
+### **Chase Conditions**
+If you remember how the ![](img/SelectorSmall.png) `Selector` node works, it only runs the first child that returns `SUCCESS`. So if we add conditions, that check the **visibility and closeness** of the player, as children of the ![](img/SequenceSmall.png) `ChaseSequence`, it will ensure that **Chase Behavior** is only run when the player is seen and close enough, otherwise the **Patrol Behavior** will be run.
+
+- **Node** ![](img/ConditionSmall.png) `ConditionLeaf` child of ![](img/SequenceSmall.png) `ChaseSequence` 
+    - **Name** `IsPlayerSeen`
+    - **Script** `bh_is_player_seen.gd`
+
+- **Node** ![](img/ConditionSmall.png) `ConditionLeaf` child of ![](img/SequenceSmall.png) `ChaseSequence` 
+    - **Name** `IsPlayerCloseEnough`
+    - **Script** `bh_is_player_close_enough.gd`
+
+
+### **Task: Condition**
+Now open the `bh_is_player_close_enough.gd` script and try to **fill it out yourself using the TODO text**. Once you think you are done look at the **code at the bottom of the page** for the solution.
+
+### **Rotate Mode**
+If the sequence gets this far it means the conditions are true and we have "entered" the `ChaseState` (speaking in FSM terms). We should switch the **Rotate Mode** of the enemy to match the FSM version of the enemy:
+
+- **Node** ![](img/Action.png) `ActionLeaf` child of ![](img/SequenceSmall.png) `ChaseSequence` 
+    - **Name** `SetRotateModeHalfHalf`
+    - **Script** `bh_set_rotate_mode.gd`
+    - **Property** `Rotate Mode` = `Half Velocity Half Player`
+
+
+
+### **![](img/Cooldown.png) CooldownDecorator and ![](img/Succeeder.png) AlwaysSucceedDecorator**
+Now all that is left to do is to **set the target** of the `NavigationAgent` to the **player position**. However, similar to the FSM version, we want to do that only every so often. To do **timed or repeated** Actions in the Beehave Tree, we can use the ![](img/CooldownSmall.png) `CooldownDecorator` node, which works like this:
+- Executes its child until it either returns `SUCCESS` or `FAILURE`, after which it will start an internal timer and return `FAILURE` until the timer is complete.
+
+However, having just the ![](img/CooldownSmall.png) `CooldownDecorator` node and an ![](img/Action.png) `ActionLeaf` node with **target setting** as a child, would not work, due to the **timer returning** `FAILURE` while waiting. This would cause the ![](img/SequenceSmall.png) `ChaseSequence` to **fail** and the **Patrol subtree would run**. To circumvent this we can **"ignore" the result** of the ![](img/CooldownSmall.png) `CooldownDecorator` node and act as it would always return `SUCCESS`. Achieving this can be done using the ![](img/SucceederSmall.png) `AlwaysSucceedDecorator` as a parent of the ![](img/CooldownSmall.png) `CooldownDecorator` node.
+
+- **Node** ![](img/SucceederSmall.png) `AlwaysSucceedDecorator` child of ![](img/SequenceSmall.png) `ChaseSequence` 
+    - **Name** `SuccessCooldownChasePointSet`
+    - **Script** default
+
+- **Node** ![](img/CooldownSmall.png) `CooldownDecorator` child of ![](img/SucceederSmall.png) `SuccessCooldownChasePointSet` 
+    - **Name** `CooldownChasePointSet`
+    - **Script** `bh_chase_point_set_cooldown.gd`
+
+- **Node** ![](img/Action.png) `ActionLeaf` child of ![](img/SequenceSmall.png) `CooldownChasePointSet` 
+    - **Name** `ChasePointSet`
+    - **Script** `bh_chase_point_set.gd`
+
+> aside positive
+> Normally, you would have to set the `Wait Time` property of the ![](img/CooldownSmall.png) `CooldownDecorator` node in the **Inspector** but here it is handled by the `bh_chase_point_set_cooldown.gd` script. This way you can just change the properties on the root node of the enemy.
+
+
+### **Reactive Composites**
+Play the game now, when the enemy sees the player in the middle of **going from one patrol point to another**, they react to the player only **after reaching the patrol point**. This is due to the ![](img/UntilFailSmall.png) `UntilNotOnPatrolPoint` node, which is `RUNNING` until the patrol point is reached. To fix this and make our enemy more "reactive" we can use a **special variant** of the ![](img/SelectorSmall.png) `SelectorComposite`.
+
+1. **Right-click** the ![](img/SelectorSmall.png) `ActionSelector`
+2. **Select** the option `Change Type`
+3. **Choose** the ![](img/SelectorReactiveSmall.png) `SelectorReactiveComposite`
+
+This version of the ![](img/SelectorSmall.png) `SelectorComposite` works in the same way, except for when a node returns `RUNNING`. Normally, you would just tick the `RUNNING` child again, but the ![](img/SelectorReactiveSmall.png) `SelectorReactiveComposite` node, first **ticks all the previous children again**. In our case it checks the conditions of the **Chase Behavior** almost every tick, which makes the enemy react immediately.
+
+Playing the game now, the enemy should be as reactive as the FSM variant.
+
+
+### **Task Solution: Condition**
+The `bh_is_player_close_enough.gd` script should look like this:
+```GDScript
+func tick(actor, blackboard: Blackboard):
+    if not actor is GroundEnemyBH: return FAILURE
+    var enemy : GroundEnemyBH = actor as GroundEnemyBH
+    var enemy_pos : Vector3 = enemy.global_position
+
+    var player : PlayerController3D = blackboard.get_value(GroundEnemyBH.BB_VAR.PLAYER_NODE)
+
+    if player.global_position.distance_to(enemy_pos) > enemy.chase_max_dist:
+        blackboard.set_value(GroundEnemyBH.BB_VAR.IS_PLAYER_SEEN, false)
+        return FAILURE
+
+    return SUCCESS
+```
+
+
+
+## Shooting and Chase Enter Tweens 
+Duration: hh:mm:ss
+
+To match the **GroundEnemyFSM** we need to add last two things to our Beehave Tree. One of them is the **periodic shooting** and the other thing are the **tweens** that play when entering chase. 
+
+### Shooting
+The shooting subtree will be very similar to the ![](img/SucceederSmall.png) `SuccessChasePointSet` subtree. Same as before we will need to have a ![](img/CooldownSmall.png) `CooldownDecorator`, whose **return state will be ignored**, since we do not care if the shooting succeeds or fails. So let's start:
+
+- **Node** ![](img/SucceederSmall.png) `AlwaysSucceedDecorator` child of ![](img/SequenceSmall.png) `ChaseSequence` 
+    - **Name** `SuccessShooting`
+    - **Script** default
+
+Now, we also want to check if the **player is in direct sight**, so let's add a sequence with a condition and the cooldown:
+
+- **Node** ![](img/SequenceSmall.png) `SequenceComposite` child of ![](img/SucceederSmall.png) `SuccessShooting` 
+    - **Name** `ShootCheckSequence`
+    - **Script** default
+
+- **Node** ![](img/ConditionSmall.png) `ConditionLeaf` child of ![](img/SequenceSmall.png) `ShootCheckSequence`
+    - **Name** `DoesRaycastSeePlayer`
+    - **Script** `bh_does_raycast_see_player.gd`
+
+- **Node** ![](img/CooldownSmall.png) `CooldownDecorator` child of ![](img/SequenceSmall.png) `ShootCheckSequence`
+    - **Name** `CooldownShoot`
+    - **Script** `bh_shoot_cooldown.gd`
+
+Ok, all the conditions for the start of shooting are now set. The shooting itself is a single ![](img/Action.png) `ActionLeaf` but we also want to set the correct `Rotate Mode` so we need a sequence:
+
+- **Node** ![](img/SequenceSmall.png) `SequenceComposite` child of ![](img/CooldownSmall.png) `CooldownShoot` 
+    - **Name** `ShootRotateSequence`
+    - **Script** default
+
+- **Node** ![](img/Action.png) `ActionLeaf` child of ![](img/SequenceSmall.png) `ShootRotateSequence`
+    - **Name** `SetRotateModePlayer`
+    - **Script** `bh_set_rotate_mode.gd`
+    - **Property** `Rotate Mode` = `Player`
+
+- **Node** ![](img/Action.png) `ActionLeaf` child of ![](img/SequenceSmall.png) `ShootRotateSequence`
+    - **Name** `Shoot`
+    - **Script** `bh_shoot.gd`
+
+Now if you play the game, the enemy should **shoot and rotate towards you** the same way the FSM version did. Here is how the **shoot subtree** should look like:
+
+![](img/ShootTree.png)
+
+
+### Chase Enter Tweens
+Playing the chase enter tweens is a bit more tricky, since we do not have `OnSubTreeEnter` or something similar. Perhaps a better design of the tree should be used, but for our purposes I came up with **storing the last action (Chase/Patrol)** and based on that, we can determine if we just started chasing. We already have the ![](img/Action.png) `SetAgentAction` node in the ![](img/SequenceSmall.png) `PatrolSequence`, so let's add it here:
+
+- **Node** ![](img/Action.png) `ActionLeaf` child of ![](img/SequenceSmall.png) `ChaseSequence`
+    - **Name** `SetAgentAction`
+    - **Script** `bh_set_agent_action.gd`
+    - **Property** `Value` = `Chase`
+    - **Between** nodes ![](img/ConditionSmall.png) `IsPlayerCloseEnough` and ![](img/Action.png) `SetRotateModeHalfHalf`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Shooting and Chase Enter Tweens 
 Duration: hh:mm:ss
 
 

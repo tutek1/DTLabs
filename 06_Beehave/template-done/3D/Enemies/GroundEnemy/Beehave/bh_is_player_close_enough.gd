@@ -7,9 +7,10 @@ func tick(actor, blackboard: Blackboard):
 	var enemy : GroundEnemyBH = actor as GroundEnemyBH
 	var enemy_pos : Vector3 = enemy.global_position
 	
-	# TODO Get player from blackboard
-	# TODO Check distance from enemy 
-	#		-> return SUCCESS if close enough
-	#		-> return FAILURE if too far away and set IS_PLAYER_SEEN to false
+	var player : PlayerController3D = blackboard.get_value(GroundEnemyBH.BB_VAR.PLAYER_NODE)
 	
-	return null
+	if player.global_position.distance_to(enemy_pos) > enemy.chase_max_dist:
+		blackboard.set_value(GroundEnemyBH.BB_VAR.IS_PLAYER_SEEN, false)
+		return FAILURE
+	
+	return SUCCESS
