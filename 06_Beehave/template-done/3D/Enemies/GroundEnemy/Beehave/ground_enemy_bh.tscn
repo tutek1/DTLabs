@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://byh0a2vnett5q"]
+[gd_scene load_steps=27 format=3 uid="uid://byh0a2vnett5q"]
 
 [ext_resource type="Script" uid="uid://dr03ohsx2gb65" path="res://3D/Enemies/GroundEnemy/Beehave/ground_enemy_bh.gd" id="1_bkr7a"]
 [ext_resource type="ArrayMesh" uid="uid://6f6y5ljqa4ss" path="res://3D/Enemies/GroundEnemy/GORODITH_ground_enemy_corrupted.obj" id="2_afujw"]
@@ -12,11 +12,14 @@
 [ext_resource type="Script" uid="uid://dwghxxom6a82x" path="res://3D/Enemies/GroundEnemy/Beehave/bh_set_next_patrol_point.gd" id="8_04y8k"]
 [ext_resource type="Script" uid="uid://bellhpstilob4" path="res://3D/Enemies/GroundEnemy/Beehave/bh_is_player_close_enough.gd" id="8_wk4lb"]
 [ext_resource type="Script" uid="uid://kwv538x26n2p" path="res://addons/beehave/nodes/decorators/succeeder.gd" id="9_5tpn6"]
+[ext_resource type="Script" uid="uid://jjaau7r8smcq" path="res://addons/beehave/nodes/composites/selector.gd" id="9_afujw"]
 [ext_resource type="Script" uid="uid://dmkg2a20uhef0" path="res://3D/Enemies/GroundEnemy/Beehave/bh_chase_point_set_cooldown.gd" id="9_kwlh6"]
 [ext_resource type="Script" uid="uid://cfyrsnweej1vp" path="res://addons/beehave/nodes/decorators/until_fail.gd" id="9_mvpmm"]
 [ext_resource type="Script" uid="uid://dmy2txrowxyiy" path="res://3D/Enemies/GroundEnemy/Beehave/bh_chase_point_set.gd" id="10_5tpn6"]
 [ext_resource type="Script" uid="uid://dh8tg8vcpx8g3" path="res://addons/beehave/nodes/decorators/inverter.gd" id="10_30w6j"]
+[ext_resource type="Script" uid="uid://t0a43mpjit4n" path="res://3D/Enemies/GroundEnemy/Beehave/bh_state_check.gd" id="10_u5cv0"]
 [ext_resource type="Script" uid="uid://dsrvx55pij7l7" path="res://3D/Enemies/GroundEnemy/Beehave/bh_is_on_patrol_point.gd" id="11_bc0lw"]
+[ext_resource type="Script" uid="uid://cov7yt22yxrjl" path="res://3D/Enemies/GroundEnemy/Beehave/bh_enter_chase_tweens.gd" id="11_exg1g"]
 [ext_resource type="Script" uid="uid://cd86tif6t81jx" path="res://3D/Enemies/GroundEnemy/Beehave/bh_update_patrol_idx.gd" id="12_1fvjy"]
 [ext_resource type="Script" uid="uid://g80jw8f7u8bm" path="res://3D/Enemies/GroundEnemy/Beehave/bh_does_raycast_see_player.gd" id="13_rkbsv"]
 [ext_resource type="Script" uid="uid://c2w4dx0xoh8ap" path="res://3D/Enemies/GroundEnemy/Beehave/bh_shoot_cooldown.gd" id="14_kv2pk"]
@@ -86,6 +89,19 @@ metadata/_custom_type_script = "uid://exlhiklcd5sp"
 script = ExtResource("8_wk4lb")
 metadata/_custom_type_script = "uid://exlhiklcd5sp"
 
+[node name="OnEnterChaseSelector" type="Node" parent="BeehaveTree/ActionSelector/ChaseSequence"]
+script = ExtResource("9_afujw")
+metadata/_custom_type_script = "uid://jjaau7r8smcq"
+
+[node name="IsActionChase" type="Node" parent="BeehaveTree/ActionSelector/ChaseSequence/OnEnterChaseSelector"]
+script = ExtResource("10_u5cv0")
+is_action = 1
+metadata/_custom_type_script = "uid://exlhiklcd5sp"
+
+[node name="EnterChaseTweens" type="Node" parent="BeehaveTree/ActionSelector/ChaseSequence/OnEnterChaseSelector"]
+script = ExtResource("11_exg1g")
+metadata/_custom_type_script = "uid://of3nga1nubss"
+
 [node name="SetAgentAction" type="Node" parent="BeehaveTree/ActionSelector/ChaseSequence"]
 script = ExtResource("6_kh3wm")
 value = 1
@@ -135,6 +151,10 @@ metadata/_custom_type_script = "uid://of3nga1nubss"
 
 [node name="Shoot" type="Node" parent="BeehaveTree/ActionSelector/ChaseSequence/SuccessShooting/ShootCheckSequence/ShootCooldown/ShootRotateSequence"]
 script = ExtResource("15_bkr7a")
+metadata/_custom_type_script = "uid://of3nga1nubss"
+
+[node name="EnterChaseTweens" type="Node" parent="BeehaveTree/ActionSelector/ChaseSequence/SuccessShooting/ShootCheckSequence/ShootCooldown/ShootRotateSequence"]
+script = ExtResource("11_exg1g")
 metadata/_custom_type_script = "uid://of3nga1nubss"
 
 [node name="PatrolSequence" type="Node" parent="BeehaveTree/ActionSelector"]

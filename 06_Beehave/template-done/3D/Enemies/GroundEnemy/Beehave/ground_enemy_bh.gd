@@ -66,7 +66,6 @@ func _physics_process(delta : float) -> void:
 # Handles falling
 func _gravity(delta : float) -> void:
 	if is_on_floor(): return
-	
 	velocity += get_gravity() * delta
 
 # Handles movement of the player
@@ -76,7 +75,8 @@ func _movement(delta : float) -> void:
 	
 	# Avoid point oscillation
 	if distance_to_target.length() < navigation_agent_3d.path_desired_distance:
-		velocity = Vector3.ZERO
+		velocity.x = 0
+		velocity.z = 0
 		return
 	
 	var direction : Vector3 = distance_to_target.normalized()

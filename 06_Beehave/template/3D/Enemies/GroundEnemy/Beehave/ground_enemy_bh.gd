@@ -76,7 +76,8 @@ func _movement(delta : float) -> void:
 
 	# Avoid point oscillation
 	if distance_to_target.length() < navigation_agent_3d.path_desired_distance:
-		velocity = Vector3.ZERO
+		velocity.x = 0
+		velocity.z = 0
 		return
 
 	var direction : Vector3 = target - global_position

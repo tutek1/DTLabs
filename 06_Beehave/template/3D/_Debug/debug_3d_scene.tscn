@@ -496,5 +496,6 @@ property = "patrol_points"
 [node name="GroundEnemyBeehave" parent="." instance=ExtResource("11_xbdsv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.71074, 2.19583, 24.0468)
 collision_mask = 7
+patrol_points = Array[Vector3]([Vector3(0, 1.5, 0), Vector3(-0.565, 1.5, 29), Vector3(13.635, 1.5, 22.36), Vector3(15.995, 1.5, -15.48)])
 
 [connection signal="body_entered" from="Enviroment/2DPlatforming/Sprite3D/Area3D" to="Enviroment/2DPlatforming/Sprite3D" method="_on_area_3d_body_entered"]

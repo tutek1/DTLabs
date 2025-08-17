@@ -271,11 +271,12 @@ Now if you play the game, the enemy should patrol in the same way as the `Ground
 
 <video id=VawO4Iq8NW0></video>
 
-(Changing the `Tick Rate` property to a higher number makes the tree update less often, making it easier for us to see, what is really happening.)
+> aside negative
+> Changing the `Tick Rate` property to a higher number makes the tree update less often, making it easier for us to see, what is really happening. However, this makes the waiting nodes (used in later sections) wait that much longer. This is probably a bug of the plugin.
 
 
 > aside positive
-> A better practice for making AI with **Behavior Trees** could be making an `AbstractEnemyBH`, that is not dependent on anything specific to any enemy type. Then the enemies would be defined entirely by their behavior using their Behavior Trees. However as always, this depends on the scale of the game you are making.
+> A better practice for making AI with **Behavior Trees** could be making an `AbstractEnemyBH`, that is not dependent on anything specific to any enemy type. Then the enemies would be defined entirely by their Behavior Trees. However as always, this depends on the scale of the game you are making.
 
 
 
@@ -426,7 +427,7 @@ Now if you play the game, the enemy should **shoot and rotate towards you** the 
 
 
 ### Chase Enter Tweens
-Playing the chase enter tweens is a bit more tricky, since we do not have `OnSubTreeEnter` or something similar. Perhaps a better design of the tree should be used, but for our purposes I came up with **storing the last action (Chase/Patrol)** and based on that, we can determine if we just started chasing. We already have the ![](img/Action.png) `SetAgentAction` node in the ![](img/SequenceSmall.png) `PatrolSequence`, so let's add it here:
+Playing the chase enter tweens is a bit more tricky, since we do not have `OnSubTreeEnter` or something similar. Perhaps a better design of the tree should be used, but for our purposes I came up with **storing the last action (Chase/Patrol)** and based on that, we can determine if we just started chasing. We already have the ![](img/Action.png) `SetAgentAction` node in the ![](img/SequenceSmall.png) `PatrolSequence`, so let's add it here too:
 
 - **Node** ![](img/Action.png) `ActionLeaf` child of ![](img/SequenceSmall.png) `ChaseSequence`
     - **Name** `SetAgentAction`
@@ -434,20 +435,28 @@ Playing the chase enter tweens is a bit more tricky, since we do not have `OnSub
     - **Property** `Value` = `Chase`
     - **Between** nodes ![](img/ConditionSmall.png) `IsPlayerCloseEnough` and ![](img/Action.png) `SetRotateModeHalfHalf`
 
+Next we will add a ![](img/SelectorSmall.png) `Selector` to choose between a condition "Are we in the chase state?" and playing the tweens. This will make the tweens play only if the agent action is not Chase -> played only on chase enter.
+
+- **Node** ![](img/SelectorSmall.png) `SelectorComposite` child of ![](img/SequenceSmall.png) `ChaseSequence`
+    - **Name** `OnEnterChaseSelector`
+    - **Between** nodes ![](img/ConditionSmall.png) `IsPlayerCloseEnough` and ![](img/Action.png) `SetAgentAction`
+
+- **Node** ![](img/ConditionSmall.png) `ConditionLeaf` child of ![](img/SelectorSmall.png) `OnEnterChaseSelector`
+    - **Name** `IsActionChase`
+    - **Script** `bh_state_check.gd`
+    - **Property** `Is Action` = `Chase`
+
+- **Node** ![](img/Action.png) `ActionLeaf` child of ![](img/SelectorSmall.png) `OnEnterChaseSelector`
+    - **Name** `EnterChaseTweens`
+    - **Script** `bh_enter_chase_tweens.gd`
+
+Now the enemy pops up and back down (enter chase tweens) when it starts to see the player. To make the enemy behavior the same as the FSM version you can also add the node ![](img/Action.png) `EnterChaseTweens` as a child of the ![](img/SequenceSmall.png) `ShootRotateSequence`, which will make the enemy do the tween when shooting.
 
 
 
 
 
-
-
-
-
-
-
-
-
-## Shooting and Chase Enter Tweens 
+## test
 Duration: hh:mm:ss
 
 
