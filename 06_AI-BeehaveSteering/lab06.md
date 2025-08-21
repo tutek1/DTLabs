@@ -1,6 +1,6 @@
 summary: Ground Enemy AI (Behavior Trees), Air Enemy AI (Steering)
 id: export
-categories: AI, Behavior Trees, Beehave, NavMesh, 3D, Plugin
+categories: AI, Behavior Trees, Beehave, NavMesh, 3D, Plugin, Steering
 status: Published
 authors: Ondřej Kyzr
 Feedback Link: https://google.com
