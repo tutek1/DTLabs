@@ -1,11 +1,11 @@
-summary: Ground Enemy AI (Behavior Tree)
+summary: Ground Enemy AI (Behavior Trees), Air Enemy AI (Steering)
 id: export
 categories: AI, Behavior Trees, Beehave, NavMesh, 3D, Plugin
 status: Published
 authors: Ondřej Kyzr
 Feedback Link: https://google.com
 
-# Lab06 - Ground Enemy AI (Behavior Tree)
+# Lab06 - Ground Enemy AI (Behavior Trees), Air Enemy AI (Steering)
 
 ## Overview
 Duration: hh:mm:ss
