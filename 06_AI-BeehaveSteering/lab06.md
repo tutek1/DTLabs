@@ -453,7 +453,7 @@ Next we will add a ![](img/SelectorSmall.png) `Selector` to choose between a con
 Now the enemy pops up and back down (enter chase tweens) when it starts to see the player. To make the enemy behavior the same as the FSM version you can also add the node ![](img/Action.png) `EnterChaseTweens` as a child of the ![](img/SequenceSmall.png) `ShootRotateSequence`, which will make the enemy do the tween when shooting.
 
 
-
+TODO ending
 
 
 ## test
@@ -470,8 +470,10 @@ Duration: hh:mm:ss
 ## Notes TODO
 Duration: hh:mm:ss
 
-Do on your own `bh_set_next_patrol_point.gd`, `bh_is_player_close_enough.gd`
-use user guide: [text](https://bitbra.in/beehave/#/manual/)
+Mention that it is very hard to fine tune and alternations of the steering behaviors are possible and for some instances necessary
+
+Do on your own `Pursue`, `Seek`, add all forces
+
 `logan/login/lungo` something AI plugin
 
 
