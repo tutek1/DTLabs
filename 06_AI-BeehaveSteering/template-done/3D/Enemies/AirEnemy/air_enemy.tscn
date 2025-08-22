@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3 uid="uid://bxrrrw1iqiee7"]
+
+[ext_resource type="Script" uid="uid://c56qx6q01k0ep" path="res://3D/Enemies/AirEnemy/air_enemy.gd" id="1_wf10h"]
+[ext_resource type="ArrayMesh" uid="uid://bc10g2igd6oxq" path="res://3D/Enemies/AirEnemy/GORODITH_air_enemy.obj" id="6_exv4h"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_8nvh3"]
+radius = 1.5
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_q4q8o"]
+radius = 7.0
+
+[node name="AirEnemy" type="CharacterBody3D"]
+collision_layer = 4
+collision_mask = 7
+script = ExtResource("1_wf10h")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, -0.1, 0)
+shape = SubResource("SphereShape3D_8nvh3")
+
+[node name="GorodithAirEnemy" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
+mesh = ExtResource("6_exv4h")
+skeleton = NodePath("../..")
+
+[node name="VisionArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="VisionArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.94191)
+shape = SubResource("SphereShape3D_q4q8o")
+
+[connection signal="body_entered" from="VisionArea" to="." method="_on_vision_area_body_entered"]
