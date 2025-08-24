@@ -14,11 +14,15 @@ extends CharacterBody3D
 @export var jump_force : float = 10
 
 @export_category("Enemies")
+@export var invincivility_time : float = 0.75
 @export var knockback_force : Vector2 = Vector2(6, 7)
-@export var knockback_time : float = 0.75
+@export var knockback_time : float = 0.5
+
+const ENEMY_LAYER = 4
 
 var _has_double_jumped : bool = false
 var _do_movement : bool = true
+var _can_be_damaged : bool = true
 
 func _ready() -> void:
 	pass
@@ -111,14 +115,24 @@ func set_do_movement(value : bool, delay : float = 0) -> void:
 
 
 func receive_damage(value : float, from : Node3D):
+	if not _can_be_damaged: return
+	_can_be_damaged = false
 	# TODO damage
 	
-	set_do_movement(false)
+	# Restrict movement for a while
+	_do_movement = false
+	set_do_movement(true, knockback_time)
 	
+	# Knockback the player
 	var dir_to_player : Vector3 = (global_position - from.global_position).normalized()
 	dir_to_player.x *= knockback_force.x
 	dir_to_player.z *= knockback_force.x
 	dir_to_player.y = knockback_force.y
 	velocity = dir_to_player
 	
-	set_do_movement(true, knockback_time)
+	# Do not collide with enemies for invincibility time
+	collision_mask -= ENEMY_LAYER
+	await get_tree().create_timer(invincivility_time).timeout
+	collision_mask += ENEMY_LAYER
+	_can_be_damaged = true
+	
