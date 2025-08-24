@@ -26,7 +26,7 @@ Here is the template for this lab. Please download it, there are scripts needed 
 
 
 
-## Behavior Trees 
+## Behavior Trees (BT)
 Duration: hh:mm:ss
 
 When it comes to creating an AI character in a videogame, there are many known ways/architectures that you can use. For example:
@@ -156,7 +156,7 @@ Let's create a basic Beehave setup, so that in the next section, we can start ma
 
 
 
-## Patrolling Behavior
+## BT - Patrolling Behavior
 Duration: hh:mm:ss
 
 Let's start by creating the **Patrolling behavior** of the enemy, since that is an easy place to start. In **Beehave** the Behavior Tree is build with nodes in the **Scene Hierarchy**. This works because the **Scene Hierarchy** is a tree-like structure with nodes and children. Don't worry about how adding the Chase behavior will work for now.
@@ -281,7 +281,7 @@ Now if you play the game, the enemy should patrol in the same way as the `Ground
 
 
 
-## Chase Behavior 
+## BT - Chase Behavior 
 Duration: hh:mm:ss
 
 The chasing behavior will be a bit more complex. Let's first tackle how the switching between **Patrol Behavior** and **Chase Behavior** will work. Start by adding a sequence for the Chase Behavior.
@@ -380,7 +380,7 @@ func tick(actor, blackboard: Blackboard):
 
 
 
-## Shooting and Chase Enter Tweens 
+## BT - Shooting and Chase Enter Tweens 
 Duration: hh:mm:ss
 
 To match the **GroundEnemyFSM** we need to add last two things to our Beehave Tree. One of them is the **periodic shooting** and the other thing are the **tweens** that play when entering chase. 
@@ -450,15 +450,17 @@ Next we will add a ![](img/SelectorSmall.png) `Selector` to choose between a con
     - **Name** `EnterChaseTweens`
     - **Script** `bh_enter_chase_tweens.gd`
 
-Now the enemy pops up and back down (enter chase tweens) when it starts to see the player. To make the enemy behavior the same as the FSM version you can also add the node ![](img/Action.png) `EnterChaseTweens` as a child of the ![](img/SequenceSmall.png) `ShootRotateSequence`, which will make the enemy do the tween when shooting.
+Now the enemy pops up and back down (enter chase tweens) when it starts to see the player.
 
+#### Optional tween when shooting
+To make the enemy behavior the same as the FSM version you can also add the node ![](img/Action.png) `EnterChaseTweens` as a child of the ![](img/SequenceSmall.png) `ShootRotateSequence`, which will make the enemy do the tween when shooting.
 
-TODO ending
+### Behavior Trees - Ending
+As we saw in the these few sections behavior trees are very modular and require you to think about AI in a bit different way. They are mostly useful for more complex AIs than the one we created but you can use them however you like to.
 
+Here is a video showcasing the complete behavior tree and enemy behavior, that we created during this codelab:
 
-## test
-Duration: hh:mm:ss
-
+<video id=s2O0LK5aLS8></video>
 
 
 

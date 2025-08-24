@@ -489,8 +489,7 @@ bidirectional = false
 start_position = Vector3(-25.3929, 15.1189, 4.05409)
 end_position = Vector3(-16.9594, 1.07147, 0.691738)
 
-[node name="DebugDrawPath" parent="." node_paths=PackedStringArray("node") instance=ExtResource("11_7xjr7")]
-node = NodePath("")
+[node name="DebugDrawPath" parent="." instance=ExtResource("11_7xjr7")]
 
 [node name="GroundEnemyBeehave" parent="." instance=ExtResource("11_xbdsv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.71074, 3.13949, 24.0468)
