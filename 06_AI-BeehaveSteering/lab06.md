@@ -1,11 +1,11 @@
-summary: Ground Enemy AI (Behavior Trees), Air Enemy AI (Steering)
+summary: Ground Enemy AI (Behavior Trees), Air Enemy AI (Steering Behaviors)
 id: export
-categories: AI, Behavior Trees, Beehave, NavMesh, 3D, Plugin, Steering
+categories: AI, Behavior Trees, Beehave, NavMesh, 3D, Plugin, Steering Behaviors, Steerings
 status: Published
 authors: Ondřej Kyzr
 Feedback Link: https://google.com
 
-# Lab06 - Ground Enemy AI (Behavior Trees), Air Enemy AI (Steering)
+# Lab06 - Ground Enemy AI (Behavior Trees), Air Enemy AI (Steering Behaviors)
 
 ## Overview
 Duration: hh:mm:ss
@@ -464,8 +464,129 @@ Here is a video showcasing the complete behavior tree and enemy behavior, that w
 
 
 
+## Steering Behaviors
+Duration: hh:mm:ss
+
+What can you use if you do not want or cannot use **Navigation Meshes** for navigation (too expensive, too dynamic environment, too rigid movement, flying enemies, etc.)?
+
+One might come up with a navigation variant that simply just **moves the "enemy" towards the player**. This is a good start, that closely mimics the **Seek** behavior that Steering behaviors define and can be expanded to create very complex AI behaviors.
+
+### What are Steering Behaviors? 
+They are a form of navigation that is inspired by the movement of **flocks of birds** and **schools of fishes** created by Craig W. Reynolds ([Academic Paper](https://www.red3d.com/cwr/steer)). 
+
+For simplicity I will in this refer to the agent controlled by the steering as **Boid** and to steering behaviors as **Steerings**.
+
+### How does Steering work?
+1. Each boid can have **any number of Steering behaviors**.
+2. Every behavior on a boid is **called every update** and returns a **force** (`Vector3` in our 3D case).
+3. All returned forces are **added to the current velocity** of the boid.
+4. The velocity is clamped at defined **maximum speed**.
+
+That's about it really. This simple adding of all forces, each with their own goal, is enough to create complex natural behaviors, that can be seen in nature.
+
+### What Steerings are there?
+There are many different types and you can even create your own. Here is a list of all the steering behaviors that Reynolds defined. Feel free to briefly look over them just so that you can get an idea, what a steering is:
+- **Seek/Flee** - Direction towards/from the target (desired velocity) is added to the current.
+<img src="img/Seek.png" width="250"/>
+<img src="img/Flee.png" width="350"/>
+
+- **Pursue & Evade** - Same as Seek/Flee but takes into account the velocity of the target.
+<img src="img/Pursue.png" width="350"/>
+
+- **Arrival** - Same as Seek but slows down near the target in a given radius.
+<img src="img/Arrival.png" width="350"/>
+
+- **Wander** - Travels randomly though space by randomly moving a point (seek direction) along a circle.
+<img src="img/Wander.png" width="350"/>
+
+- **Collision Avoidance** - Checks forward in space in current velocity for any colliders and steers away from them.
+<img src="img/CollisionAvoidance.png" width="400"/>
+
+- **Wall Following** - Travels along a wall (left or right).
+- **Path Following** - Tries to closely follow a path.
+- **Leader Following** - Tries to follow a leader Boid/Target while maintaining distance from them.
+- **Group/Flocking** - 3 steering rules/forces that together create a flocking behavior.
+    - **Separation** - Do not get too close to nearby flockmates.
+    - **Alignment** - Move at same speed and direction as nearby flockmates.
+    - **Cohesion** - Prefer to be at the center of nearby flockmates.
+- **Flow Field Following**, **Obstacle Avoidance & Containment**, **Unaligned collision avoidance**
 
 
+
+## Steerings in the Project
+Duration: hh:mm:ss
+
+Best way to learn about **Steering Behaviors** is to try them and implement them. I have prepared an `AirEnemy` in the project so that we can try Steering and different behaviors. I also created some of the **Steerings** mentioned in the previous section. All of them extend the `SteeringBehavior` class, which looks like this:
+
+```GDScript
+class_name SteeringBehavior
+extends Resource
+
+# Called every frame, should return normalized force unless the magnitude plays a role 
+func act(air_enemy : AirEnemy) -> Vector3:
+    assert(false, "Do not use SteeringBehavior abstract class! Method `act()`")
+    return Vector3.ZERO
+
+# Called every frame if draw_debug is enabled
+func debug_draw(air_enemy : AirEnemy) -> void:
+    assert(false, "Do not use SteeringBehavior abstract class! Method `debug_draw()`")
+```
+
+Let's look at the `air_enemy.tscn` file in `3D/Enemies/AirEnemy`.
+
+![](img/AirEnemy.png)
+
+This is our enemy, which in the game world represents the **malware that attacked the computer**, that the player needs to clear out (see [GDD]("TODO")). Now let's have a look at the script `air_enemy.gd` and the `_physics_process()` to see what it does.
+
+```GDScript
+func _physics_process(delta : float) -> void:
+    _behavior()
+    _steering(delta)
+    _rotate_enemy(delta)
+    _check_collisions()
+
+    move_and_slide()
+```
+
+The code is pretty similar to the ground enemy or the player code, since it is again a `CharacterBody3D` node. We will look at some interesting functions and fill out the steering one.
+
+### **`_behavior()`** function
+This function controls the **behavior of the enemy**. Currently, it just looks if the `VisionArea` assigned the `_player` reference and sets the **player as the target**. If not it sets the target to a fixed value. The final game will implement an **FSM** or a **Behavior Tree** but for now, to keep it simple, this `if -> else` structure is good enough.
+
+### Task: **`_steering()`** function
+This function handles the steering forces and works very similarly to how steering should work:
+1. First, all the forces are calculated and added to `force` variable (your task).
+2. Then the `force` is limited to `1` to preserve maximum acceleration.
+3. `force` is multiplied by acceleration speed, delta, and added to `velocity`.
+4. `velocity` is limited to `fly_speed` (maximum speed)
+5. Lastly a debug arrow pointing in the direction of velocity is drawn.
+
+You should now implement the first point as an exercise. The solution is at the bottom of the page.
+
+
+### **`_rotate_enemy()`** function
+
+
+
+### **`_check_collisions()`** function
+
+
+
+### Add the enemy to the scene
+
+
+### Solution: **`_steering()`** function
+The solution is quite simple. Just iterate over all the `steerings` and call the `act()` function on each one.
+```GDScript
+func _steering(delta : float) -> void:
+
+    # Accumulate all forces from all steerings
+    var force : Vector3
+    for steering in steerings:
+        force += steering.act(self)
+    
+    ...
+```
 
 
 

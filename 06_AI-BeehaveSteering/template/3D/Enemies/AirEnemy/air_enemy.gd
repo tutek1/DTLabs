@@ -76,8 +76,9 @@ func _rotate_enemy(delta: float) -> void:
 	rotation.x = lerp_angle(rotation.x, 0, rotation_speed * delta)
 	rotation.z = lerp_angle(rotation.z, 0, rotation_speed * delta)
 	
-	# Use the looking_at to transform
-	var target_transform = transform.looking_at(transform.origin + direction, Vector3.UP)
+	# Use the looking_at to transform the enemy to look at the target
+	var target_transform : Transform3D = transform\
+		.looking_at(transform.origin + direction, Vector3.UP)
 	
 	# Interpolate between current basis and target basis for smooth rotation
 	transform.basis = transform.basis.slerp(target_transform.basis, rotation_speed * delta)
