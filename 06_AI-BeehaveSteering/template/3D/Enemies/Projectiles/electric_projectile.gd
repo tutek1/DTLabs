@@ -96,13 +96,4 @@ func _on_body_entered(body : Node3D):
 	_destroy()
 	
 	if body is PlayerController3D:
-		_player.set_do_movement(false)
-		
-		var dir_to_player : Vector3 = (_player.global_position - global_position).normalized()
-		dir_to_player.x *= knockback_force.x
-		dir_to_player.z *= knockback_force.x
-		dir_to_player.y = knockback_force.y
-		
-		_player.velocity = dir_to_player
-		
-		_player.set_do_movement(true, knockback_time)
+		body.receive_damage(damage, self)

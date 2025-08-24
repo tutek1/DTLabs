@@ -8,8 +8,7 @@ extends CharacterBody3D
 @export var up_down_rot_mult : float = 2
 
 @export_category("Behavior")
-@export var knockback_force : Vector2 = Vector2(6, 7)
-@export var knockback_time : float = 0.75
+@export var contact_damage : float = 5
 @export var damage_cooldown : float = 0.5
 @export var max_player_chase_dist : float = 20 
 
@@ -91,16 +90,7 @@ func _check_collisions() -> void:
 		var collision : KinematicCollision3D = get_slide_collision(idx)
 		var collider : Object = collision.get_collider()
 		if collider is PlayerController3D:
-			_player.set_do_movement(false)
-			
-			var dir_to_player : Vector3 = (_player.global_position - global_position).normalized()
-			dir_to_player.x *= knockback_force.x
-			dir_to_player.z *= knockback_force.x
-			dir_to_player.y = knockback_force.y
-			
-			_player.velocity = dir_to_player
-			
-			_player.set_do_movement(true, knockback_time)
+			collider.receive_damage(contact_damage, self)
 			_last_damage_time = Time.get_ticks_msec()
 			return
 

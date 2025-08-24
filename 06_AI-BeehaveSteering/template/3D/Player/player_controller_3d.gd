@@ -13,6 +13,10 @@ extends CharacterBody3D
 @export var gravity : float = -9.81
 @export var jump_force : float = 10
 
+@export_category("Enemies")
+@export var knockback_force : Vector2 = Vector2(6, 7)
+@export var knockback_time : float = 0.75
+
 var _has_double_jumped : bool = false
 var _do_movement : bool = true
 
@@ -104,3 +108,17 @@ func set_do_movement(value : bool, delay : float = 0) -> void:
 	
 	await get_tree().create_timer(delay).timeout
 	_do_movement = value
+
+
+func receive_damage(value : float, from : Node3D):
+	# TODO damage
+	
+	set_do_movement(false)
+	
+	var dir_to_player : Vector3 = (global_position - from.global_position).normalized()
+	dir_to_player.x *= knockback_force.x
+	dir_to_player.z *= knockback_force.x
+	dir_to_player.y = knockback_force.y
+	velocity = dir_to_player
+	
+	set_do_movement(true, knockback_time)
