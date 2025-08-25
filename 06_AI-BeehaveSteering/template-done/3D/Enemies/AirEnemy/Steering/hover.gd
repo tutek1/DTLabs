@@ -26,7 +26,7 @@ func act(air_enemy : AirEnemy) -> Vector3:
 	else:
 		_going_up = false
 	
-	return Vector3.UP if _going_up else Vector3.ZERO
+	return Vector3.UP * air_enemy.fly_acceleration if _going_up else Vector3.ZERO
 
 func debug_draw(air_enemy : AirEnemy) -> void:
 	if _going_up:

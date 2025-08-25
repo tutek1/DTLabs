@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://chnffv2lmano5"]
+[gd_scene load_steps=36 format=3 uid="uid://chnffv2lmano5"]
 
 [ext_resource type="PackedScene" uid="uid://44guktn5iwdy" path="res://3D/WorldObjects/resistor.tscn" id="1_oikrr"]
 [ext_resource type="PackedScene" uid="uid://co65xg3ltrdrq" path="res://3D/WorldObjects/big_resistor.tscn" id="2_kdw4m"]
@@ -8,8 +8,10 @@
 [ext_resource type="Script" uid="uid://cxr26cu7py7mo" path="res://3D/Camera/player_camera_3d.gd" id="6_itcoc"]
 [ext_resource type="Script" uid="uid://bsumix7xtjux1" path="res://3D/Player/player_controller_3d.gd" id="7_vdnx2"]
 [ext_resource type="Material" uid="uid://d1xu766jnbqqd" path="res://3D/Player/player_material.tres" id="8_x3b60"]
+[ext_resource type="PackedScene" uid="uid://bxrrrw1iqiee7" path="res://3D/Enemies/AirEnemy/air_enemy.tscn" id="10_kai6n"]
 [ext_resource type="PackedScene" uid="uid://1ps1fcn15ft3" path="res://3D/_Debug/debug_draw_path.tscn" id="11_7xjr7"]
-[ext_resource type="PackedScene" uid="uid://byh0a2vnett5q" path="res://3D/Enemies/GroundEnemy/Beehave/ground_enemy_bh.tscn" id="11_xbdsv"]
+[ext_resource type="Script" uid="uid://q0fjp3ypmwdd" path="res://3D/Enemies/AirEnemy/Steering/steering_behavior.gd" id="11_vdnx2"]
+[ext_resource type="Script" uid="uid://cagrwkbxr0vip" path="res://3D/Enemies/AirEnemy/Steering/arrival.gd" id="12_x3b60"]
 
 [sub_resource type="Environment" id="Environment_ndwkr"]
 background_color = Color(1, 1, 1, 1)
@@ -91,6 +93,11 @@ polygons = [PackedInt32Array(0, 2, 1), PackedInt32Array(4, 3, 5), PackedInt32Arr
 geometry_source_geometry_mode = 1
 geometry_source_group_name = &"NavMeshSource"
 agent_radius = 1.0
+
+[sub_resource type="Resource" id="Resource_xbdsv"]
+script = ExtResource("12_x3b60")
+slowing_radius = 10.0
+metadata/_custom_type_script = "uid://cagrwkbxr0vip"
 
 [node name="Debug3dScene" type="Node3D"]
 
@@ -491,9 +498,8 @@ end_position = Vector3(-16.9594, 1.07147, 0.691738)
 
 [node name="DebugDrawPath" parent="." instance=ExtResource("11_7xjr7")]
 
-[node name="GroundEnemyBeehave" parent="." instance=ExtResource("11_xbdsv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.71074, 3.13949, 24.0468)
-collision_mask = 7
-patrol_points = Array[Vector3]([Vector3(0, 1.5, 0), Vector3(-0.565, 1.5, 29), Vector3(13.635, 1.5, 22.36), Vector3(15.995, 1.5, -15.48)])
+[node name="AirEnemy" parent="." instance=ExtResource("10_kai6n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.96201, 0)
+steerings = Array[ExtResource("11_vdnx2")]([SubResource("Resource_xbdsv")])
 
 [connection signal="body_entered" from="Enviroment/2DPlatforming/Sprite3D/Area3D" to="Enviroment/2DPlatforming/Sprite3D" method="_on_area_3d_body_entered"]

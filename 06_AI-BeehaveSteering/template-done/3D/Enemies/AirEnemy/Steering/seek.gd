@@ -8,7 +8,8 @@ func act(air_enemy : AirEnemy) -> Vector3:
 	
 	# TODO: Calculate normalized seek force and return it
 	# Hint: use `air_enemy.get_target()` to get the current target position
-	
+	force = (air_enemy.get_target() - air_enemy.global_position).normalized()
+	force = force * air_enemy.fly_acceleration - air_enemy.velocity
 	_last_act_force = force
 	return force
 

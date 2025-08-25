@@ -3,7 +3,7 @@ extends CharacterBody3D
 
 @export_category("Speeds")
 @export var fly_speed : float = 5.0
-@export var fly_acceleration : float = 10.0
+@export var fly_acceleration : float = 15.0
 @export var rotation_speed : float = 4
 @export var up_down_rot_mult : float = 2
 
@@ -18,9 +18,11 @@ extends CharacterBody3D
 
 @onready var collision_shape : CollisionShape3D = $CollisionShape3D
 
+const PLAYER_LAYER : int = 2
+
 var _player : PlayerController3D
 var _target : Vector3 = Vector3(0, -0.1, 0)
-var _last_damage_time : float = 0
+var _can_damage_player : bool = true
 
 
 func _physics_process(delta : float) -> void:
@@ -47,11 +49,12 @@ func _steering(delta : float) -> void:
 	var force : Vector3
 	
 	
-	# Normalize only when a lot of forces act 
-	# -> preserves force magnitude for arrival and others
-	if force.length() > 1.0:
-		force = force.normalized()
-	velocity += force * fly_acceleration * delta
+	# Max acceleration
+	if force.length() > fly_acceleration:
+		force = force.normalized() * fly_acceleration
+	
+	# Add velocity
+	velocity += force * delta
 	
 	# Max speed check
 	if velocity.length() > fly_speed:
@@ -85,14 +88,20 @@ func _rotate_enemy(delta: float) -> void:
 
 # Check all current collisions and if it is a player damage them
 func _check_collisions() -> void:
-	if _last_damage_time + damage_cooldown * 1000 > Time.get_ticks_msec(): return 
+	if not _can_damage_player: return
 	
 	for idx in range(0, get_slide_collision_count()):
 		var collision : KinematicCollision3D = get_slide_collision(idx)
 		var collider : Object = collision.get_collider()
 		if collider is PlayerController3D:
 			collider.receive_damage(contact_damage, self)
-			_last_damage_time = Time.get_ticks_msec()
+			
+			# Damage cooldown and collision removal
+			_can_damage_player = false
+			collision_mask -= PLAYER_LAYER
+			await get_tree().create_timer(damage_cooldown).timeout
+			_can_damage_player = true
+			collision_mask += PLAYER_LAYER
 			return
 
 # Returns the current target position

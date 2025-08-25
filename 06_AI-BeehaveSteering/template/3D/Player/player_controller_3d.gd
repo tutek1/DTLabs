@@ -15,7 +15,7 @@ extends CharacterBody3D
 
 @export_category("Enemies")
 @export var invincivility_time : float = 0.75
-@export var knockback_force : Vector2 = Vector2(6, 7)
+@export var knockback_force : Vector2 = Vector2(10, 8)
 @export var knockback_time : float = 0.5
 
 const ENEMY_LAYER = 4

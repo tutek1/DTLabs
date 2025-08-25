@@ -1,10 +1,12 @@
 class_name CollisionAvoidance
 extends SteeringBehavior
 
-@export var max_look_ahead : float = 2
-@export var avoidance_radius : float = 1.6
+@export var avoidance_strength : float = 4
+@export var max_look_ahead : float = 3
+@export var avoidance_radius : float = 1.7
 @export var normal_to_mid_mix : float = 0.25
 
+const PLAYER_LAYER : int = 2
 
 var _shape_cast : ShapeCast3D = null
 
@@ -34,11 +36,11 @@ func act(air_enemy : AirEnemy) -> Vector3:
 			
 			# The final force for the collision is a mix of the normal vector of hit point
 			#  and the mid point of the object. It might be a bit confusing but works well.
-			#  Although only one of these directions can be used.
+			#  Only one of these directions can be used
 			force += (_shape_cast.get_collision_normal(idx) / strength) * normal_to_mid_mix\
 				  + ((point - mid_point).normalized() / strength) * (1 - normal_to_mid_mix)
 	
-	return force
+	return force * avoidance_strength
 
 # Draws all the collision points
 func debug_draw(air_enemy : AirEnemy) -> void:
@@ -55,6 +57,6 @@ func _create_shapecast(air_enemy : AirEnemy):
 	_shape_cast.exclude_parent = true
 	_shape_cast.collide_with_areas = false
 	_shape_cast.collide_with_bodies = true
-	_shape_cast.collision_mask = air_enemy.collision_mask - 1 # 1 == player, do not avoid them
+	_shape_cast.collision_mask = air_enemy.collision_mask - PLAYER_LAYER # 2 == player, do not avoid them
 	_shape_cast.shape = air_enemy.collision_shape.shape.duplicate()
 	_shape_cast.shape.radius = avoidance_radius
