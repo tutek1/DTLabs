@@ -17,4 +17,4 @@ func act(air_enemy : AirEnemy) -> Vector3:
 
 func debug_draw(air_enemy : AirEnemy) -> void:
 	var pos : Vector3 = air_enemy.global_position
-	DebugDraw3D.draw_arrow(pos, pos + _last_act_force * 4, Color.HOT_PINK, 0.05)
+	DebugDraw3D.draw_arrow(pos, pos + _last_act_force.normalized() * 4, Color.HOT_PINK, 0.05)

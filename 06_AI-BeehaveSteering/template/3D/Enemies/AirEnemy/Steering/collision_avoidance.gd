@@ -2,8 +2,8 @@ class_name CollisionAvoidance
 extends SteeringBehavior
 
 @export var avoidance_strength : float = 4
-@export var max_look_ahead : float = 3
-@export var avoidance_radius : float = 1.7
+@export var max_look_ahead : float = 6
+@export var avoidance_radius : float = 1.8
 @export var normal_to_mid_mix : float = 0.25
 
 const PLAYER_LAYER : int = 2
@@ -23,14 +23,17 @@ func act(air_enemy : AirEnemy) -> Vector3:
 	var force : Vector3
 	if _shape_cast.is_colliding():
 		
+		var max_strength : float = 0
+
 		# Get each collision point and add it to the force
 		for idx in range(0, _shape_cast.get_collision_count()):
 			var point : Vector3 = _shape_cast.get_collision_point(idx)
 			
 			# Strength of the possible collision point (distance - enemy radius)
 			var strength : float = point.distance_to(air_enemy.global_position) - avoidance_radius
-			strength = max(strength * strength, 0.1) # makes the strength have curve effect x^2
-			
+			strength = max(strength * strength, 0.1) # makes the strength have curve effect x^2			
+			if strength < max_strength: continue
+
 			# Mid point of the hit object
 			var mid_point : Vector3 = (_shape_cast.get_collider(idx)).global_position
 			

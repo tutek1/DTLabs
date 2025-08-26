@@ -1,6 +1,6 @@
 summary: Ground Enemy AI (Behavior Trees), Air Enemy AI (Steering Behaviors)
 id: export
-categories: AI, Behavior Trees, Beehave, NavMesh, 3D, Plugin, Steering Behaviors, Steerings
+categories: AI, Behavior Trees, Beehave, NavMesh, 3D, Plugin, Steering Behaviors, Steerings, Seek, Pursue
 status: Published
 authors: Ondřej Kyzr
 Feedback Link: https://google.com
@@ -9,17 +9,20 @@ Feedback Link: https://google.com
 
 ## Overview
 Duration: hh:mm:ss
-TODO
-This lab will focus on learning about **Behavior Trees**. We will recreate the behavior of the **Ground Enemy Finite-State Machine** from the last lab using a Behavior Tree.
 
-Today we will look over:
-- Changes made in the project between the codelabs. 
-- The 
-- Learn 
-- Creating 
-- 
+This lab will focus on learning about **Behavior Trees** as an alternative for **Finite-State Machines**. We will recreate the behavior of the **Ground Enemy Finite-State Machine** from the last lab using a Behavior Tree.
 
-Here is the template for this lab. Please download it, there are scripts needed for the Behavior tree implementation.
+Then we will learn about **Steering Behaviors** as an less robust but more interesting alternative for **Navigational Meshes** (NavMesh). We will use the new enemy **Air Enemy** to try out the Steering Behaviors, while implementing some of them.
+
+In a bullet point format, we will:
+- Learn the theory behind **Behavior Trees**. 
+- Install the **`Beehave`** plugin** and set it up.
+- Reimplement the **`Ground Enemy` behavior** using Behavior Trees.
+- Learn the theory behind **Steering Behaviors**. 
+- Implement **`Seek`** and **`Pursue`** behavior.
+- Try out all the other **steering behaviors** I prepared.
+
+Here is the template for this lab. Please download it, there are scripts, models, and scenes needed for the Behavior Trees and Steering Behaviors.
 <button>
   [Template Project](link)
 </button>
@@ -532,6 +535,7 @@ func debug_draw(air_enemy : AirEnemy) -> void:
     assert(false, "Do not use SteeringBehavior abstract class! Method `debug_draw()`")
 ```
 
+### Air Enemy
 Let's look at the `air_enemy.tscn` file in `3D/Enemies/AirEnemy`.
 
 ![](img/AirEnemy.png)
@@ -548,12 +552,22 @@ func _physics_process(delta : float) -> void:
     move_and_slide()
 ```
 
-The code is pretty similar to the ground enemy or the player code, since it is again a `CharacterBody3D` node. We will look at some interesting functions and fill out the steering one.
+The code is pretty similar to the ground enemy or the player code, since it is again a `CharacterBody3D` node. We will look over it to get an idea how it works and fill out the steerings one.
 
-### **`_behavior()`** function
+#### `_behavior()` function
 This function controls the **behavior of the enemy**. Currently, it just looks if the `VisionArea` assigned the `_player` reference and sets the **player as the target**. If not it sets the target to a fixed value. The final game will implement an **FSM** or a **Behavior Tree** but for now, to keep it simple, this `if -> else` structure is good enough.
 
-### Task: **`_steering()`** function
+```GDScript
+func _behavior() -> void:
+    if _player != null:
+        _target = _player.global_position
+        if _player.global_position.distance_to(global_position) > max_player_chase_dist:
+            _player = null
+    else:
+        _target = Vector3(25, 5, 10)
+```
+
+#### Task: `_steering()` function
 This function handles the steering forces and works very similarly to how steering should work:
 1. First, all the forces are calculated and added to `force` variable (your task).
 2. Then the `force` is limited to `1` to preserve maximum acceleration.
@@ -561,21 +575,83 @@ This function handles the steering forces and works very similarly to how steeri
 4. `velocity` is limited to `fly_speed` (maximum speed)
 5. Lastly a debug arrow pointing in the direction of velocity is drawn.
 
-You should now implement the first point as an exercise. The solution is at the bottom of the page.
+```GDScript
+func _steering(delta : float) -> void:
+	
+    # TODO Accumulate all forces from all steerings
+    var force : Vector3
+	
+	
+    # Normalize only when a lot of forces act 
+    # -> preserves force magnitude for arrival and others
+    if force.length() > 1.0:
+        force = force.normalized()
+    velocity += force * fly_acceleration * delta
+	
+    # Max speed check
+    if velocity.length() > fly_speed:
+        velocity = velocity.normalized() * fly_speed
+	
+    # Draw debug velocity if turned on
+    if draw_debug:
+        DebugDraw3D.draw_arrow(global_position, global_position + velocity, Color.GREEN, 0.1)
+```
+
+You should now **implement the first point** as an exercise. **Remember** that you should also call the `draw_debug()` function to see debug gizmos. The solution is at the bottom of the page.
 
 
-### **`_rotate_enemy()`** function
+#### `_rotate_enemy()` function
+Works just like the `_rotate_enemy()` in `GroundEnemy`, but it also rotates on the `x` and `z` axis based on direction. You can look into the function more closely if you are interested how it works.
+
+```GDScript
+func _rotate_enemy(delta: float) -> void:
+    # Get the direction normalized
+    var direction : Vector3 = velocity.normalized()
+    direction.x *= up_down_rot_mult
+    direction.z *= up_down_rot_mult
+
+    # Stop rotating when slow enough -> prevents oscilation
+    if direction.length() < 0.1:
+        return
+
+    # Rotate a bit towards a natural direction (why? it looks better in game)
+    rotation.x = lerp_angle(rotation.x, 0, rotation_speed * delta)
+    rotation.z = lerp_angle(rotation.z, 0, rotation_speed * delta)
+
+    # Use the looking_at to transform the enemy to look at the target
+    var target_transform : Transform3D = transform\
+        .looking_at(transform.origin + direction, Vector3.UP)
+
+    # Interpolate between current basis and target basis for smooth rotation
+    transform.basis = transform.basis.slerp(target_transform.basis, rotation_speed * delta)
+```
 
 
+#### `_check_collisions()` function
+Checks all the collisions generated by `move_and_slide()`. If any collision was with the player it damages them (only applies knockback for now). It also has a cooldown so that the enemy cannot damage the player multiple times in quick succession.
 
-### **`_check_collisions()`** function
-
+```GDScript
+func _check_collisions() -> void:
+    if _last_damage_time + damage_cooldown * 1000 > Time.get_ticks_msec(): return 
+	
+    for idx in range(0, get_slide_collision_count()):
+        var collision : KinematicCollision3D = get_slide_collision(idx)
+        var collider : Object = collision.get_collider()
+        if collider is PlayerController3D:
+            collider.receive_damage(contact_damage, self)
+            _last_damage_time = Time.get_ticks_msec()
+            return
+```
 
 
 ### Add the enemy to the scene
+Now let's try out the steerings. Open the `debug_scene_3d.tscn` scene.
+1. **Delete** the `GroundEnemyBeehave` node.
+2. **Instantiate** ![](img/SceneInstantiate.png) the `air_enemy.tscn`.
+3. **Move** the enemy above the ground.
 
 
-### Solution: **`_steering()`** function
+### Solution: `_steering()` function
 The solution is quite simple. Just iterate over all the `steerings` and call the `act()` function on each one.
 ```GDScript
 func _steering(delta : float) -> void:
@@ -584,41 +660,172 @@ func _steering(delta : float) -> void:
     var force : Vector3
     for steering in steerings:
         force += steering.act(self)
-    
+        if draw_debug: steering.debug_draw(self)
     ...
 ```
 
 
-
-## Notes TODO
+## Seek & Pursue
 Duration: hh:mm:ss
 
-Mention that it is very hard to fine tune and alternations of the steering behaviors are possible and for some instances necessary
+In this section we will look at the **Seek** and **Pursue** behaviors and implement them. I chose for us to implement these because they are not too difficult, but you still need to understand the steering forces to create them.
 
-Do on your own `Pursue`, `Seek`, add all forces
+### Learn to use Steerings
+Let's first learn how to **add a steering to the enemy** so that you can test it during implementation.
+1. **Select** the `AirEnemy` node in the **Scene Hierarchy**.
+2. **Click** the `Steerings` array in the **Inspector**
+3. **Press** the `+ Add Element` button.
+4. **Create** a new `Seek` resource.
 
-`logan/login/lungo` something AI plugin
+![](img/AirEnemySteerings.png)
+
+This way you can add as many steerings as you want, but I recommend having just the one that you are testing.
+
+
+### Task: Seek behavior
+The `Seek` steering force works very simply. It steers the velocity of the enemy (in our case) towards the set target position.
+
+![](img/Seek.png)
+
+1. **Open** the script `seek.gd` in `3D/Enemies/AirEnemy/Steering` 
+2. **Try** to implement the `act()` method with the help of the comments and the image above.
+
+The solution can be found on the bottom of the page, but try to implement it yourself.
+
+
+### Task: Pursue behavior
+The `Pursue` steering force works similarly to the `Seek` force. It steers the velocity of the enemy (in our case) towards the set target position, but also adds a multiple of the targets velocity to the target.
+
+![](img/Pursue.png)
+
+1. **Open** the script `pursue.gd` in `3D/Enemies/AirEnemy/Steering` 
+2. **Try** to implement the `act()` method with the help of the comments and the image above.
+
+The solution can be found on the bottom of the page, but try to implement it yourself.
+
+
+> aside positive
+> The `T` parameter is already in the code in form of `predict_mult` variable.
+
+
+
+### Solution: Seek behavior
+Here is the solution to the `act()` method of `Seek`:
+
+```GDScript
+func act(air_enemy : AirEnemy) -> Vector3:
+    var to_target : Vector3 = air_enemy.get_target() - air_enemy.global_position
+    var desired_velocity : Vector3 = to_target.normalized() * air_enemy.fly_acceleration
+
+    var force : Vector3 = desired_velocity - air_enemy.velocity
+    _last_act_force = force
+    return force
+```
+
+Please try it out in the project to get a feel for the behavior.
+
+### Solution: Pursue behavior
+Here is the solution to the `act()` method of `Pursue`:
+```GDScript
+func act(air_enemy : AirEnemy) -> Vector3:
+    var to_target : Vector3 = air_enemy.get_target() - air_enemy.global_position
+    var player : PlayerController3D = air_enemy.get_player()
+
+    # If the enemy knows about the player (is hunting them) add velocity
+    if player != null:
+        to_target += player.velocity * predict_mult
+
+    var desired_velocity : Vector3 = to_target.normalized() * air_enemy.fly_acceleration
+    var force : Vector3 = desired_velocity - air_enemy.velocity
+    _last_act_force = force
+    return force
+```
+
+Please try it out in the project and tweak the `predict_mult` parameter to get a feel for the behavior.
+
+
+
+## Other Implemented Steerings
+Duration: hh:mm:ss
+
+Let's have a brief look at all the other steerings I implemented and play around with them.
+
+
+### Collision Avoidance
+This steering force is responsible for the enemy to **avoid running into walls**. It is not as robust as path-finding on a NavMesh, but it can produce very **solid results**, depending on the environment and other steering forces.
+
+![](img/CollisionAvoidance.png)
+
+#### How it works?
+It works by checking for any obstacles in the direction of the velocity, taking the most threatening one (closest one) and steering away from its middle point.
+
+#### Implementation details
+One key detail of the implementation is that in Godot a shapecast cannot be done in code the same way a raycast can be done (see `Hover`). I solved this issue by creating a shapecasting node in code and adding it to the enemy. This makes sure that we get all the points, from which the closest one is taken and the enemy is repelled by.
+
+
+### Arrival
+While using `Seek`, the enemy will overshoot the target and oscillate back and forth. This steering force helps to solve this problem.
+
+![](img/Arrival.png)
+
+#### How it works?
+When outside of the `slowing_radius` the force is the same as `Seek`. While inside the slowing radius, the force is adjusted to counter the current velocity, which results in the enemy slowing down. 
+
+
+### My own steering: Hover
+I wanted the `AirEnemy` to float up and down, so I created this steering. It raycasts below the enemy and when it is low enough it floats up until a set height is reached. This also helps the enemy to not get stuck as much behind objects.
+
+
+### Preview
+I recommend for you to just run the project and experiment with different combinations of the steerings and their parameters.Here is a video showing all the steering behaviors, that are implemented in the template project:
+
+<video id=tyLv_fO5OKY></video>
+
+> aside positive
+> Note the **differences** between `Seek` and `Pursue` in the last two runs of the game. With `Pursue` it is much harder to circle around the enemy.
+
+> aside negative
+> Beware, that you need to **stop and run the game again** when you make a change in the steerings. This is probably a bug in the current version of Godot.
+
+Here are a list of what the debug shapes mean, so that you get a better idea of what is really going on:
+- **Green Arrow** - `AirEnemy` velocity
+- **Yellow Arrow** - `Arrival` force
+- **Yellow Sphere** - `Arrival` distance to slowing radius
+- **Pink Arrow** - `Pursue` force
+- **Purple Arrow** - `Seek` force
+- **Orange Sphere** - `Hover` is pushing enemy up 
+- **Blue Spheres** - `CollisionAvoidance` points
+
+
+> aside negative
+> Keep in mind, that a lot of the steerings are very dependent on the parameters set, which make and break the whole behavior.
 
 
 
 ## Recap
 Duration: hh:mm:ss
-TODO
+
 Let's look at what we did in this lab.
-- We looked at the **changes I made** between the last codelab
-- In 
-- Then, 
-- In order to 
-- Next, we 
-- Then, we 
-- After that 
-- Next, we
-    - 
-    - 
-    - 
-- Lastly
+- We learned about **Behavior Trees** and installed the plugin `Beehave`.
+- Then, we **implemented the `Patrol`** behavior of the `GroundEnemy` to match the `FSM` variant.
+- Next, we **implemented the `Chase`** behavior of the `GroundEnemy` to match the `FSM` variant.
+- In order to do the two steps above we learned about **composite, decorator,** and **leaf nodes**.
+- Lastly, we **added the shooting and tweens**, that the `FSM` variant of the enemy also does.
+- With Behavior Trees covered we looked into the **theory** of **Steering Behaviors**
+- Then, we looked at the `AirEnemy` and how is **Steering** implemented in the code
+- We got our hands dirty by programming the **`Seek & Pursue`** behaviors.
+- Lastly we looked at other **Steering Behaviors**:
+    - **Arrive**
+    - **Collision Avoidance**
+    - My own: **Hover**
 
+### Note on AI in games
+As we saw, you can create an AI for your game in about a **million different ways**. In the end it all depends on the behavior that you are trying to achieve with your game. Each game can have **different restrictions**, that you need to take into account, whether it be the visual style/theme of the game, performance, or ease of use by the designers.
 
+### A better plugin
+If you are interested in a more robust plugin for your game, I recommend **LimboAI** ([GitHub](https://github.com/limbonaut/limboai)). It implements `FSM` and `Behavior Trees` in a very efficient way with interesting visual tools for debugging.
+
+### Project Download
 If you want to see how the finished template looks like after this lab, you can download it here:
 <button>
   [Template Done Project](link)
@@ -626,4 +833,4 @@ If you want to see how the finished template looks like after this lab, you can 
 
 
 > aside positive
-> All custom icons used in headers taken from the free Godot plugin [Beehave](https://github.com/bitbrain/beehave).
+> All custom icons used in headers and text were taken from the MIT-licensed Godot plugin [Beehave](https://github.com/bitbrain/beehave).

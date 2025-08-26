@@ -1,7 +1,7 @@
 class_name Hover
 extends SteeringBehavior
 
-@export var hover_start_height : float = 1.75
+@export var hover_start_height : float = 2
 @export var hover_end_height : float = 3
 
 var _going_up : bool
