@@ -1,0 +1,59 @@
+[gd_scene load_steps=9 format=3 uid="uid://8sbvl7rcejq5"]
+
+[ext_resource type="Script" uid="uid://bsumix7xtjux1" path="res://3D/Player/player_controller_3d.gd" id="1_d17s7"]
+[ext_resource type="Material" uid="uid://d1xu766jnbqqd" path="res://3D/Player/player_material.tres" id="2_lfm5r"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hn7em"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_nqv4f"]
+material = ExtResource("2_lfm5r")
+
+[sub_resource type="BoxMesh" id="BoxMesh_hn7em"]
+material = ExtResource("2_lfm5r")
+size = Vector3(0.3, 0.8, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_krwbd"]
+material = ExtResource("2_lfm5r")
+size = Vector3(0.3, 0.8, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_g7e0o"]
+material = ExtResource("2_lfm5r")
+size = Vector3(0.6, 0.7, 0.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_x3b60"]
+size = Vector3(2, 1, 1.5)
+
+[node name="Player" type="CharacterBody3D"]
+collision_layer = 2
+collision_mask = 5
+floor_max_angle = 1.0472
+script = ExtResource("1_d17s7")
+gravity = -29.43
+jump_force = 9.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_hn7em")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_nqv4f")
+
+[node name="Hand1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.63, 0, 0)
+mesh = SubResource("BoxMesh_hn7em")
+
+[node name="Hand2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.63, 0.04, 0)
+mesh = SubResource("BoxMesh_krwbd")
+
+[node name="Backpack" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0797353, 0.549897)
+mesh = SubResource("BoxMesh_g7e0o")
+
+[node name="InteractArea" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00126171, 7.15256e-07, -1.38019)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractArea"]
+shape = SubResource("BoxShape3D_x3b60")
+
+[connection signal="body_entered" from="InteractArea" to="." method="_on_interact_area_body_entered"]
+[connection signal="body_exited" from="InteractArea" to="." method="_on_interact_area_body_exited"]
