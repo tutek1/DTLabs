@@ -28,7 +28,7 @@
 [sub_resource type="SphereShape3D" id="SphereShape3D_dytxf"]
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_vg4k8"]
-points = PackedVector3Array(0, 0, 1, 5, -2.5, -5, -5, -2.5, -5, 5, 2.5, -5, -5, 2.5, -5)
+points = PackedVector3Array(0, 0, 1, 10, -5, -10, -10, -5, -10, 10, 5, -10, -10, 5, -10)
 
 [node name="GroundEnemyBeehave" type="CharacterBody3D"]
 collision_layer = 4

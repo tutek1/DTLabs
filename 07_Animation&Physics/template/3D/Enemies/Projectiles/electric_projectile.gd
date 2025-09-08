@@ -15,7 +15,8 @@ extends Area3D
 
 @export_category("Visual")
 @export var rotation_speed : float = 3
-@export var scale_up : float = 1.25
+@export var scale_down : float = 0.5
+@export var scale_up : float = 0.85
 @export var scale_up_time : float = 0.4
 @export var death_time : float = 0.4
 
@@ -44,7 +45,7 @@ func _ready():
 	var scale_tween : Tween = create_tween()
 	scale_tween.set_loops()
 	scale_tween.tween_property(mesh_instance_3d, "scale", Vector3.ONE * scale_up, scale_up_time)
-	scale_tween.chain().tween_property(mesh_instance_3d, "scale", Vector3.ONE, scale_up_time)
+	scale_tween.chain().tween_property(mesh_instance_3d, "scale", Vector3.ONE * scale_down, scale_up_time)
 	
 	# Lifetime
 	life_timer.start(lifetime)

@@ -2,21 +2,11 @@ class_name PlayerController3D
 extends CharacterBody3D
 
 @export var camera_pivot : PlayerCamera3D
+@export var stats : PlayerStats
 
-@export_category("Horizontal")
-@export var speed : float = 7
-@export var acceleration : float = 75
-@export var dampening : float = 10
-
-@export_category("Vertical")
-@export var rotation_speed : float = 8
-@export var gravity : float = -9.81
-@export var jump_force : float = 10
-
-@export_category("Enemies")
-@export var invincivility_time : float = 0.75
-@export var knockback_force : Vector2 = Vector2(10, 8)
-@export var knockback_time : float = 0.5
+@export_category("Physics")
+@export var player_mass : float = 20
+@export var gravity : float = -29.43
 
 const ENEMY_LAYER = 4
 
@@ -25,9 +15,10 @@ var _do_movement : bool = true
 var _can_be_damaged : bool = true
 var _interact_node_in_area : Node3D
 var _controllable : bool = true
+var _current_hp : float
 
 func _ready() -> void:
-	pass
+	_current_hp = stats.health
 
 func _process(delta : float) -> void:
 	pass
@@ -57,19 +48,19 @@ func _movement(delta : float) -> void:
 	direction = direction.normalized()
 	
 	# Add the new velocity
-	velocity.x += direction.x * delta * acceleration
-	velocity.z += direction.z * delta * acceleration
+	velocity.x += direction.x * delta * stats.acceleration
+	velocity.z += direction.z * delta * stats.acceleration
 	
 	# Clamp max speed
 	var horizontal_velocity : Vector3 = Vector3(velocity.x, 0, velocity.z)
-	if horizontal_velocity.length() > speed:
-		horizontal_velocity = horizontal_velocity.normalized() * speed
+	if horizontal_velocity.length() > stats.speed:
+		horizontal_velocity = horizontal_velocity.normalized() * stats.speed
 		velocity.x = horizontal_velocity.x
 		velocity.z = horizontal_velocity.z
 	
 	# Dampening if not moving
 	if abs(z_axis) < 0.01 and abs(x_axis) < 0.01:
-		var damp_coef : float = 1 - dampening * delta
+		var damp_coef : float = 1 - stats.dampening * delta
 		damp_coef = clamp(damp_coef, 0, 1)
 		
 		velocity.x *= damp_coef
@@ -81,7 +72,7 @@ func _rotate_player(delta : float) -> void:
 	if abs(velocity.x) < 0.01 and abs(velocity.z) < 0.01: return
 	var angle : float = atan2(velocity.x, velocity.z) - PI
 	
-	rotation.y = lerp_angle(rotation.y, angle, rotation_speed * delta)
+	rotation.y = lerp_angle(rotation.y, angle, stats.rotation_speed * delta)
 
 # Applies the gravity to the player
 func _apply_gravity(delta : float) -> void:
@@ -93,7 +84,7 @@ func _jump() -> void:
 	if not Input.is_action_just_pressed("jump"): return
 	if not is_on_floor(): return
 	
-	velocity.y = jump_force
+	velocity.y = stats.jump_force
 
 # Handles the double jump of the player, conditions, reset, and apply
 func _double_jump() -> void:
@@ -110,7 +101,7 @@ func _double_jump() -> void:
 	
 	# Jump
 	_has_double_jumped = true
-	velocity.y = jump_force
+	velocity.y = stats.jump_force
 
 # Interacts with node in the interact area 3D
 func _interact() -> void:
@@ -132,24 +123,34 @@ func set_do_movement(value : bool, delay : float = 0) -> void:
 func receive_damage(value : float, from : Node3D):
 	if not _can_be_damaged: return
 	_can_be_damaged = false
-	# TODO damage
+	
+	_current_hp -= value
+	if _current_hp <= 0:
+		_current_hp = 0
+		print("Player dead")
+	
+	print("Player hit! hp: " + str(_current_hp))
 	
 	# Restrict movement for a while
 	_do_movement = false
-	set_do_movement(true, knockback_time)
+	set_do_movement(true, stats.knockback_time)
 	
 	# Knockback the player
 	var dir_to_player : Vector3 = (global_position - from.global_position).normalized()
-	dir_to_player.x *= knockback_force.x
-	dir_to_player.z *= knockback_force.x
-	dir_to_player.y = knockback_force.y
+	dir_to_player.x *= stats.knockback_force.x
+	dir_to_player.z *= stats.knockback_force.x
+	dir_to_player.y = stats.knockback_force.y
 	velocity = dir_to_player
 	
 	# Do not collide with enemies for invincibility time
 	collision_mask -= ENEMY_LAYER
-	await get_tree().create_timer(invincivility_time).timeout
+	await get_tree().create_timer(stats.invincivility_time).timeout
 	collision_mask += ENEMY_LAYER
 	_can_be_damaged = true
+
+func set_connect_anim_bool(value : bool) -> void:
+	#TODO
+	pass
 
 # Call to set if the player can be controlled
 func set_controllable(value : bool) -> void:

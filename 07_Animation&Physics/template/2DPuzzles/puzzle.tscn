@@ -13,14 +13,14 @@ viewport_path = NodePath("SubViewport")
 size = Vector3(0.75, 0.85, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_sdnea"]
-size = Vector3(8.5, 1, 5.5)
+size = Vector3(8.7, 1, 5.5)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sdnea"]
 albedo_color = Color(0.004, 0.4, 0.2218, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_sdnea"]
 material = SubResource("StandardMaterial3D_sdnea")
-size = Vector3(8.5, 1, 5.5)
+size = Vector3(8.7, 1, 5.5)
 
 [node name="PuzzleSection" type="Sprite3D" node_paths=PackedStringArray("success_object")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
@@ -71,5 +71,3 @@ shape = SubResource("BoxShape3D_sdnea")
 [node name="Base" type="MeshInstance3D" parent="PuzzleInteract/BaseCollider"]
 mesh = SubResource("BoxMesh_sdnea")
 skeleton = NodePath("../../../..")
-
-[node name="Puzzle" type="Node3D" parent="."]

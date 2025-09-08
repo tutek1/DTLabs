@@ -33,7 +33,7 @@ points = PackedVector3Array(0, 0, 2, 10, -5, -10, -10, -5, -10, 10, 5, -10, -10,
 
 [node name="GroundEnemyBeehave" type="CharacterBody3D"]
 collision_layer = 4
-collision_mask = 6
+collision_mask = 7
 floor_max_angle = 1.0472
 script = ExtResource("1_bkr7a")
 patrol_points = Array[Vector3]([Vector3(0, 1, 0), Vector3(-0.565, 1, 29), Vector3(13.635, 1, 22.36), Vector3(15.995, 1, -15.48)])
@@ -47,6 +47,7 @@ mesh = ExtResource("2_afujw")
 skeleton = NodePath("../..")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+path_desired_distance = 0.2
 path_height_offset = -0.5
 debug_enabled = true
 

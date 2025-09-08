@@ -140,7 +140,7 @@ func exit_2D(success : bool) -> void:
 	# Tween camera and enable
 	_camera_pivot.set_temp_target(null)
 	await create_tween().tween_property(_camera_pivot, "quaternion", _player3D.quaternion, tween_camera_time).finished
-	_camera_pivot.set_user_rotation_control(false)
+	_camera_pivot.set_user_rotation_control(true)
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	
 	# Play disconnect animation
