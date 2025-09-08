@@ -29,8 +29,117 @@ Here is the template for this lab. Please download it, there are scripts, models
 
 
 
-## Behavior Trees (BT)
+## Changes Made in the Project TODO
 Duration: hh:mm:ss
+
+Since the last template I have added and changed quite a few things in our game.
+
+### 2D Puzzle
+Quite a large addition is the 2D puzzle section. It works in a similar way to the **platforming section** except you use the mouse to play it. You can have a look at the code and node setup if you are interested in how games that are controlled with a mouse work.
+
+![](img/Puzzle2D.png)
+
+
+### Player Stats
+Some of the player parameters (`speed`, `jump_force`, `health`, `can_double_jump`, etc.) will change during the gameplay though the upgrade system. To easily handle changes, saving, and loading of these parameters I created a `Resource` class called **PlayerStats** that has all of these parameters. This way the stats of the player can be changed on the go.
+
+> aside negative
+> Some parameters, that do not change (`rotation_speed`, `gravity`, `acceleration`, etc.), are still present as `@export` parameters of the player class.
+
+### Player, Broken pin, Cylinder, and Cube models
+I made the model for the **Player** in **MagicaVoxel** and then rigged, weight-painted, and animated the model in **Blender**. We will use the model in the first part of the codelab focusing on animation.
+
+<img src="img/Player.png" width="300"/>
+
+
+Next, I created several models for us to play around with in **MagicaVoxel**. We will use them in the **Physics** part of this codelab for `Rigidbodies`, `Joints`, etc.
+
+<img src="img/Cylinder.png" width="200"/>
+<img src="img/Cube.png" width="300"/>
+<img src="img/BrokenPin.png" width="300"/>
+
+
+### Environment
+The main `debug_3d_scene.tscn` was also expanded. I made the floor much bigger, created a playground for the **Physics** part of the codelab, and added the new models.
+
+![](img/Environment.png)
+
+
+## Player model import TODO
+Duration: hh:mm:ss
+TODO
+
+### Blurry Textures
+
+### Animation Import
+
+### Put player in place
+
+
+
+## Animation Tree (Premade Animations) TODO
+Duration: hh:mm:ss
+
+### State machine
+
+### Blend tree
+
+### fall and jump parameters
+
+### Connect to puzzle (fill out function)
+
+
+
+## Skeleton Modifiers (Procedural Animations) TODO
+Duration: hh:mm:ss
+
+### Light in eyes BoneAttachment
+
+### LookAt for gun
+
+### Player projectiles
+
+### SkeletonIK showcase
+
+
+
+## Moving Platform (In-engine animations) TODO
+Duration: hh:mm:ss
+
+### Animation Player
+
+### Animation
+
+### Why it works?
+
+
+
+## Physics TODO?
+Duration: hh:mm:ss
+
+
+
+## Rigidbodies TODO
+Duration: hh:mm:ss
+
+### Make player interact - mask layer process
+
+### Physics material and mass
+
+
+## Hinge Joint - Seesaw
+Duration: hh:mm:ss
+
+
+
+## Other Joints TODO
+Duration: hh:mm:ss
+
+### Types
+
+### My implementation
+
+### Button - Spring joint 
 
 
 ## Recap TODO
