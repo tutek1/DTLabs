@@ -4,9 +4,22 @@ extends CharacterBody3D
 @export var camera_pivot : PlayerCamera3D
 @export var stats : PlayerStats
 
-@export_category("Physics")
+@export_group("Movement")
+@export var acceleration : float = 75
+@export var dampening : float = 10
+@export var rotation_speed : float = 8
+
+@export_group("Physics")
 @export var player_mass : float = 20
 @export var gravity : float = -29.43
+
+@export_group("Animation")
+@export var walk_mult : float = 2
+@export var fall_mult : float = 0.075
+@export var jump_mult : float = 0.1
+@export var gun_IK_offset : float = 1.3
+@export var gun_point_depth : float = 15
+@export var gun_point_offset : Vector3 = Vector3(0, 4, 0)
 
 const ENEMY_LAYER = 4
 
@@ -30,8 +43,14 @@ func _physics_process(delta : float) -> void:
 	_jump()
 	_double_jump()
 	_interact()
+	_update_gun_target()
+	_shoot()
 	
 	move_and_slide()
+	
+	_check_collisions(delta)
+	_animation_tree_update()
+
 
 # Handles the horizontal movement of the player
 func _movement(delta : float) -> void:
@@ -48,8 +67,8 @@ func _movement(delta : float) -> void:
 	direction = direction.normalized()
 	
 	# Add the new velocity
-	velocity.x += direction.x * delta * stats.acceleration
-	velocity.z += direction.z * delta * stats.acceleration
+	velocity.x += direction.x * delta * acceleration
+	velocity.z += direction.z * delta * acceleration
 	
 	# Clamp max speed
 	var horizontal_velocity : Vector3 = Vector3(velocity.x, 0, velocity.z)
@@ -60,7 +79,7 @@ func _movement(delta : float) -> void:
 	
 	# Dampening if not moving
 	if abs(z_axis) < 0.01 and abs(x_axis) < 0.01:
-		var damp_coef : float = 1 - stats.dampening * delta
+		var damp_coef : float = 1 - dampening * delta
 		damp_coef = clamp(damp_coef, 0, 1)
 		
 		velocity.x *= damp_coef
@@ -69,10 +88,11 @@ func _movement(delta : float) -> void:
 # Rotates the player based on the direction they are moving on the Y-axis
 func _rotate_player(delta : float) -> void:
 	if not _controllable: return
-	if abs(velocity.x) < 0.01 and abs(velocity.z) < 0.01: return
-	var angle : float = atan2(velocity.x, velocity.z) - PI
+	if Vector2(velocity.x, velocity.z).length() < 0.1: return
+	var direction : Vector3 = -camera_pivot.basis.z
+	var angle : float = atan2(direction.x, direction.z) - PI
 	
-	rotation.y = lerp_angle(rotation.y, angle, stats.rotation_speed * delta)
+	rotation.y = lerp_angle(rotation.y, angle, rotation_speed * delta)
 
 # Applies the gravity to the player
 func _apply_gravity(delta : float) -> void:
@@ -88,6 +108,7 @@ func _jump() -> void:
 
 # Handles the double jump of the player, conditions, reset, and apply
 func _double_jump() -> void:
+	if not stats.has_double_jump: return
 	if not _controllable: return
 	
 	# Double jump reset when on ground
@@ -109,6 +130,43 @@ func _interact() -> void:
 	if _interact_node_in_area == null: return
 	
 	_interact_node_in_area.interact(self)
+
+# Updates the target for the gun LookAt modifier
+func _update_gun_target() -> void:
+	# TODO update the gun target
+	pass
+
+# Shoots a projectile when conditions are met
+func _shoot() -> void:
+	pass
+	#var projectile : PlayerProjectile = stats.projectile.instantiate()
+	#get_tree().current_scene.add_child(projectile)
+	#
+	#projectile.global_position = shoot_point.global_position
+	#projectile.global_rotation = shoot_point.global_rotation
+	#projectile.set_damage(stats.projectile_damage)
+	#
+	#var direction : Vector3 = (gun_target.global_position - projectile.global_position).normalized()
+	#projectile.set_velocity(direction * stats.projectile_speed)
+
+# Process collisions with rigidbodies
+func _check_collisions(delta : float) -> void:
+	for i in get_slide_collision_count():
+		var collision : KinematicCollision3D = get_slide_collision(i)
+		var collider : Object = collision.get_collider()
+		if collider is RigidBody3D:
+			
+			# TODO Calculate the force to be applied based on:
+			#	- Normal vector of collision
+			#	- Rigidbody mass
+			#	- Player mass
+			# Get the offset from Rigidbody center
+			# Apply the force
+			pass
+
+# Updates the parameters of the animation tree
+func _animation_tree_update():
+	pass
 
 # Sets a control variable if the _movement() function should be run or not
 func set_do_movement(value : bool, delay : float = 0) -> void:

@@ -11,10 +11,8 @@ invincivility_time = 0.75
 knockback_force = Vector2(10, 8)
 knockback_time = 0.5
 speed = 7.0
-acceleration = 75.0
-dampening = 10.0
-rotation_speed = 8.0
 jump_force = 10.0
+has_double_jump = true
 metadata/_custom_type_script = "uid://dtuvy1vh7q3x4"
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hn7em"]

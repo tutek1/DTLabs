@@ -7,11 +7,15 @@ extends Resource
 @export var knockback_force : Vector2 = Vector2(10, 8)
 @export var knockback_time : float = 0.5
 
-@export_group("Horizontal Movement")
+@export_group("Movement")
 @export var speed : float = 7
-@export var acceleration : float = 75
-@export var dampening : float = 10
-
-@export_group("Vertical Movement")
-@export var rotation_speed : float = 8
 @export var jump_force : float = 10
+
+@export_category("Shooting")
+@export var projectile : PackedScene = preload("res://3D/Player/Projectile/player_projectile.tscn")
+@export var projectile_damage : float = 5
+@export var projectile_speed : float = 50
+@export var shoot_cooldown : float = 0.7
+
+@export_group("Abilities")
+@export var has_double_jump : bool

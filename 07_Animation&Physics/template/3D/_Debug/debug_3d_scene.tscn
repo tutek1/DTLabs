@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=3 uid="uid://chnffv2lmano5"]
+[gd_scene load_steps=42 format=3 uid="uid://chnffv2lmano5"]
 
 [ext_resource type="PackedScene" uid="uid://44guktn5iwdy" path="res://3D/WorldObjects/resistor.tscn" id="1_oikrr"]
 [ext_resource type="PackedScene" uid="uid://co65xg3ltrdrq" path="res://3D/WorldObjects/big_resistor.tscn" id="2_kdw4m"]
@@ -6,16 +6,11 @@
 [ext_resource type="Script" uid="uid://c4r63jgjgyev1" path="res://2DPlatforming/Scripts/platforming_section.gd" id="4_7xjr7"]
 [ext_resource type="PackedScene" uid="uid://b1uab5wsn60o4" path="res://2DPlatforming/Levels/level_codelab.tscn" id="5_xbdsv"]
 [ext_resource type="PackedScene" uid="uid://c3ninobgiq0ab" path="res://3D/Camera/camera_pivot.tscn" id="6_vdnx2"]
-[ext_resource type="Texture2D" uid="uid://ibjwqwru8wnm" path="res://3D/WorldObjects/Seesaw/GORODITH_seesaw-1.png" id="7_2m8vb"]
-[ext_resource type="ArrayMesh" uid="uid://b81exkhrkov0n" path="res://3D/WorldObjects/Seesaw/GORODITH_seesaw-1.obj" id="7_7xxqo"]
+[ext_resource type="PackedScene" uid="uid://qftfcqmg5ul6" path="res://3D/WorldObjects/BrokenPin/broken_pin.tscn" id="7_7xxqo"]
 [ext_resource type="PackedScene" uid="uid://8sbvl7rcejq5" path="res://3D/Player/player.tscn" id="7_x3b60"]
-[ext_resource type="ArrayMesh" uid="uid://c45c5mx0at8gn" path="res://3D/WorldObjects/Seesaw/GORODITH_seesaw-0.obj" id="9_g38yx"]
-[ext_resource type="Texture2D" uid="uid://cva4ap145k1kc" path="res://3D/WorldObjects/Seesaw/GORODITH_seesaw-0.png" id="9_t1pn0"]
 [ext_resource type="PackedScene" uid="uid://bxrrrw1iqiee7" path="res://3D/Enemies/AirEnemy/air_enemy.tscn" id="10_kai6n"]
 [ext_resource type="PackedScene" uid="uid://1ps1fcn15ft3" path="res://3D/_Debug/debug_draw_path.tscn" id="11_7xjr7"]
-[ext_resource type="ArrayMesh" uid="uid://bqbvk73iy8ghx" path="res://3D/WorldObjects/Cylinder/GORODITH_cylinder_big.obj" id="11_t1pn0"]
 [ext_resource type="Script" uid="uid://q0fjp3ypmwdd" path="res://3D/Enemies/AirEnemy/Steering/steering_behavior.gd" id="11_vdnx2"]
-[ext_resource type="PackedScene" uid="uid://dn1tsg6mdnqn1" path="res://3D/WorldObjects/Cube/cube.tscn" id="12_gw1uw"]
 [ext_resource type="Script" uid="uid://cu1ach3o062mc" path="res://3D/Enemies/AirEnemy/Steering/pursue.gd" id="12_xbdsv"]
 [ext_resource type="Script" uid="uid://c8gax33ifuogc" path="res://3D/Enemies/AirEnemy/Steering/collision_avoidance.gd" id="13_itcoc"]
 [ext_resource type="Script" uid="uid://c3wds62fiwue6" path="res://3D/Enemies/AirEnemy/Steering/hover.gd" id="14_vdnx2"]
@@ -79,16 +74,6 @@ size = Vector3(0.2, 0.2, 0.2)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_gw1uw"]
 viewport_path = NodePath("SubViewport")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t1pn0"]
-albedo_texture = ExtResource("7_2m8vb")
-metallic = 0.6
-roughness = 0.5
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gw1uw"]
-albedo_texture = ExtResource("9_t1pn0")
-metallic = 0.6
-roughness = 0.5
 
 [sub_resource type="BoxMesh" id="BoxMesh_gw1uw"]
 size = Vector3(4, 0.5, 4)
@@ -482,50 +467,23 @@ mesh = SubResource("BoxMesh_72jxc")
 transform = Transform3D(-1, -8.74228e-08, -3.82137e-15, 0, -4.37114e-08, 1, -8.74228e-08, 1, 4.37114e-08, 5.50242, 1.55608, 41.256)
 texture = SubResource("ViewportTexture_gw1uw")
 
-[node name="BrokenPin" type="Node3D" parent="Enviroment"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.03134, 3.31577, 30.6548)
+[node name="BrokenPin" parent="Enviroment" instance=ExtResource("7_7xxqo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.9444, 3.31577, 31.2232)
 
-[node name="SeeSaw" type="StaticBody3D" parent="Enviroment/BrokenPin"]
-transform = Transform3D(0.673013, 0, 0.739631, 0, 1, 0, -0.739631, 0, 0.673013, -0.995099, 0.779196, 1.39368)
+[node name="SpringPlatform" type="Node3D" parent="Enviroment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.89062, 3.1211, 43.3472)
 
-[node name="MeshStart" type="MeshInstance3D" parent="Enviroment/BrokenPin/SeeSaw"]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
-material_override = SubResource("StandardMaterial3D_t1pn0")
-mesh = ExtResource("7_7xxqo")
-
-[node name="MeshEnd" type="MeshInstance3D" parent="Enviroment/BrokenPin/SeeSaw"]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
-material_override = SubResource("StandardMaterial3D_gw1uw")
-mesh = ExtResource("9_g38yx")
-
-[node name="HingeJoint3D" type="HingeJoint3D" parent="Enviroment/BrokenPin"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.127851, 0.131966, 0.644083)
-angular_limit/enable = true
-
-[node name="Cylinder" type="StaticBody3D" parent="Enviroment/BrokenPin"]
-transform = Transform3D(0.580637, 0.673012, -0.458165, -0.61945, -2.98023e-08, -0.785036, -0.528339, 0.739631, 0.416898, -0.529179, -1.28569, -0.0682182)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Enviroment/BrokenPin/Cylinder"]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.258476, 0)
-mesh = ExtResource("11_t1pn0")
-
-[node name="SpringPlatform" type="Node3D" parent="Enviroment/BrokenPin"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.140722, -0.194674, 12.6924)
-
-[node name="Generic6DOFJoint3D" type="Generic6DOFJoint3D" parent="Enviroment/BrokenPin/SpringPlatform"]
+[node name="Generic6DOFJoint3D" type="Generic6DOFJoint3D" parent="Enviroment/SpringPlatform"]
 node_b = NodePath("../RigidBody3D")
 
-[node name="RigidBody3D" type="RigidBody3D" parent="Enviroment/BrokenPin/SpringPlatform"]
+[node name="RigidBody3D" type="RigidBody3D" parent="Enviroment/SpringPlatform"]
 gravity_scale = 0.0
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Enviroment/BrokenPin/SpringPlatform/RigidBody3D"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Enviroment/SpringPlatform/RigidBody3D"]
 mesh = SubResource("BoxMesh_gw1uw")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Enviroment/BrokenPin/SpringPlatform/RigidBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Enviroment/SpringPlatform/RigidBody3D"]
 shape = SubResource("BoxShape3D_0v0jw")
-
-[node name="Cube" parent="Enviroment/BrokenPin" instance=ExtResource("12_gw1uw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.27626, 2.66739, 7.37708)
 
 [node name="AnimatedPlatform" type="AnimatableBody3D" parent="Enviroment"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.4675, 0.63008, 42.4034)
@@ -541,7 +499,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.8935, 14.1815, 2.42364)
 camera_target = NodePath("../Player")
 
 [node name="Player" parent="." node_paths=PackedStringArray("camera_pivot") instance=ExtResource("7_x3b60")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.50289, 1.53008, 36.8496)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.50289, 1.53008, 32.8284)
 camera_pivot = NodePath("../CameraPivot")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]

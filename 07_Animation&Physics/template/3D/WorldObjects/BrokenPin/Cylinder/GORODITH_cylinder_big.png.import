@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bjyw8or3jj82b"
-path="res://.godot/imported/GORODITH_cylinder_big.png-3178bcc6dc935911a738c41292a97b92.ctex"
+path="res://.godot/imported/GORODITH_cylinder_big.png-838a5353e5a73fb56da11a9ca04b9b9f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://3D/WorldObjects/Cylinder/GORODITH_cylinder_big.png"
-dest_files=["res://.godot/imported/GORODITH_cylinder_big.png-3178bcc6dc935911a738c41292a97b92.ctex"]
+source_file="res://3D/WorldObjects/BrokenPin/Cylinder/GORODITH_cylinder_big.png"
+dest_files=["res://.godot/imported/GORODITH_cylinder_big.png-838a5353e5a73fb56da11a9ca04b9b9f.ctex"]
 
 [params]
 
