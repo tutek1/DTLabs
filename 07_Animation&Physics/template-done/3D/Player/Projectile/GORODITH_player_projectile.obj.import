@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://c3hgiimvpslvk"
+path="res://.godot/imported/GORODITH_player_projectile.obj-31b9fdcf5d0ac04fdb253fb229fa0b0d.mesh"
+
+[deps]
+
+files=["res://.godot/imported/GORODITH_player_projectile.obj-31b9fdcf5d0ac04fdb253fb229fa0b0d.mesh"]
+
+source_file="res://3D/Player/Projectile/GORODITH_player_projectile.obj"
+dest_files=["res://.godot/imported/GORODITH_player_projectile.obj-31b9fdcf5d0ac04fdb253fb229fa0b0d.mesh", "res://.godot/imported/GORODITH_player_projectile.obj-31b9fdcf5d0ac04fdb253fb229fa0b0d.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=false
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(1.2, -3.3, -1.1)
+force_disable_mesh_compression=false

@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://1ps1fcn15ft3"]
+
+[ext_resource type="Script" uid="uid://cifss20wfj0fb" path="res://3D/_Debug/debug_draw_path.gd" id="1_st6gd"]
+
+[node name="DebugDrawPath" type="Node" node_paths=PackedStringArray("node")]
+script = ExtResource("1_st6gd")
+node = NodePath("")
+property = "patrol_state.patrol_points"

@@ -1,0 +1,199 @@
+[gd_scene load_steps=26 format=3 uid="uid://byh0a2vnett5q"]
+
+[ext_resource type="Script" uid="uid://dr03ohsx2gb65" path="res://3D/Enemies/GroundEnemy/Beehave/ground_enemy_bh.gd" id="1_bkr7a"]
+[ext_resource type="ArrayMesh" uid="uid://c6pdmxiaywp05" path="res://3D/Enemies/GroundEnemy/GORODITH_ground_enemy_corrupted.obj" id="2_afujw"]
+[ext_resource type="Script" uid="uid://dtahe8chswhkx" path="res://addons/beehave/blackboard.gd" id="3_u5cv0"]
+[ext_resource type="Script" uid="uid://b3twu71kg1fpj" path="res://addons/beehave/nodes/beehave_tree.gd" id="4_exg1g"]
+[ext_resource type="Script" uid="uid://qryob473chq3" path="res://addons/beehave/nodes/composites/selector_reactive.gd" id="5_npg33"]
+[ext_resource type="Script" uid="uid://c72vw4eyojm7k" path="res://addons/beehave/nodes/composites/sequence.gd" id="6_1kjq7"]
+[ext_resource type="Script" uid="uid://e7bpcitsob88" path="res://3D/Enemies/GroundEnemy/Beehave/bh_is_player_seen.gd" id="7_hhfxt"]
+[ext_resource type="Script" uid="uid://bellhpstilob4" path="res://3D/Enemies/GroundEnemy/Beehave/bh_is_player_close_enough.gd" id="8_limol"]
+[ext_resource type="Script" uid="uid://b51evrehg82fa" path="res://addons/beehave/nodes/decorators/succeeder.gd" id="9_17eb2"]
+[ext_resource type="Script" uid="uid://cov7yt22yxrjl" path="res://3D/Enemies/GroundEnemy/Beehave/bh_enter_chase_tweens.gd" id="9_u5cv0"]
+[ext_resource type="Script" uid="uid://cg4xejg3qfv8w" path="res://addons/beehave/nodes/composites/sequence_reactive.gd" id="10_exg1g"]
+[ext_resource type="Script" uid="uid://dmkg2a20uhef0" path="res://3D/Enemies/GroundEnemy/Beehave/bh_chase_point_set_cooldown.gd" id="10_vfc5h"]
+[ext_resource type="Script" uid="uid://bo56pa44st3jy" path="res://3D/Enemies/GroundEnemy/Beehave/bh_set_rotation_mode.gd" id="11_qfyi6"]
+[ext_resource type="Script" uid="uid://dmy2txrowxyiy" path="res://3D/Enemies/GroundEnemy/Beehave/bh_chase_point_set.gd" id="12_bqm18"]
+[ext_resource type="Script" uid="uid://g80jw8f7u8bm" path="res://3D/Enemies/GroundEnemy/Beehave/bh_does_raycast_see_player.gd" id="13_igo8f"]
+[ext_resource type="Script" uid="uid://c2w4dx0xoh8ap" path="res://3D/Enemies/GroundEnemy/Beehave/bh_shoot_cooldown.gd" id="14_pqh0w"]
+[ext_resource type="Script" uid="uid://b31jkyekxydnt" path="res://3D/Enemies/GroundEnemy/Beehave/bh_shoot.gd" id="15_t50gj"]
+[ext_resource type="Script" uid="uid://dwghxxom6a82x" path="res://3D/Enemies/GroundEnemy/Beehave/bh_set_next_patrol_point.gd" id="16_rob8i"]
+[ext_resource type="Script" uid="uid://b6sq65o7nlg33" path="res://addons/beehave/nodes/decorators/until_fail.gd" id="17_341g3"]
+[ext_resource type="Script" uid="uid://cbtrtl8k8jrgu" path="res://addons/beehave/nodes/decorators/inverter.gd" id="18_pvlbx"]
+[ext_resource type="Script" uid="uid://dsrvx55pij7l7" path="res://3D/Enemies/GroundEnemy/Beehave/bh_is_on_patrol_point.gd" id="19_qxkoi"]
+[ext_resource type="Script" uid="uid://uls1ekqvrqo" path="res://3D/Enemies/GroundEnemy/Beehave/bh_look_around.gd" id="20_xipwu"]
+[ext_resource type="Script" uid="uid://cd86tif6t81jx" path="res://3D/Enemies/GroundEnemy/Beehave/bh_update_patrol_idx.gd" id="21_n0ea8"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_dytxf"]
+radius = 1.0
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_vg4k8"]
+points = PackedVector3Array(0, 0, 2, 10, -5, -10, -10, -5, -10, 10, 5, -10, -10, 5, -10)
+
+[node name="GroundEnemyBeehave" type="CharacterBody3D"]
+collision_layer = 4
+collision_mask = 6
+floor_max_angle = 1.0472
+script = ExtResource("1_bkr7a")
+patrol_points = Array[Vector3]([Vector3(0, 2, 0), Vector3(-0.565, 2, 29), Vector3(13.635, 2, 22.36), Vector3(15.995, 2, -15.48)])
+update_time = 1.0
+shoot_cooldown = 4.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_dytxf")
+
+[node name="GorodithGroundEnemyCorrupted" type="MeshInstance3D" parent="CollisionShape3D"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+mesh = ExtResource("2_afujw")
+skeleton = NodePath("../..")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+debug_enabled = true
+
+[node name="VisionArea" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="VisionArea"]
+shape = SubResource("ConvexPolygonShape3D_vg4k8")
+
+[node name="ShootCast" type="RayCast3D" parent="."]
+enabled = false
+target_position = Vector3(0, 10, 0)
+collision_mask = 7
+debug_shape_thickness = 5
+
+[node name="Blackboard" type="Node" parent="."]
+script = ExtResource("3_u5cv0")
+metadata/_custom_type_script = "uid://dtahe8chswhkx"
+
+[node name="BeehaveTree" type="Node" parent="." node_paths=PackedStringArray("blackboard", "actor")]
+script = ExtResource("4_exg1g")
+blackboard = NodePath("../Blackboard")
+actor = NodePath("..")
+metadata/_custom_type_script = "uid://b3twu71kg1fpj"
+
+[node name="ActionSelect" type="Node" parent="BeehaveTree"]
+script = ExtResource("5_npg33")
+metadata/_custom_type_script = "uid://qryob473chq3"
+
+[node name="ChaseAndShoot" type="Node" parent="BeehaveTree/ActionSelect"]
+script = ExtResource("6_1kjq7")
+metadata/_custom_type_script = "uid://c72vw4eyojm7k"
+
+[node name="IsPlayerSeen" type="Node" parent="BeehaveTree/ActionSelect/ChaseAndShoot"]
+script = ExtResource("7_hhfxt")
+metadata/_custom_type_script = "uid://dva3eijpjhgde"
+
+[node name="IsPlayerCloseEnough" type="Node" parent="BeehaveTree/ActionSelect/ChaseAndShoot"]
+script = ExtResource("8_limol")
+metadata/_custom_type_script = "uid://dva3eijpjhgde"
+
+[node name="EnterChaseTweens" type="Node" parent="BeehaveTree/ActionSelect/ChaseAndShoot"]
+script = ExtResource("9_u5cv0")
+metadata/_custom_type_script = "uid://mdjkx62b513d"
+
+[node name="SequenceReactiveComposite" type="Node" parent="BeehaveTree/ActionSelect/ChaseAndShoot"]
+script = ExtResource("10_exg1g")
+metadata/_custom_type_script = "uid://cg4xejg3qfv8w"
+
+[node name="IsPlayerSeen" type="Node" parent="BeehaveTree/ActionSelect/ChaseAndShoot/SequenceReactiveComposite"]
+script = ExtResource("7_hhfxt")
+metadata/_custom_type_script = "uid://dva3eijpjhgde"
+
+[node name="IsPlayerCloseEnough" type="Node" parent="BeehaveTree/ActionSelect/ChaseAndShoot/SequenceReactiveComposite"]
+script = ExtResource("8_limol")
+metadata/_custom_type_script = "uid://dva3eijpjhgde"
+
+[node name="SuccessChase" type="Node" parent="BeehaveTree/ActionSelect/ChaseAndShoot/SequenceReactiveComposite"]
+script = ExtResource("9_17eb2")
+metadata/_custom_type_script = "uid://b51evrehg82fa"
+
+[node name="ChasePointSetCooldown" type="Node" parent="BeehaveTree/ActionSelect/ChaseAndShoot/SequenceReactiveComposite/SuccessChase"]
+script = ExtResource("10_vfc5h")
+wait_time = null
+metadata/_custom_type_script = "uid://bucsog4ltsqro"
+
+[node name="SequenceComposite" type="Node" parent="BeehaveTree/ActionSelect/ChaseAndShoot/SequenceReactiveComposite/SuccessChase/ChasePointSetCooldown"]
+script = ExtResource("6_1kjq7")
+metadata/_custom_type_script = "uid://c72vw4eyojm7k"
+
+[node name="SetRotationMode" type="Node" parent="BeehaveTree/ActionSelect/ChaseAndShoot/SequenceReactiveComposite/SuccessChase/ChasePointSetCooldown/SequenceComposite"]
+script = ExtResource("11_qfyi6")
+rotate_mode = 2
+metadata/_custom_type_script = "uid://mdjkx62b513d"
+
+[node name="ChasePointSet" type="Node" parent="BeehaveTree/ActionSelect/ChaseAndShoot/SequenceReactiveComposite/SuccessChase/ChasePointSetCooldown/SequenceComposite"]
+script = ExtResource("12_bqm18")
+metadata/_custom_type_script = "uid://mdjkx62b513d"
+
+[node name="SuccessShoot" type="Node" parent="BeehaveTree/ActionSelect/ChaseAndShoot/SequenceReactiveComposite"]
+script = ExtResource("9_17eb2")
+metadata/_custom_type_script = "uid://b51evrehg82fa"
+
+[node name="SequenceShoot" type="Node" parent="BeehaveTree/ActionSelect/ChaseAndShoot/SequenceReactiveComposite/SuccessShoot"]
+script = ExtResource("6_1kjq7")
+metadata/_custom_type_script = "uid://c72vw4eyojm7k"
+
+[node name="DoesRaycastSeePlayer" type="Node" parent="BeehaveTree/ActionSelect/ChaseAndShoot/SequenceReactiveComposite/SuccessShoot/SequenceShoot"]
+script = ExtResource("13_igo8f")
+metadata/_custom_type_script = "uid://dva3eijpjhgde"
+
+[node name="ShootDelay" type="Node" parent="BeehaveTree/ActionSelect/ChaseAndShoot/SequenceReactiveComposite/SuccessShoot/SequenceShoot"]
+script = ExtResource("14_pqh0w")
+wait_time = null
+metadata/_custom_type_script = "uid://bucsog4ltsqro"
+
+[node name="SequenceComposite" type="Node" parent="BeehaveTree/ActionSelect/ChaseAndShoot/SequenceReactiveComposite/SuccessShoot/SequenceShoot/ShootDelay"]
+script = ExtResource("6_1kjq7")
+metadata/_custom_type_script = "uid://c72vw4eyojm7k"
+
+[node name="SetRotationMode" type="Node" parent="BeehaveTree/ActionSelect/ChaseAndShoot/SequenceReactiveComposite/SuccessShoot/SequenceShoot/ShootDelay/SequenceComposite"]
+script = ExtResource("11_qfyi6")
+rotate_mode = 3
+metadata/_custom_type_script = "uid://mdjkx62b513d"
+
+[node name="Shoot" type="Node" parent="BeehaveTree/ActionSelect/ChaseAndShoot/SequenceReactiveComposite/SuccessShoot/SequenceShoot/ShootDelay/SequenceComposite"]
+script = ExtResource("15_t50gj")
+metadata/_custom_type_script = "uid://mdjkx62b513d"
+
+[node name="Patrol" type="Node" parent="BeehaveTree/ActionSelect"]
+script = ExtResource("6_1kjq7")
+metadata/_custom_type_script = "uid://c72vw4eyojm7k"
+
+[node name="SetRotationModeVelocity" type="Node" parent="BeehaveTree/ActionSelect/Patrol"]
+script = ExtResource("11_qfyi6")
+rotate_mode = 1
+metadata/_custom_type_script = "uid://mdjkx62b513d"
+
+[node name="SetNextPatrolPoint" type="Node" parent="BeehaveTree/ActionSelect/Patrol"]
+script = ExtResource("16_rob8i")
+metadata/_custom_type_script = "uid://mdjkx62b513d"
+
+[node name="While" type="Node" parent="BeehaveTree/ActionSelect/Patrol"]
+script = ExtResource("17_341g3")
+metadata/_custom_type_script = "uid://b6sq65o7nlg33"
+
+[node name="SequenceComposite" type="Node" parent="BeehaveTree/ActionSelect/Patrol/While"]
+script = ExtResource("6_1kjq7")
+metadata/_custom_type_script = "uid://c72vw4eyojm7k"
+
+[node name="Not" type="Node" parent="BeehaveTree/ActionSelect/Patrol/While/SequenceComposite"]
+script = ExtResource("18_pvlbx")
+metadata/_custom_type_script = "uid://cbtrtl8k8jrgu"
+
+[node name="IsOnPatrolPoint" type="Node" parent="BeehaveTree/ActionSelect/Patrol/While/SequenceComposite/Not"]
+script = ExtResource("19_qxkoi")
+metadata/_custom_type_script = "uid://dva3eijpjhgde"
+
+[node name="SetRotationModeNone" type="Node" parent="BeehaveTree/ActionSelect/Patrol"]
+script = ExtResource("11_qfyi6")
+metadata/_custom_type_script = "uid://mdjkx62b513d"
+
+[node name="LookAround" type="Node" parent="BeehaveTree/ActionSelect/Patrol"]
+script = ExtResource("20_xipwu")
+metadata/_custom_type_script = "uid://mdjkx62b513d"
+
+[node name="UpdatePatrolIdx" type="Node" parent="BeehaveTree/ActionSelect/Patrol"]
+script = ExtResource("21_n0ea8")
+metadata/_custom_type_script = "uid://mdjkx62b513d"
+
+[connection signal="body_entered" from="VisionArea" to="." method="_on_vision_area_body_entered"]

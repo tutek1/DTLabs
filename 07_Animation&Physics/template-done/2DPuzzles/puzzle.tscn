@@ -1,0 +1,73 @@
+[gd_scene load_steps=11 format=3 uid="uid://bbpnrywhpjt8u"]
+
+[ext_resource type="Script" uid="uid://blwuscb1yy8h0" path="res://2DPuzzles/Scripts/puzzle_section_manager.gd" id="1_sdnea"]
+[ext_resource type="PackedScene" uid="uid://cp740ldwmrs6i" path="res://2DPuzzles/Debug/debug_2d_puzzle_scene.tscn" id="2_q1rx7"]
+[ext_resource type="Script" uid="uid://cpd0bqnx4posl" path="res://2DPuzzles/Scripts/puzzle_interact.gd" id="3_6lso6"]
+[ext_resource type="ArrayMesh" uid="uid://dt8id16d0m6s5" path="res://3D/WorldObjects/Connector/GORODITH_connector_on.obj" id="4_7ksy8"]
+[ext_resource type="ArrayMesh" uid="uid://c07l8hdj15le4" path="res://3D/WorldObjects/Connector/GORODITH_connector_off.obj" id="5_rgqnm"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_72jxc"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8kvwl"]
+size = Vector3(0.75, 0.85, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sdnea"]
+size = Vector3(8.7, 1, 5.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sdnea"]
+albedo_color = Color(0.004, 0.4, 0.2218, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_sdnea"]
+material = SubResource("StandardMaterial3D_sdnea")
+size = Vector3(8.7, 1, 5.5)
+
+[node name="PuzzleSection" type="Sprite3D" node_paths=PackedStringArray("success_object")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+texture = SubResource("ViewportTexture_72jxc")
+script = ExtResource("1_sdnea")
+success_object = NodePath("PuzzleInteract")
+success_function = "success"
+cam_rot = Vector3(-90, 0, 0)
+target_position = Vector3(-0.67, 12.45, -24.75)
+pos_tween_time = 0.5
+target_rotation = Vector3(0, -180, 0)
+
+[node name="SubViewport" type="SubViewport" parent="."]
+handle_input_locally = false
+size = Vector2i(827, 512)
+render_target_update_mode = 4
+
+[node name="Debug2dPuzzleScene" parent="SubViewport" instance=ExtResource("2_q1rx7")]
+
+[node name="CameraTarget" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.17012, -3.71598e-08)
+
+[node name="RaycastArea" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.04)
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RaycastArea"]
+
+[node name="PuzzleInteract" type="StaticBody3D" parent="." node_paths=PackedStringArray("puzzle_section") groups=["Interactable"]]
+transform = Transform3D(-4.37114e-08, 0, 1, 1, -4.37114e-08, 4.37114e-08, 4.37114e-08, 1, 1.91069e-15, 0, -3.27144, -1.026)
+collision_mask = 0
+script = ExtResource("3_6lso6")
+complete_mesh = ExtResource("4_7ksy8")
+puzzle_section = NodePath("..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PuzzleInteract"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.125335, 0.425293, 3.25963e-09)
+shape = SubResource("BoxShape3D_8kvwl")
+
+[node name="ConnectorMesh" type="MeshInstance3D" parent="PuzzleInteract"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+mesh = ExtResource("5_rgqnm")
+
+[node name="BaseCollider" type="CollisionShape3D" parent="PuzzleInteract"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 3.25, 0.5, 0.006)
+shape = SubResource("BoxShape3D_sdnea")
+
+[node name="Base" type="MeshInstance3D" parent="PuzzleInteract/BaseCollider"]
+mesh = SubResource("BoxMesh_sdnea")
+skeleton = NodePath("../../../..")
