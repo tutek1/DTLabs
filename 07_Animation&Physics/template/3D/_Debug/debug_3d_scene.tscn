@@ -466,6 +466,9 @@ mesh = SubResource("BoxMesh_72jxc")
 [node name="Puzzle" parent="Enviroment/2DPuzzles" groups=["NavMeshSource"] instance=ExtResource("15_x3b60")]
 transform = Transform3D(-1, -8.74228e-08, -3.82137e-15, 0, -4.37114e-08, 1, -8.74228e-08, 1, 4.37114e-08, 5.50242, 1.55608, 41.256)
 texture = SubResource("ViewportTexture_gw1uw")
+cam_rot = Vector3(-90, 180, 0)
+target_position = Vector3(5.503, 1.53, 36.895)
+target_rotation = Vector3(0, 0, 0)
 
 [node name="BrokenPin" parent="Enviroment" instance=ExtResource("7_7xxqo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.9444, 3.31577, 31.2232)
