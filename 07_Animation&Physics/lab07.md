@@ -202,6 +202,7 @@ If you followed the steps in the GIF above, please **clear the state machine** a
 3. **Connect** a transition from the `Start` node to the `FreeMoveBlend`.
 4. **Click** the **pencil icon** in the `FreeMoveBlend` node. 
 
+test
 
 ### fall and jump parameters
 
