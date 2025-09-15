@@ -83,3 +83,4 @@
 {"rule":"WHITESPACE_RULE","sentence":"^\\QInstantiate  the \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q.\\E$"}
 {"rule":"EN_A_VS_AN","sentence":"^\\QYou can add new nodes by right-clicking\nYou can connect nodes by left-click and dragging the white circles\nYou can set the animation of an \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q node\\E$"}
 {"rule":"EN_A_VS_AN","sentence":"^\\QYou can add new nodes by right-clicking\nYou can connect nodes by left-click and dragging the white circles\nYou can set the animation clip of an \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q node by clicking the \"film\" icon\\E$"}
+{"rule":"EN_A_VS_AN","sentence":"^\\Q\\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q is an \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q variable that controls the amount of force needed to blend.\\E$"}

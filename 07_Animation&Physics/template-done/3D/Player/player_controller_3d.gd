@@ -21,6 +21,8 @@ extends CharacterBody3D
 @export var gun_point_depth : float = 15
 @export var gun_point_offset : Vector3 = Vector3(0, 4, 0)
 
+@onready var animation_tree : AnimationTree = $Mesh/AnimationTree
+
 const ENEMY_LAYER = 4
 
 var _has_double_jumped : bool = false
@@ -166,7 +168,30 @@ func _check_collisions(delta : float) -> void:
 
 # Updates the parameters of the animation tree
 func _animation_tree_update():
-	pass
+	# Blend amount Fall
+	var fall_coef : float = 0 
+	if velocity.y < 0:
+		fall_coef = clamp(-velocity.y * fall_mult, 0.0, 1.0) 
+	animation_tree.set("parameters/FreeMoveBlendTree/FallBlend/blend_amount", fall_coef)
+	
+	# Blend amount Jump
+	var jump_coef : float = 0 
+	if abs(velocity.y) > 0:
+		jump_coef = clamp(abs(velocity.y) * jump_mult, 0.0, 1.0) 
+	animation_tree.set("parameters/FreeMoveBlendTree/JumpBlend/blend_amount", jump_coef)
+	
+	# Blend amount Walk
+	var local_velocity : Vector3 = velocity * basis
+	local_velocity.y = 0
+	animation_tree.set("parameters/FreeMoveBlendTree/WalkBlend/blend_amount", (local_velocity.length() / stats.speed))
+	
+	# BlendSpace2D walking
+	var vel2 : Vector2 = Vector2(local_velocity.x, -local_velocity.z).normalized()
+	animation_tree.set("parameters/FreeMoveBlendTree/WalkSpace2D/blend_position", vel2)
+	
+	# BlendSpace2D walking timescale
+	var walkscale : float = (local_velocity.length() / stats.speed) * walk_mult
+	animation_tree["parameters/FreeMoveBlendTree/TimeScale/scale"] = walkscale
 
 # Sets a control variable if the _movement() function should be run or not
 func set_do_movement(value : bool, delay : float = 0) -> void:

@@ -24,7 +24,7 @@ In a bullet point format, we will:
 
 Here is the template for this lab. Please download it, there are scripts, models, and scenes needed for the Behavior Trees and Steering Behaviors.
 <button>
-  [Template Project](link)
+  [Template Project](https://cent.felk.cvut.cz/courses/39HRY/godot/07_Animation&Physics/template.zip)
 </button>
 
 
@@ -195,16 +195,107 @@ With the state machine open we can see the `Start` node, which is initial state,
 > Selecting a transition, many things can be set in the **Inspector** such as `Priority`, `Switch Mode`, `Transition Conditions`, etc. More on that later.
 
 ### Blend tree
-If you followed the steps in the GIF above, please **clear the state machine** and let's fill it out.
+If you followed the steps in the GIF above, please **clear the state machine** and let's fill it out properly.
 
 1. **Add** a `BlendTree` node.
 2. **Rename** the node to `FreeMoveBlend`.
-3. **Connect** a transition from the `Start` node to the `FreeMoveBlend`.
+3. **Connect** a transition from the `Start` node to the `FreeMoveBlend` node.
 4. **Click** the **pencil icon** in the `FreeMoveBlend` node. 
 
-test
+The `BlendTree` editor should now be open, with a single `Output` node. You can navigate this space by holding the middle-mouse button and dragging.
 
-### fall and jump parameters
+#### What is a `BlendTree`?
+A `BlendTree` is a special node, that allows us to blend together different animations based on the values of parameters (0.0 - 1.0), which can be set in code. The functionality is best shown on an example. Let's create a `BlendTree` for our player character.
+
+#### Filling out the `BlendTree`
+Please **recreate** the setup seen in the picture below.
+- You can add new nodes by **right-clicking** 
+- You can connect nodes by **left-click and dragging** the white circles
+- You can set the animation clip of an `Animation` node by clicking the **"film" icon**
+
+![](img/BlendTreeEditor.PNG)
+
+The `Blend2` node blends two animations based on the value in the slider.
+
+The `BlendSpace2D` node is a bit more complex, and we will look into it more closely.
+
+> aside positive
+> This configuration of animations has an inherited priority to them. For example: The `FallBlend` will override all any animation that comes before it.
+
+### Walking animation using `BlendSpace2D`
+`BlendSpace2D` is useful when you want to animate an action that takes place in 2D, meaning that the animation should slightly differ based on some parameter (velocity in our case). For example: I did not create the animations for walking diagonally, but I don't need to because I can just blend the `WalkForward` and `WalkRight` animations. 
+
+1. **Set** the `WalkBlend` value to `1` (so that we can see the preview)
+2. **Click** the `Open Editor` button in the `BlendSpace2D` node.
+3. **Select** the third tool from the left.
+4. **Right-click** and add the animation `Armature|WalkForward` to the center middle `[0, 1]`
+5. **Repeat** step 4 but with the other 3 walking animations in the correct spots (left animation ⇾ `[-1, 0]` etc.)
+
+Alternatively you can follow this GIF:
+![](img/BlendSpace2D.gif)
+
+To get back to the `Blendtree` **click** the `FreeMoveBlendTree` button at the top of the `AnimationTree` panel.
+
+> aside positive
+> You can use the first tool, as I did in the GIF, to try out how different values of the 2D blending parameter look like.
+
+### Setting the blending parameters
+If you had tried to play the game, the animations would not have worked. That's because we still need to set the values of the `AnimationTree` **blending parameters** in the script of our player.
+
+**Open** the `player_controller_3D.gd` script and find the function `_animation_tree_update()` (should be around line 168). This function will be responsible for setting all the **animation blend values**. 
+
+Let's start with the `FallBlend`. We want the falling animation to play only when the `velocity.y` of our player is lower than `0`. The animation should also not play **as strongly** when the player starts to fall. That will be done by multiplying the force by some small number for example around `0.1`. This is the code for the `FallBlend`:
+
+```GDScript
+# Blend amount Fall
+var fall_coef : float = 0 
+if velocity.y < 0:
+  fall_coef = clamp(-velocity.y * fall_mult, 0.0, 1.0) 
+animation_tree.set("parameters/FreeMoveBlendTree/FallBlend/blend_amount", fall_coef)
+```
+- `fall_mult` is an `@export` variable that controls the amount of force needed to blend.
+
+The path of the parameter to set can be found in the **Inspector**, while the `AnimationTree` is selected. You can even **right-click** the parameter and press `Copy Property Path`, so that you don't have to type it out.
+
+<img src="img/AnimTreeParams.png" width="300"/>
+
+The setting of other parameters works similarly, so I won't go through them in detail. Here is the full code of the `_animation_tree_update()` function:
+
+```GDScript
+func _animation_tree_update():
+  # Blend amount Fall
+  var fall_coef : float = 0 
+  if velocity.y < 0:
+    fall_coef = clamp(-velocity.y * fall_mult, 0.0, 1.0) 
+  animation_tree.set("parameters/FreeMoveBlendTree/FallBlend/blend_amount", fall_coef)
+
+  # Blend amount Jump
+  var jump_coef : float = 0 
+  if abs(velocity.y) > 0:
+    jump_coef = clamp(abs(velocity.y) * jump_mult, 0.0, 1.0) 
+  animation_tree.set("parameters/FreeMoveBlendTree/JumpBlend/blend_amount", jump_coef)
+
+  # Blend amount Walk
+  var local_velocity : Vector3 = velocity * basis
+  local_velocity.y = 0
+  animation_tree.set("parameters/FreeMoveBlendTree/WalkBlend/blend_amount", (local_velocity.length() / stats.speed))
+
+  # BlendSpace2D walking
+  var vel2 : Vector2 = Vector2(local_velocity.x, -local_velocity.z).normalized()
+  animation_tree.set("parameters/FreeMoveBlendTree/WalkSpace2D/blend_position", vel2)
+```
+
+#### `TimeScale` node
+Trying out the animations in play mode, one thing becomes clear. The walking animations need to be faster. This can be done with a `TimeScale` node.
+
+1. **Open** the `AnimationTree` panel.
+2. **Open** the `FreeMoveBlendTree`.
+3. **Add** a `TimeScale` node between the `WalkSpace2D` and `WalkBlend` nodes.
+4. **Connect** the new node correctly.
+
+<img src="img/TimeScale.png" width="300"/>
+
+
 
 ### Connect to puzzle (fill out function)
 
@@ -280,13 +371,13 @@ Let's look at what we did in this lab.
     - My own: **Hover**
 
 ### Note on AI in games
-As we saw, you can create an AI for your game in about a **million different ways**. In the end it all depends on the behavior that you are trying to achieve with your game. Each game can have **different restrictions**, that you need to take into account, whether it be the visual style/theme of the game, performance, or ease of use by the designers.
+... As we saw, you can create an AI for your game in about a **million different ways**. In the end it all depends on the behavior that you are trying to achieve with your game. Each game can have **different restrictions**, that you need to take into account, whether it be the visual style/theme of the game, performance, or ease of use by the designers.
 
 ### A better plugin
-If you are interested in a more robust plugin for your game, I recommend **LimboAI** ([GitHub](https://github.com/limbonaut/limboai)). It implements `FSM` and `Behavior Trees` in a very efficient way with interesting visual tools for debugging.
+... If you are interested in a more robust plugin for your game, I recommend **LimboAI** ([GitHub](https://github.com/limbonaut/limboai)). It implements `FSM` and `Behavior Trees` in a very efficient way with interesting visual tools for debugging.
 
 ### Project Download
 If you want to see how the finished template looks like after this lab, you can download it here:
 <button>
-  [Template Done Project](link)
+  [Template Done Project](https://cent.felk.cvut.cz/courses/39HRY/godot/07_Animation&Physics/template-done.zip)
 </button>
