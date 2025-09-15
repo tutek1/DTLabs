@@ -24,7 +24,9 @@ func act(air_enemy : AirEnemy) -> Vector3:
 	if _shape_cast.is_colliding():
 		
 		var max_strength : float = 0
-		# Get each collision point and add it to the force
+		var max_strength_idx : int = 0
+		
+		# Get each collision point and find the strongest
 		for idx in range(0, _shape_cast.get_collision_count()):
 			var point : Vector3 = _shape_cast.get_collision_point(idx)
 			
@@ -34,14 +36,19 @@ func act(air_enemy : AirEnemy) -> Vector3:
 			
 			if strength < max_strength: continue
 			
-			# Mid point of the hit object
-			var mid_point : Vector3 = (_shape_cast.get_collider(idx)).global_position
-			
-			# The final force for the collision is a mix of the normal vector of hit point
-			#  and the mid point of the object. It might be a bit confusing but works well.
-			#  Only one of these directions can be used
-			force = (_shape_cast.get_collision_normal(idx) / strength) * normal_to_mid_mix\
-				  + ((point - mid_point).normalized() / strength) * (1 - normal_to_mid_mix)
+			max_strength = strength
+			max_strength_idx = idx
+		
+		# Mid point, hit point, and normal vector of the hit
+		var mid_point : Vector3 = (_shape_cast.get_collider(max_strength_idx)).global_position
+		var normal : Vector3 = _shape_cast.get_collision_normal(max_strength_idx)
+		var point : Vector3 = _shape_cast.get_collision_point(max_strength_idx)
+		
+		# The final force for the collision is a mix of the normal vector of hit point
+		#  and the mid point of the object. It might be a bit confusing but works well.
+		#  Only one of these directions can be used
+		force = (normal / max_strength) * normal_to_mid_mix\
+			  + ((point - mid_point).normalized() / max_strength) * (1 - normal_to_mid_mix)
 	
 	return force * avoidance_strength - air_enemy.velocity
 

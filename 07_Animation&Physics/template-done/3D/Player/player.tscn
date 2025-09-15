@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://8sbvl7rcejq5"]
+[gd_scene load_steps=11 format=3 uid="uid://8sbvl7rcejq5"]
 
 [ext_resource type="Script" uid="uid://bsumix7xtjux1" path="res://3D/Player/player_controller_3d.gd" id="1_d17s7"]
 [ext_resource type="PackedScene" uid="uid://b20m6c0e0bfdu" path="res://3D/Player/Projectile/player_projectile.tscn" id="2_46t1g"]
@@ -23,11 +23,15 @@ metadata/_custom_type_script = "uid://dtuvy1vh7q3x4"
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hn7em"]
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_46t1g"]
-graph_offset = Vector2(-160, 55)
+graph_offset = Vector2(-390, 11)
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_xq0gp"]
+advance_mode = 2
 
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_46t1g"]
-states/BlendTree/node = SubResource("AnimationNodeBlendTree_46t1g")
-states/BlendTree/position = Vector2(421, 100)
+states/FreeMoveBlendTree/node = SubResource("AnimationNodeBlendTree_46t1g")
+states/FreeMoveBlendTree/position = Vector2(466, 95)
+transitions = ["Start", "FreeMoveBlendTree", SubResource("AnimationNodeStateMachineTransition_xq0gp")]
 graph_offset = Vector2(-79, -30)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_x3b60"]
