@@ -23,7 +23,7 @@ Today we will look over:
 
 Here is the template for this lab. Please download it, there are new scenes and folders.
 <button>
-  [Template Project](link)
+  [Template Project](https://cent.felk.cvut.cz/courses/39HRY/godot/04_2DPlatformIn3D/template.zip)
 </button>
 
 
@@ -904,5 +904,5 @@ Let's look at what we did in this lab.
 
 If you want to see how the finished template looks like after this lab, you can download it here:
 <button>
-  [Template Done Project](link)
+  [Template Done Project](https://cent.felk.cvut.cz/courses/39HRY/godot/04_2DPlatformIn3D/template-done.zip)
 </button>

@@ -62,7 +62,7 @@ In this tutorial we will be making a game about a robot that goes inside a compu
 ### Getting and running the template
 Each lab will have a template project, which we will fill out together. This lab's template can be downloaded here:
 <button>
-  [Template Project](link)
+  [Template Project](https://cent.felk.cvut.cz/courses/39HRY/godot/01_Basics/template.zip)
 </button>
 
 1. **Download** the template using the button above
@@ -317,5 +317,5 @@ Let's look at what we did in this lab.
 
 If you want to see how the finished template looks like after this lab, you can download it here:
 <button>
-  [Template Done Project](link)
+  [Template Done Project](https://cent.felk.cvut.cz/courses/39HRY/godot/01_Basics/template-done.zip)
 </button>

@@ -21,6 +21,8 @@ extends CharacterBody3D
 @export var gun_point_depth : float = 15
 @export var gun_point_offset : Vector3 = Vector3(0, 4, 0)
 
+@onready var animation_tree : AnimationTree = $Mesh/AnimationTree
+
 const ENEMY_LAYER = 4
 
 var _has_double_jumped : bool = false

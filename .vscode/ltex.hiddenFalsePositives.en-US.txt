@@ -81,3 +81,5 @@
 {"rule":"WHITESPACE_RULE","sentence":"^\\QOptional tween when shooting\nTo make the enemy behavior the same as the FSM version you can also add the node  \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q as a child of the  \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q, which will make the enemy do the tween when shooting.\\E$"}
 {"rule":"EN_A_VS_AN","sentence":"^\\QI have prepared an \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q in the project so that we can try Steering and different behaviors.\\E$"}
 {"rule":"WHITESPACE_RULE","sentence":"^\\QInstantiate  the \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q.\\E$"}
+{"rule":"EN_A_VS_AN","sentence":"^\\QYou can add new nodes by right-clicking\nYou can connect nodes by left-click and dragging the white circles\nYou can set the animation of an \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q node\\E$"}
+{"rule":"EN_A_VS_AN","sentence":"^\\QYou can add new nodes by right-clicking\nYou can connect nodes by left-click and dragging the white circles\nYou can set the animation clip of an \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q node by clicking the \"film\" icon\\E$"}

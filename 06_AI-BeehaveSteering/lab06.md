@@ -24,7 +24,7 @@ In a bullet point format, we will:
 
 Here is the template for this lab. Please download it, there are scripts, models, and scenes needed for the Behavior Trees and Steering Behaviors.
 <button>
-  [Template Project](link)
+  [Template Project](https://cent.felk.cvut.cz/courses/39HRY/godot/06_AI-BeehaveSteering/template.zip)
 </button>
 
 
@@ -828,7 +828,7 @@ If you are interested in a more robust plugin for your game, I recommend **Limbo
 ### Project Download
 If you want to see how the finished template looks like after this lab, you can download it here:
 <button>
-  [Template Done Project](link)
+  [Template Done Project](https://cent.felk.cvut.cz/courses/39HRY/godot/06_AI-BeehaveSteering/template-done.zip)
 </button>
 
 

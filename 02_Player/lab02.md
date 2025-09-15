@@ -22,7 +22,7 @@ In this tutorial we will:
 
 Please download the template project, that we will be using in this lab:
 <button>
-  [Template Project](link)
+  [Template Project](https://cent.felk.cvut.cz/courses/39HRY/godot/02_Player/template.zip)
 </button>
 
 
@@ -1113,5 +1113,5 @@ Let's look at what we did in this lab.
 
 If you want to see how the finished template looks like after this lab, you can download it here:
 <button>
-  [Template Done Project](link)
+  [Template Done Project](https://cent.felk.cvut.cz/courses/39HRY/godot/02_Player/template-done.zip)
 </button>
