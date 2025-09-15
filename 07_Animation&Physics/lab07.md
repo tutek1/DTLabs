@@ -12,7 +12,7 @@ Duration: hh:mm:ss
 
 This lab will focus on learning about **Behavior Trees** as an alternative for **Finite-State Machines**. We will recreate the behavior of the **Ground Enemy Finite-State Machine** from the last lab using a Behavior Tree.
 
-Then we will learn about **Steering Behaviors** as an less robust but more interesting alternative for **Navigational Meshes** (NavMesh). We will use the new enemy **Air Enemy** to try out the Steering Behaviors, while implementing some of them.
+Then we will learn about **Steering Behaviors** as a less robust but more interesting alternative for **Navigational Meshes** (NavMesh). We will use the new enemy **Air Enemy** to try out the Steering Behaviors, while implementing some of them.
 
 In a bullet point format, we will:
 - Learn the theory behind **Behavior Trees**. 
@@ -34,12 +34,12 @@ Duration: hh:mm:ss
 Since the last template I have added and changed quite a few things in our game.
 
 ### 2D Puzzle
-Quite a large addition is the 2D puzzle section. It works in a similar way to the **platforming section** except you use the mouse to play it. You can have a look at the code and node setup if you are interested in how games that are controlled with a mouse work.
+Quite a large addition is the 2D puzzle section. It works similarly as the **platforming section** except you use the mouse to play it. You can have a look at the code and node setup if you are interested in how games that are controlled with a mouse work.
 
 ![](img/Puzzle2D.png)
 
 ### Player Stats
-Some of the player parameters (`speed`, `jump_force`, `health`, `can_double_jump`, etc.) will change during the gameplay though the upgrade system. To easily handle changes, saving, and loading of these parameters I created a `Resource` class called **PlayerStats** that has all of these parameters. This way the stats of the player can be changed on the go.
+Some player parameters (`speed`, `jump_force`, `health`, `can_double_jump`, etc.) will change during the gameplay though the upgrade system. To easily handle changes, saving, and loading of these parameters I created a `Resource` class called **PlayerStats** that has all of these parameters. This way the stats of the player can be changed on the go.
 
 > aside negative
 > Some parameters, that do not change (`rotation_speed`, `gravity`, `acceleration`, etc.), are still present as `@export` parameters of the player class.
@@ -75,10 +75,10 @@ Please **rotate** and **move** the `Mesh` node to match the collider. This is th
 <img src="img/PlayerRightPlace.png" width="380"/>
 
 > aside positive
-> I moved the `Mesh` node to `y = -1.0` and rotated to `y = -90`, which closes matches the player model.
+> I moved the `Mesh` node to `y = -1.0` and rotated to `y = -90`, which closely matches the player collider.
 
 ### Blurry Textures
-You may have noticed, that the textures on the player model are a bit blurry and they start to clear up, when you get really close to the player. Let's fix this.
+You may have noticed, that the textures on the player model are a bit blurry, and they start to clear up, when you get really close to the player. Let's fix this.
 
 1. **Open** the file `3D/Player/GORODITH_Player_anim.fbx` in the **FileSystem**.
 2. Now in the **Advanced Import Settings** disable the `Generate LODs` option in the menu on the right side.
@@ -92,7 +92,7 @@ Now the texture should be crystal-clear:
 > The `Generate LODs` option is almost necessary for high-poly models and environments, since it improves performance. However, our model is low-poly and only suffers from this option.
 
 ### <img src="img/AnimationPlayerIcon.png" width="20"/> **`AnimationPlayer`** Node
-Importing an `.fbx` model with animations will automatically create a `AnimationPlayer` node. This node can play a single animation at a time and has parameters such as `Speed Scale`. You can use the `Current Animation` property to tryout and **play animations** of the player model.
+Importing a `.fbx` model with animations will automatically create a `AnimationPlayer` node. This node can play a single animation at a time and has parameters such as `Speed Scale`. You can use the `Current Animation` property to tryout and **play animations** of the player model.
 
 In our case, we need to disable the animation `Optimizer` since it breaks (skipping some frames) a few of the animations.
 1. Again, **open** the **Advanced Import Settings** of the player model.
@@ -103,7 +103,7 @@ In our case, we need to disable the animation `Optimizer` since it breaks (skipp
 > More complex behaviors, such as **blending animations**, **changing them** based on current circumstances/parameters, etc. needs to be done either by **`AnimationTree`** node (covered in later section) or **your own implementation** for switching animations.
 
 ### Animation Import
-While we are messing around with the importing, let's set some properties of the animations of the player. We want some of the animations to loop since they will be continuously playing. To do this we need to change the import settings of the animation.
+While we are messing around with the importing, let's set some properties of the animations of the player. We want some animations to loop since they will be continuously playing. To do this we need to change the import settings of the animation.
 
 1. Again, **open** the **Advanced Import Settings** of the player model.
 2. **Select** the `Armature|Fall` animation in the left menu.
@@ -119,16 +119,16 @@ While we are messing around with the importing, let's set some properties of the
 ## Theory: Skeletal Animations
 Duration: hh:mm:ss
 
-In this section I would like to tell you the theory behind **Skeletal Animations**, how they work, and how they are created. We will look at the process of creating a proper **Rig** for our player model. Feel free to look over this section if you are interested or you can skip it and comeback later, if some part of **Skeletal Animation** is unclear.
+In this section I would like to tell you the theory behind **Skeletal Animations**, how they work, and how they are created. We will look at the process of creating a proper **Rig** for our player model. Feel free to look over this section if you are interested, or you can skip it and comeback later, if some part of **Skeletal Animation** is unclear.
 
 **Skeletal Animation** is a technique of using connected **bones** to simulate movement and bend vertices of the model in natural ways. **Animations** are then created by only moving the bones of the model, since the vertices follow the bones.
 
 ### Step 1: Skeleton
-First, the bones of the model need to be created and connected. The skeleton does not need to the match all the real joints and bones that the model has. For example here you can see the **Skeleton** of our player model, which only has one bone for the whole right arm, since I do not want bend it in the animations:
+First, the bones of the model need to be created and connected. The skeleton does not need to the match all the real joints and bones that the model has. For example here you can see the **Skeleton** of our player model, which only has one bone for the whole right arm, since I do not want the elbow to bend in any of the animations:
 
 ![](img/PlayerBones.png)
 
-The bones work in the same way as the nodes in a **hierarchy**. By transforming the parent bone all the child bones are also transformed in the same way. An example can be seen in the gif below, where rotating the `LegBone` also rotates the `FootBone`. 
+The bones work in the same way as the nodes in a **hierarchy**. By transforming the parent bone all the child bones are also transformed in the same way. An example can be seen in the GIF below, where rotating the `LegBone` also rotates the `FootBone`. 
 
 ### Step 2: Weight Painting
 Next, you need to define, which vertices react to, which bones of the model and how strongly they react to them. This is done with the process of **Weight Painting**, where you automatically or manually paint each vertex ranging from **blue** (no influence) to **red** (maximum influence) for each bone.
@@ -140,17 +140,17 @@ Here you can see the weight painting of the right leg and foot of the player:
 <img src="img/WeightPaintingRightFoot.png" width="349"/>
 
 > aside positive
-> Note that in the "knee" area, the both bones have the same influence. You could say that the influence of the bones "crossfades".
+> Note that in the "knee" area, the both bones have the same influence. You could say that the influence of the bones "cross-fades".
 
 ### Step 3: Posing
-The last step is the transform the bones into poses. You can see in the gif below how the model reacts to moving the bones.
+The last step is the transform the bones into poses. You can see in the GIF below how the model reacts to moving the bones.
 
 <img src="img/SkeletonAnim.gif" width="450"/>
 
 ### Step 4: Animation
 Animations are made by capturing these poses in **keyframes** at set times. You can think of keyframes as the desired **transforms of the bones** of the model. The final animation is then only a sequence of theses keyframes. The animation is then played by interpolating from one keyframe to another, creating a seamless motion, while storing only a fraction of the data.
 
-Here you can see the keyframes (grey and yellow dots) of all the bones for the player during the `WalkForward` animation:
+Here you can see the keyframes (gray and yellow dots) of all the bones for the player during the `WalkForward` animation:
 
 ![](img/KeyframesWalk.png)
 
@@ -167,16 +167,16 @@ The tree has a property of `Tree Root`, which can be set to create the behavior.
 
 ![](img/AnimationTreeRoot.png)
 
-- ❌ **`AnimationRootNode`** is just an abstract class that all other inherit from.
+- ❌ **`AnimationRootNode`** is just an abstract class that all other animation node classes inherit from.
 - ✔️ **`AnimationNodeBlendTree`** is a canvas in which you can connect nodes to blend animations.
 - 🟡 **`AnimationNodeBlendSpace1D`** is a 1D axis that interpolates between several animations based on a value `[0.0 - 1.0]`. It can be used but it is very limited.
-- 🟡 **`AnimationNodeBlendSpace2D`** is the same as the 1D version, however you blend/interpolate in 2D space. Again, it can be used but it is very limited.
+- 🟡 **`AnimationNodeBlendSpace2D`** is the same as the 1D version, however you blend/interpolate in 2D space. Again, it can be used, but it is very limited.
 - ✔️ **`AnimationNodeStateMachine`** a visual state machine, similar to the one we created in one of the previous codelabs, but specialized for animation.
 - ❌ **`AnimationNodeAnimation`** a single animation. Useless as the root since you can achieve this behavior by setting a fixed animation in the `AnimationPlayer`.
 
 
 ### `AnimationTree` setup
-Let's open the `player.tscn` scene and setup an `AnimationTree`.
+Let's open the `player.tscn` scene and set up an `AnimationTree`.
 
 1. **Add** a `AnimationTree` node as a child of the `Mesh` node.
 2. **Set** the property of `Anim Player` of the new node to the `AnimationPlayer` node.
@@ -195,7 +195,12 @@ With the state machine open we can see the `Start` node, which is initial state,
 > Selecting a transition, many things can be set in the **Inspector** such as `Priority`, `Switch Mode`, `Transition Conditions`, etc. More on that later.
 
 ### Blend tree
-If you followed the gif above, please **clear the state machine**. Let's add a BlendTree
+If you followed the steps in the GIF above, please **clear the state machine** and let's fill it out.
+
+1. **Add** a `BlendTree` node.
+2. **Rename** the node to `FreeMoveBlend`.
+3. **Connect** a transition from the `Start` node to the `FreeMoveBlend`.
+4. **Click** the **pencil icon** in the `FreeMoveBlend` node. 
 
 
 ### fall and jump parameters
@@ -209,7 +214,7 @@ Duration: hh:mm:ss
 
 ### Light in eyes BoneAttachment
 
-### LookAt for gun
+### LookAtModifier for gun
 
 ### Player projectiles
 

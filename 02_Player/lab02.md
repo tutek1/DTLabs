@@ -42,7 +42,7 @@ Both `RigidBody3D` and `CharacterBody3D` are solid choices for us. The better ch
 ### Create the player node
 Now that we know what node type the player will be, let's add it.
 1. Add a `CharacterBody3D` node in the scene hierarchy as a child of the scene node ("Debug3dScene")
-2. Rename it to **"Player"** (Right-click -> rename)
+2. Rename it to **"Player"** (Right-click ⇾ rename)
 3. Add a `MeshInstance3D` node as a child of the player and set the `Mesh` property to a `CapsuleMesh`
 4. Add a `CollisionShape3D` node as a child of the player and set the collision shape to a `CapsuleShape3D`
 
@@ -59,7 +59,7 @@ Please move the player up a bit so that they are not stuck in the ground.
 The player is now just a plain white capsule. Let's add hands and a backpack to make them look a bit nicer (before we change it to a 3D model in a future lab) and also learn a bit about materials.
 
 #### Adding hands
-1. Add a `MeshInstance3D` node as a child of the player and add a BoxMesh to it (Optionally rename it to "Hand1").
+1. Add a `MeshInstance3D` node as a child of the player and add a `BoxMesh` to it (Optionally rename it to "Hand1").
 2. **Change** the size of the mesh to make it look more like a hand (I used `0.3, 0.8, 0.3`)
 3. **Move** the hand on the **X-axis** so that it is on the side of the player (I moved it by `0.65`)
 4. **Repeat** the steps 1-3 for the other hand, just move it to the other side of the player (negative X-axis)
@@ -82,8 +82,8 @@ The player should look like this now (mind the direction of the **blue arrow**, 
 #### Giving the player some color
 Let's give the player capsule some color.
 
-1. Click on to the `MeshInstance3D` with the capsule mesh in the **scene hierarchy**
-2. Click on the **CapsuleMesh** in the **inspector**
+1. Click on to the `MeshInstance3D` with the capsule mesh in the **Scene Hierarchy**
+2. Click on the **CapsuleMesh** in the **Inspector**
 3. Add a new `StandardMaterial3D` to the **Material slot**
 4. **Click** on the created material
 5. Set **Albedo** to gray
@@ -92,7 +92,7 @@ Let's give the player capsule some color.
 
 This makes the capsule look gray and shiny like a stereotypical robot. However, I would like to add the same material to the hands and the backpack.
 
-I could manually set all the properties on each material of each object but what if I decide later on, that the robot will have a different color? -> I would have to modify all the parts of the robot, which is not ideal.
+I could manually set all the properties on each material of each object but what if I decide later on, that the robot will have a different color? ⇾ I would have to modify all the parts of the robot, which is not ideal.
 
 #### Saving materials
 Let's learn how to save a material, so that we can then use it on other meshes.
@@ -132,17 +132,17 @@ In this section we will take a bit of a detour and look at how to play and test 
 However, right now if you **press the button** all you can see is a gray screen. This happens because there is no camera in the scene through which we would be able to see the game world.
 
 > aside positive
-> Press `F8` or `ALT+F4` if all you can see is a fullscreen of gray and cannot get out of it.
+> Press `F8` or `ALT+F4` if all you can see is a full-screen of gray and cannot get out of it.
 
 
 ### Adding a camera
-To solve this add a new `Camera3D` node to the scene as a **child** of the root (Debug3dScene) and **move/rotate** it so that the player is in view. For example like this:
+To solve this, add a new `Camera3D` node to the scene as a **child** of the root (Debug3dScene) and **move/rotate** it so that the player is in view. For example like this:
 ![](img/Camera.png)
 
 Now if you press play you can see the game world. Yippee!
 
 > aside positive
-> If your game still starts in **"fullscreen"** I recommend setting the embedding options same as in the next image. It makes the **game window** embed inside the editor.
+> If your game still starts in **"full-screen"** I recommend setting the embedding options same as in the next image. It makes the **game window** embed inside the editor.
 > ![](img/EmbedSettings.png)
 
 ### Making something happen
@@ -166,8 +166,8 @@ This is far from perfect or even playable (since the **inspector** is not availa
 Duration: hh:mm:ss
 
 Let's **open the script** we have added to the player in the previous section. You can do that by:
-1. Either by clicking the ![](img/ScriptIcon.png) next to the `Player` node in the scene hierarchy.
-2. Or double click the script file in the **FileSystem**
+1. Either click the ![](img/ScriptIcon.png) next to the `Player` node in the scene hierarchy.
+2. Or double-click the script file in the **FileSystem**
 
 ![](img/BaseScript.png)
 
@@ -181,7 +181,7 @@ There are many variable types from the classic **float**, **bool**, **int**, **V
 The variable on line 3 `speed`, which we used in the previous section, has the annotation of `@export`. This annotation tells the engine, that it should be visible and changeable from the **inspector**. Without the annotation we wouldn't be able to change the variable value like we did in the last section. We will come across different annotations in due time.
 
 > aside positive
-> You do not have to declare the variable types but it is **recommended**. Declaring variable types improves performance and helps Godot autocomplete your lines more often.  
+> You do not have to declare the variable types, but it is **recommended**. Declaring variable types improves performance and helps Godot autocomplete your lines more often.  
 
 ### Functions
 In **GDScript** a function is declared with the keyword `func`. The keyword is followed by **the name** of the function and **parameters** with types in brackets. Before closing the function header with `:` it is a good practice to declare the return type with `-> type`.
@@ -190,7 +190,7 @@ In **GDScript** a function is declared with the keyword `func`. The keyword is f
 > **GDScript** does not have `private/protected/public` modifiers for functions or variables. The [styling guide](https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/gdscript_styleguide.html) suggests, that the name of the variable should reflect its access. Private functions and variables should start with an `_`.
 
 ### Lifecycle of a Godot node
-You might be wondering, what the **functions** present in the script do and when they are called. That is where the Godot lifecycle comes in to play.
+You might be wondering what the **functions** present in the script do and when they are called. That is where the Godot lifecycle comes in to play.
 
 In Godot every node automatically calls a number of **virtual functions** as it gets created, added to the tree, and so on. The importance of these functions can be seen on this simple enemy example:
 - When the enemy is **spawned/created**, it will play an animation.
@@ -200,7 +200,7 @@ In Godot every node automatically calls a number of **virtual functions** as it 
 Ok, what are the functions? Here is a list of some of them in the order that they are called:
 - `_init()` is called **once** when the node is created, it is the same as a constructor in OOP
 - `_enter_tree()` is called **every time** the node is added as a child of another node in the scene tree
-- `_ready()` is called **once** when the node and all of it's children have been created and are also ready
+- `_ready()` is called **once** when the node and all of its children have been created and are also ready
 - `_process()` is called **every frame** and depends on the current framerate of the game (how many FPS does the game run at)
 - `_physics_process()` is called **every physics frame**, that means that every time the physics in the game are updated this function is called, it depends on the set FPS of the physics engine
 - `_exit_tree()` is called **every time** a node is removed from the scene tree
@@ -275,7 +275,7 @@ You should see:
 - `0.0` being printed when nothing is pressed or both `D` and `A` is pressed
 
 #### Apply the input
-Ok, this should helps us move the player and it will be easier than to check each one of two 2 inputs separately. Let's set the `velocity` on the **X-axis** to this value like this:
+Ok, this should help us move the player, and it will be easier than to check each one of two 2 inputs separately. Let's set the `velocity` on the **X-axis** to this value like this:
 ```GDScript
 velocity.x = x_axis
 ```
@@ -311,7 +311,7 @@ func _physics_process(delta : float) -> void:
 > Notice, that we used `-z_axis` instead of `z_axis`. That is because the **negative Z-axis** is considered as the **forward** direction in Godot Engine. 
 
 ### Make the player faster
-Playing the game, we can see that the player moves quite slowly. To change this we can multiply the values that are set to the `velocity` variable. Multiply both of these values by `5` and try it in the game. I would say this speed seems fine, however what we if wanted to change it later on? We would have to find all lines where we multiply the velocity by `5`, that is not ideal.
+Playing the game, we can see that the player moves quite slowly. To change this we can multiply the values that are set to the `velocity` variable. Multiply both of these values by `5` and try it in the game. I would say this speed seems fine, however what if we wanted to change it later on? We would have to find all lines where we multiply the velocity by `5`, that is not ideal.
 
 Let's change the **exported** variable `speed` to a float (since we no longer use it), set its default value to `5`, and replace the `* 5` with it.
 ```GDScript
@@ -322,7 +322,7 @@ func _physics_process(delta : float) -> void:
     velocity.x = x_axis * speed
     velocity.z = -z_axis * speed
 ```
-Now if we look in the **inspector** with the `Player` node selected, we can see the `Speed` parameter and we can change it. Start the game, move around, and change the value of `Speed` to see how the player responds to the changes.
+Now if we look in the **inspector** with the `Player` node selected, we can see the `Speed` parameter, and we can change it. Start the game, move around, and change the value of `Speed` to see how the player responds to the changes.
 
 ![](img/PlayerSpeed.png)
 
@@ -343,7 +343,7 @@ You probably noticed that the player can easily run away from the camera. To mak
 It would be nice if the player would look in the direction they are moving. Let's add this functionality.
 
 #### Cleanup
-First we should cleanup our code a bit. Since the code we have written handles movement let's create a function called `_movement()` and move all of the code there and call it in `_physics_process()`. We can also do the same for the code that we are about to write for player rotation.
+First we should clean up our code a bit. Since the code we have written handles movement let's create a function called `_movement()` and move all the code there and call it in `_physics_process()`. We can also do the same for the code that we are about to write for player rotation.
 
 This should be the resulting code.
 ```GDScript
@@ -442,7 +442,7 @@ Where `delta` is the parameter from `_physics_process()` that you need to pass i
 #### Task
 So additionally to make it all work:
 1. Change the `_rotate_player()` function header and call to include `delta`.
-2. Add the a new `@export` variable called `rotation_speed` of type `float`
+2. Add a new `@export` variable called `rotation_speed` of type `float`
 
 Try to do it yourself and experiment with different `rotation_speed` values. Once you are **done** or **stuck** you can continue to the solution, which is in the next section.
 
@@ -475,7 +475,7 @@ func _rotate_player(delta : float) -> void:
 ### Forward Correct Movement
 Right now if you try to play the game, the player does rotate according to the direction they move. However, you might notice that the forward direction is always the **negative Z-axis**. To change this, so that `W` (and `S`) will always move the player forward in the direction they are facing, we need to have a look at the `_movement()` function again.
 
-Let's create a `Vector3` from the axes we gathered from the input. We will do this in a way so it represents the direction we want the player to move in from the perspective of the player (their coordinate space).
+Let's create a `Vector3` from the axes we gathered from the input. We will do this in a way, so it represents the direction we want the player to move in from the perspective of the player (their coordinate space).
 
 ```GDScript
 var direction : Vector3 = Vector3(x_axis, 0, -z_axis)
@@ -538,9 +538,9 @@ The final resulting code should look like this and the Player Controller should 
 ## Simple Player Controller - Gravity
 Duration: hh:mm:ss
 
-If you tried to go over the edge of the platform or you manually moved the player high enough, you might have noticed, that the player doesn't **fall down**.
+If you tried to go over the edge of the platform, or you manually moved the player high enough, you might have noticed, that the player doesn't **fall down**.
 
-This is because the `CharacterBody3D` does not account for **gravity** by default and we need to add it manually in a script. Let's do it.
+This is because the `CharacterBody3D` does not account for **gravity** by default, and we need to add it manually in a script. Let's do it.
 
 ### Gravity Code
 1. **Add** another `@export` variable called `gravity` (default value `-9.81`)
@@ -553,7 +553,7 @@ velocity.y += gravity * delta
 ```
 
 #### Why are we adding gravity every frame?
-Gravity is a force that **continuously** accelerates a body. In a game engine we can only apply forces (or run code) on a per frame basis, which makes time **discrete**. However, with the parameter of `delta` we can compensate for the time that has passed between the frames.
+Gravity is a force that **continuously** accelerates a body. In a game engine we can only apply forces (or run code) on a per-frame basis, which makes time **discrete**. However, with the parameter of `delta` we can compensate for the time that has passed between the frames.
 
 `delta` tells us how much time in seconds has passed since the last frame.
 
@@ -606,7 +606,7 @@ We would like to make the player jump with `SPACE`, so let's add a new input act
 
 
 ### How to jump?
-Jumping can be implemented in many different ways and it always depends on the game that we are making. One way is to apply a **continuous force** while the player is holding the jump button (for a limited time), which makes the jump very responsive. Another, simpler way, which we will implement, is to apply an **instant force** as the jump.
+Jumping can be implemented in many ways, and it always depends on the game that we are making. One way is to apply a **continuous force** while the player is holding the jump button (for a limited time), which makes the jump very responsive. Another, simpler way, which we will implement, is to apply an **instant force** as the jump.
 
 
 ### Jump Function Code
@@ -659,10 +659,10 @@ I suggest you play the game for a bit and test different values for the `gravity
 ## Better Camera - Follow the Player
 Duration: hh:mm:ss
 
-Right now the behavior of the camera that follows the player is suboptimal. It could work for some games but I want the camera in this game to respond to the mouse movements and follow the player more smoothly.
+Right now the behavior of the camera that follows the player is suboptimal. It could work for some games, but I want the camera in this game to respond to the mouse movements and follow the player more smoothly.
 
 ### Separate the Camera
-Let's remove the `Camera3D` node from the `Player` node and move it one step up, so that it is a **sibling** of the `Player` and not a **child**. This way it won't rotate and move the same way as the player and we will be able to control the camera ourselves.
+Let's remove the `Camera3D` node from the `Player` node and move it one step up, so that it is a **sibling** of the `Player` and not a **child**. This way it won't rotate and move the same way as the player, and we will be able to control the camera ourselves.
 
 ![](img/CameraSeparate.png)
 
@@ -699,7 +699,7 @@ func _follow_target(delta : float) -> void:
     pass
 ```
 > aside positive
-> We could have chosen `CharacterBody3D` instead of `Node3D` for the `camera_target` variable, because our camera will follow the player. However, it is always a good idea to use the **highest possible parent class** in the inheritance chain. In our case it is the `Node3D` class, since it stores 3D **position/rotation/scale** and allows the camera to follow any 3D object (we will use this later on ;) )
+> We could have chosen `CharacterBody3D` instead of `Node3D` for the `camera_target` variable, because our camera will follow the player. However, it is always a good idea to use the **highest possible parent class** in the inheritance chain. In our case it is the `Node3D` class, since it stores 3D **position/rotation/scale** and allows the camera to follow any 3D object (we will use this later on)
 
 #### Follow the player
 Now we need to implement the `_follow_target()` function. The camera should **smoothly follow** the player across multiple frames. If this rings a bell, it’s because linear interpolation (**lerp**) is ideal for this task. We used it when we wanted to rotate the player in the direction of movement.
@@ -784,7 +784,7 @@ This should be the setup:
 Now **remove** the script from the `Camera3D` node and **add** it to the pivot. Also change the first line extend type to `Node3D` instead of `Camera3D`.
 
 ### Camera offset correction
-Now we also need to change how we use the `camera_offset` variable, so that it reflects our new setup. The **offset** should be applied to the child of the pivot - the `Camera3D` node. To access the child node we need a **reference** to it. We could make another `@export` variable but the following way is easier and less error-prone. Write this line just below the export variables:
+Now we also need to change how we use the `camera_offset` variable, so that it reflects our new setup. The **offset** should be applied to the child of the pivot - the `Camera3D` node. To access the child node we need a **reference** to it. We could make another `@export` variable, but the following way is easier and less error-prone. Write this line just below the export variables:
 
 ```GDScript
 @onready var camera_3d : Camera3D = $Camera3D
@@ -808,7 +808,7 @@ camera_3d.position = camera_offset
 Try playing the game and adjust the values of `camera_offset` and `follow_speed` to your liking.
 
 > aside positive
-> It is recommended to use the relative node references `$node_name` if we are referencing a **child** node and `@export` is we are referencing a node outside of the subtree of the current node.
+> It is recommended to use the relative node references `$node_name` if we are referencing a **child** node and `@export` is we are referencing a node outside the subtree of the current node.
 
 
 ### Camera limit
@@ -846,7 +846,7 @@ func _ready() -> void:
 ## Better Camera - Raycast, Shapecast
 Duration: hh:mm:ss
 
-Right now if you move the camera, it can go inside of objects and walls. This is can be fixed by **raycasting**. Raycasting is the process of shooting a ray from a given position in a given direction until it reaches a **physics object** or its **maximum distance**.
+Right now if you move the camera, it can go inside of objects and walls. This can be fixed by **raycasting**. Raycasting is the process of shooting a ray from a given position in a given direction until it reaches a **physics object** or its **maximum distance**.
 
 We will use **raycasting** to shoot a ray from the `CameraPivot` to the `Camera3D` and if any object is in the way, we will set the camera offset to that point.
 
@@ -899,7 +899,7 @@ point += raycast_3d.get_collision_normal() * 0.5
 ```
 
 ### Problem 2 - Change to ShapeCast3D
-However, this fixes our problem only partway. A better solution is to change `RayCast3D` to `ShapeCast3D`. This node works in a similar way to a raycast. Instead of shooting a ray in a direction, it checks if the shape would collide with anything if it moved along the ray.
+However, this fixes our problem only partway. A better solution is to change `RayCast3D` to `ShapeCast3D`. This node works similarly to a raycast. Instead of shooting a ray in a direction, it checks if the shape would collide with anything if it moved along the ray.
 
 These are the changes to be made in the **scene hierarchy** and **inspector** of the shapecast:
 
@@ -939,7 +939,7 @@ Now the setup seems even more broken because it just shows the backpack of the p
 #### Collision layer and mask
 Each physics object in Godot has a collision layer and a collision mask. The **collision layer** tells the physics engine, what kind of physics object it is. The **collision mask** tells the physics engine, which collision layers is the object interested in (wants to be updated upon collision update with that layer).
 
-Let's setup the **layers and masks** of the scene objects so that the shapecast only checks collision with the terrain. Please use this video to set it up:
+Let's set up the **layers and masks** of the scene objects so that the shapecast only checks collision with the terrain. Please use this video to set it up:
 <video id=g9lYt3jF950></video>
 
 
@@ -1036,7 +1036,7 @@ func _double_jump() -> void:
 ## Bonus - Velocity-based player 
 Duration: hh:mm:ss
 
-This is a **optional** section, where we will expand on the Player Controller from previous sections. This version will not just override the **velocity** every frame but add to it. This will make the player have **acceleration**, **deceleration**, and **inertia**, which will feel more natural while remaining responsive. This approach is not strictly better or worse than the controller we already have. It always depends on the games you are making, however this approach is very common, so I would like to go over it.
+This is an **optional** section, where we will expand on the Player Controller from previous sections. This version will not just override the **velocity** every frame but add to it. Thus making the player have **acceleration**, **deceleration**, and **inertia**, which will feel more natural while remaining responsive. This approach is not strictly better or worse than the controller we already have. It always depends on the games you are making, however this approach is very common, so I would like to go over it.
 
 ### Additional parameters
 First, let's define some more `@export` variables.
@@ -1082,7 +1082,7 @@ if horizontal_velocity.length() > speed:
 Now the player is much more controllable. However, the player still needs to slow down (decelerate) because now they just keep sliding forever.
 
 ### Dampening
-Simplest way to apply the **dampening** is to multiply the `velocity` with some number just under 1 (for example `0.998`). But of course we need to account for `delta` since this way the dampening would be much stronger with higher framerates.
+The simplest way to apply the **dampening** is to multiply the `velocity` with some number just under 1 (for example `0.998`). But of course we need to account for `delta` since this way the dampening would be much stronger with higher framerates.
 
 Let's also check if the player is moving. We can do that by checking the `x_axis` and `z_axis` variables, so that we apply dampening only when the player **isn't** moving. This way the max speed will be consistent. Add this code below the clamping of the max speed:
 

@@ -80,13 +80,13 @@ To use our sprite sheet in Godot, we need to create a `TileSet` resource. This r
 #### TileSet Creation
 Let's create and save a new `TileSet` resource.
 1. **Right-click** the `Sprites` folder.
-2. Select `+ Create new` -> `Resource`
+2. Select `+ Create new` ⇾ `Resource`
 3. Search for **"TileSet"** and press `Create`
 4. Name it `platforming_tileset.tres` and press `Save`
 5. **Double-click** the newly created resource
 
 #### TileSet Setup
-First, we need to set the tile size of the `TileSet`. In the **inspector**, set the **X** and **Y** to `32px`, since our tiles are 32x32 pixels. Now the `TileSet` is setup in the bottom of the Godot editor:
+First, we need to set the tile size of the `TileSet`. In the **inspector**, set the **X** and **Y** to `32px`, since our tiles are 32x32 pixels. Now the `TileSet` is set up in the bottom of the Godot editor:
 
 ![](img/TileSetWindow.png)
 
@@ -112,7 +112,7 @@ There are 3 main **tabs** in the tileset editor:
 #### TileSet Physics
 Let's add collision shapes to our tile, so that the player, once we add them later, will collide with the environment.
 
-First, we need to add a physics layer to the tileset. The **physics layer** is a specific setup of a collision layer and mask. This way, you don't need to setup collision layers and masks for each tile but only set the physics layer to those tiles.
+First, we need to add a physics layer to the tileset. The **physics layer** is a specific setup of a collision layer and mask. This way, you don't need to set up collision layers and masks for each tile but only set the physics layer to those tiles.
 
 With the tileset resource open, look in the **Inspector** and:
 1. Open the dropdown called **Physics Layers**
@@ -309,7 +309,7 @@ func _double_jump() -> void:
 > **Note 1:** In the `_movement()` function, in the part that "clamps" the max speed, I used the `sign` function. This gives us `+1` or `-1` depending on whether we are going left or right, which is basically what the `normalize()` did in 3D.
 
 > aside positive
-> **Note 2:** In the `_movement()` function, in the part that dampens the velocity, I decided to `clamp` the dampening coefficient. This only ensures that it remains between `0` and `1`, even in cases where the dampening is very strong. I also recommend to add this to the 3D controller just to be sure.
+> **Note 2:** In the `_movement()` function, in the part that dampens the velocity, I decided to `clamp` the dampening coefficient. This only ensures that it remains between `0` and `1`, even in cases where the dampening is very strong. I also recommend adding this to the 3D controller just to be sure.
 
 
 
@@ -342,7 +342,7 @@ Now if you play the game and step on the **jump pad** the player will be pushed 
 ## Functional Electric Cables/Spikes
 Duration: hh:mm:ss
 
-Now let's look at the **electric cable** sprites, that are in the sprite sheet. I want them to act like spikes in any other 2D platforming games. You might also notice, that there are several cable tiles. That is because they are a part of an animation and we will learn how to create an **animated tile** out of them.
+Now let's look at the **electric cable** sprites, that are in the sprite sheet. I want them to act like spikes in any other 2D platforming games. You might also notice, that there are several cable tiles. That is because they are a part of an animation, and we will learn how to create an **animated tile** out of them.
 
 ### Animated Tile
 First, we need to only keep the first sprite as a tile, since the other 3 tiles are only the animation of the first one. So with the `TileSet` open:
@@ -358,7 +358,7 @@ Next up:
 
 1. Go into the **Select** tab
 2. Select the **first cable tile**
-3. Open the **Animation** -> **Frames** dropdown and add frames so that there are `4` frames
+3. Open the **Animation** ⇾ **Frames** dropdown and add frames so that there are `4` frames
 
 This will create an animation with 4 tiles. The selected tile will be the first frame and the next frames are selected depending on the settings in the **Animation** dropdown. By default, this will take 4 tiles in a row.
 
@@ -375,7 +375,7 @@ We will detect if the player is touching the spikes with **Custom Data** of a ti
 3. Select the **cable tile**
 4. Under the dropdown **Custom Data** set **"DamageOnTouch"** to `On`
 
-Now to detect the collision, the electric cables need a collision shape. Add it in the **select** tab so it looks similar to this:
+Now to detect the collision, the electric cables need a collision shape. Add it in the **select** tab, so it looks similar to this:
 
 ![](img/CablePhysics.png)
 
@@ -406,10 +406,10 @@ func _process_new_collision():
 - The `for cycle` goes through each new collision that happened after the `move_and_slide()` call.
 - We get one of the **collisions** that happened with `get_slide_collision(i)`.
 - We get the **collider** that the player collided with using `collision.get_collider()`.
-- Next we check if the collider `is` a `TileMapLayer` -> if the player collided with the tilemap.
+- Next we check if the collider `is` a `TileMapLayer` ⇾ if the player collided with the tilemap.
 - Then we get the `RID`, which is the **unique Resource ID** of the tile we collided with.
 - We use this RID to get the **coordinates** of tile in the `TileSet`
-- Lastly, we get the `TileData` using the tile coordinates and we use it to check if the **Custom Data** `DamageOnTouch` is turned on.
+- Lastly, we get the `TileData` using the tile coordinates, and we use it to check if the **Custom Data** `DamageOnTouch` is turned on.
 
 > aside positive
 > The keyword `is` is used to check the class type.
@@ -456,7 +456,7 @@ Duration: hh:mm:ss
 
 Let's look at what we did in this lab.
 - We looked at **project organization** and folder management
-- Then we learned what **sprite sheets** are and how to setup a `TileSet` from one
+- Then we learned what **sprite sheets** are and how to set up a `TileSet` from one
 - We used the created `TileSet` in a `TileMapLayer` and drew an **environment**
 - Next I tasked you to create a **2D player controller**
 - Then we made the **jump pad** functional using the `Linear Velocity` property in tiles

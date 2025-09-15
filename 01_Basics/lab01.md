@@ -10,7 +10,7 @@ Feedback Link: https://google.com
 ## Introduction
 Duration: hh:mm:ss
 
-This tutorial should provide a surface level overview of how to use the open-source game engine **Godot Engine** to make games. It won't cover everything there is to cover and will only show a small number of ways how to program/create game mechanics and systems. If any of the discussed topics catch your interest I suggest to lookup other more detailed tutorials, that cover the topic in more depth.
+This tutorial should provide a surface level overview of how to use the open-source game engine **Godot Engine** to make games. It won't cover everything there is to cover and will only show a few ways how to program/create game mechanics and systems. If any of the discussed topics catch your interest I suggest to you to lookup other more detailed tutorials, that cover the topic in more depth.
 
 In this first lab we will cover:
 - Downloading the **Godot Engine**
@@ -89,12 +89,12 @@ Now with the project open it might a bit overwhelming to orient yourself in the 
     - The **Debugger**, where you can find all the information about the performance, errors, warnings, networking etc.
     - Then there are the **Audio Bus** settings, **Animation** window, **Shader Editor** and much more depending on the open Node/Asset.
 5. This is the **Inspector**. Here you can change exposed parameters of nodes such as the `position`, `rotation`, `scale`, `visibility`, etc.
-6. This **tab selection** is where you can change, what you can see in `2.`, currently it is the scene view . 
+6. This **tab selection** is where you can change, what you can see in `2.`, currently it is the scene view. 
     - The **2D/3D** tabs shows you the current scene from that perspective
     - The **Script** tab hosts the in engine IDE for writing scripts.
     - The **Game** tab has the game window, where you can see the game once you run it.
     > aside negative
-    > Note that 3D scenes **cannot** be viewed in 2D and vice versa by using these tabs .
+    > Note that 3D scenes **cannot** be viewed in 2D and vice versa by using these tabs.
 
 7. This is the **Play** panel. We will be mainly interested in:
     - The first button starts the full game (a set main scene)
@@ -109,7 +109,7 @@ Don't worry if you feel lost. We will go through all these parts in much more de
 Duration: hh:mm:ss
 
 > aside negative
-> If you don't see the testing scene in the scene view (the one in the video below) here is how to open it. In the **FileSystem** window open the folder `3D/Debug` and double click the `debug_3d_scene.tscn` file. 
+> If you don't see the testing scene in the scene view (the one in the video below) here is how to open it. In the **FileSystem** window open the folder `3D/Debug` and double-click the `debug_3d_scene.tscn` file. 
 
 In this section we will learn several ways how to move in the 3D scene view (2D handles in a very similar way). Now there are 2 most commonly used ways to move in the scene view:
 
@@ -142,7 +142,7 @@ Duration: hh:mm:ss
 Let's learn how you can manipulate objects (nodes) in the scene. **Find** and **Select** the `Resistor` node in the **scene hierarchy** on the left.
 
 > aside positive
-> If the resistor is out of view or you are far away you can press `F` to focus on it. 
+> If the resistor is out of view, or you are far away you can press `F` to focus on it. 
 
 
 Now with the `Resistor` selected and in view, you can move it, rotate it, or scale it in 3 ways:
@@ -165,8 +165,7 @@ Try to use all **three ways** described above to manipulate the objects.
 > You can select multiple resistors and duplicate all of them at once. So that you don't have to duplicate them one by one.
 
 
-If you played with the scale of objects or moved some of them up or down,
- you might have noticed that they are no longer placed precisely on the ground. They are either a above/below ground or partway in the ground. You can use:
+If you played with the scale of objects or moved some of them up or down, you might have noticed that they are no longer placed precisely on the ground. They are either above/below the ground or partway in the ground. You can use:
 - `PAGEDOWN` key to snap an object to the ground.
 - `SHIFT+G` and then click to place it on any surface.
 
@@ -249,7 +248,7 @@ Mesh is a representation of a 3D object composed of vertices/points and triangle
 ![](img/Mesh.png)
 
 
-Now there is a white cube placed in the ground. Let's make it big and change it's color.
+Now there is a white cube placed in the ground. Let's make it big and change its color.
 
 ![](img/MeshManipulation.png)
 1. **Click** the cube mesh in the **inspector**
@@ -275,7 +274,7 @@ The warning tells us that the `StaticBody3D` needs a **collision shape**. Let's 
 Now you have a cube with collisions. 
 
 ### Saving the object as a scene
-Having this new cube **saved** as a reusable object will be useful. Imagine you have 20 of them in a scene and you want to change some property on all of them. Normally, you would have to go and individually change every single one. This would be inefficient and time consuming.
+Having this new cube **saved** as a reusable object will be useful. Imagine you have 20 of them in a scene, and you want to change some property on all of them. Normally, you would have to go and individually change every single one. This would be inefficient and time-consuming.
 
 If we instead **save** the object as a scene, then all **changes made** to the scene will be **propagated** to every instance of the scene. Let's save the `Big Resistor` as a scene.
 

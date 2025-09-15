@@ -14,7 +14,7 @@ This lab will combine the 2D minigame created in the previous lab with the 3D ga
 
 Today we will look over:
 - See the **changes** I made from the last lab and save the **2D player scene**
-- How to setup a `SubViewport` and **view a 2D scene in 3D**
+- How to set up a `SubViewport` and **view a 2D scene in 3D**
 - Learn about **signals**, how to **create** them and **use** them
 - How to **"turn off"** a subtree
 - The process of **entering** and **exiting** 2D
@@ -33,7 +33,7 @@ Here is the template for this lab. Please download it, there are new scenes and 
 Duration: hh:mm:ss
 
 ### 3D Scene Changes
-I cleaned up our 3D scene a bit more by moving all the objects under the node `Obstacles`, which is a child of `Environment`. I also added another node container called `2DPlatforming`, which will hold all the 2D platforming sections. There is already a `Sprite3D` for the first section and we will setup a `SubViewport` in the next section.
+I cleaned up our 3D scene a bit more by moving all the objects under the node `Obstacles`, which is a child of `Environment`. I also added another node container called `2DPlatforming`, which will hold all the 2D platforming sections. There is already a `Sprite3D` for the first section, and we will set up a `SubViewport` in the next section.
 
 ![](img/3DChanges.png)
 
@@ -73,7 +73,7 @@ Now if we change something in the `player_2d.tscn` scene, it shows up in all 2D 
 ## Visible 2D Scene in 3D
 Duration: hh:mm:ss
 
-Now in order to make the 2D scene visible in 3D, we need a something to show it on. **Open** the `debug_3d_scene.tscn` and look at the **Scene Hierarchy**. There, you can see the node `Enviroment` -> `2DPlatforming` (a container for all the 2D platforming sections), which has a single `Sprite3D` as a child (a single platforming section). `Sprite3D` node is used to display 2D sprites/images in 3D.
+Now in order to make the 2D scene visible in 3D, we need a something to show it on. **Open** the `debug_3d_scene.tscn` and look at the **Scene Hierarchy**. There, you can see the node `Enviroment` ⇾ `2DPlatforming` (a container for all the 2D platforming sections), which has a single `Sprite3D` as a child (a single platforming section). `Sprite3D` node is used to display 2D sprites/images in 3D.
 
 
 ### Adding a SubViewport
@@ -197,7 +197,7 @@ If you select the `Area3D`, you can switch the tab at the top of the **inspector
 
 ![](img/Area3DSignals.png)
 
-The `Area3D` has many different signals that can be connected. We are interested in the signal `body_entered(body: Node3D)` since we want to detect the player entering and our player is a `CharacterBody3D`.
+The `Area3D` has many signals that can be connected. We are interested in the signal `body_entered(body: Node3D)` since we want to detect the player entering and our player is a `CharacterBody3D`.
 
 1. **Select** the `body_entered(body: Node3D)` signal
 2. **Press** the `Connect...` button on the bottom right
@@ -319,7 +319,7 @@ To easily see and debug the position translation from 2D to 3D, let's add a `Nod
 
 
 ### Player2D position
-How do we get the 2D player position in the `platforming_section.gd` script? We have a reference to the `PlatformingManager2D` and it has a reference to the 2D player. Let's add a function to the `PlatformingManager2D`, that will return the player 2D reference.
+How do we get the 2D player position in the `platforming_section.gd` script? We have a reference to the `PlatformingManager2D`, and it has a reference to the 2D player. Let's add a function to the `PlatformingManager2D`, that will return the player 2D reference.
 
 ```GDScript
 func get_player2D() -> Node2D:
@@ -388,7 +388,7 @@ func _on_area_3d_body_entered(body : Node3D) -> void:
 ```
 
 ### PlayerCamera3D changes
-Now if you play the game, the camera follows the 2D player with the cube pretty well. However the camera is too **zoomed** in, due to the camera shapecasting in to the wall, and we can still **rotate** the camera.
+Now if you play the game, the camera follows the 2D player with the cube pretty well. However, the camera is too **zoomed** in, due to the camera shapecasting in to the wall, and we can still **rotate** the camera.
 
 #### Shapecasting problem
 The easiest way to fix this is to move the camera target a bit out of the wall, so that the shapecast does not hit it. We can easily adjust it in the function `_update_camera_target()` by setting:
@@ -419,7 +419,7 @@ func set_user_rotation_control(value : bool, fixed_rotation : Vector3) -> void:
 - `value` will determine if we want the rotation to turn on or off
 - `fixed_rotation` will determine the rotation, which will be set and constant throughout the 2D level
 
-Some 2D platforming levels might be set at a different angle in the 3D world, that is why we will add an `export` variable, that will be used as the `fixed_rotation` parameter. **Add** this to the top of the `platforming_section.gd` script:
+Some 2D platforming levels might be set at a different angle in the 3D world, that is why we will add an `@export` variable, that will be used as the `fixed_rotation` parameter. **Add** this to the top of the `platforming_section.gd` script:
 ```GDScript
 @export var camera_angle : Vector3 = Vector3.ZERO
 ```
@@ -495,7 +495,7 @@ player2D_died.emit()
 ```
 which will emit the signal once the player has died.
 
-Now let's connect it to the `platforming_manager_2d.gd`, we could do it the same way as the `WinArea` but I want to show you how to do it through code.
+Now let's connect it to the `platforming_manager_2d.gd`, we could do it the same way as the `WinArea`, but I want to show you how to do it through code.
 
 First, let's change the node type of the player from `Node2D` to `PlayerController2D`.
 
@@ -528,7 +528,7 @@ func _ready() -> void:
     platforming_manager.platforming_complete.connect(print)
 ```
 
-For now, let's just print out the bool of the signal -> success or not. Try to play the game, jump on the spikes, and try to enter the `WinArea`. The `Output` should print out `false` for spikes and `true` for the `WinArea`.
+For now, let's just print out the bool of the signal ⇾ success or not. Try to play the game, jump on the spikes, and try to enter the `WinArea`. The `Output` should print out `false` for spikes and `true` for the `WinArea`.
 
 
 
@@ -536,7 +536,7 @@ For now, let's just print out the bool of the signal -> success or not. Try to p
 ## Exiting 2D
 Duration: hh:mm:ss
 
-Now it is time to make a function to **exit the 2D world**. It will work in a similar way as the enter function but in **reverse**. The result of the 2D platforming section will determine if the player will be pushed **up and forward** (success) or **down and backwards** (failure).
+Now it is time to make a function to **exit the 2D world**. It will work similarly as the enter function but in **reverse**. The result of the 2D platforming section will determine if the player will be pushed **up and forward** (success) or **down and backwards** (failure).
 
 
 ### The Exit Function
@@ -615,7 +615,7 @@ func turn_off() -> void:
 ```
 
 #### 3. Move Player 2D Outside of the `WinArea`
-The third problem is also with the `WinArea`. The problem here is identical to the one in player 3D and we will fix this in the same way. Please apply this fix to the `platforming_manager.gd` script:
+The third problem is also with the `WinArea`. The problem here is identical to the one in player 3D, and we will fix this in the same way. Please apply this fix to the `platforming_manager.gd` script:
 ```GDScript
 func turn_off() -> void:
     player.scale = Vector2.ZERO
@@ -668,7 +668,7 @@ func _exit2D(success : bool) -> void:
 
 
 #### Pushing the player
-Right now, when the player exits the 2D level, they just **pop out** based on the player 2D position. That's not very interesting and it can make the 3D player **fall off** the obstacle that they are climbed successfully using the platforming section. We will push (apply velocity) to the player in a given direction to make it more interesting.
+Right now, when the player exits the 2D level, they just **pop out** based on the player 2D position. That's not very interesting, and it can make the 3D player **fall off** the obstacle that they are climbed successfully using the platforming section. We will push (apply velocity) to the player in a given direction to make it more interesting.
 
 Let's define 3 `export` variables, that will determine the **success** (entered `WinArea`) and **failure** (fell on spikes) force the player should be pushed by and a variable that will determine for **how long** the player should be pushed for. Add this to the top of the `platforming_section.gd`:
 ```GDScript
@@ -877,7 +877,7 @@ func _exit2D(success : bool) -> void:
 > I used `EASE_OUT` instead of `EASE_IN`, which makes the effect look much better
 
 ### Afterword about Tweens
-As you can see, Tweening can make a huge difference in the feel and look of your game. More importantly, choosing the wrong `transition` or `easing` can have the exact opposite visual effect that you were going for. You can spend a lot of time tweaking and perfecting tweens but I personally think that they are worth it.
+As you can see, Tweening can make a huge difference in the feel and look of your game. More importantly, choosing the wrong `transition` or `easing` can have the exact opposite visual effect that you were going for. You can spend a lot of time tweaking and perfecting tweens, but I personally think that they are worth it.
 
 
 ### One more thing
@@ -898,7 +898,7 @@ Let's look at what we did in this lab.
 - Next, we learned about what **signals** are, how to **create** them, and **use** them
 - Then, we made the **camera follow** the 2D player by **recalculating 2D coordinates** to 3D
 - We made the **result** of the 2D game **propagate upwards** the tree to the section manager
-- Next, we fixed many different **errors** that sprung up
+- Next, we fixed many **errors** that sprung up during the implementation
 - Lastly, we made the **entering** and **exiting** 2D smoothly animated using **Tweens**
 
 

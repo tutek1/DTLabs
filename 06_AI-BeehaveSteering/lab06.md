@@ -12,7 +12,7 @@ Duration: hh:mm:ss
 
 This lab will focus on learning about **Behavior Trees** as an alternative for **Finite-State Machines**. We will recreate the behavior of the **Ground Enemy Finite-State Machine** from the last lab using a Behavior Tree.
 
-Then we will learn about **Steering Behaviors** as an less robust but more interesting alternative for **Navigational Meshes** (NavMesh). We will use the new enemy **Air Enemy** to try out the Steering Behaviors, while implementing some of them.
+Then we will learn about **Steering Behaviors** as a less robust but more interesting alternative for **Navigational Meshes** (NavMesh). We will use the new enemy **Air Enemy** to try out the Steering Behaviors, while implementing some of them.
 
 In a bullet point format, we will:
 - Learn the theory behind **Behavior Trees**. 
@@ -35,7 +35,7 @@ Duration: hh:mm:ss
 When it comes to creating an AI character in a videogame, there are many known ways/architectures that you can use. For example:
 - easy but restrictive **Simple reactive planning** (bunch of if-else statements, that only react to the current environment)
 - more complex **Finite-State Machine** (becoming less and less clear the more states and transitions you add)
-- easily modifiable **Behavior Tree** (forcing you to learn to think about AI in a different way)
+- easily modifiable **Behavior Tree** (forcing you to learn to think about AI differently)
 - and many more...
 
 The choice of the architecture always depends on the complexity of the character you are making. However, most of the more complex characters are usually made with **FSMs** or **Behavior Trees**, that is why I wanted to cover them in this tutorial series.
@@ -50,7 +50,7 @@ The choice of the architecture always depends on the complexity of the character
 
 
 ### What are ![](img/TreeIcon.png) Behavior Trees?
-Behavior trees are and alternative way to of creating AI for videogames. The whole behavior of the AI is divided into a **tree structure with many nodes**, that can have various types and purposes. The tree is run from **the root** and when there are sibling nodes, they are run left -> right, or top -> bottom (depends on the orientation of the tree).
+Behavior trees are and alternative way to of creating AI for videogames. The whole behavior of the AI is divided into a **tree structure with many nodes**, that can have various types and purposes. The tree is run from **the root** and when there are sibling nodes, they are run left ⇾ right, or top ⇾ bottom (depends on the orientation of the tree).
 
 When a node is run, it **must return the state** that it is in. A node can be in one of these three states:
 - `SUCCESS` - Signals to the parent that the node has executed the action successfully.
@@ -58,7 +58,7 @@ When a node is run, it **must return the state** that it is in. A node can be in
 - `RUNNING` - Signals to the parent that the node is still performing the execution. This pauses the tree traversal and the node will be run again next frame/tick. This is used for actions that take some time to complete.
 
 There are 3 base node types:
-- **Composite** - has more than one children and the state return value depends on the children
+- **Composite** - has more than one child and the state return value depends on the children
 - **Leaf** - has no children, usually performs an action or checks a condition ("go to patrol point", "is player seen?" etc.)
 - **Decorator** - has exactly one child node, that is a leaf and performs operation on the state return (invert state, always SUCCESS, etc.)
 
@@ -68,38 +68,38 @@ Let's look how the two most basic composite nodes work.
 
 #### ![](img/Sequence.png) SequenceComposite
 Sequence node runs all child nodes one by one until **one has failed or all have succeeded**:
-- Child node return `SUCCESS` -> run the next child node -> no more child nodes to run -> return `SUCCESS`
-- Child node return `FAILURE` -> return `FAILURE`
-- Child node return `RUNNING` -> return `RUNNING` (next frame/tick the child node is run again)
+- Child node return `SUCCESS` ⇾ run the next child node ⇾ no more child nodes to run ⇾ return `SUCCESS`
+- Child node return `FAILURE` ⇾ return `FAILURE`
+- Child node return `RUNNING` ⇾ return `RUNNING` (next frame/tick the child node is run again)
 
 #### ![](img/Selector.png) SelectorComposite
 Similar to sequence, the selector node runs all child nodes one by one until **one has succeeded or all have failed**:
-- Child node return `FAILURE` -> run the next child node -> no more child nodes to run -> return `FAILURE`
-- Child node return `SUCCESS` -> return `SUCCESS`
-- Child node return `RUNNING` -> return `RUNNING` (next frame/tick the child node is run again)
+- Child node return `FAILURE` ⇾ run the next child node ⇾ no more child nodes to run ⇾ return `FAILURE`
+- Child node return `SUCCESS` ⇾ return `SUCCESS`
+- Child node return `RUNNING` ⇾ return `RUNNING` (next frame/tick the child node is run again)
 
 
 ### Example Behavior Tree
-I think Behavior Trees are best shown on an example. This modified example was taken from [gamedeveloper.com](https://www.gamedeveloper.com/programming/behavior-trees-for-ai-how-they-work) and I will walk you through it.
+I think Behavior Trees are best shown on an example. This modified example was taken from [gamedeveloper.com](https://www.gamedeveloper.com/programming/behavior-trees-for-ai-how-they-work), and I will walk you through it.
 
 ![](img/BTExampleModified.jpg)
 
 Here, the goal of the tree is to perform actions so that the character **goes through a door**. The execution starts in the **root of the tree**, in the top-most composite `RootSequence` node. Let's take a scenario, where the door is locked.
 
-1. **`RootSequence`** runs **`Walk to Door`** -> `SUCCESS`
-2. **`RootSequence`** runs the **`DoorSelector`**, which runs the **`Open Door`** node -> `FAILURE` (door is locked)
-3. **`DoorSelector`** runs **`UnlockSequence`**, which runs **`Unlock Door`** -> `SUCCESS` (worked since the door was locked) then run **`Open Door`** -> `SUCCESS` 
-4. This makes the **`UnlockSequence`** -> `SUCCESS`, making the **`DoorSelector`** -> `SUCCESS`
-5. **`RootSequence`** runs **`Walk through Door`** -> `SUCCESS`, then runs **`Close Door`** -> `SUCCESS`
-6. **`RootSequence`** -> `SUCCESS`, which means that the tree executed successfully
+1. **`RootSequence`** runs **`Walk to Door`** ⇾ `SUCCESS`
+2. **`RootSequence`** runs the **`DoorSelector`**, which runs the **`Open Door`** node ⇾ `FAILURE` (door is locked)
+3. **`DoorSelector`** runs **`UnlockSequence`**, which runs **`Unlock Door`** ⇾ `SUCCESS` (worked since the door was locked) then run **`Open Door`** ⇾ `SUCCESS` 
+4. This makes the **`UnlockSequence`** ⇾ `SUCCESS`, making the **`DoorSelector`** ⇾ `SUCCESS`
+5. **`RootSequence`** runs **`Walk through Door`** ⇾ `SUCCESS`, then runs **`Close Door`** ⇾ `SUCCESS`
+6. **`RootSequence`** ⇾ `SUCCESS`, which means that the tree executed successfully
 
 > aside positive
 > If a node returned **`RUNNING`** in the example above, the tree would be **"stuck" and continuously run** the node until it would return `SUCCESS` or `FAILURE`
 
-Try to walk through the tree with **other scenarios** (door is only closed or it has a broken lock). You should find that the tree adapts to the situation and if something were to go wrong, you would be able to see, which node/action had failed -> easy debugging.
+Try to walk through the tree with **other scenarios** (door is only closed, or it has a broken lock). You should find that the tree adapts to the situation and if something were to go wrong, you would be able to see, which node/action had failed ⇾ easy debugging.
 
 > aside negative
-> **Small but important note:** "node -> SUCCESS" means that "node returns SUCCESS"
+> **Small but important note:** "node ⇾ SUCCESS" means that "node returns SUCCESS"
 
 ### ![](img/Blackboard.png) Blackboard
 The last thing you should know about Behavior Trees for now is how to handle dynamic information. In the example above the dynamic information could be:
@@ -128,10 +128,10 @@ I have already installed the plugin to save time. However, some more complex plu
 
 ### GroundEnemyBH script
 I have created a copy of the `GroundEnemyFSM` called `GroundEnemyBH` and replaced them in the `debug_3d_scene.tscn` scene. All relevant scripts and scenes can be found in the `3D/Enemies/GroundEnemy/Beehave/` folder. Please **open** the `ground_enemy_bh.gd` script and let's go through it:
-- At the top, there are all the **`@export` variables** from the `GroundEnemyFSM` and all of the FSM states. These variables are declared here in the enemy, because they are not dynamic data (during play time they do not change).
+- At the top, there are all the **`@export` variables** from the `GroundEnemyFSM` and all the FSM states. These variables are declared here in the enemy, because they are not dynamic data (during play time they do not change).
 - Then, there are several `enums`:
-    - **`BB_VAR`** - These are all the keys for the **Blackboard variables**, that we will need. Normally, you would use strings as keys but I feel like that leads to many bugs due to typos.
-    - **`ROTATE_MODE`** - You might have noticed that in the FSM version our enemy rotated differently in each state. For simplicity I decided to delegate the job back to the main enemy script and the Behavior Tree will only switch, which mode is currently running.
+    - **`BB_VAR`** - These are all the keys for the **Blackboard variables**, that we will need. Normally, you would use strings as keys, but I feel like that leads to many bugs due to typos.
+    - **`ROTATE_MODE`** - You might have noticed that in the FSM version our enemy rotated differently in each state. For simplicity, I decided to delegate the job back to the main enemy script and the Behavior Tree will only switch, which mode is currently running.
     - **`ACTIONS`** - This will be used to easily detect what action (Patrol, Chase) the enemy is currently in. We will use it to detect that we started chasing the player and play the "pop up" tween animation. 
 - The `_ready()` function sets the **default values** of all the Blackboard variables.
 - Rest of the script is pretty much the same as the FSM variant, except for **storing and loading dynamic variables**, where the Blackboard is used.
@@ -150,7 +150,7 @@ Now **open** the `ground_enemy_bh.tscn`. The scene is pretty much the same as th
 Let's create a basic Beehave setup, so that in the next section, we can start making the behavior already.
 1. **Add** a `Blackboard` node as a child of the `GroundEnemyBeehave`
 2. **Add** a `BeehaveTree` node as a child of the `GroundEnemyBeehave`
-3. **Set** the property of `Blackboard` in the `BeehaveTree` node the the `Blackboard` node
+3. **Set** the property of `Blackboard` in the `BeehaveTree` node the `Blackboard` node
 
 <img src="img/GroundEnemyBHSetup.png" width="350"/>
 <img src="img/BeehaveTreeNodeSetup.png" width="400"/>
@@ -165,7 +165,7 @@ Duration: hh:mm:ss
 Let's start by creating the **Patrolling behavior** of the enemy, since that is an easy place to start. In **Beehave** the Behavior Tree is build with nodes in the **Scene Hierarchy**. This works because the **Scene Hierarchy** is a tree-like structure with nodes and children. Don't worry about how adding the Chase behavior will work for now.
 
 ### ![](img/Sequence.png) Patrol Sequence
-If you think about the behavior of **Patrolling** it is a **Sequence** of actions (Go to point -> Wait until there -> Update index -> Go to next point -> ...) by that logic, we should use a `SequenceComposite` node as the root of the tree. The `BeehaveTree` in `ground_enemy_bh.tscn` will be the **parent of the root of the tree**.
+If you think about the behavior of **Patrolling** it is a **Sequence** of actions (Go to point ⇾ Wait until there ⇾ Update index ⇾ Go to next point ⇾ ...) by that logic, we should use a `SequenceComposite` node as the root of the tree. The `BeehaveTree` in `ground_enemy_bh.tscn` will be the **parent of the root of the tree**.
 
 1. **Add** a ![](img/SequenceSmall.png) `SequenceComposite` node as a child of the ![](img/TreeIconSmall.png) `BeehaveTree`
 2. **Rename** it to `PatrolSequence`
@@ -231,7 +231,7 @@ The whole tree should look like this:
 
 
 ### **`bh_set_next_patrol_point.gd`** Script
-Making the scripts of the **Action and Condition** nodes takes quite some time and as I have said before we will not code the them in this codelab. However, I would still like to create at least **two scripts** to show you how it is done. One of them is the `bh_set_next_patrol_point.gd` script, which we have to fill out to make the **Patrol Behavior** functional.
+Making the scripts controlling the **Action and Condition** nodes takes quite some time and as I have said before we will not code them all in this codelab. However, I would still like to create at least **two scripts**, so you get the idea of how you can code them. One of them is the `bh_set_next_patrol_point.gd` script, which we have to fill out to make the **Patrol Behavior** functional.
 
 The script looks like this now:
 ```GDScript
@@ -279,7 +279,7 @@ Now if you play the game, the enemy should patrol in the same way as the `Ground
 
 
 > aside positive
-> A better practice for making AI with **Behavior Trees** could be making an `AbstractEnemyBH`, that is not dependent on anything specific to any enemy type. Then the enemies would be defined entirely by their Behavior Trees. However as always, this depends on the scale of the game you are making.
+> A better practice for making AI with **Behavior Trees** could be making an `AbstractEnemyBH`, that is not dependent on anything specific to any enemy type. Then the enemies would be defined entirely by their Behavior Trees. However, as always, this depends on the scale of the game you are making.
 
 
 
@@ -321,7 +321,7 @@ If you remember how the ![](img/SelectorSmall.png) `Selector` node works, it onl
 Now open the `bh_is_player_close_enough.gd` script and try to **fill it out yourself using the TODO text**. Once you think you are done look at the **code at the bottom of the page** for the solution.
 
 ### **Rotate Mode**
-If the sequence gets this far it means the conditions are true and we have "entered" the `ChaseState` (speaking in FSM terms). We should switch the **Rotate Mode** of the enemy to match the FSM version of the enemy:
+If the sequence gets this far it means the conditions are true, and we have "entered" the `ChaseState` (speaking in FSM terms). We should switch the **Rotate Mode** of the enemy to match the FSM version of the enemy:
 
 - **Node** ![](img/Action.png) `ActionLeaf` child of ![](img/SequenceSmall.png) `ChaseSequence` 
     - **Name** `SetRotateModeHalfHalf`
@@ -331,10 +331,10 @@ If the sequence gets this far it means the conditions are true and we have "ente
 
 
 ### **![](img/Cooldown.png) CooldownDecorator and ![](img/Succeeder.png) AlwaysSucceedDecorator**
-Now all that is left to do is to **set the target** of the `NavigationAgent` to the **player position**. However, similar to the FSM version, we want to do that only every so often. To do **timed or repeated** Actions in the Beehave Tree, we can use the ![](img/CooldownSmall.png) `CooldownDecorator` node, which works like this:
+Now all that is left to do is to **set the target** of the `NavigationAgent` to the **player position**. However, similar to the FSM version, we want to do that only every so often. To do **timed or repeated** actions in the Beehave Tree, we can use the ![](img/CooldownSmall.png) `CooldownDecorator` node, which works like this:
 - Executes its child until it either returns `SUCCESS` or `FAILURE`, after which it will start an internal timer and return `FAILURE` until the timer is complete.
 
-However, having just the ![](img/CooldownSmall.png) `CooldownDecorator` node and an ![](img/Action.png) `ActionLeaf` node with **target setting** as a child, would not work, due to the **timer returning** `FAILURE` while waiting. This would cause the ![](img/SequenceSmall.png) `ChaseSequence` to **fail** and the **Patrol subtree would run**. To circumvent this we can **"ignore" the result** of the ![](img/CooldownSmall.png) `CooldownDecorator` node and act as it would always return `SUCCESS`. Achieving this can be done using the ![](img/SucceederSmall.png) `AlwaysSucceedDecorator` as a parent of the ![](img/CooldownSmall.png) `CooldownDecorator` node.
+However, having just the ![](img/CooldownSmall.png) `CooldownDecorator` node and an ![](img/Action.png) `ActionLeaf` node with **target setting** as a child, would not work, due to the **timer returning** `FAILURE` while waiting. This would cause the ![](img/SequenceSmall.png) `ChaseSequence` to **fail**, and the **Patrol subtree would run**. To circumvent this we can **"ignore" the result** of the ![](img/CooldownSmall.png) `CooldownDecorator` node and act as it would always return `SUCCESS`. Achieving this can be done using the ![](img/SucceederSmall.png) `AlwaysSucceedDecorator` as a parent of the ![](img/CooldownSmall.png) `CooldownDecorator` node.
 
 - **Node** ![](img/SucceederSmall.png) `AlwaysSucceedDecorator` child of ![](img/SequenceSmall.png) `ChaseSequence` 
     - **Name** `SuccessCooldownChasePointSet`
@@ -409,7 +409,7 @@ Now, we also want to check if the **player is in direct sight**, so let's add a 
     - **Name** `CooldownShoot`
     - **Script** `bh_shoot_cooldown.gd`
 
-Ok, all the conditions for the start of shooting are now set. The shooting itself is a single ![](img/Action.png) `ActionLeaf` but we also want to set the correct `Rotate Mode` so we need a sequence:
+Ok, all the conditions for the start of shooting are now set. The shooting itself is a single ![](img/Action.png) `ActionLeaf`, but we also want to set the correct `Rotate Mode`, so we need a sequence:
 
 - **Node** ![](img/SequenceSmall.png) `SequenceComposite` child of ![](img/CooldownSmall.png) `CooldownShoot` 
     - **Name** `ShootRotateSequence`
@@ -438,7 +438,7 @@ Playing the chase enter tweens is a bit more tricky, since we do not have `OnSub
     - **Property** `Value` = `Chase`
     - **Between** nodes ![](img/ConditionSmall.png) `IsPlayerCloseEnough` and ![](img/Action.png) `SetRotateModeHalfHalf`
 
-Next we will add a ![](img/SelectorSmall.png) `Selector` to choose between a condition "Are we in the chase state?" and playing the tweens. This will make the tweens play only if the agent action is not Chase -> played only on chase enter.
+Next we will add a ![](img/SelectorSmall.png) `Selector` to choose between a condition "Are we in the chase state?" and playing the tweens. This will make the tweens play only if the agent action is not Chase ⇾ played only on chase enter.
 
 - **Node** ![](img/SelectorSmall.png) `SelectorComposite` child of ![](img/SequenceSmall.png) `ChaseSequence`
     - **Name** `OnEnterChaseSelector`
@@ -459,7 +459,7 @@ Now the enemy pops up and back down (enter chase tweens) when it starts to see t
 To make the enemy behavior the same as the FSM version you can also add the node ![](img/Action.png) `EnterChaseTweens` as a child of the ![](img/SequenceSmall.png) `ShootRotateSequence`, which will make the enemy do the tween when shooting.
 
 ### Behavior Trees - Ending
-As we saw in the these few sections behavior trees are very modular and require you to think about AI in a bit different way. They are mostly useful for more complex AIs than the one we created but you can use them however you like to.
+As we saw in the these few sections behavior trees are very modular and require you to think about AI in a bit different way. They are mostly useful for more complex AIs than the one we created, but you can use them however you like to.
 
 Here is a video showcasing the complete behavior tree and enemy behavior, that we created during this codelab:
 
@@ -477,7 +477,7 @@ One might come up with a navigation variant that simply just **moves the "enemy"
 ### What are Steering Behaviors? 
 They are a form of navigation that is inspired by the movement of **flocks of birds** and **schools of fishes** created by Craig W. Reynolds ([Academic Paper](https://www.red3d.com/cwr/steer)). 
 
-For simplicity I will in this refer to the agent controlled by the steering as **Boid** and to steering behaviors as **Steerings**.
+For simplicity, I will in this refer to the agent controlled by the steering as **Boid** and to steering behaviors as **Steerings**.
 
 ### How does Steering work?
 1. Each boid can have **any number of Steering behaviors**.
@@ -488,7 +488,7 @@ For simplicity I will in this refer to the agent controlled by the steering as *
 That's about it really. This simple adding of all forces, each with their own goal, is enough to create complex natural behaviors, that can be seen in nature.
 
 ### What Steerings are there?
-There are many different types and you can even create your own. Here is a list of all the steering behaviors that Reynolds defined. Feel free to briefly look over them just so that you can get an idea, what a steering is:
+There are many types, and you can even create your own. Here is a list of all the steering behaviors that Reynolds defined. Feel free to briefly look over them just so that you can get an idea, what a steering is:
 - **Seek/Flee** - Direction towards/from the target (desired velocity) is added to the current.
 <img src="img/Seek.png" width="250"/>
 <img src="img/Flee.png" width="350"/>
@@ -519,19 +519,19 @@ There are many different types and you can even create your own. Here is a list 
 ## Steerings in the Project
 Duration: hh:mm:ss
 
-Best way to learn about **Steering Behaviors** is to try them and implement them. I have prepared an `AirEnemy` in the project so that we can try Steering and different behaviors. I also created some of the **Steerings** mentioned in the previous section. All of them extend the `SteeringBehavior` class, which looks like this:
+Best way to learn about **Steering Behaviors** is to try them and implement them. I have prepared an `AirEnemy` in the project so that we can try Steering and different behaviors. I also created some **Steerings** mentioned in the previous section. All of them extend the `SteeringBehavior` class, which looks like this:
 
 ```GDScript
 class_name SteeringBehavior
 extends Resource
 
 # Called every frame, should return normalized force unless the magnitude plays a role 
-func act(air_enemy : AirEnemy) -> Vector3:
+func act(air_enemy : AirEnemy) ⇾ Vector3:
     assert(false, "Do not use SteeringBehavior abstract class! Method `act()`")
     return Vector3.ZERO
 
 # Called every frame if draw_debug is enabled
-func debug_draw(air_enemy : AirEnemy) -> void:
+func debug_draw(air_enemy : AirEnemy) ⇾ void:
     assert(false, "Do not use SteeringBehavior abstract class! Method `debug_draw()`")
 ```
 
@@ -543,7 +543,7 @@ Let's look at the `air_enemy.tscn` file in `3D/Enemies/AirEnemy`.
 This is our enemy, which in the game world represents the **malware that attacked the computer**, that the player needs to clear out (see [GDD]("TODO")). Now let's have a look at the script `air_enemy.gd` and the `_physics_process()` to see what it does.
 
 ```GDScript
-func _physics_process(delta : float) -> void:
+func _physics_process(delta : float) ⇾ void:
     _behavior()
     _steering(delta)
     _rotate_enemy(delta)
@@ -555,10 +555,10 @@ func _physics_process(delta : float) -> void:
 The code is pretty similar to the ground enemy or the player code, since it is again a `CharacterBody3D` node. We will look over it to get an idea how it works and fill out the steerings one.
 
 #### `_behavior()` function
-This function controls the **behavior of the enemy**. Currently, it just looks if the `VisionArea` assigned the `_player` reference and sets the **player as the target**. If not it sets the target to a fixed value. The final game will implement an **FSM** or a **Behavior Tree** but for now, to keep it simple, this `if -> else` structure is good enough.
+This function controls the **behavior of the enemy**. Currently, it just looks if the `VisionArea` assigned the `_player` reference and sets the **player as the target**. If not it sets the target to a fixed value. The final game will implement an **FSM** or a **Behavior Tree** but for now, to keep it simple, this `if ⇾ else` structure is good enough.
 
 ```GDScript
-func _behavior() -> void:
+func _behavior() ⇾ void:
     if _player != null:
         _target = _player.global_position
         if _player.global_position.distance_to(global_position) > max_player_chase_dist:
@@ -576,14 +576,14 @@ This function handles the steering forces and works very similarly to how steeri
 5. Lastly a debug arrow pointing in the direction of velocity is drawn.
 
 ```GDScript
-func _steering(delta : float) -> void:
+func _steering(delta : float) ⇾ void:
 	
     # TODO Accumulate all forces from all steerings
     var force : Vector3
 	
 	
     # Normalize only when a lot of forces act 
-    # -> preserves force magnitude for arrival and others
+    # ⇾ preserves force magnitude for arrival and others
     if force.length() > 1.0:
         force = force.normalized()
     velocity += force * fly_acceleration * delta
@@ -604,13 +604,13 @@ You should now **implement the first point** as an exercise. **Remember** that y
 Works just like the `_rotate_enemy()` in `GroundEnemy`, but it also rotates on the `x` and `z` axis based on direction. You can look into the function more closely if you are interested how it works.
 
 ```GDScript
-func _rotate_enemy(delta: float) -> void:
+func _rotate_enemy(delta: float) ⇾ void:
     # Get the direction normalized
     var direction : Vector3 = velocity.normalized()
     direction.x *= up_down_rot_mult
     direction.z *= up_down_rot_mult
 
-    # Stop rotating when slow enough -> prevents oscilation
+    # Stop rotating when slow enough ⇾ prevents oscilation
     if direction.length() < 0.1:
         return
 
@@ -631,7 +631,7 @@ func _rotate_enemy(delta: float) -> void:
 Checks all the collisions generated by `move_and_slide()`. If any collision was with the player it damages them (only applies knockback for now). It also has a cooldown so that the enemy cannot damage the player multiple times in quick succession.
 
 ```GDScript
-func _check_collisions() -> void:
+func _check_collisions() ⇾ void:
     if _last_damage_time + damage_cooldown * 1000 > Time.get_ticks_msec(): return 
 	
     for idx in range(0, get_slide_collision_count()):
@@ -654,7 +654,7 @@ Now let's try out the steerings. Open the `debug_scene_3d.tscn` scene.
 ### Solution: `_steering()` function
 The solution is quite simple. Just iterate over all the `steerings` and call the `act()` function on each one.
 ```GDScript
-func _steering(delta : float) -> void:
+func _steering(delta : float) ⇾ void:
 
     # Accumulate all forces from all steerings
     var force : Vector3
@@ -694,7 +694,7 @@ The solution can be found on the bottom of the page, but try to implement it you
 
 
 ### Task: Pursue behavior
-The `Pursue` steering force works similarly to the `Seek` force. It steers the velocity of the enemy (in our case) towards the set target position, but also adds a multiple of the targets velocity to the target.
+The `Pursue` steering force works similarly to the `Seek` force. It steers the velocity of the enemy (in our case) towards the set target position, but also adds a multiple of the target's velocity to the target.
 
 ![](img/Pursue.png)
 
@@ -713,7 +713,7 @@ The solution can be found on the bottom of the page, but try to implement it you
 Here is the solution to the `act()` method of `Seek`:
 
 ```GDScript
-func act(air_enemy : AirEnemy) -> Vector3:
+func act(air_enemy : AirEnemy) ⇾ Vector3:
     var to_target : Vector3 = air_enemy.get_target() - air_enemy.global_position
     var desired_velocity : Vector3 = to_target.normalized() * air_enemy.fly_acceleration
 
@@ -727,7 +727,7 @@ Please try it out in the project to get a feel for the behavior.
 ### Solution: Pursue behavior
 Here is the solution to the `act()` method of `Pursue`:
 ```GDScript
-func act(air_enemy : AirEnemy) -> Vector3:
+func act(air_enemy : AirEnemy) ⇾ Vector3:
     var to_target : Vector3 = air_enemy.get_target() - air_enemy.global_position
     var player : PlayerController3D = air_enemy.get_player()
 
@@ -757,10 +757,10 @@ This steering force is responsible for the enemy to **avoid running into walls**
 ![](img/CollisionAvoidance.png)
 
 #### How it works?
-It works by checking for any obstacles in the direction of the velocity, taking the most threatening one (closest one) and steering away from its middle point.
+It works by checking for any obstacles in the direction of the velocity, taking the most threatening one (the closest one) and steering away from its middle point.
 
 #### Implementation details
-One key detail of the implementation is that in Godot a shapecast cannot be done in code the same way a raycast can be done (see `Hover`). I solved this issue by creating a shapecasting node in code and adding it to the enemy. This makes sure that we get all the points, from which the closest one is taken and the enemy is repelled by.
+One key detail of the implementation is that in Godot a shapecast cannot be done in code the same way a raycast can be done (see `Hover`). I solved this issue by creating a shapecasting node in code and adding it to the enemy. This makes sure that we get all the points, from which the closest one is taken, and the enemy is repelled by.
 
 
 ### Arrival
@@ -769,7 +769,7 @@ While using `Seek`, the enemy will overshoot the target and oscillate back and f
 ![](img/Arrival.png)
 
 #### How it works?
-When outside of the `slowing_radius` the force is the same as `Seek`. While inside the slowing radius, the force is adjusted to counter the current velocity, which results in the enemy slowing down. 
+When outside the `slowing_radius` the force is the same as `Seek`. While inside the slowing radius, the force is adjusted to counter the current velocity, which results in the enemy slowing down. 
 
 
 ### My own steering: Hover
@@ -777,7 +777,7 @@ I wanted the `AirEnemy` to float up and down, so I created this steering. It ray
 
 
 ### Preview
-I recommend for you to just run the project and experiment with different combinations of the steerings and their parameters.Here is a video showing all the steering behaviors, that are implemented in the template project:
+I recommend for you to just run the project and experiment with different combinations of the steerings and their parameters. Here is a video showing all the steering behaviors, that are implemented in the template project:
 
 <video id=tyLv_fO5OKY></video>
 

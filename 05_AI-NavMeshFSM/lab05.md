@@ -37,14 +37,14 @@ One of the more important additions is the `global_debug.gd` script. You can mak
 - `F2` - slows down time by 1/2
 - `F3` - speeds up time by 2
 
-Having a script like this in your project is **extremely useful** for fast and easy **debugging**. Moreover you can easily expand it to solve your project-specific debugging issues. I **recommend** copying it into your project if you plan on using Godot. 
+Having a script like this in your project is **extremely useful** for fast and easy **debugging**. Moreover, you can easily expand it to solve your project-specific debugging issues. I **recommend** copying it into your project if you plan on using Godot. 
 
 However, firstly we need to learn about **Singletons** and **Autoload**!
 
 ### Singleton Pattern and Autoload
 The Singleton pattern is a software design pattern that **restricts a class**, so that there cannot be more than a **singular instance** of it. In most other game engines you would have to use Singletons for scripts like the `global_debug.gd`.
 
-In **Godot** you could also use Singletons but there is an easier way. Godot allows you to set **scripts** or even **node trees** as **Autoload**. If you add a node/script as **Autoload** it will be automatically created and added above the scene tree upon start. This makes the node accessible from anywhere, which is useful for many reasons. The usual **Godot Lifecycle** functions are still run.
+In **Godot** you could also use Singletons, but there is an easier way. Godot allows you to set **scripts** or even **node trees** as **Autoload**. If you add a node/script as **Autoload** it will be automatically created and added above the scene tree upon start. This makes the node accessible from anywhere, which is useful for many reasons. The usual **Godot Lifecycle** functions are still run.
 
 Let's add the `global_debug.gd` as an **Autoload**:
 1. **Open** the `Project Settings`
@@ -76,7 +76,7 @@ Autoload/Singletons are very useful for **tracking global values** (max reached 
 ## NavMesh
 Duration: hh:mm:ss
 
-Imagine you have a **NPC character** and you want them to navigate through a **maze**. We need to know where they **can and cannot walk** and then somehow **plan a path** through the maze. We can solve this problem easily with a **NavMesh** and a **NavMeshAgent**:
+Imagine you have a **NPC character**, and you want them to navigate through a **maze**. We need to know where they **can and cannot walk** and then somehow **plan a path** through the maze. We can solve this problem easily with a **NavMesh** and a **NavMeshAgent**:
 
 - **NavMesh** is a simplified representation of the environment using convex polygons, that defines which areas of an environment are traversable by **NavMeshAgents**.
 - **NavMeshAgent** uses the **NavMesh** and a pathfinding algorithm like `A*` to plan a path from point A to a point B.
@@ -87,7 +87,7 @@ Here is an example of a **NavMesh** in Godot. The light-blue areas are walkable 
 A **NavMesh** is usually "baked" or calculated in the editor, so naturally it is **NOT** suitable for **highly dynamic** environments since you would need to rebake the **NavMesh** every time something would change. If you really need to, you can bake a NavMesh while the **game is running**, but be aware that the computation is quite **costly**.
 
 > aside positive
-> Depending on the engine or literature the **NavMeshAgent** and **NavMesh** may be called by different names. In Godot it is a **NavigationAgent** and **NavigationRegion**. Both version of these terms are correct and I will use them interchangeably.
+> Depending on the engine or literature the **NavMeshAgent** and **NavMesh** may be called by different names. In Godot it is a **NavigationAgent** and **NavigationRegion**. Both version of these terms are correct, and I will use them interchangeably.
 
 
 
@@ -101,13 +101,13 @@ Now that we know what a **NavMesh** is, we can try and use it in our project. Op
 2. In the **Inspector** of the new node **add** a new `NavigationMesh`
 3. **Open** the created `NavigationMesh`
 
-There are many settings that you can change here and it would take too much time to go through them all. I will show you the basics and you can look up the rest. 
+There are many settings that you can change here, and it would take too much time to go through them all. I will show you the basics, and you can look up the rest. 
 
 First, we need to specify, which **meshes/colliders** should be considered during the **NavMesh** calculation. We can do that in the `Geometry` category with the `Source Geometry Mode` property. I find the `Group With Children` option to be the most manageable, so let's use it. Also set the property `Source Group Name` to `NavMeshSource`.
 
 
 ### Groups
-Now we have set the `Source Group Name` property but what are the **groups**? Each node can be a part of any number of **Groups**. They can be used to easily **tag** nodes. For example you can tag **boxes and barrels** in your game as **"Destructible"** and then when the player attacks an object, you can **check** if the object is in the group "Destructible", if yes then you can **delete** the object.
+Now we have set the `Source Group Name` property, but what are the **groups**? Each node can be a part of any number of **Groups**. They can be used to easily **tag** nodes. For example, you can tag **boxes and barrels** in your game as **"Destructible"** and then when the player attacks an object, you can **check** if the object is in the group "Destructible", if yes then you can **delete** the object.
 
 Every node has a function to check if it is in a group: 
 ```GDScript
@@ -174,7 +174,7 @@ To fix this we will learn about the **Import** tab.
 Now the enemy should be correctly centered like in the picture above. 
 
 > aside positive
-> I created this 3D Voxel model in a free program called **MagicaVoxel**. It is very easy to use and I recommend it if you want to use a similar aesthetic.
+> I created this 3D Voxel model in a free program called **MagicaVoxel**. It is very easy to use, and I recommend it if you want to use a similar aesthetic.
 
 
 #### Enemy Texture
@@ -263,7 +263,7 @@ Now if you **play the game** and click somewhere, you can see the **path** (red 
 
 
 ### Stuck on Corners
-The reason the enemy is getting **stuck on corners** is because the enemy is **wider** than the `radius` property that the `NavMesh` was baked with. The `radius` property controls how much space is between the edge of the `NavMesh` and the edge of the obstacle. Our enemy has a `SphereShape` with radius of `1m` as the collider. Let's go into the `NavigationMesh` settings and **change** the `radius` property:
+The reason the enemy is getting **stuck on corners** is that the enemy is **wider** than the `radius` property that the `NavMesh` was baked with. The `radius` property controls how much space is between the edge of the `NavMesh` and the edge of the obstacle. Our enemy has a `SphereShape` with radius of `1m` as the collider. Let's go into the `NavigationMesh` settings and **change** the `radius` property:
 
 ![](img/NavMeshRadius.png)
 
@@ -290,7 +290,7 @@ This problem is a bit different since it does not originate from any of the **na
 ## Extra Navigation Nodes
 Duration: hh:mm:ss
 
-There are **2 extra nodes** related to `NavMeshes`/`NavigationRegions`, that can be used. This chapter is a bit **optional** but I recommend at least looking through it, so that you know that these nodes exist.
+There are **2 extra nodes** related to `NavMeshes`/`NavigationRegions`, that can be used. This chapter is a bit **optional**, but I recommend at least looking through it, so that you know that these nodes exist.
 
 
 ### NavigationObstacle3D
@@ -302,7 +302,7 @@ To do this:
 1. **Open** the `resistor.tscn` scene
 2. **Add** a `NavigationObstacle3D` as a child of the root
 3. **Open** the `vertices` property and **add** 4 vertices
-4. **Set** the **coordinates** of vertices so it matches the bounds of the grey square
+4. **Set** the **coordinates** of vertices, so it matches the bounds of the gray square
 5. **Set** the `height` property to `1.5m` (needed so that the top of the object is unwalkable)
 6. **Toggle** the property `Affect Navigation Mesh` ON in the `Navigation Mesh` category
 
@@ -337,12 +337,12 @@ You can **try to make** a similar one and see how the enemy handles it.
 Duration: hh:mm:ss
 
 I would like our Ground Enemy to work like this:
-- When the player is **not spotted** -> **Patrol**
-- When **patrolling** -> move between a **sequence of points**
-- When the player is **spotted** -> **Chase** the player
-- When **chasing** the player -> Go to the **player position** and periodically **shoot a projectile** at them
+- When the player is **not spotted** ⇾ **Patrol**
+- When **patrolling** ⇾ move between a **sequence of points**
+- When the player is **spotted** ⇾ **Chase** the player
+- When **chasing** the player ⇾ Go to the **player position** and periodically **shoot a projectile** at them
 
-This behavior can be expressed as the graph below. Where each **box is a state** the enemy can be in and each **arrow is a transition** from one state to another. These transitions are taken when the **conditions are met** (red squares).
+This behavior can be expressed as the graph below. Where each **box is a state** the enemy can be in, and each **arrow is a transition** from one state to another. These transitions are taken when the **conditions are met** (red squares).
 
 ![](img/FiniteStateMachinePlan.png)
 
@@ -403,7 +403,7 @@ Start by:
 4. **Copy** the **three empty functions** from the `abstract_fsm_state.gd`
 5. **Replace** the `assert` lines with `pass` instead
 
-Additionally, we will need to be able to **set and store** the points of the **patrol path**. Let's **add** an `export` variable and an **index**, so that we know which point we are targeting:
+Additionally, we will need to be able to **set and store** the points of the **patrol path**. Let's **add** an `@export` variable and an **index**, so that we know which point we are targeting:
 ```GDScript
 @export var patrol_points : Array[Vector3]
 
@@ -564,7 +564,7 @@ The chase state is for the most part **already implemented**. We will just quick
 There are a few additions needed for the `ChaseState` to be usable.
 
 #### Adding Chase State as a Resource
-In a similar way to the `PatrolState` we will add an `export` variable of the type `ChaseState` to the enemy.
+Similarly to the `PatrolState` we will add an `@export` variable of the type `ChaseState` to the enemy.
 ```GDScript
 @export var chase_state : ChaseState
 ```
@@ -580,7 +580,7 @@ The enemy needs to somehow **detect the player**. The most straightforward way i
 2. **Add** a `CollisionShape3D` as a child of the `Area3D`
 3. **Add** a new `ConvexPolygonShape3D` as the `Shape` property of the `CollisionShape3D`
 
-We added a `ConvexPolygonShape3D`, because we want to **create a custom shape** for the vision of the enemy (a vision cone). **Add the points** to the shape in a similar way as the image below:
+We added a `ConvexPolygonShape3D`, because we want to **create a custom shape** for the vision of the enemy (a vision cone). **Add the points** to the shape similarly as the image below:
 
 ![](img/VisionCone.png)
 
@@ -589,7 +589,7 @@ We added a `ConvexPolygonShape3D`, because we want to **create a custom shape** 
 >![](img/VisionMask.png)
 
 
-Now connect the signal `body_entered()` to the enemy script using the **Inspector** in the **Node** -> **Signal** tab. This will **create a function** called `_on_vision_area_body_entered()` (if you renamed the `Area3D` to `VisionArea`). Let's use it:
+Now connect the signal `body_entered()` to the enemy script using the **Inspector** in the **Node** ⇾ **Signal** tab. This will **create a function** called `_on_vision_area_body_entered()` (if you renamed the `Area3D` to `VisionArea`). Let's use it:
 
 ```GDScript
 var _trigger_player_seen : bool = false
@@ -633,7 +633,7 @@ func _ready():
     _switch_state(patrol_state)
 ```
 
-Let's also **change** the `_physics_process()` function so it updates the `_curr_state` instead of the `patrol_state`.
+Let's also **change** the `_physics_process()` function, so it updates the `_curr_state` instead of the `patrol_state`.
 ```GDScript
 func _physics_process(delta : float) -> void:
     ...
@@ -729,14 +729,14 @@ Let's tackle the **cooldown** first.
 To handle reoccurring cooldowns or waiting times, I recommend using the `Timer` node. Let's add one to the enemy:
 1. **Add** the `Timer` node as the child of the `GroundEnemyFSM`
 2. **Rename** it to `ShootCooldownTimer`
-3. **Connect** the `timeout()` signal of the node the the `GroundEnemyFSM` script
+3. **Connect** the `timeout()` signal of the node the `GroundEnemyFSM` script
 
 Now in the `GroundEnemyFSM` let's add a reference to the `Timer`:
 ```GDScript
 @onready var shoot_cooldown_timer : Timer = $ShootCooldownTimer
 ```
 
-Now to know if we **can or cannot shoot** ( -> go to the `ShootState`), we can **add a variable** to track it and a **setter function** for the variable:
+Now to know if we **can or cannot shoot** (⇾ go to the `ShootState`), we can **add a variable** to track it and a **setter function** for the variable:
 ```GDScript
 var _can_shoot : bool = true
 ...
@@ -751,11 +751,11 @@ func _on_shoot_cooldown_timer_timeout():
 ```
 
 > aside positive
-> We use **getter** and **setter** functions instead of **directly setting** the value, because in the future we might want to do **other operations** while getting/setting the value (eg. bounds check, default value override, reference null check etc.) 
+> We use **getter** and **setter** functions instead of **directly setting** the value, because in the future we might want to do **other operations** while getting/setting the value (e.g. bounds check, default value override, reference null check etc.) 
 
 
 #### Player in Direct Sight
-To check if the player is in **direct sight**, we will use a `RayCast3D` node. The node will be **disabled by default** and we will enable it and check the result, only when checking the **transition conditions**. This will save us some performance, as the enemy will not shoot raycasts every frame, but only when they want to shoot a projectile.
+To check if the player is in **direct sight**, we will use a `RayCast3D` node. The node will be **disabled by default**, and we will enable it and check the result, only when checking the **transition conditions**. This will save us some performance, as the enemy will not shoot raycasts every frame, but only when they want to shoot a projectile.
 
 1. **Add** a `RayCast3D` node and call it `ShootCast`.
 2. **Set** the `enabled` property to `false` and **set the collision mask** to check `Player`, `Terrain`, `Enemy`.
@@ -854,7 +854,7 @@ func state_enter(enemy : GroundEnemyFSM) -> void:
 The projectile already flies towards the player. **Check** `electric_projectile.gd` for more info.
 
 > aside positive
-> The projectile has many different **visual effects** applied. Such as: cycling 2 meshes, scaling up and down, random rotation axis, etc. More effects could be added easily since Godot has really easy to use tools (`Tweens`, `awaits`, etc.).
+> The projectile has many **visual effects** going on. Such as: cycling 2 meshes, scaling up and down, random rotation axis, etc. More effects could be added easily since Godot has really easy to use tools (`Tweens`, `awaits`, etc.).
 
 
 #### **`state_physics_process()`**
@@ -911,7 +911,7 @@ func _on_body_entered(body : Node3D):
 ```
 
 > aside negative
-> We cannot use `await get_tree.create_time(knockback_time).timeout` for calling the `set_do_movement(true)`, because the node will be destroyed soon and the code would not run.
+> We cannot use `await get_tree.create_time(knockback_time).timeout` for calling the `set_do_movement(true)`, because the node will be destroyed soon, which would make the code not run.
 
 
 ### PlayerController3D
@@ -927,7 +927,7 @@ func set_do_movement(value : bool, delay : float = 0) -> void:
 ```
 
 > aside positive
-> The delay parameter has a **default value** of `0`, meaning that if you call the function without specifying the parameter an error is NOT thrown but it is called with a delay of `0`
+> The delay parameter has a **default value** of `0`, meaning that if you call the function without specifying the parameter an error is NOT thrown, but it is called with a delay of `0`
 
 
 
