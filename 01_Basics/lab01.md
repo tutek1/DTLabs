@@ -77,7 +77,7 @@ Each lab will have a template project, which we will fill out together. This lab
 ## Godot UI
 Duration: hh:mm:ss
 
-Now with the project open it might a bit overwhelming to orient yourself in the **Godot UI** so let's have a look at it.
+Now with the project open it might a bit overwhelming to orient yourself in the **Godot UI** so let's take a look at it.
 
 ![](img/GodotUI.png)
 

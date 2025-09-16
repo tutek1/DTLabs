@@ -276,7 +276,7 @@ Add this line to the `_enter2D()` function:
 _player_3d.process_mode = Node.PROCESS_MODE_DISABLED
 ```
 
-It would also be nice, if the player 2D was not **visible** until we enter the 2D world and if the player 3D was invisible until we exit the 2D world. There are several ways to do it and each has a pro and con, we will stick with the simplest and just set the **scale** of the player to `0`.
+It would also be nice if the player 2D was not **visible** until we enter the 2D world and if the player 3D was invisible until we exit the 2D world. There are several ways to do it and each has a pro and con, we will stick with the simplest and just set the **scale** of the player to `0`.
 
 For the 3D player, add this line to the `_enter2D()` function:
 ```GDScript

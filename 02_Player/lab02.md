@@ -233,7 +233,7 @@ Now we know how to move the player on a given axis by manually setting it in the
 
 
 ### Adding actions and keys to the Input map
-Input in Godot is handled with **input actions**. Each action should correspond to a type of input you want to detect. For example: Jumping will be its own action "jump" and in a 2D game it can be triggered by `W` or `SPACE`. This way we don't have to remember what keys are set for each action, we just have to remember, what action we want to check for. It also allows us to change/add keybindings easily without writing code.
+Input in Godot is handled with **input actions**. Each action should correspond to a type of input you want to detect. For example: Jumping will be its own action "jump" and in a 2D game it can be triggered by `W` or `SPACE`. This way we don't have to remember what keys are set for each action, we just have to remember, what action we want to check for. It also allows us to change/add **keybindings** easily without writing code.
 
 You can follow this video or the step by step below to add the keys and actions we want to listen for.
 
@@ -473,7 +473,7 @@ func _rotate_player(delta : float) -> void:
     rotation.y = lerp_angle(rotation.y, angle, rotation_speed * delta)
 ```
 ### Forward Correct Movement
-Right now if you try to play the game, the player does rotate according to the direction they move. However, you might notice that the forward direction is always the **negative Z-axis**. To change this, so that `W` (and `S`) will always move the player forward in the direction they are facing, we need to have a look at the `_movement()` function again.
+Right now if you try to play the game, the player does rotate according to the direction they move. However, you might notice that the forward direction is always the **negative Z-axis**. To change this, so that `W` (and `S`) will always move the player forward in the direction they are facing, we need to take a look at the `_movement()` function again.
 
 Let's create a `Vector3` from the axes we gathered from the input. We will do this in a way, so it represents the direction we want the player to move in from the perspective of the player (their coordinate space).
 

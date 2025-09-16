@@ -44,7 +44,7 @@ However, firstly we need to learn about **Singletons** and **Autoload**!
 ### Singleton Pattern and Autoload
 The Singleton pattern is a software design pattern that **restricts a class**, so that there cannot be more than a **singular instance** of it. In most other game engines you would have to use Singletons for scripts like the `global_debug.gd`.
 
-In **Godot** you could also use Singletons, but there is an easier way. Godot allows you to set **scripts** or even **node trees** as **Autoload**. If you add a node/script as **Autoload** it will be automatically created and added above the scene tree upon start. This makes the node accessible from anywhere, which is useful for many reasons. The usual **Godot Lifecycle** functions are still run.
+In **Godot,** you could also use Singletons, but there is an easier way. Godot allows you to set **scripts** or even **node trees** as **Autoload**. If you add a node/script as **Autoload** it will be automatically created and added above the scene tree upon start. This makes the node accessible from anywhere, which is useful for many reasons. The usual **Godot Lifecycle** functions are still run.
 
 Let's add the `global_debug.gd` as an **Autoload**:
 1. **Open** the `Project Settings`
@@ -87,7 +87,7 @@ Here is an example of a **NavMesh** in Godot. The light-blue areas are walkable 
 A **NavMesh** is usually "baked" or calculated in the editor, so naturally it is **NOT** suitable for **highly dynamic** environments since you would need to rebake the **NavMesh** every time something would change. If you really need to, you can bake a NavMesh while the **game is running**, but be aware that the computation is quite **costly**.
 
 > aside positive
-> Depending on the engine or literature the **NavMeshAgent** and **NavMesh** may be called by different names. In Godot it is a **NavigationAgent** and **NavigationRegion**. Both version of these terms are correct, and I will use them interchangeably.
+> Depending on the engine or literature the **NavMeshAgent** and **NavMesh** may be called by different names. In Godot, it is a **NavigationAgent** and **NavigationRegion**. Both version of these terms are correct, and I will use them interchangeably.
 
 
 

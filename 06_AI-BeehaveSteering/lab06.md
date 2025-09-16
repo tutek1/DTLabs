@@ -540,7 +540,7 @@ Let's look at the `air_enemy.tscn` file in `3D/Enemies/AirEnemy`.
 
 ![](img/AirEnemy.png)
 
-This is our enemy, which in the game world represents the **malware that attacked the computer**, that the player needs to clear out (see [GDD]("TODO")). Now let's have a look at the script `air_enemy.gd` and the `_physics_process()` to see what it does.
+This is our enemy, which in the game world represents the **malware that attacked the computer**, that the player needs to clear out (see [GDD]("TODO")). Now let's take a look at the script `air_enemy.gd` and the `_physics_process()` to see what it does.
 
 ```GDScript
 func _physics_process(delta : float) ⇾ void:
@@ -748,7 +748,7 @@ Please try it out in the project and tweak the `predict_mult` parameter to get a
 ## Other Implemented Steerings
 Duration: hh:mm:ss
 
-Let's have a brief look at all the other steerings I implemented and play around with them.
+Let's take a brief look at all the other steerings I implemented and play around with them.
 
 
 ### Collision Avoidance

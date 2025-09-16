@@ -34,7 +34,7 @@ Here is the template for this lab. Please download it, there are new assets, sce
 ## Project Organization
 Duration: hh:mm:ss
 
-Let's have a look in the template project that I provided. If you look in the **FileSystem**, you can see the folder `2DPlatforming`. Inside it, you can find the debug scene, in which we will work in this codelab, and a sprite sheet image.
+Let's take a look in the template project that I provided. If you look in the **FileSystem**, you can see the folder `2DPlatforming`. Inside it, you can find the debug scene, in which we will work in this codelab, and a sprite sheet image.
 
 ### Folder management
 The way you structure the folders in your project is very important. Many people have folders based on **file type** (`Scripts`, `Art`, `Scenes`, `Sounds` etc.). This can be quick and useful to find something in smaller projects or folders. I will use this approach in the `2DPlatforming` part of the project, since it will be a small minigame.
