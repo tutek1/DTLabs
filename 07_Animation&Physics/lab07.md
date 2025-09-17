@@ -1,6 +1,6 @@
 summary: Animation & Physics
 id: export
-categories: Animation, Physics, 3D, Models, Joints, Animation Tree
+categories: Animation, Physics, 3D, Models, Joints, Animation Tree, Skeleton, Bones, Light
 status: Published
 authors: Ondřej Kyzr
 Feedback Link: https://google.com
@@ -34,7 +34,7 @@ Duration: hh:mm:ss
 Since the last template I have added and changed quite a few things in our game.
 
 ### 2D Puzzle
-Quite a large addition is the 2D puzzle section. It works similarly as the **platforming section** except you use the mouse to play it. You can have a look at the code and node setup if you are interested in how games that are controlled with a mouse work.
+Quite a large addition is the 2D puzzle section. It works similarly as the **platforming section** except you use the mouse to play it. You can take a look at the code and node setup if you are interested in how games that are controlled with a mouse work.
 
 ![](img/Puzzle2D.png)
 
@@ -158,10 +158,14 @@ Here you can see the keyframes (gray and yellow dots) of all the bones for the p
 **Skeletal Animation** is a very useful technique to create natural moving models and are a much deeper topic. If you are interested in 3D modelling or procedural animation, I recommend looking up more sources. This brief overview will be sufficient for us to use them in this codelab.
 
 
-## Animation Tree (Premade Animations) TODO
+## Animation Tree (Premade Animations)
 Duration: hh:mm:ss
 
-Creating more complex animation behavior, than just playing one animation, can be done in Godot with the use of the `AnimationTree` node. It can be used to create very complex animation switching and blending trees.
+In the first half of this codelab, we will look at 3 different ways to make and use animations. The first one is working with animations created in another software, such as `Blender` or others.
+
+
+### `AnimationTree`
+Creating more complex animation behavior, than just playing one animation, can be done in Godot with the use of the `AnimationTree` node. It can be used to create very complex animation behavior with state switching and blending trees.
 
 The tree has a property of `Tree Root`, which can be set to create the behavior. There are several options but only some of them are useful (✔️) to be chosen as the root of the animation tree. 
 
@@ -205,7 +209,7 @@ If you followed the steps in the GIF above, please **clear the state machine** a
 The `BlendTree` editor should now be open, with a single `Output` node. You can navigate this space by holding the middle-mouse button and dragging.
 
 #### What is a `BlendTree`?
-A `BlendTree` is a special node, that allows us to blend together different animations based on the values of parameters (0.0 - 1.0), which can be set in code. The functionality is best shown on an example. Let's create a `BlendTree` for our player character.
+A `BlendTree` is a special node, that allows us to blend together different animations based on the values of parameters (0.0–1.0), which can be set in code. The functionality is best shown on an example. Let's create a `BlendTree` for our player character.
 
 #### Filling out the `BlendTree`
 Please **recreate** the setup seen in the picture below.
@@ -244,6 +248,7 @@ If you had tried to play the game, the animations would not have worked. That's 
 
 **Open** the `player_controller_3D.gd` script and find the function `_animation_tree_update()` (should be around line 168). This function will be responsible for setting all the **animation blend values**. 
 
+#### Blending the falling animation
 Let's start with the `FallBlend`. We want the falling animation to play only when the `velocity.y` of our player is lower than `0`. The animation should also not play **as strongly** when the player starts to fall. That will be done by multiplying the force by some small number for example around `0.1`. This is the code for the `FallBlend`:
 
 ```GDScript
@@ -255,6 +260,7 @@ animation_tree.set("parameters/FreeMoveBlendTree/FallBlend/blend_amount", fall_c
 ```
 - `fall_mult` is an `@export` variable that controls the amount of force needed to blend.
 
+#### Parameter path
 The path of the parameter to set can be found in the **Inspector**, while the `AnimationTree` is selected. You can even **right-click** the parameter and press `Copy Property Path`, so that you don't have to type it out.
 
 <img src="img/AnimTreeParams.png" width="300"/>
@@ -293,22 +299,143 @@ Trying out the animations in play mode, one thing becomes clear. The walking ani
 3. **Add** a `TimeScale` node between the `WalkSpace2D` and `WalkBlend` nodes.
 4. **Connect** the new node correctly.
 
-<img src="img/TimeScale.png" width="300"/>
+<img src="img/TimeScale.png" width="400"/>
 
+This `TimeScale` node can also be used to adjust the speed of the walking animation on the go, based on the actual walking speed of the player. To do this, add these lines to the end of the `_animation_tree_update()` function:
 
+```GDScript
+# BlendSpace2D walking timescale
+var walkscale : float = (local_velocity.length() / stats.speed) * walk_mult
+animation_tree["parameters/FreeMoveBlendTree/TimeScale/scale"] = walkscale
+```
+
+Now try to lower the `acceleration` parameter of the player, and you should see that the animation adapts:
+
+![](img/TimeScaleGIF.gif)
 
 ### Connect to puzzle (fill out function)
+Ok, so now with the `FreeMoveBlendTree` complete let's go back to the `Root` of the `AnimationTree` and add the animations for the **connecting and disconnecting** from the 2D puzzle.
+
+#### Fill out the Root State Machine
+1. **Add** a new node of type `Animation` ⇾ `Armature|Connect`.
+2. **Create** a transition from the `FreeMoveBlendTree` to the new state node.
+3. **Add** another new state of type `Animation` ⇾ `Armature|Connect` and rename it to `Armature|Disconnect`
+4. **Select** the new state and change the `Play Mode` in the **Inspector** to `Backward`
+5. **Create** a transition from the `Armature|Connect` node to the `Armature|Disconnect`.
+6. **Select** the transition and set the `Switch Mode` in the **Inspector** to `At End`.
+7. **Create** a transition from the `Armature|Disconnect` node to the `FreeMoveBlendTree`.
+8. **Select** the transition and set the `Switch Mode` in the **Inspector** to `At End`.
+
+<img src="img/AnimationTreeStateMachine.png" width="500"/>
+
+> aside positive
+> `Switch Mode` ⇾ `At End` makes the transition wait until the animation finishes
+>
+> `Play Mode` ⇾ `Backward` makes the animation play in reverse
+
+#### Connect Parameter
+The current configuration will just loop between the three states. We want the animations to play when the player **enters** and **exits** the 2D puzzle. To make this possible I already created a function `set_connect_anim_bool(value : bool)` in the `player_controller_3d.gd` script, and you need to fill it out.
+
+**Create** a variable of type `bool` called `_connected` and set it in the `set_connect_anim_bool(value : bool)` function. This should be the result:
+
+```GDScript
+...
+var _connected : bool
+...
+func set_connect_anim_bool(value : bool) -> void:
+    _connected = value
+...
+```
+
+#### Transition Parameter
+To use the `_connected` parameter in the `AnimationTree` we first need to set the `Advance Expression Base Node` in the **Inspector**. This makes the variables and parameters of the player script available in the `AnimationTree`. Please **set** the parameter to the `Player` node as such:
+
+<img src="img/AdvancedExpressionBaseNode.png" width="300"/>
+
+Now inside the `AnimationTree` window:
+1. **Select** the transition from `FreeMoveBlendTree` to `Armature|Connect`
+2. **Set** the `Expression` parameter to `_connected` in the **Inspector** in the `Advance` section
+3. **Select** the transition from `Armature|Connect` to `Armature|Disconnect`
+4. **Set** the `Expression` parameter to `not _connected` in the **Inspector** in the `Advance` section
+
+This makes the `AnimationTree` work directly with the variable of `_connected`, that is set when the player enters and exits the 2D puzzle.
+
+![](img/PuzzleConnect.gif)
+
 
 
 
 ## Skeleton Modifiers (Procedural Animations) TODO
 Duration: hh:mm:ss
 
-### Light in eyes BoneAttachment
+Another way of creating animations is using code. There are many ways you can code animations, but we will look at how we can use bones of an already existing skeleton to **influence objects**, and **create responsive (procedural) animations**. Here are some examples:
+- Placing the feet of a character precisely on the ground so that they do not float or clip inside the ground.
+- Keeping the hands of a character from going through walls by influencing the bones and pushing them away.
+- Making the head/gun look at in the same direction as the camera.
+- Organic movement of characters such as animals (games: `Rain World`, `Gecko Gods`, ...)
+- Most of the Tweens we did in this project are also a form of procedural animation.
+- and many more ...
 
-### LookAtModifier for gun
+### Light in eyes `BoneAttachment3D`
+We will first make the player eyes glow using point lights (`OmniLight` in Godot).
 
-### Player projectiles
+1. **Add** two `OmniLight3D` nodes as children of the `Skeleton3D`
+2. **Move** each light inside an "eyehole" of the player model (turn off the `AnimationTree` for easier manipulation)
+3. **Adjust** the parameters of the lights like so:
+    - `Range` = `0.1`
+    - `Color` = `ffb300`
+    - `Energy` = `0.5`
+
+Now to make the lights follow eyes we will attach them to a bone like this:
+
+1. **Add** a `BoneAttachment3D` node as a child of the `Skeleton3D`
+2. **Set** the `Bone Name` parameter of the `BoneAttachment3D` to `Head_end`
+3. **Put** the two `OmniLight3D` nodes as children of the `BoneAttachment3D`
+
+Now the eye lights should closely follow the movement of the head of the player.
+
+![](img/EyeLightFollow.gif)
+
+
+### Gun Aiming `LookAtModifier3D`
+Let's use another modifier. I want the gun, that the player holds to aim where the camera is looking. We will do this by adding a `LookAtModifier3D`, which will rotate the bone towards a target, and by adding a `Node3D`, which will work as the target that the bone will be looking at. 
+
+1. **Add** a `LookAtModifier3D` node as a child of the `Skeleton3D`
+2. **Add** a `Node3D` as a child of the `Player` node
+3. **Rename** the `Node3D` to `GunTarget` (Important!)
+4. **Set** the parameters of the `LookAtModifier3D` as such:
+    - `Target Node` = `GunTarget`
+    - `Bone Name` = `GunBone`
+    - `Forward Axis` = `+Y`
+    - `Primary Rotation` = `Z`
+
+Try to move the `GunTarget` node around, and you can see that the gun follows it.
+
+![](img/GunTarget.gif)
+
+> aside positive
+> You can see which axis to use for the `Forward Axis` and `Primary Rotation` by looking closely at the bone. It has a small 3D axis gizmo drawn at the end of it.
+
+#### Moving the `GunTarget`
+Now the only thing left to do is to move the actual `GunTarget` based on direction the camera is looking in. I already prepared the logic in the code, since I want it a bit more complex than just moving the target.
+
+1. **Go** into the `player_controller_3d.gd` script
+2. **Uncomment** the `_update_gun_target()` function
+3. **Delete** the `pass` line
+
+This code **moves the target** based on set parameters such as `gun_point_offset`, `gun_point_depth`, etc. However, it also **changes the** `influece` of the modifier in such a way, that the influence is lower when looking backwards. This makes the gun not clip inside the player. 
+
+![](img/GunMoving.gif)
+
+You can change the line `look_at_modifier_3d.influence = influence` to `look_at_modifier_3d.influence = 1` to see the difference between limiting the angle or not.
+
+> aside positive
+> You can also limit the angles of rotation in a more absolute way using the `Angle Limitation` section:
+>
+><img src="img/AngleLimitsLookAt.png" width="250"/>
+
+### Player Projectiles
+Now that our gun rotates to where we are looking at ...
 
 ### SkeletonIK showcase
 

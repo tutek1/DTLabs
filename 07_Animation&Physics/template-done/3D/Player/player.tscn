@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://8sbvl7rcejq5"]
+[gd_scene load_steps=28 format=3 uid="uid://8sbvl7rcejq5"]
 
 [ext_resource type="Script" uid="uid://bsumix7xtjux1" path="res://3D/Player/player_controller_3d.gd" id="1_d17s7"]
 [ext_resource type="PackedScene" uid="uid://b20m6c0e0bfdu" path="res://3D/Player/Projectile/player_projectile.tscn" id="2_46t1g"]
@@ -21,6 +21,13 @@ has_double_jump = true
 metadata/_custom_type_script = "uid://dtuvy1vh7q3x4"
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hn7em"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_w2xrt"]
+animation = &"Armature|Connect"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jmp7f"]
+animation = &"Armature|Connect"
+play_mode = 1
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_46t1g"]
 animation = &"Armature|Fall"
@@ -62,7 +69,7 @@ blend_point_3/node = SubResource("AnimationNodeAnimation_djpnq")
 blend_point_3/pos = Vector2(-1, 0)
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_46t1g"]
-graph_offset = Vector2(-776.514, 98.2729)
+graph_offset = Vector2(-428, 93)
 nodes/Fall/node = SubResource("AnimationNodeAnimation_46t1g")
 nodes/Fall/position = Vector2(160, 400)
 nodes/FallBlend/node = SubResource("AnimationNodeBlend2_xq0gp")
@@ -85,11 +92,28 @@ node_connections = [&"FallBlend", 0, &"JumpBlend", &"FallBlend", 1, &"Fall", &"J
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_xq0gp"]
 advance_mode = 2
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_yrgra"]
+advance_mode = 2
+advance_expression = "_connected"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ryaqj"]
+switch_mode = 2
+advance_mode = 2
+advance_expression = "not _connected"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_1x7iy"]
+switch_mode = 2
+advance_mode = 2
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_46t1g"]
+states/Armature|Connect/node = SubResource("AnimationNodeAnimation_w2xrt")
+states/Armature|Connect/position = Vector2(626, 200)
+states/Armature|Disconnect/node = SubResource("AnimationNodeAnimation_jmp7f")
+states/Armature|Disconnect/position = Vector2(324, 200)
 states/FreeMoveBlendTree/node = SubResource("AnimationNodeBlendTree_46t1g")
 states/FreeMoveBlendTree/position = Vector2(466, 95)
-transitions = ["Start", "FreeMoveBlendTree", SubResource("AnimationNodeStateMachineTransition_xq0gp")]
-graph_offset = Vector2(-79, -30)
+transitions = ["Start", "FreeMoveBlendTree", SubResource("AnimationNodeStateMachineTransition_xq0gp"), "FreeMoveBlendTree", "Armature|Connect", SubResource("AnimationNodeStateMachineTransition_yrgra"), "Armature|Connect", "Armature|Disconnect", SubResource("AnimationNodeStateMachineTransition_ryaqj"), "Armature|Disconnect", "FreeMoveBlendTree", SubResource("AnimationNodeStateMachineTransition_1x7iy")]
+graph_offset = Vector2(-105, -22)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_x3b60"]
 size = Vector3(2, 1, 1.5)
@@ -108,31 +132,61 @@ shape = SubResource("CapsuleShape3D_hn7em")
 transform = Transform3D(-2.18557e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.18557e-08, 0, -1, 0)
 
 [node name="Skeleton3D" parent="Mesh/Armature" index="0"]
-bones/0/position = Vector3(0, 0, 0.01113)
-bones/0/rotation = Quaternion(0.706994, 8.42803e-08, 8.43071e-08, 0.707219)
+bones/0/position = Vector3(0, 0, 0.0117743)
+bones/0/rotation = Quaternion(0.707107, 8.42937e-08, 8.42937e-08, 0.707107)
 bones/0/scale = Vector3(1, 1, 1)
-bones/1/rotation = Quaternion(-0.00212252, 0.0649164, -5.40797e-05, 0.997888)
-bones/1/scale = Vector3(1, 0.97312, 0.999999)
+bones/1/rotation = Quaternion(-0.00232366, 5.62673e-19, -5.54004e-10, 0.999997)
+bones/1/scale = Vector3(1, 1, 0.999999)
 bones/3/position = Vector3(-0.000499998, 0.0107497, -0.0105217)
-bones/3/rotation = Quaternion(0.99725, -0.0741085, 3.32239e-05, -0.000444455)
+bones/3/rotation = Quaternion(0.999714, -0.0225084, 0.00767264, -0.00270723)
 bones/5/position = Vector3(-0.000447049, -0.000234075, -0.00350103)
-bones/5/rotation = Quaternion(0.992567, 0.121297, 0.00972369, -0.00208763)
-bones/6/rotation = Quaternion(0.000394402, -0.00904197, -0.374344, 0.927246)
+bones/5/rotation = Quaternion(0.998001, -0.0624093, 0.00988582, 0.000618203)
+bones/6/rotation = Quaternion(0.000454021, -0.0109982, -0.0516081, 0.998607)
 bones/6/scale = Vector3(1, 1, 1)
 bones/8/position = Vector3(-0.000447051, -0.000234075, 0.00350103)
-bones/8/rotation = Quaternion(0.976965, -0.213176, 0.00954155, 0.00219094)
-bones/9/rotation = Quaternion(0.00642869, -0.0116412, -0.208313, 0.977972)
+bones/8/rotation = Quaternion(0.999952, -5.99422e-19, 0.00978963, 6.12274e-17)
 bones/9/scale = Vector3(1, 1, 1)
-bones/11/rotation = Quaternion(0.721699, -0.690895, 0.0307698, 0.0294564)
+bones/11/rotation = Quaternion(0.706465, -0.706465, 0.0301203, 0.0301202)
 bones/11/scale = Vector3(1, 1, 1)
+
+[node name="BoneAttachment3D" type="BoneAttachment3D" parent="Mesh/Armature/Skeleton3D" index="1"]
+transform = Transform3D(1, 5.63993e-14, 2.38418e-07, 2.38416e-07, 0.0046472, -0.999988, -1.10802e-09, 0.999989, 0.00464719, 1.36334e-15, 3.3529e-05, 0.0358148)
+bone_name = "Head_end"
+bone_idx = 2
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Mesh/Armature/Skeleton3D/BoneAttachment3D"]
+transform = Transform3D(0.019985, 6.26769e-05, 0.000772013, -4.26062e-05, 0.0199932, -0.000520232, -0.000773382, 0.000518198, 0.0199783, -0.0031352, -0.00267318, -0.00376591)
+light_color = Color(1, 0.7, 0, 1)
+light_energy = 0.5
+omni_range = 0.1
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="Mesh/Armature/Skeleton3D/BoneAttachment3D"]
+transform = Transform3D(0.019985, 6.26769e-05, 0.000772013, -4.26062e-05, 0.0199932, -0.000520232, -0.000773382, 0.000518198, 0.0199783, -0.00282703, -0.00291803, 0.00421105)
+light_color = Color(1, 0.7, 0, 1)
+light_energy = 0.5
+omni_range = 0.111
+
+[node name="LookAtModifier3D" type="LookAtModifier3D" parent="Mesh/Armature/Skeleton3D" index="2"]
+target_node = NodePath("../../../../GunTarget")
+bone_name = "GunBone"
+bone = 11
+forward_axis = 2
+primary_rotation_axis = 2
+use_angle_limitation = true
+symmetry_limitation = true
+primary_limit_angle = 6.28319
+primary_damp_threshold = 1.0
+secondary_limit_angle = 6.28319
+secondary_damp_threshold = 1.0
 
 [node name="AnimationTree" type="AnimationTree" parent="Mesh"]
 tree_root = SubResource("AnimationNodeStateMachine_46t1g")
+advance_expression_base_node = NodePath("../..")
 anim_player = NodePath("../AnimationPlayer")
 parameters/FreeMoveBlendTree/FallBlend/blend_amount = 0.0
 parameters/FreeMoveBlendTree/JumpBlend/blend_amount = 0.0
 parameters/FreeMoveBlendTree/TimeScale/scale = 2.0
-parameters/FreeMoveBlendTree/WalkBlend/blend_amount = 1.0
+parameters/FreeMoveBlendTree/WalkBlend/blend_amount = 0.0
 parameters/FreeMoveBlendTree/WalkSpace2D/blend_position = Vector2(-0.321613, 0.671171)
 
 [node name="InteractArea" type="Area3D" parent="."]
@@ -140,6 +194,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00126171, 7.15256e-07, -1.
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="InteractArea"]
 shape = SubResource("BoxShape3D_x3b60")
+
+[node name="GunTarget" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.760215, 0.033249, -2.10876)
 
 [connection signal="body_entered" from="InteractArea" to="." method="_on_interact_area_body_entered"]
 [connection signal="body_exited" from="InteractArea" to="." method="_on_interact_area_body_exited"]

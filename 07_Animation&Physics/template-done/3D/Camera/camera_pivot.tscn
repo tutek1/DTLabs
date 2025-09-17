@@ -5,12 +5,12 @@
 [sub_resource type="SphereShape3D" id="SphereShape3D_krwbd"]
 radius = 0.3
 
-[node name="CameraPivot" type="Node3D" node_paths=PackedStringArray("camera_target")]
+[node name="CameraPivot" type="Node3D"]
 script = ExtResource("1_w1w5k")
-camera_target = NodePath("")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 
 [node name="ShapeCast3D" type="ShapeCast3D" parent="."]
+visible = false
 shape = SubResource("SphereShape3D_krwbd")
 target_position = Vector3(0, 0, 0)

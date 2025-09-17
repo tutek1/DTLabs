@@ -260,8 +260,9 @@ func _ff_apply_new_state(from: Vector2i, cables_ON_lookup : Dictionary, update_c
 		# Once a new search depth was reached wait -> procedural
 		if node.depth > last_depth:
 			last_depth = node.depth
-			cable_update.emit()
 			await get_tree().create_timer(flood_fill_wait).timeout
+		
+		cable_update.emit()
 		
 		# Push neighbors in
 		queue.push_back(FloodNode.new(node.pos + Vector2i.UP, node.depth + 1))

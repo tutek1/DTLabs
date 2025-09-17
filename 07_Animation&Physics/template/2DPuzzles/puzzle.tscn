@@ -22,12 +22,10 @@ albedo_color = Color(0.004, 0.4, 0.2218, 1)
 material = SubResource("StandardMaterial3D_sdnea")
 size = Vector3(8.7, 1, 5.5)
 
-[node name="PuzzleSection" type="Sprite3D" node_paths=PackedStringArray("success_object")]
+[node name="PuzzleSection" type="Sprite3D"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 texture = SubResource("ViewportTexture_72jxc")
 script = ExtResource("1_sdnea")
-success_object = NodePath("PuzzleInteract")
-success_function = "success"
 cam_rot = Vector3(-90, 0, 0)
 target_position = Vector3(-0.67, 12.45, -24.75)
 pos_tween_time = 0.5

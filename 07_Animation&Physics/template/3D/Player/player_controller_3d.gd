@@ -22,6 +22,10 @@ extends CharacterBody3D
 @export var gun_point_offset : Vector3 = Vector3(0, 4, 0)
 
 @onready var animation_tree : AnimationTree = $Mesh/AnimationTree
+@onready var look_at_modifier_3d : LookAtModifier3D = $Mesh/Armature/Skeleton3D/LookAtModifier3D
+@onready var gun_target : Node3D = $GunTarget
+@onready var shoot_point : Node3D = $GORODITH_Player_anim/Armature/Skeleton3D/BoneAttachment3D2/ShootPoint
+@onready var shoot_cooldown : Timer = $ShootCooldown
 
 const ENEMY_LAYER = 4
 
@@ -135,8 +139,18 @@ func _interact() -> void:
 
 # Updates the target for the gun LookAt modifier
 func _update_gun_target() -> void:
-	# TODO update the gun target
 	pass
+	#var camera_pos : Vector3 = camera_pivot.camera_3d.global_position
+	#var pivot_pos : Vector3 = camera_pivot.global_position
+	#var cam_to_pivot : Vector3 = (pivot_pos - camera_pos).normalized()
+	#
+	## Change the influence based on angle
+	#var angle_to_player : float = basis.z.angle_to(cam_to_pivot)
+	#var influence : float = lerp(0, 1, clamp(angle_to_player - gun_IK_offset, 0, 1))
+	#look_at_modifier_3d.influence = influence
+	#
+	## Pivot position + offset + inverse direction to camera 
+	#gun_target.global_position = pivot_pos + gun_point_offset + cam_to_pivot * gun_point_depth
 
 # Shoots a projectile when conditions are met
 func _shoot() -> void:

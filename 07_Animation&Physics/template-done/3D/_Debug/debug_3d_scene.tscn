@@ -463,11 +463,11 @@ mesh = SubResource("BoxMesh_72jxc")
 
 [node name="2DPuzzles" type="Node3D" parent="Enviroment"]
 
-[node name="Puzzle" parent="Enviroment/2DPuzzles" groups=["NavMeshSource"] instance=ExtResource("15_x3b60")]
+[node name="Puzzle" parent="Enviroment/2DPuzzles" instance=ExtResource("15_x3b60")]
 transform = Transform3D(-1, -8.74228e-08, -3.82137e-15, 0, -4.37114e-08, 1, -8.74228e-08, 1, 4.37114e-08, 5.50242, 1.55608, 41.256)
 texture = SubResource("ViewportTexture_gw1uw")
 cam_rot = Vector3(-90, 180, 0)
-target_position = Vector3(5.50289, 1.53008, 36.8947)
+target_position = Vector3(5.502, 1.53, 37.185)
 target_rotation = Vector3(0, 0, 0)
 
 [node name="BrokenPin" parent="Enviroment" instance=ExtResource("7_7xxqo")]
@@ -502,7 +502,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.8935, 14.1815, 2.42364)
 camera_target = NodePath("../Player")
 
 [node name="Player" parent="." node_paths=PackedStringArray("camera_pivot") instance=ExtResource("7_x3b60")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.50289, 1.53008, 36.8947)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.50289, 1.53008, 35.1639)
 camera_pivot = NodePath("../CameraPivot")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]

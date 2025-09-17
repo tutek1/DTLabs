@@ -21,6 +21,7 @@ class_name PuzzleSectionManager
 @onready var puzzle_manager : PuzzleManager = $SubViewport.get_child(0)
 @onready var raycast_area : Area3D = $RaycastArea
 @onready var raycast_collider : CollisionShape3D = $RaycastArea/CollisionShape3D
+@onready var puzzle_interact : PuzzleInteract = $PuzzleInteract
 
 var _is_in_2D : bool = false
 var _player3D : PlayerController3D
@@ -106,7 +107,7 @@ func enter_2D(player3D : PlayerController3D) -> void:
 	.finished
 	
 	# Play connect animation
-	#player3D.set_connect_anim_bool(true)
+	player3D.set_connect_anim_bool(true)
 	
 	# Wait a while
 	await get_tree().create_timer(connect_anim_tween_time).timeout
@@ -133,7 +134,9 @@ func exit_2D(success : bool) -> void:
 	
 	# Call success function on success object
 	if success:
-		success_object.call(success_function)
+		puzzle_interact.success()
+		if success_object != null:
+			success_object.call(success_function)
 	
 	_is_in_2D = false
 	

@@ -9,6 +9,7 @@ var _layer : int
 func interact(player : PlayerController3D):
 	if puzzle_section.get_is_in_2D():
 		puzzle_section.exit_2D(false)
+		collision_layer = _layer
 	else:
 		puzzle_section.enter_2D(player)
 		_layer = collision_layer
