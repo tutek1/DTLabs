@@ -30,7 +30,7 @@
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_vg4k8"]
 points = PackedVector3Array(0, 0, 1, 10, -5, -10, -10, -5, -10, 10, 5, -10, -10, 5, -10)
 
-[node name="GroundEnemyBeehave" type="CharacterBody3D"]
+[node name="GroundEnemyBeehave" type="CharacterBody3D" groups=["Damageable"]]
 collision_layer = 4
 collision_mask = 6
 floor_max_angle = 1.0472

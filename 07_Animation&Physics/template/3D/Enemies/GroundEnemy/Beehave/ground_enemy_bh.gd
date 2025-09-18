@@ -1,7 +1,8 @@
 class_name GroundEnemyBH
 extends CharacterBody3D
 
-@export_category("Speeds")
+@export_category("Base")
+@export var health : float = 20.0
 @export var speed : float = 5.0
 @export var up_speed : float = 10.0
 @export var rotation_speed : float = 7
@@ -114,6 +115,15 @@ func _rotate_enemy(delta: float) -> void:
 	var angle : float = atan2(direction.x, direction.z) - PI
 	
 	rotation.y = lerp_angle(rotation.y, angle, rotation_speed * delta)
+
+# Damagable Group function
+func damage(value : float, node : Node3D) -> void:
+	health -= value
+	if health < 0:
+		queue_free()
+		return
+	
+	print("hit by " + node.name)
 
 func _on_vision_area_body_entered(body):
 	if not (body is PlayerController3D): return

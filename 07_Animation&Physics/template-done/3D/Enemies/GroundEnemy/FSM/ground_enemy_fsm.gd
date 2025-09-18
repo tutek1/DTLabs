@@ -1,6 +1,7 @@
 class_name GroundEnemyFSM
 extends CharacterBody3D
 
+@export var health : float = 20.0
 @export var speed : float = 5.0
 @export var up_speed : float = 25.0
 @export var rotation_speed : float = 7
@@ -135,6 +136,15 @@ func rotate_enemy(delta: float, direction : Vector3) -> void:
 		#
 		#if result:
 			#navigation_agent_3d.target_position = result.position
+
+# Damagable Group function
+func damage(value : float, node : Node3D) -> void:
+	health -= value
+	if health < 0:
+		queue_free()
+		return
+	
+	print("hit by " + node.name)
 
 func get_player() -> PlayerController3D:
 	return _player

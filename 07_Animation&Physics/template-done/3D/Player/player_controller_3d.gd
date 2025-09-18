@@ -24,7 +24,7 @@ extends CharacterBody3D
 @onready var animation_tree : AnimationTree = $Mesh/AnimationTree
 @onready var look_at_modifier_3d : LookAtModifier3D = $Mesh/Armature/Skeleton3D/LookAtModifier3D
 @onready var gun_target : Node3D = $GunTarget
-@onready var shoot_point : Node3D = $GORODITH_Player_anim/Armature/Skeleton3D/BoneAttachment3D2/ShootPoint
+@onready var shoot_point : Node3D = $Mesh/Armature/Skeleton3D/BoneAttachment3D2/ShootPoint
 @onready var shoot_cooldown : Timer = $ShootCooldown
 
 const ENEMY_LAYER = 4
@@ -154,16 +154,22 @@ func _update_gun_target() -> void:
 
 # Shoots a projectile when conditions are met
 func _shoot() -> void:
-	pass
-	#var projectile : PlayerProjectile = stats.projectile.instantiate()
-	#get_tree().current_scene.add_child(projectile)
-	#
-	#projectile.global_position = shoot_point.global_position
-	#projectile.global_rotation = shoot_point.global_rotation
-	#projectile.set_damage(stats.projectile_damage)
-	#
-	#var direction : Vector3 = (gun_target.global_position - projectile.global_position).normalized()
-	#projectile.set_velocity(direction * stats.projectile_speed)
+	if not shoot_cooldown.time_left <= 0: return
+	if not Input.is_action_just_pressed("shoot"): return
+	shoot_cooldown.start(stats.shoot_cooldown)
+	
+	# Create projectile
+	var projectile : PlayerProjectile = stats.projectile.instantiate()
+	get_tree().current_scene.add_child(projectile)
+	
+	# Set position, rotation, damage
+	projectile.global_position =  shoot_point.global_position
+	projectile.global_rotation = shoot_point.global_rotation
+	projectile.set_damage(stats.projectile_damage)
+	
+	# Set velocity
+	var direction : Vector3 = (gun_target.global_position - projectile.global_position).normalized()
+	projectile.set_velocity(direction * stats.projectile_speed)
 
 # Process collisions with rigidbodies
 func _check_collisions(delta : float) -> void:

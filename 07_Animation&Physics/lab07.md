@@ -365,7 +365,7 @@ This makes the `AnimationTree` work directly with the variable of `_connected`, 
 
 
 
-## Skeleton Modifiers (Procedural Animations) TODO
+## Skeleton Modifiers (Procedural Animations)
 Duration: hh:mm:ss
 
 Another way of creating animations is using code. There are many ways you can code animations, but we will look at how we can use bones of an already existing skeleton to **influence objects**, and **create responsive (procedural) animations**. Here are some examples:
@@ -375,6 +375,9 @@ Another way of creating animations is using code. There are many ways you can co
 - Organic movement of characters such as animals (games: `Rain World`, `Gecko Gods`, ...)
 - Most of the Tweens we did in this project are also a form of procedural animation.
 - and many more ...
+
+> aside negative
+> To save time in this section I already made all the necessary references to nodes though `@onready` beforehand. So it is important to keep the names of the nodes the same!
 
 ### Light in eyes `BoneAttachment3D`
 We will first make the player eyes glow using point lights (`OmniLight` in Godot).
@@ -435,9 +438,108 @@ You can change the line `look_at_modifier_3d.influence = influence` to `look_at_
 ><img src="img/AngleLimitsLookAt.png" width="250"/>
 
 ### Player Projectiles
-Now that our gun rotates to where we are looking at ...
+Now that our gun rotates to where we are looking at it would be nice to actually **shoot a projectile**. I have already prepared a scene with the projectile (`3D/Player/Projectile`), that can be easily instantiated. We first need the position and rotation of the tip of the gun.
 
-### SkeletonIK showcase
+![](img/PlayerProjectile.png)
+
+#### The Shoot Point
+Either we can calculate it using the bone transform, which is a bit too complex, or we can use another `BoneAttachment3D` node with a `Node3D`, which will be easier and will allow us to more easily tweak the precise spawn point in space. Let's do the second variant:
+
+1. **Add** a `BoneAttachment3D` node as a child of the `Skeleton3D` (should be called `BoneAttachment3D2`)
+2. **Set** the `Bone Name` to `GunBone_end`
+3. **Add** a `Node3D` as a child of the new `Boneattachment3D`
+4. **Rename** the new `Node3D` to `ShootPoint`
+
+You can adjust the position of the `ShootPoint` to your liking.
+
+#### The Shoot Cooldown
+Another node we need is a `Timer` node that will handle the cooldown of shooting.
+
+1. **Add** a `Timer` node as a child of the `Player`
+2. **Rename** it to `ShootCooldown`
+3. **Set** the property `One Shot` to `On`
+
+If a timer is set as `One Shot` it means that once it will run out, it won't start again on its own, which is exactly what we need since we only want to start the timer once the player fires their gun.
+
+#### The Input Map
+The next thing we need to do is add a new input into the `InputMap` for shooting.
+
+1. **Open** the **Project Settings**
+2. **Go** into `InputMap`
+3. **Add** a new action called `shoot` and add a keybinding of `Right Mouse Button`
+
+#### The `_shoot()` function
+The last thing that needs to be done is to **uncomment** the `_shoot()` function in `player_controller_3d.gd`. Here is the full function just to be sure:
+
+```GDScript
+func _shoot() -> void:
+    if not shoot_cooldown.time_left <= 0: return
+    if not Input.is_action_just_pressed("shoot"): return
+    shoot_cooldown.start(stats.shoot_cooldown)
+
+    # Create projectile
+    var projectile : PlayerProjectile = stats.projectile.instantiate()
+    get_tree().current_scene.add_child(projectile)
+
+    # Set position, rotation, damage
+    projectile.global_position =  shoot_point.global_position
+    projectile.global_rotation = shoot_point.global_rotation
+    projectile.set_damage(stats.projectile_damage)
+
+    # Set velocity
+    var direction : Vector3 = (gun_target.global_position - projectile.global_position).normalized()
+    projectile.set_velocity(direction * stats.projectile_speed)
+```
+- Check if the **timer has run out** ⇾ we can shoot.
+- Check if the player **pressed the shoot button**.
+- **Start the `Timer`** again to prevent shoot spamming
+- **Create the projectile** defined in player stats
+- Set the **position, rotation, and damage**
+- Set the **velocity** based on direction of the gun and projectile speed from player stats
+
+Now when you play the game, the player can shoot a projectile using the `Right Mouse Button`.
+
+<img src="img/PlayerShooting.gif" width="500"/>
+
+
+### Enemy Damage
+The shooting is nice and all but in the current state it is useless, since the enemies **do not receive damage**, so let's change that. There are many ways to do this, but since I want the game to feature breakable walls, boxes, etc. we will use a **group** (same as tag in Unity) to denote, which objects can receive damage.
+
+1. **Open** the **Node** panel next to the **Inspector**.
+2. **Select** the `Groups` tab
+3. **Add** a new group called `Damageable` and set it to **global**
+4. **Open** `air_enemy.tscn` and **check** the `Damageable` group on the root node
+5. **Repeat** for `ground_enemy_bh.tscn` and `ground_enemy_fsm.tscn`
+
+![](img/Damageable.png)
+
+`air_enemy.tscn`, `ground_enemy_bh.tscn`, and `ground_enemy_fsm.tscn` already implement the `damage()` function, so playing the game now, you should be able to kill the enemies after a few hits.
+
+> aside negative
+> Usually in other programming languages we would create an `Interface`, that every damageable object would extend. In our case, since Godot does not have `Interfaces`, we will set a rule for our selves, that every object with the `Damageable` group will implement a function `damage(value : float, node : Node3D) -> void`.
+
+### Skeleton Inverse Kinematics Showcase
+Godot also has a special node for **inverse kinematics**. It is a bit more complex and not that applicable for our game, so I am only going to showcase how it works on a simple example.  
+
+#### Node setup
+First you need to add the `SkeletonIK` node and set the `Root` and `Tip` bone, then the node to be followed (`Target`) also needs to be set. For our example I will use the right leg of the player like this:
+
+<img src="img/SkeletonIKSetup.png" width="400"/>
+
+<img src="img/SkeletonIKBones.png" width="400"/>
+
+> aside positive
+> The `RightFoot_end` bone is the tip of the `RightFoot` bone.
+
+### Result
+To preview the `SkeletonIK` it is needed to click the `Play IK` button on the top bar of the scene view. Here is the resulting behavior:
+
+![](img/SkeletonIKShowcase.gif)
+
+Of course, you can then set rotation limits for the bones by implementing your own `SkeletonModifier3D`, so that they only rotate in a realistic way.
+
+> aside negative
+> In the version of Godot, that we are using (4.4.1) the `SkeletonIK` node is deprecated and will be replaced by a `SkeletonModifier` node in a future release, but it is ok to use for now.
 
 
 

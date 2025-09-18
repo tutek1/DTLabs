@@ -15,7 +15,7 @@ speed = 7.0
 jump_force = 10.0
 projectile = ExtResource("2_46t1g")
 projectile_damage = 5.0
-projectile_speed = 50.0
+projectile_speed = 30.0
 shoot_cooldown = 0.7
 has_double_jump = true
 metadata/_custom_type_script = "uid://dtuvy1vh7q3x4"
@@ -132,25 +132,26 @@ shape = SubResource("CapsuleShape3D_hn7em")
 transform = Transform3D(-2.18557e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.18557e-08, 0, -1, 0)
 
 [node name="Skeleton3D" parent="Mesh/Armature" index="0"]
-bones/0/position = Vector3(0, 0, 0.0117743)
+bones/0/position = Vector3(0, 0, 0.011788)
 bones/0/rotation = Quaternion(0.707107, 8.42937e-08, 8.42937e-08, 0.707107)
 bones/0/scale = Vector3(1, 1, 1)
-bones/1/rotation = Quaternion(-0.00232366, 5.62673e-19, -5.54004e-10, 0.999997)
+bones/1/rotation = Quaternion(0.00934026, 0.0173553, -0.00121977, 0.999805)
 bones/1/scale = Vector3(1, 1, 0.999999)
 bones/3/position = Vector3(-0.000499998, 0.0107497, -0.0105217)
-bones/3/rotation = Quaternion(0.999714, -0.0225084, 0.00767264, -0.00270723)
+bones/3/rotation = Quaternion(0.978514, -0.104475, 0.0157903, -0.177047)
 bones/5/position = Vector3(-0.000447049, -0.000234075, -0.00350103)
-bones/5/rotation = Quaternion(0.998001, -0.0624093, 0.00988582, 0.000618203)
-bones/6/rotation = Quaternion(0.000454021, -0.0109982, -0.0516081, 0.998607)
+bones/5/rotation = Quaternion(0.999951, -6.06494e-19, 0.00990513, 6.12273e-17)
+bones/6/rotation = Quaternion(0, -0.0110092, 0, 0.99994)
 bones/6/scale = Vector3(1, 1, 1)
 bones/8/position = Vector3(-0.000447051, -0.000234075, 0.00350103)
 bones/8/rotation = Quaternion(0.999952, -5.99422e-19, 0.00978963, 6.12274e-17)
+bones/9/rotation = Quaternion(-0.0214177, -0.0108959, -0.00018597, 0.999711)
 bones/9/scale = Vector3(1, 1, 1)
 bones/11/rotation = Quaternion(0.706465, -0.706465, 0.0301203, 0.0301202)
 bones/11/scale = Vector3(1, 1, 1)
 
 [node name="BoneAttachment3D" type="BoneAttachment3D" parent="Mesh/Armature/Skeleton3D" index="1"]
-transform = Transform3D(1, 5.63993e-14, 2.38418e-07, 2.38416e-07, 0.0046472, -0.999988, -1.10802e-09, 0.999989, 0.00464719, 1.36334e-15, 3.3529e-05, 0.0358148)
+transform = Transform3D(0.999395, 0.00276327, 0.0346812, 0.0347268, -0.0186347, -0.999222, -0.00211485, 0.999822, -0.0187193, 1.99379e-05, -0.000134457, 0.0358273)
 bone_name = "Head_end"
 bone_idx = 2
 
@@ -179,7 +180,15 @@ primary_damp_threshold = 1.0
 secondary_limit_angle = 6.28319
 secondary_damp_threshold = 1.0
 
+[node name="BoneAttachment3D2" type="BoneAttachment3D" parent="Mesh/Armature/Skeleton3D" index="3"]
+transform = Transform3D(-0.519563, -0.831515, 0.196565, -0.0727254, 0.272255, 0.959473, -0.851331, 0.484211, -0.201926, -0.0104803, -0.00904076, 0.018505)
+bone_name = "GunBone_end"
+bone_idx = 12
+
+[node name="ShootPoint" type="Node3D" parent="Mesh/Armature/Skeleton3D/BoneAttachment3D2"]
+
 [node name="AnimationTree" type="AnimationTree" parent="Mesh"]
+active = false
 tree_root = SubResource("AnimationNodeStateMachine_46t1g")
 advance_expression_base_node = NodePath("../..")
 anim_player = NodePath("../AnimationPlayer")
@@ -196,7 +205,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00126171, 7.15256e-07, -1.
 shape = SubResource("BoxShape3D_x3b60")
 
 [node name="GunTarget" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.760215, 0.033249, -2.10876)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0668404, 0.848085, -2.10876)
+
+[node name="ShootCooldown" type="Timer" parent="."]
+one_shot = true
 
 [connection signal="body_entered" from="InteractArea" to="." method="_on_interact_area_body_entered"]
 [connection signal="body_exited" from="InteractArea" to="." method="_on_interact_area_body_exited"]

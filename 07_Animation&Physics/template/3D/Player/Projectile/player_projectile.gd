@@ -26,7 +26,7 @@ func set_velocity(value : Vector3) -> void:
 
 # Damage the body if Damagable and Destroy self
 func _on_body_entered(body : Node3D) -> void:
-	if body.is_in_group("Damagable"):
+	if body.is_in_group("Damageable"):
 		print("shot " + body.name)
 		body.damage(_damage, self)
 	

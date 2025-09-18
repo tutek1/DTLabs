@@ -8,6 +8,7 @@ extends CharacterBody3D
 @export var up_down_rot_mult : float = 2
 
 @export_category("Behavior")
+@export var health : float = 20
 @export var contact_damage : float = 5
 @export var damage_cooldown : float = 0.5
 @export var max_player_chase_dist : float = 20 
@@ -106,6 +107,15 @@ func _check_collisions() -> void:
 			collision_mask += PLAYER_LAYER
 			
 			return
+
+# Damagable Group function
+func damage(value : float, node : Node3D) -> void:
+	health -= value
+	if health < 0:
+		queue_free()
+		return
+	
+	print("hit by " + node.name)
 
 # Returns the current target position
 func get_target() -> Vector3:

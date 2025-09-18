@@ -14,7 +14,7 @@ extends Resource
 @export_category("Shooting")
 @export var projectile : PackedScene = preload("res://3D/Player/Projectile/player_projectile.tscn")
 @export var projectile_damage : float = 5
-@export var projectile_speed : float = 50
+@export var projectile_speed : float = 30
 @export var shoot_cooldown : float = 0.7
 
 @export_group("Abilities")
