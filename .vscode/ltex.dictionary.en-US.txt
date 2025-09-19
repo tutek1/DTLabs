@@ -94,3 +94,6 @@ steerings
 int
 keybindings
 keybinding
+Rigidbody
+rigidbody
+rigidbodies

@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://chnffv2lmano5"]
+[gd_scene load_steps=43 format=3 uid="uid://chnffv2lmano5"]
 
 [ext_resource type="PackedScene" uid="uid://44guktn5iwdy" path="res://3D/WorldObjects/resistor.tscn" id="1_oikrr"]
 [ext_resource type="PackedScene" uid="uid://co65xg3ltrdrq" path="res://3D/WorldObjects/big_resistor.tscn" id="2_kdw4m"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://c3ninobgiq0ab" path="res://3D/Camera/camera_pivot.tscn" id="6_vdnx2"]
 [ext_resource type="PackedScene" uid="uid://qftfcqmg5ul6" path="res://3D/WorldObjects/BrokenPin/broken_pin.tscn" id="7_7xxqo"]
 [ext_resource type="PackedScene" uid="uid://8sbvl7rcejq5" path="res://3D/Player/player.tscn" id="7_x3b60"]
+[ext_resource type="PackedScene" uid="uid://dn1tsg6mdnqn1" path="res://3D/WorldObjects/Cube/cube.tscn" id="8_2m8vb"]
 [ext_resource type="PackedScene" uid="uid://bxrrrw1iqiee7" path="res://3D/Enemies/AirEnemy/air_enemy.tscn" id="10_kai6n"]
 [ext_resource type="PackedScene" uid="uid://1ps1fcn15ft3" path="res://3D/_Debug/debug_draw_path.tscn" id="11_7xjr7"]
 [ext_resource type="Script" uid="uid://q0fjp3ypmwdd" path="res://3D/Enemies/AirEnemy/Steering/steering_behavior.gd" id="11_vdnx2"]
@@ -496,6 +497,18 @@ mesh = SubResource("BoxMesh_0e4a3")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Enviroment/AnimatedPlatform"]
 shape = SubResource("BoxShape3D_g1oyg")
+
+[node name="Cube" parent="Enviroment" instance=ExtResource("8_2m8vb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.51, 1.899, 23.671)
+
+[node name="Cube2" parent="Enviroment" instance=ExtResource("8_2m8vb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.6507, 1.899, 23.671)
+
+[node name="Cube3" parent="Enviroment" instance=ExtResource("8_2m8vb")]
+transform = Transform3D(0.937398, 0, -0.348261, 0, 1, 0, 0.348261, 0, 0.937398, -14.6563, 4.16328, 23.671)
+
+[node name="Cube4" parent="Enviroment" instance=ExtResource("8_2m8vb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.7969, 1.899, 20.9619)
 
 [node name="CameraPivot" parent="." node_paths=PackedStringArray("camera_target") instance=ExtResource("6_vdnx2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.8935, 14.1815, 2.42364)

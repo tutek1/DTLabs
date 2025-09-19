@@ -178,13 +178,15 @@ func _check_collisions(delta : float) -> void:
 		var collider : Object = collision.get_collider()
 		if collider is RigidBody3D:
 			
-			# TODO Calculate the force to be applied based on:
-			#	- Normal vector of collision
-			#	- Rigidbody mass
-			#	- Player mass
-			# Get the offset from Rigidbody center
+			# Calculate the force
+			var push_direction : Vector3 = -collision.get_normal()
+			var force : Vector3 = push_direction * (player_mass / collider.mass)
+			
+			# Get the offset from collision point to rigidbody center
+			var pos_offset : Vector3 = collision.get_position() - collider.global_position
+			
 			# Apply the force
-			pass
+			collider.apply_impulse(force * delta, pos_offset)
 
 # Updates the parameters of the animation tree
 func _animation_tree_update():

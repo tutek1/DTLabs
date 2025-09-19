@@ -543,28 +543,203 @@ Of course, you can then set rotation limits for the bones by implementing your o
 
 
 
-## Moving Platform (In-engine animations) TODO
+## Moving Platform (In-engine animations)
 Duration: hh:mm:ss
+
+The last way to make animations, that I want to show you, is **creating them in the engine** itself. This is useful for creating simple animations, such as moving platforms, UI animations, visual effects, etc.
+
+
+### Moving Platform Node Type
+We will create a moving platform, that will move the player. I have already created a basic platform and placed it in our `debug_3d_scene.tscn`. So please open the scene and find the `AnimatedPlatform` node.
+
+The platform is a node type of `AnimatableBody3D`. This node is similar to the `StaticBody3D`, except while it is moved manually using code or animations it affects other physics bodies correctly (collisions, linear and angular velocity estimation, etc.).
+
 
 ### Animation Player
+To create an animation, we first need to add an `AnimationPlayer` node, which will host our animations.
 
-### Animation
+1. **Add** a `AnimationPlayer` node as a child of the `AnimatedPlatform`
+2. **Select** the `AnimationPlayer` node
+3. **Open** the `Animation` tab on the bottom panel
 
-### Why it works?
+> aside positive
+>In more complex cases we would create an `AnimationTree` to handle the behavior but in our case the platform will just play one animation in a loop.
+
+### The Animation
+With the animation window open let's create a new animation:
+
+1. **Click** on the `Animation` Button
+2. **Select** the `New...` option
+3. **Set** the name to `move`
+
+![](img/AnimationWindow.png)
+
+#### Animation Tracks
+To actually animate something, we need to add an **animation track**. There are several options that we can use:
+
+<img src="img/AnimationTracks.png" width="200"/>
+
+- **Property** - any property, can be position, color, export variables, etc.
+- **3D Position** - used to animate the position of an object
+- **3D Rotation** - used to animate the rotation of an object
+- **3D Scale** - used to animate the scale of an object
+- **Blend Shape** - used to interpolate between blend shapes (used for facial expressions, lip-syncing etc.)
+- **Call Method** - used to call methods/function during the animation ⇾ can be used as animation events
+- **Bezier Curve** - used to animate any property but using a curve editor instead of a dope sheet
+- **Audio Playback** - used to play sound during an animation
+- **Animation Playback** - used to sequence the animations of other animation player nodes in a scene, for example in cut scenes
+
+#### Moving the platform
+We want to create an animation of the platform moving up to the big resistor.
+
+<img src="img/MovingPlatformPre.png" width="400"/>
+
+Ok, let's make the animation.
+
+1. **Add** a `3D position` animation track ⇾ new menu opens
+2. In the new menu, **Select** the `AnimatedPlatform` node ⇾ new menu opens
+
+Let's also set some parameters of the animation.
+1. **Find** the animation length field on the right side ![](img/AnimationTime.png) and **set it** to `3` seconds.
+2. Next to the field, there is the **loop button** set it like this ![](img/AnimLoop.png).
+3. Above these settings, there is the ![](img/Autoplay.png) button, **toggle** it **on**.
+
+These settings will make the animation **3 seconds long**, **start playing automatically** when we turn the game on, and **loop it** with a bounce-back effect. Now to add keyframes to our animation:
+
+1. **Set** the `AnimatedPlatform` node's position
+2. **Right-click** on the timeline and press **Insert Key ...**
+
+This adds a keyframe to the current position of the track player with the value of the `AnimatedPlatform` position. Use this process to create an animation of the platform moving up to the `BigResistor` object.
+
+![](img/MovingPlatform.gif)
+
+#### Rotating the platform
+You can play add another track for rotation (`Bezier Curve`) to make the animation a bit more interesting. I first set the keyframes the same way as we did with the `position`, and then I switched to the **bezier curve editor** to make the animation a bit more interesting
+
+![](img/BezierCurve.gif)
+
+> aside negative
+> Sadly, there is currently a bug in Godot with multiple **animation tracks** (or even multiple `Tweens`) and **`AnimatableBody3D`**. If the option of `Sync To Physics` is turned on then only the **first** animation track will be played.
+>
+> If this becomes a problem for you, these are your options:
+> 1. Try the newest version of Godot in case that it is already fixed
+> 2. Keep `Sync To Physics` off making the motion a bit jittery. 
+> 3. Have only one animation track (very restrictive)
+> 4. Use an alternative that could work better for your specific need, mostly with `Sync To Physics` still turned off: 
+>   - `Tweens`, which are more limited than the animation player and need the `set_process_mode` called and set to physics.
+>   - `Path3D` with `PathFollow3D`, which are used for 3D position and rotation
+
+
+### Why the player rides the platform?
+You might have noticed that the player gets moved and rotated by the platform as it is animated in a correct way. This is due to the player node being of type `CharacterBody3D`, which has the `Moving Platform` ⇾ `Floor Layers` set use all layers as moving platforms by default.
 
 
 
-## Physics TODO?
+
+## Rigidbody Physics TODO
 Duration: hh:mm:ss
 
+This second part of the codelab will focus on physics, more precisely rigidbody physics. A rigidbody (`RigidBody3D` in Godot) is a 3D physics body that is moved by a physics simulation.
+
+`RigidBody3D` implements full 3D physics. It cannot be controlled directly, instead, you must **apply forces** to it (gravity, impulses, etc.), and the physics simulation will calculate the resulting movement, rotation, react to collisions, and affect other physics bodies in its path.
+
+### `CharacterBody3D` and `RigidBody3D` Interaction Problem
+Right now, if you try to push the cubes present in the scene they are stiff and do not move. This is the basic behavior when you set collision layers and masks in such a way that the player (`CharacterBody3D`) and the cube (`RigidBody3D`) collide with each other. Here is the behavior for different configurations:
+
+#### Player ❌ Cube ❌
+Disabling the player layers in the cube masks and vice versa makes both bodies not interact with each other. The player simple walks through the cube.
+
+<img src="img/NoCollisionPlayerCollision.png" width="150"/> <img src="img/NoCollisionCubeCollision.png" width="148"/>
+
+#### Player ❌ Cube ✔️
+Making the cube collide with the player but not the player with the cube creates a semi functioning physics system.
+
+<img src="img/NoCollisionPlayerCollision.png" width="150"/> <img src="img/InfForceCubeCollision.png" width="149"/>
+
+This setup is also called "infinite inertia" and it looks like this:
+
+![](img/InfiniteInertia.gif)
+
+#### Player ✔️ Cube ❌ and Player ✔️ Cube ✔️
+Both of these configurations make the cubes stiff and the player cannot move them. However, the player also no longer pushes the cube into the ground.
 
 
-## Rigidbodies TODO
-Duration: hh:mm:ss
+### Solving the Interaction Problem
+To solve this problem we need to manually process all the collisions and apply the correct forces to simulate realistic rigidbody interactions. First, we need to set the **collision layer and mask** of the cube in the `cube.tscn` scene like so:
 
-### Make player interact - mask layer process
+![](img/CubeCollision.png)
+
+Then let's set the player **collision layer and mask** in the `player.tscn` scene like so:
+
+![](img/PlayerLayer.png)
+
+Now, I prepared a function called `_check_collisions(delta : float)` in the `player_controller_3d.gd`. Let's fill out the missing lines and walk through them.
+
+> aside positive
+> I also set the name of the forth collision layer to `RigidBodies`.
+
+#### Push Direction
+First, we need to know which way to push the rigidbody we collided with. This can be achieved simply by getting the **normal vector** of the collision.
+
+```GDScript
+var push_direction : Vector3 = -collision.get_normal()
+```
+
+#### Push Force
+Then we need to calculate the push force. Since we want the collisions to be physically correct, we need to take into account **the masses** of both the player and the rigidbody. This line will calculate just that:
+
+```GDScript
+var force : Vector3 = push_direction * (player_mass / collider.mass)
+```
+
+> aside positive
+> Another possibility is to also take into account the velocities of the player and rigidbody to create a more accurate simulation and to make the rigidbodies also push the player.
+
+#### Position Offset
+The next thing, before we apply the force, is the offset from the rigidbody center to the collision point. We need this offset for the `apply_impulse()` function, that will be used in the next step. Here is the line to get the offset:
+
+```GDScript
+var pos_offset : Vector3 = collision.get_position() - collider.global_position
+```
+
+#### Force Apply
+The last thing we need is to apply the force on the rigidbody. To do this we will use the `apply_impulse()` function, which applies an instant force to the body.
+
+```GDScript
+collider.apply_impulse(force * delta, pos_offset)
+```
+
+#### The Result
+The player and cube `mass` parameter can be adjusted to make the interactions feel different. Here is the full code of the function:
+
+```GDScript
+func _check_collisions(delta : float) -> void:
+    for i in get_slide_collision_count():
+        var collision : KinematicCollision3D = get_slide_collision(i)
+        var collider : Object = collision.get_collider()
+        if collider is RigidBody3D:
+
+            # Calculate the force
+            var push_direction : Vector3 = -collision.get_normal()
+            var force : Vector3 = push_direction * (player_mass / collider.mass)
+
+            # Get the offset from collision point to rigidbody center
+            var pos_offset : Vector3 = collision.get_position() - collider.global_position
+
+            # Apply the force
+            collider.apply_impulse(force * delta, pos_offset)
+```
+
+This is the resulting behavior the code produces:
+
+![](img/RigidBodyResult.gif)
+
 
 ### Physics material and mass
+Having different physics objects have different properties is essential. The `RigidBody3D` node has these properties that can be changed:
+
+![](img/PhysicsMaterial.png)
+
 
 
 ## Hinge Joint - Seesaw
