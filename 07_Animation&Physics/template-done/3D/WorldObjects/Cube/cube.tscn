@@ -3,6 +3,7 @@
 [ext_resource type="ArrayMesh" uid="uid://rmc5k83fkrn5" path="res://3D/WorldObjects/Cube/GORODITH_cube.obj" id="1_w15o4"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_w15o4"]
+friction = 0.8
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_gw1uw"]
 size = Vector3(2, 2, 2)

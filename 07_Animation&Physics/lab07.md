@@ -636,7 +636,7 @@ You might have noticed that the player gets moved and rotated by the platform as
 
 
 
-## Rigidbody Physics TODO
+## Rigidbody Physics
 Duration: hh:mm:ss
 
 This second part of the codelab will focus on physics, more precisely rigidbody physics. A rigidbody (`RigidBody3D` in Godot) is a 3D physics body that is moved by a physics simulation.
@@ -665,11 +665,11 @@ Both of these configurations make the cubes stiff and the player cannot move the
 
 
 ### Solving the Interaction Problem
-To solve this problem we need to manually process all the collisions and apply the correct forces to simulate realistic rigidbody interactions. First, we need to set the **collision layer and mask** of the cube in the `cube.tscn` scene like so:
+To solve this problem we need to manually process all the collisions and apply the correct forces to simulate realistic rigidbody interactions. First, we need to set the **collision layer and mask** of the cube ❌ in the `cube.tscn` scene like so:
 
 ![](img/CubeCollision.png)
 
-Then let's set the player **collision layer and mask** in the `player.tscn` scene like so:
+Then let's set the player ✔️ **collision layer and mask** in the `player.tscn` scene like so:
 
 ![](img/PlayerLayer.png)
 
@@ -693,7 +693,7 @@ var force : Vector3 = push_direction * (player_mass / collider.mass)
 ```
 
 > aside positive
-> Another possibility is to also take into account the velocities of the player and rigidbody to create a more accurate simulation and to make the rigidbodies also push the player.
+> Another possibility is to also take into account the velocities of the player and rigidbody to create a more accurate simulation and to make the rigidbodies also push the player. However, if you want to create a physics-based game (`Fall Guys`, `Human: Fall Flat`, `Gang Beasts`, etc.) it would be easier if the player was of node type `RigidBody3D`.
 
 #### Position Offset
 The next thing, before we apply the force, is the offset from the rigidbody center to the collision point. We need this offset for the `apply_impulse()` function, that will be used in the next step. Here is the line to get the offset:
@@ -736,15 +736,32 @@ This is the resulting behavior the code produces:
 
 
 ### Physics material and mass
-Having different physics objects have different properties is essential. The `RigidBody3D` node has these properties that can be changed:
+Having different physics objects have different physical properties is essential. The `RigidBody3D` node has these properties that can be changed:
 
 ![](img/PhysicsMaterial.png)
 
+- **`Mass`** - The weight of the body, controls how easily it can be pushed.
+- **`Friction`** - Controls how much the body slides on the ground (lower ⇾ more ice-like).
+- **`Rough`** - When `On`, upon collision the `Friction` of this body will be used.
+- **`Bounce`** - Controls the bounciness of the body (`1` == bouncy, `0` == no bounce).
+- **`Absorbent`** - Makes the `Bounce` parameter subtract the `Bounce` from other bodies making this body absorb the bounciness (kinda reverses the effect of `Bounce`).
+- **`Gravity Scale`** - Just multiplies the effect of gravity.
+
+Try to **play around** with these parameters of the cube to see how it behaves with different values.
+
+> aside positive
+> I am going to change the `Friction` to `0.8` and keep the rest of the parameters on default values.
 
 
-## Hinge Joint - Seesaw
+
+## Seesaw - Hinge Joint TODO
 Duration: hh:mm:ss
 
+### Composite Colliders
+
+### Axis Limits
+
+### Hinge Joint
 
 
 ## Other Joints TODO

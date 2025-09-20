@@ -92,6 +92,20 @@ size = Vector3(5, 0.2, 5)
 [sub_resource type="BoxShape3D" id="BoxShape3D_g1oyg"]
 size = Vector3(5, 0.2, 5)
 
+[sub_resource type="Animation" id="Animation_2m8vb"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
 [sub_resource type="Animation" id="Animation_7xxqo"]
 resource_name = "move"
 length = 3.0
@@ -113,20 +127,6 @@ tracks/1/keys = {
 "handle_modes": PackedInt32Array(0, 0, 0, 0),
 "points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 1.3, 0.00825488, 3.14159, -1.06667, -0.0200477, 0.25, 0, 3.14159, -0.25, 0, 0.25, 0),
 "times": PackedFloat32Array(0, 0.5, 2.5, 3)
-}
-
-[sub_resource type="Animation" id="Animation_2m8vb"]
-length = 0.001
-tracks/0/type = "bezier"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:rotation:y")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_2m8vb"]
