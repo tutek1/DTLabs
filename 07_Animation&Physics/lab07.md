@@ -1,6 +1,6 @@
 summary: Animation & Physics
 id: export
-categories: Animation, Physics, 3D, Models, Joints, Animation Tree, Skeleton, Bones, Light
+categories: Animation, Physics, Colliders, 3D, Models, Joints, Animation Tree, Skeleton, Bones, Light
 status: Published
 authors: Ondřej Kyzr
 Feedback Link: https://google.com
@@ -757,11 +757,122 @@ Try to **play around** with these parameters of the cube to see how it behaves w
 ## Seesaw - Hinge Joint TODO
 Duration: hh:mm:ss
 
-### Composite Colliders
+This section will look at one type of **physics joints**, that can be used to create objects such as seesaws, doors, and other objects with similar axis of movement. We will make the seesaw object I modelled behave in a physically correct way.
 
-### Axis Limits
+![](img/BrokenPinInGame.png)
+
+**Open** the `broken_pin.tscn` scene located in `3D/WorldObjects/BrokenPin/`.
+
+### Colliders
+Firstly, to use our seesaw, we need to add a collider to the `RigidBody3D` called `SeeSaw` so that it is able to collide with the environment and the player. With more complex shapes than just cubes and spheres you generally have **3 options** for creating the collider. We will go through all of them and I will show you how you can create them.
+
+#### Trimesh collider / Concave collider
+The most computationally expensive option but the most precise is to create a collider that is **identical to the mesh**. This option is only really used for precise terrain collision in landscapes (expansive lower poly terrain and/or mountains). Most modern engines also **DO NOT support** this type of collider on a **non-static body**.
+
+To create this type of collider in Godot simply:
+
+![](img/TrimeshCreate.png)
+
+1. **Select** the `MeshInstace3D` node in question
+2. **Press** the `Mesh` button in the top middle of the **scene view** (aka. **context menu**)
+3. **Select** the `Create Collision Shape...` option
+4. **Keep** `placement` = `Sibling` and `type` = `Trimesh` ⇾ **Create**
+
+As you can see this type of collider is extremely detailed (depends on the mesh) and for our case **wasteful**.
+
+![](img/Trimesh.png)
+
+
+> aside positive
+> This type of collider is often called a **Mesh Collider**.
+
+
+#### Convex collider
+This collider is a tradeoff between precision and performance. It still crates a **precise collider** based on the underlying mesh with one special property. The resulting collider is a **convex shell**, or in other words you can imagine the object tightly wrapped in plastic wrap.
+
+The **process of creation** is the same, except you select `type` = `Single Convex` in the pop-up window.
+
+![](img/Convex.png)
+
+This collider type is also **not suitable for our case**, since the precision is not good for the specific shape of the broken pin. It can be useful for complex objects that are hard to create as a **composite collider**.
+
+
+#### Composite collider
+A composite collider is not really a collider type it is more like a **method of creating colliders** from simple collider shapes.
+
+1. **Delete** all previous colliders, in case you created them.
+2. **Create** two `CollisionShape3D` nodes as children of the `SeeSaw` node
+3. **Set** the `Shape` to `BoxShape3D`
+4. **Adjust** the `position` and `Shape` of the `CollisionShape3D` nodes to match the mesh
+
+![](img/CompositeCollider.png)
+
+This collider setup uses **only two** **`BoxShape3D`** colliders, which is very **computationally cheap**, and **quite precise**. Although the small details of the mesh are lost to the collision detection with this setup, it is sometimes better to not introduce these details since the physics in game engines can be more buggy with more details.
+
+> aside positive
+> I used these values for the two `CollisionShape3D` nodes:
+> - **Shape Size** = `(17.0, 1.0, 2.0)`, **position** = `(-1.5, 0.0, 0.0)`
+> - **Shape Size** = `(3.0, 3.0, 3.0)`, **position** = `(8.5, 0.0, 0.0)`
+
+
+### Axis Lock
+Now with a proper collider we can implement the behavior of the seesaw. The first way to do it is using the `Axis Lock` functionality. I locked all the axis prior to the codelab so that the `SeeSaw` would not fall through the ground.
+
+1. **Select** the `SeeSaw` rigidbody.
+2. **Locate** the `Axis Lock` category.
+3. **Uncheck** the `Angular Z` to enable rotation in the correct axis
+4. **Uncheck** the `Linear Y` to enable the movement up and down 
+
+Here is how the seesaw should behave now. As you can see in the GIF, the seesaw works better when `Mass` parameter is set to `10`. I recommend keeping the `Mass = 10`.
+
+![](img/AxisLockSeesaw.gif)
+
+However, using `Axis Lock` does not produce the desired behavior, which I wanted and has many quirks, such as not being able to lock outside the main XYZ axes.
+
+> aside positive
+> `Axis Lock` is a useful tool not only for making seesaws but many different mechanisms
 
 ### Hinge Joint
+The proper and more robust way to create a physics object like a seesaw or doors is to use a `HingeJoint`. A `HingeJoint3D` node works by pinning two `PhysicsBody3D` nodes (parent class of all bodies) in a single point and restricting their movement to one rotation axis.
+
+#### Set Nodes
+I already created the `HingeJoint3D` node in the `broken_pin.tscn` scene, so let's set it up. The `Node A` should be the fixed/static part of our joint and `Node B` the moving part.
+
+1. **Set** the `Node A` to the `Cylinder` node (`StaticBody3D`)
+2. **Set** the `Node B` to the `SeeSaw` node (`RigidBody3D`)
+
+#### Move the Joint
+Now we need to **move and rotate** the joint, so that the gizmo (light blue circle and axis) is where we want the axis of rotation to be. I moved the joint like this:
+
+![](img/HingeJointSeeSaw.png)
+
+
+> aside positive
+> I used the position of `(1.45, 0.215, 1.5)` and the rotation of `(0, 0, 0)`
+
+#### Angular Limits
+The rotation along the joint axis can be then further **limited** to set minimum and maximum angle. There are many parameters that can be set to tweak the behavior, which can make the joint more stable:
+
+![](img/JointParams.png)
+
+Try to **play around** with the angle limits to see
+
+### Closing Thoughts
+The `HingeJoint3D` and other joints (in most engines) are very quirky, and you need to find the correct parameters for all the values. In the case of the `BrokenPin`, making the `RigidBody3D` heavier (`12 kg`) and moving it on the `X-axis` to balance the weight better, fixed most of the jittering.
+
+#### Seesaw Results
+Here is the resulting behavior of the broken pin seesaw, which will act as a **small environmental puzzle**. The player will push the cubes off and gain access to the top of the big block. 
+
+![](img/HingeBrokenPin.gif)
+
+
+#### Hinge on two cubes
+You can also connect two rigidbodies together like I did here with two cubes:
+
+![](img/CubeHinge.gif)
+
+> aside positive
+> It is also possible to add more `HingeJoint3D` (or other joints) nodes to create a chain of several objects all connected to each other.
 
 
 ## Other Joints TODO
@@ -769,7 +880,7 @@ Duration: hh:mm:ss
 
 ### Types
 
-### My implementation
+### My implementation of `Generic6DOFJoint3D`
 
 ### Button - Spring joint 
 

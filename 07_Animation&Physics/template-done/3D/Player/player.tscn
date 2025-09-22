@@ -132,26 +132,25 @@ shape = SubResource("CapsuleShape3D_hn7em")
 transform = Transform3D(-2.18557e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.18557e-08, 0, -1, 0)
 
 [node name="Skeleton3D" parent="Mesh/Armature" index="0"]
-bones/0/position = Vector3(0, 0, 0.0117957)
+bones/0/position = Vector3(0, 0, 0.0117832)
 bones/0/rotation = Quaternion(0.707107, 8.42937e-08, 8.42937e-08, 0.707107)
 bones/0/scale = Vector3(1, 1, 1)
-bones/1/rotation = Quaternion(-0.00232366, 6.50523e-19, -5.54004e-10, 0.999997)
+bones/1/rotation = Quaternion(-0.0366967, -0.0511465, 0.00361591, 0.99801)
 bones/1/scale = Vector3(1, 1, 0.999999)
 bones/3/position = Vector3(-0.000499998, 0.0107497, -0.0105217)
-bones/3/rotation = Quaternion(0.999965, -7.01676e-05, -0.000204076, -0.00832627)
+bones/3/rotation = Quaternion(0.963373, -0.252895, 0.0861632, -0.0230723)
 bones/5/position = Vector3(-0.000447049, -0.000234075, -0.00350103)
 bones/5/rotation = Quaternion(0.999951, -6.06494e-19, 0.00990513, 6.12273e-17)
-bones/6/rotation = Quaternion(0, -0.0110125, 0, 0.999939)
+bones/6/rotation = Quaternion(0, -0.0110072, 0, 0.99994)
 bones/6/scale = Vector3(1, 1, 1)
 bones/8/position = Vector3(-0.000447051, -0.000234075, 0.00350103)
 bones/8/rotation = Quaternion(0.999952, -5.99422e-19, 0.00978963, 6.12274e-17)
-bones/9/rotation = Quaternion(-0.0185183, -0.0108963, -0.000160792, 0.999769)
 bones/9/scale = Vector3(1, 1, 1)
 bones/11/rotation = Quaternion(0.706465, -0.706465, 0.0301203, 0.0301202)
 bones/11/scale = Vector3(1, 1, 1)
 
 [node name="BoneAttachment3D" type="BoneAttachment3D" parent="Mesh/Armature/Skeleton3D" index="1"]
-transform = Transform3D(1, 4.91829e-14, 2.38418e-07, 2.38416e-07, 0.0046472, -0.999988, -1.10802e-09, 0.999989, 0.00464719, 1.19172e-15, 3.3529e-05, 0.0358362)
+transform = Transform3D(0.994742, -0.00346363, -0.102354, -0.101824, 0.073617, -0.992074, 0.0109712, 0.99728, 0.0728772, -2.49912e-05, 0.000531168, 0.0358042)
 bone_name = "Head_end"
 bone_idx = 2
 
@@ -181,7 +180,7 @@ secondary_limit_angle = 6.28319
 secondary_damp_threshold = 1.0
 
 [node name="BoneAttachment3D2" type="BoneAttachment3D" parent="Mesh/Armature/Skeleton3D" index="3"]
-transform = Transform3D(-0.519435, -0.831584, 0.196612, -0.0727321, 0.272278, 0.959466, -0.851409, 0.48408, -0.201913, -0.0104808, -0.0090406, 0.0185118)
+transform = Transform3D(-0.519641, -0.831472, 0.196536, -0.0727214, 0.272241, 0.959477, -0.851284, 0.484291, -0.201934, -0.01048, -0.00904086, 0.0185008)
 bone_name = "GunBone_end"
 bone_idx = 12
 

@@ -97,3 +97,5 @@ keybinding
 Rigidbody
 rigidbody
 rigidbodies
+TriMesh
+Trimesh

@@ -553,13 +553,19 @@ autoplay = "move"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.5103, 1.89939, 23.6709)
 
 [node name="Cube2" parent="Enviroment" instance=ExtResource("8_2m8vb")]
-transform = Transform3D(0.982736, 0, -0.185015, 0, 1, 0, 0.185015, 0, 0.982736, -15.6582, 1.89939, 23.6709)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.7025, 1.53008, 23.5633)
 
 [node name="Cube4" parent="Enviroment" instance=ExtResource("8_2m8vb")]
-transform = Transform3D(0.982736, 0, -0.185015, 0, 1, 0, 0.185015, 0, 0.982736, -16.6361, 1.48648, 21.1923)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.7411, 1.48648, 21.5608)
 
 [node name="Cube3" parent="Enviroment" instance=ExtResource("8_2m8vb")]
 transform = Transform3D(0.928531, 0, -0.371254, 0, 1, 0, 0.371254, 0, 0.928531, -14.4754, 4.53484, 23.6709)
+
+[node name="HingeJoint3D" type="HingeJoint3D" parent="Enviroment"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -20.7372, 1.78508, 22.5742)
+node_a = NodePath("../Cube4")
+node_b = NodePath("../Cube2")
+exclude_nodes_from_collision = false
 
 [node name="CameraPivot" parent="." node_paths=PackedStringArray("camera_target") instance=ExtResource("6_vdnx2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.8935, 14.1815, 2.42364)
