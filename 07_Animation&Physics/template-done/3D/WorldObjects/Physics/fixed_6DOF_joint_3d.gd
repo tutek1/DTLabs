@@ -14,22 +14,22 @@ func _linear_motor(delta : float) -> void:
 	
 	# X motor
 	if get_flag_x(FLAG_ENABLE_LINEAR_MOTOR):
-		lin_vel.x += get_param_x(PARAM_LINEAR_MOTOR_TARGET_VELOCITY) * delta
-		var limit : float = get_param_x(PARAM_LINEAR_MOTOR_FORCE_LIMIT)
+		lin_vel.x += get_param_x(PARAM_LINEAR_MOTOR_FORCE_LIMIT) * delta
+		var limit : float = get_param_x(PARAM_LINEAR_MOTOR_TARGET_VELOCITY)
 		if abs(lin_vel.x) > limit:
 			lin_vel.x = sign(lin_vel.x) * limit
 	
 	# Y motor
 	if get_flag_y(FLAG_ENABLE_LINEAR_MOTOR):
-		lin_vel.y += get_param_y(PARAM_LINEAR_MOTOR_TARGET_VELOCITY) * delta
-		var limit : float = get_param_y(PARAM_LINEAR_MOTOR_FORCE_LIMIT)
+		lin_vel.y += get_param_y(PARAM_LINEAR_MOTOR_FORCE_LIMIT) * delta
+		var limit : float = get_param_y(PARAM_LINEAR_MOTOR_TARGET_VELOCITY)
 		if abs(lin_vel.y) > limit:
 			lin_vel.y = sign(lin_vel.y) * limit
 	
 	# Z motor
 	if get_flag_z(FLAG_ENABLE_LINEAR_MOTOR):
-		lin_vel.z += get_param_z(PARAM_LINEAR_MOTOR_TARGET_VELOCITY) * delta
-		var limit : float = get_param_z(PARAM_LINEAR_MOTOR_FORCE_LIMIT)
+		lin_vel.z += get_param_z(PARAM_LINEAR_MOTOR_FORCE_LIMIT) * delta
+		var limit : float = get_param_z(PARAM_LINEAR_MOTOR_TARGET_VELOCITY)
 		if abs(lin_vel.z) > limit:
 			lin_vel.z = sign(lin_vel.z) * limit
 	
