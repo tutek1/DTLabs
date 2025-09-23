@@ -84,7 +84,7 @@ func _linear_spring(delta : float) -> void:
 		_node_b.apply_central_force(force * Vector3.UP)
 	
 	# Z spring
-	if get_flag_y(FLAG_ENABLE_LINEAR_SPRING):
+	if get_flag_z(FLAG_ENABLE_LINEAR_SPRING):
 		var stiff = get_param_z(Generic6DOFJoint3D.PARAM_LINEAR_SPRING_STIFFNESS)
 		var damp = get_param_z(Generic6DOFJoint3D.PARAM_LINEAR_SPRING_DAMPING)
 		var eq = get_param_z(Generic6DOFJoint3D.PARAM_LINEAR_SPRING_EQUILIBRIUM_POINT)
@@ -97,7 +97,7 @@ func _linear_spring(delta : float) -> void:
 		var force : float = -stiff * (rel_pos - eq) - damp * rel_vel
 		
 		# Apply force along axis to both bodies
-		_node_b.apply_central_force(force * Vector3.FORWARD)
+		_node_b.apply_central_force(force * Vector3.BACK)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

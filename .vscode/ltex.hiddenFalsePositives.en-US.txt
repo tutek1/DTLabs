@@ -141,3 +141,4 @@
 {"rule":"COMMA_PARENTHESIS_WHITESPACE","sentence":"^\\QNext to the field, there is the loop button set it like this .\\E$"}
 {"rule":"CONSECUTIVE_SPACES","sentence":"^\\QAbove these settings, there is the  button, toggle it on.\\E$"}
 {"rule":"EN_DIACRITICS_REPLACE_ORTHOGRAPHY_BEZIER_CURVE","sentence":"^\\QI first set the keyframes the same way as we did with the \\E(?:Dummy|Ina|Jimmy-|Dummy-|Maniquí-|Maniquíes-)[0-9]+\\Q, and then I switched to the bezier curve editor to make the animation a bit more interesting\\E$"}
+{"rule":"ID_CASING","sentence":"^\\Qsummary: Animation & Physics id: export categories: Animation, Physics, Colliders, 3D, Models, Joints, Animation Tree, Skeleton, Bones, Light status: Published authors: Ondřej Kyzr Feedback Link: https://google.com\\E$"}

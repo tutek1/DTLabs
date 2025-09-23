@@ -7,20 +7,22 @@ Feedback Link: https://google.com
 
 # Lab07 - Animation & Physics
 
-## Overview TODO
+## Overview
 Duration: hh:mm:ss
 
-This lab will focus on learning about **Behavior Trees** as an alternative for **Finite-State Machines**. We will recreate the behavior of the **Ground Enemy Finite-State Machine** from the last lab using a Behavior Tree.
+This lab will focus on learning about three ways of making/using **Animations**. We will create the animation behavior of our player character, shooting, and a moving platform.
 
-Then we will learn about **Steering Behaviors** as a less robust but more interesting alternative for **Navigational Meshes** (NavMesh). We will use the new enemy **Air Enemy** to try out the Steering Behaviors, while implementing some of them.
+Then we will learn about **Physics** and make the player interact with `RigidBody3D` nodes. We will also check out **joints**, which can be used to make complex physics behavior.
 
 In a bullet point format, we will:
-- Learn the theory behind **Behavior Trees**. 
-- Install the **`Beehave`** plugin** and set it up.
-- Reimplement the **`Ground Enemy` behavior** using Behavior Trees.
-- Learn the theory behind **Steering Behaviors**. 
-- Implement **`Seek`** and **`Pursue`** behavior.
-- Try out all the other **steering behaviors** I prepared.
+- Look at the **changes I made** in the project such as.
+- **Import** the player model and animation.
+- Learn about **skeletal animations** and how they are made.
+- Look at the 3 types of animations **Premade**, **Procedural**, and **In-engine**.
+- Implement physically accurate **`CharacterBody3D` and `RigidBody3D` interactions** play around with **physics materials** and **properties**.
+- Learn how to create **precise and performant colliders** for more complex objects.
+- Use the `HingeJoint3D` node to set up a **seesaw**-like object.
+- Lastly, look at **other joint types** (both for `2D` and `3D`).
 
 Here is the template for this lab. Please download it, there are scripts, models, and scenes needed for the Behavior Trees and Steering Behaviors.
 <button>
@@ -669,9 +671,12 @@ To solve this problem we need to manually process all the collisions and apply t
 
 ![](img/CubeCollision.png)
 
-Then let's set the player ✔️ **collision layer and mask** in the `player.tscn` scene like so:
+Then let's **set** the player ✔️ **collision layer and mask** in the `player.tscn` scene like so:
 
 ![](img/PlayerLayer.png)
+
+> aside negative
+> Make sure to turn off the collision with the 4th layer in the `Moving Platform` section or else the player will slide off rigidbodies.
 
 Now, I prepared a function called `_check_collisions(delta : float)` in the `player_controller_3d.gd`. Let's fill out the missing lines and walk through them.
 
@@ -754,7 +759,7 @@ Try to **play around** with these parameters of the cube to see how it behaves w
 
 
 
-## Seesaw - Hinge Joint TODO
+## Seesaw - Hinge Joint
 Duration: hh:mm:ss
 
 This section will look at one type of **physics joints**, that can be used to create objects such as seesaws, doors, and other objects with similar axis of movement. We will make the seesaw object I modelled behave in a physically correct way.
@@ -858,7 +863,7 @@ The rotation along the joint axis can be then further **limited** to set minimum
 Try to **play around** with the angle limits to see
 
 ### Closing Thoughts
-The `HingeJoint3D` and other joints (in most engines) are very quirky, and you need to find the correct parameters for all the values. In the case of the `BrokenPin`, making the `RigidBody3D` heavier (`12 kg`) and moving it on the `X-axis` to balance the weight better, fixed most of the jittering.
+The `HingeJoint3D` and other joints (in most engines) are very quirky, and you need to find the correct parameters for all the values. In the case of the `BrokenPin`, making the `RigidBody3D` **heavier** (`12 kg`), **moving it** on the `X-axis` to balance the weight better, and **setting** `Deactivation -> Can Sleep` **off**. These settings fixed most of the jittering and instability.
 
 #### Seesaw Results
 Here is the resulting behavior of the broken pin seesaw, which will act as a **small environmental puzzle**. The player will push the cubes off and gain access to the top of the big block. 
@@ -875,38 +880,139 @@ You can also connect two rigidbodies together like I did here with two cubes:
 > It is also possible to add more `HingeJoint3D` (or other joints) nodes to create a chain of several objects all connected to each other.
 
 
-## Other Joints TODO
+
+## Other Joints
 Duration: hh:mm:ss
 
-### Types
+There are many other joint types, that can be used. The selection of `2D` and `3D` joints also differs a bit due to the dimension specifics.
 
-### My implementation of `Generic6DOFJoint3D`
+### `2D` Joint Types
 
-### Button - Spring joint 
+![](img/2DJoints.png)
+
+#### `DampedSpringJoint2D`
+- Connects two 2D physics bodies with a spring-like force.
+- Useful for making buttons, bouncy platforms, etc.
+
+#### `GrooveJoint2D`
+- Restricts the movement of two physics bodies to a single axis.
+- Useful for sliding doors, pistons, etc.
 
 
-## Recap TODO
+#### `PinJoint2D`
+- Attaches two 2D physics bodies at a single point, allowing them to freely rotate.
+- Useful for chains, swinging objects like chandeliers, bridges, etc.
+
+> aside positive
+> Notice, that there is no `HingeJoint2D` since the `PinJoint2D` works the same way, but only in 2D! 
+
+### `3D` Joint Types
+
+![](img/3DJoints.png)
+
+#### `ConeTwistJoint3D`
+- Connects two 3D physics bodies in a way that simulates a ball-and-socket joint.
+- Similar to `PinJoint3D` except it allows restricting the rotation angle and how much the body can twist.
+- Useful for limbs like shoulders and hips, lamps hanging off a ceiling, etc.
+
+#### `Generic6DOFJoint3D` (6DOF = 6 Degrees Of Freedom)
+- Allows for implementing custom types of joints by locking the rotation and translation of certain axes.
+- There are options for **Limits**, **Springs**, and **Motors** (constantly applies force)
+- Useful for custom joints, that cannot be easily made with other types.
+
+#### `HingeJoint3D`
+- Already explained in great detail in previous section.
+- Useful for making hinges, doors, trapdoors, seesaws, etc. 
+
+#### `PinJoint3D`
+- Same as the `2D` version except you cannot restrict the rotation angles. 
+
+#### `SliderJoint3D`
+- Same as the `GrooveJoint2D` but in `3D`
+
+
+### Problem with the `Generic6DOFJoint3D`
+Currently in `Godot 4.4.1`, the `Generic6DOFJoint3D` is broken and only the **limiting** of movement and rotation work. Both of the `Linear` and `Angular` **Springs** and **Motors** are broken and do not work at all.
+
+I created a **script**, that can be attached to a `Generic6DOFJoint3D` node, which makes at least the `Linear Spring` and `Linear Motor` work in a somewhat reliable way. Hopefully this issue will be fixes in future releases.
+
+> aside positive
+> Feel free to use this script in your games if you need to use the `Generic6DOFJoint3D` node for something.
+
+### Button/Bouncy Platform - Spring joint 
+Let's use the `Generic6DOFJoint3D` node with my script and create a button/bouncy platform. I have already prepared some stuff.
+
+#### Setup
+
+1. **Open** the `debug_3d_scene.tscn` scene.
+2. **Navigate** to `Environment` ⇾ `SpringPlatform`.
+3. **Add** the `3D/WorldObjects/Physics/fixed_6DOF_joint_3d.gd` script to the `Generic6DOFJoint3D`
+4. **Set** the `Node B` property of `Generic6DOFJoint3D` to `Platform`
+5. **Set** the `Mass` of the `Platform` to `2kg`
+
+Let's now set the limits, motors, and springs.
+
+#### Linear Limits Parameters
+We want the platform to move on the `Y-axis` so:
+
+1. **Turn** on the `X` limits
+2. **Turn** off the `Y` limits
+3. **Turn** on the `Z` limits
+
+#### Linear Motors Parameters
+The motor option makes the rigidbody move in set direction. We want the platform to have a stronger spring on the up `Y-axis` so set the motor to:
+
+1. **Turn** off the `X` motor
+2. **Turn** on the `Y` motor
+3. **Set** the `Target Velocity` to `0.1`
+4. **Set** the `Force Limit` to `2`
+5. **Turn** off the `Z` motor
+
+#### Linear Spring Parameters
+The spring option makes the rigidbody behave like being attached to a spring. We want the platform work as a spring on the `Y-axis`:
+
+1. **Turn** off the `X` spring
+2. **Turn** on the `Y` spring
+3. **Set** the `Stiffness` to `3`
+4. **Set** the `Dampening` to `1`
+5. **Turn** off the `Z` spring
+
+> aside positive
+> You can hover over all the parameters to see, what each one does.
+
+#### The result
+Here is the resulting bouncy platform. Feel free to play around with all the parameters to see what each does and how it influences the platform.
+
+![](img/Platform.gif)
+
+
+
+## Recap
 Duration: hh:mm:ss
 
 Let's look at what we did in this lab.
-- We learned about **Behavior Trees** and installed the plugin `Beehave`.
-- Then, we **implemented the `Patrol`** behavior of the `GroundEnemy` to match the `FSM` variant.
-- Next, we **implemented the `Chase`** behavior of the `GroundEnemy` to match the `FSM` variant.
-- In order to do the two steps above we learned about **composite, decorator,** and **leaf nodes**.
-- Lastly, we **added the shooting and tweens**, that the `FSM` variant of the enemy also does.
-- With Behavior Trees covered we looked into the **theory** of **Steering Behaviors**
-- Then, we looked at the `AirEnemy` and how is **Steering** implemented in the code
-- We got our hands dirty by programming the **`Seek & Pursue`** behaviors.
-- Lastly we looked at other **Steering Behaviors**:
-    - **Arrive**
-    - **Collision Avoidance**
-    - My own: **Hover**
+- We looked at the **changes I made** in the project such as:
+    - 2D Puzzle
+    - Player stats script
+    - New models
+- Then, we **imported and corrected** the player model and animation.
+- Next, we looked at how **skeletal animations** are made and the theory behind them.
+- We looked at the 3 types of animations:
+    - **Premade** - used by the `AnimationTree` node and created a complex animator behavior (`StateMachine`, `BlendTree`, `Timescale`, etc.).
+    - **Procedural** - with the `SkeletonModifiers`, which helped us make:
+        - Lights follow the eyes.
+        - Aiming the gun with the camera.
+        - Inverse kinematics, etc.
+    - **In-engine** - to create a moving platform animation.
+- The second part of the codelab looked closely at **physics**.
+- We implemented physically accurate **`CharacterBody3D` and `RigidBody3D` interactions** and looked at **physics materials** and **properties**.
+- We made a little detour into how to create **precise and performant colliders** for more complex objects.
+- After that, we used the `HingeJoint3D` node and the `Axis Lock` property to set up a **seesaw**-like object.
+- Lastly, we looked at **other joint types** (both for `2D` and `3D`) and created a **bouncy platform** with my fixed implementation of `Generic6DOFJoint3D`.
 
-### Note on AI in games
-... As we saw, you can create an AI for your game in about a **million different ways**. In the end it all depends on the behavior that you are trying to achieve with your game. Each game can have **different restrictions**, that you need to take into account, whether it be the visual style/theme of the game, performance, or ease of use by the designers.
 
-### A better plugin
-... If you are interested in a more robust plugin for your game, I recommend **LimboAI** ([GitHub](https://github.com/limbonaut/limboai)). It implements `FSM` and `Behavior Trees` in a very efficient way with interesting visual tools for debugging.
+### Note on Animations
+Creating animations is quite difficult and lengthy endeavor. If you want **professional animations and character models** ready to be used, I suggest checking out [Mixamo](https://www.mixamo.com/#/?page=1&type=Character) from `Adobe`. The characters and animations are free to use even in commercial products. 
 
 ### Project Download
 If you want to see how the finished template looks like after this lab, you can download it here:

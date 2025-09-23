@@ -97,7 +97,7 @@ func _linear_spring(delta : float) -> void:
 		var force : float = -stiff * (rel_pos - eq) - damp * rel_vel
 		
 		# Apply force along axis to both bodies
-		_node_b.apply_central_force(force * Vector3.FORWARD)
+		_node_b.apply_central_force(force * Vector3.BACK)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

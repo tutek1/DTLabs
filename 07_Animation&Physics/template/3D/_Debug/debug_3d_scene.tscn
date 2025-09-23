@@ -478,15 +478,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.9444, 3.31577, 31.2232)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.89062, 3.1211, 43.3472)
 
 [node name="Generic6DOFJoint3D" type="Generic6DOFJoint3D" parent="Enviroment/SpringPlatform"]
-node_b = NodePath("../RigidBody3D")
+node_b = NodePath("../Platform")
 
-[node name="RigidBody3D" type="RigidBody3D" parent="Enviroment/SpringPlatform"]
+[node name="Platform" type="RigidBody3D" parent="Enviroment/SpringPlatform"]
+collision_layer = 8
+collision_mask = 13
 gravity_scale = 0.0
+can_sleep = false
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Enviroment/SpringPlatform/RigidBody3D"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Enviroment/SpringPlatform/Platform"]
 mesh = SubResource("BoxMesh_gw1uw")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Enviroment/SpringPlatform/RigidBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Enviroment/SpringPlatform/Platform"]
 shape = SubResource("BoxShape3D_0v0jw")
 
 [node name="AnimatedPlatform" type="AnimatableBody3D" parent="Enviroment"]

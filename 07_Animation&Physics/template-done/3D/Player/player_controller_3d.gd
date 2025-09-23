@@ -53,9 +53,9 @@ func _physics_process(delta : float) -> void:
 	_update_gun_target()
 	_shoot()
 	
+	_check_collisions(delta)
 	move_and_slide()
 	
-	_check_collisions(delta)
 	_animation_tree_update()
 
 
