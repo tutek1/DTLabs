@@ -454,6 +454,16 @@ Right now if you change the **window size**, the size of objects stays the same 
 ## Recap
 Duration: hh:mm:ss
 
+### Feedback
+I would be very grateful if you could take a moment to fill out a **very short feedback form** (it takes less than a minute). Your feedback will prove very useful for my diploma thesis, where I will use it to evaluate the work I have done.
+<button>
+  [Google Forms](https://forms.gle/xcsTDRJH2sjiuCjP7)
+</button>
+
+> aside positive
+> This whole course and the game we are making is a part of my diploma thesis.
+
+### Recap
 Let's look at what we did in this lab.
 - We looked at **project organization** and folder management
 - Then we learned what **sprite sheets** are and how to set up a `TileSet` from one

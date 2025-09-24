@@ -805,6 +805,16 @@ Here are a list of what the debug shapes mean, so that you get a better idea of 
 ## Recap
 Duration: hh:mm:ss
 
+### Feedback
+I would be very grateful if you could take a moment to fill out a **very short feedback form** (it takes less than a minute). Your feedback will prove very useful for my diploma thesis, where I will use it to evaluate the work I have done.
+<button>
+  [Google Forms](https://forms.gle/xcsTDRJH2sjiuCjP7)
+</button>
+
+> aside positive
+> This whole course and the game we are making is a part of my diploma thesis.
+
+### Recap
 Let's look at what we did in this lab.
 - We learned about **Behavior Trees** and installed the plugin `Beehave`.
 - Then, we **implemented the `Patrol`** behavior of the `GroundEnemy` to match the `FSM` variant.
