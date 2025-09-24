@@ -3,7 +3,7 @@ id: export
 categories: AI, Behavior Trees, Beehave, NavMesh, 3D, Plugin, Steering Behaviors, Steerings, Seek, Pursue
 status: Published
 authors: Ondřej Kyzr
-Feedback Link: https://google.com
+Feedback Link: https://forms.gle/J8eeuQAJ3wMY1Wnq7
 
 # Lab06 - Ground Enemy AI (Behavior Trees), Air Enemy AI (Steering Behaviors)
 

@@ -3,7 +3,7 @@ id: export
 categories: Globals, AI, NavMesh, 3D, FSM, Plugin, Projectile
 status: Published
 authors: Ondřej Kyzr
-Feedback Link: https://google.com
+Feedback Link: https://forms.gle/J8eeuQAJ3wMY1Wnq7
 
 # Lab05 - Ground Enemy AI (NavMesh, FSM)
 

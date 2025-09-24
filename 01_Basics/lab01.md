@@ -1,9 +1,9 @@
 summary: Basics of Godot and 3D
 id: export
-categories: Installation, Basics, Engine UI, 3D
+categories: Installation, Basics, GDScript, Navigation, Nodes, StaticBody3D, Engine UI, 3D
 status: Published
 authors: Ondřej Kyzr
-Feedback Link: https://google.com
+Feedback Link: https://forms.gle/J8eeuQAJ3wMY1Wnq7
 
 # Lab01 - Basics of Godot and 3D
 

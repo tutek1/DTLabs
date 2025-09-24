@@ -3,7 +3,7 @@ id: export
 categories: 3D, CharacterBody3D, 3D Player Controller, Camera3D, Materials, GDScript
 status: Published
 authors: Ondřej Kyzr
-Feedback Link: https://google.com
+Feedback Link: https://forms.gle/J8eeuQAJ3wMY1Wnq7
 
 # Lab02 - 3D Player Character and Camera
 

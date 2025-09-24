@@ -3,7 +3,7 @@ id: export
 categories: Animation, Physics, Colliders, 3D, Models, Joints, Animation Tree, Skeleton, Bones, Light
 status: Published
 authors: Ondřej Kyzr
-Feedback Link: https://google.com
+Feedback Link: https://forms.gle/J8eeuQAJ3wMY1Wnq7
 
 # Lab07 - Animation & Physics
 

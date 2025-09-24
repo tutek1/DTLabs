@@ -3,7 +3,7 @@ id: export
 categories: 2D, Tilemap, Tileset, Sprite, 2D Player Controller, CharacterBody2D
 status: Published
 authors: Ondřej Kyzr
-Feedback Link: https://google.com
+Feedback Link: https://forms.gle/J8eeuQAJ3wMY1Wnq7
 
 # Lab03 - 2D Platformer
 
