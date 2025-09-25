@@ -1,0 +1,49 @@
+Krátký kurz vytvořený pro předmět HRY na FEL ČVUT. Sada lekcí je připravená ve stylu Google Colab. Kurz pokrývá témata potřebná k tvorbě her v Godotu jako alternativě k Unity: základy enginu a GDScriptu, ovládání hráče, 2D/3D platformer, umělá inteligence, navigace, animace a fyzika.
+
+Tip: Každá lekce se otevírá v nové záložce.
+
+
+01 - Basics
+Úvod do Godotu: rozhraní enginu, scény, nodes, GDScript a jednoduché objekty — základy nezbytné pro další lekce.
+
+Základy enginu
+
+
+02 - Player Controller and Camera
+Tvorba hráče a jeho ovládání: vstupy, pohyb, skok, kolize a základní kamera ve 3D.
+
+Hráč a kamera
+
+
+03 - Platformer2D
+2D platformer: kolize, gravitace, skok, tilemapa a level design pro 2D hry.
+
+2D tile-based hry
+
+
+04 - 2D Platformer in 3D
+Implementace zobrazení 2D platformeru ve 3D — zobrazení, detekce kolizí, sledování kamerou, signály a scene managers.
+
+Hratelné 2D hry ve 3D
+
+
+05 - AI: NavMesh & FSM
+Navigace a chování AI nepřítele: NavMesh, pathfinding a implementace jednoduchého FSM (finite-state machine).
+
+Navigace a AI
+
+
+06 - AI: Behavior Trees a Steering
+Behaviorální stromy (BT) a steerings: Beehave plugin, design BT, steering behaviors, seek, pursue, flee a skupinové chování agentů (flock behavior).
+
+Alternativní AI a Navigace
+
+
+07 - Animation & Physics
+Animace a fyzika: animation tree, přechody, skeletální/procedurální/in-engine animace, rigidbody, fyzikální vlastnosti těles, interakce rigidbody a characterbody.
+
+Animace a fyzika
+
+
+
+Jeden HTML soubor (index.html) rozcestníku. (je potřeba v záhlaví?)
