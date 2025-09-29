@@ -4,7 +4,6 @@
 [ext_resource type="PackedScene" uid="uid://cwcvo74fuibvv" path="res://3D/WorldObjects/coil.tscn" id="2_krwbd"]
 
 [sub_resource type="Environment" id="Environment_nqv4f"]
-fog_enabled = true
 fog_light_color = Color(0.065963, 0.143594, 0.072862, 1)
 adjustment_brightness = 1.67
 
