@@ -155,6 +155,9 @@ Now with the `Resistor` selected and in view, you can move it, rotate it, or sca
 > aside positive
 > You can hold `CTRL` or `SHIFT` while manipulating objects to snap them to a grid.
 
+> aside negative
+> Be careful when scaling an object with collisions. To achieve the correct behavior, you need to scale the node equally on all sides or adjust the collider and mesh properties separately. 
+
 
 ### Object duplication
 Our scene is looking a little sad, so let's add more resistors. **Select** the `Resistor` node in the **scene hierarchy** and press `CTRL+D` to duplicate. Now repeat this step and **move, scale,** and **rotate** them to make the scene look nicer.
