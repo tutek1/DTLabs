@@ -1,6 +1,6 @@
 summary: UI & Audio
 id: export
-categories: UI, Canvas, Slider, Label, Alignment, Anchors, Container, Gradient, Progress Bar, Health, Collectibles, Audio, Audio Manager, Audio Bus, Audio Stream, Audio Listener
+categories: UI, Canvas, Slider, Label, Alignment, Anchors, Container, Gradient, Progress Bar, Health, Collectibles, Audio, Audio Manager, Audio Bus, Audio Stream, Audio Listener, Tween
 status: Published
 authors: Ondřej Kyzr
 Feedback Link: https://forms.gle/J8eeuQAJ3wMY1Wnq7
@@ -35,8 +35,114 @@ Duration: hh:mm:ss
 
 Since the last template I have added and changed quite a few things in our game.
 
+### HUD scene
+
+### UI textures
+
+### Collectibles
+
+### Sounds
+
+### Audio Manager +`sfxsett`
 
 
+## Health Bar UI TODO
+Duration: hh:mm:ss
+
+### `TextureProgressBar`
+
+### Anchors
+
+### Update from signal
+
+### Gradient and Progress Tint
+
+
+## Collectible UI TODO
+Duration: hh:mm:ss
+
+### `VBoxContainer` texture and label
+
+### Another `VBoxContainer` + `ColorRect`
+
+### Put UI Together
+Control nodes for transform retention
+`HBoxContainer`
+
+
+## Bonus: Collectible Tween and Particles TODO
+Duration: hh:mm:ss
+
+### Tween UI up
+
+### Particles
+
+
+
+## Temporary Audio Sliders TODO
+Duration: hh:mm:ss
+
+### `GridContainer`
+
+### Label and Slider
+
+### Slider Signals
+
+
+
+## Audio Basics TODO
+Duration: hh:mm:ss
+
+### Bus Layout
+
+### Fill UI Callback
+
+### Audio Nodes
+
+
+
+## Play Simple Audio TODO
+Duration: hh:mm:ss
+
+### Sound Import Loop
+
+### `AudioStreamPlayer3D` Setup
+
+
+
+## Crate an `AudioManager` TODO
+Duration: hh:mm:ss
+
+### Overview of `AudioManager`
+
+### Play Music
+
+### SFX Settings
+
+### Play SFX Methods
+
+
+
+## Play SFX
+Duration: hh:mm:ss
+
+### Player Walk
+#### physics could work but no
+#### bone attachments yes
+
+### Player Jump
+
+### Player Damaged
+
+### Player Shooting
+
+### Collectible Gather
+
+### `GroundEnemy` - Damage
+
+### `GroundEnemy` - Shooting
+
+### `AirEnemy` - Damage
 
 
 
@@ -68,7 +174,10 @@ Let's look at what we did in this lab.
 - Lastly, we looked at 
 
 
-### Note on Animations
+### Note on Audacity
+X
+
+### Note on Freesound.org
 X
 
 ### Project Download

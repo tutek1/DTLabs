@@ -143,3 +143,4 @@
 {"rule":"EN_DIACRITICS_REPLACE_ORTHOGRAPHY_BEZIER_CURVE","sentence":"^\\QI first set the keyframes the same way as we did with the \\E(?:Dummy|Ina|Jimmy-|Dummy-|Maniquí-|Maniquíes-)[0-9]+\\Q, and then I switched to the bezier curve editor to make the animation a bit more interesting\\E$"}
 {"rule":"ID_CASING","sentence":"^\\Qsummary: Animation & Physics id: export categories: Animation, Physics, Colliders, 3D, Models, Joints, Animation Tree, Skeleton, Bones, Light status: Published authors: Ondřej Kyzr Feedback Link: https://google.com\\E$"}
 {"rule":"ID_CASING","sentence":"^\\Qsummary: Animation & Physics id: export categories: Animation, Physics, Colliders, 3D, Models, Joints, Animation Tree, Skeleton, Bones, Light status: Published authors: Ondřej Kyzr Feedback Link: https://forms.gle/J8eeuQAJ3wMY1Wnq7\\E$"}
+{"rule":"EN_A_VS_AN","sentence":"^\\QCrate an \\E(?:Dummy|Ina|Jimmy-|Dummy-|Maniquí-|Maniquíes-)[0-9]+\\Q TODO\nDuration: hh:mm:ss\\E$"}
