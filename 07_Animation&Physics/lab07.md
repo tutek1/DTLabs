@@ -10,7 +10,7 @@ Feedback Link: https://forms.gle/J8eeuQAJ3wMY1Wnq7
 ## Overview
 Duration: hh:mm:ss
 
-This lab will focus on learning about three ways of making/using **Animations**. We will create the animation behavior of our player character, shooting, and a moving platform.
+This lab will focus on learning about the three ways of making/using **Animations**. We will create the animation behavior of our player character, shooting, and a moving platform.
 
 Then we will learn about **Physics** and make the player interact with `RigidBody3D` nodes. We will also check out **joints**, which can be used to make complex physics behavior.
 
