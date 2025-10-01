@@ -12,7 +12,7 @@ Duration: hh:mm:ss
 
 This lab will move away a bit from the previous one. We will look at how to make a basic **2D platformer**. We will connect this 2D platformer to our 3D game in the next lab.
 
-Today we will look over:
+Today, we will look over:
 - What is a **sprite sheet/atlas**
 - What are **tile maps** and how to use them
 - Setting up a **tile set** for tile maps with collisions
@@ -23,7 +23,7 @@ Today we will look over:
 - Learn how to **reset** the scene
 - Learn about scaling 2D objects in the **viewport**
 
-Here is the template for this lab. Please download it, there are new assets, scenes, and folders.
+Here is the template for this lab. Please download it, since there are new assets, scenes, and folders.
 <button>
   [Template Project](https://cent.felk.cvut.cz/courses/39HRY/godot/03_Platformer2D/template.zip)
 </button>
@@ -34,10 +34,10 @@ Here is the template for this lab. Please download it, there are new assets, sce
 ## Project Organization
 Duration: hh:mm:ss
 
-Let's take a look in the template project that I provided. If you look in the **FileSystem**, you can see the folder `2DPlatforming`. Inside it, you can find the debug scene, in which we will work in this codelab, and a sprite sheet image.
+Let's take a look at the template project that I provided. If you look in the **FileSystem**, you can see the folder `2DPlatforming`. Inside it, you can find the debug scene, in which we will work in this codelab, and a sprite sheet image.
 
 ### Folder management
-The way you structure the folders in your project is very important. Many people have folders based on **file type** (`Scripts`, `Art`, `Scenes`, `Sounds` etc.). This can be quick and useful to find something in smaller projects or folders. I will use this approach in the `2DPlatforming` part of the project, since it will be a small minigame.
+The way you structure the folders in your project is very important. Many people have folders based on **file type** (`Scripts`, `Art`, `Scenes`, `Sounds`, etc.). This can be quick and useful to find something in smaller projects or folders. I will use this approach in the `2DPlatforming` part of the project, since it will be a small minigame.
 
 The other approach, which you can see in the `3D` folder, is to split everything based on the **type of the game object**. I personally like this approach better, since it is more **logical** and **scalable**.
 
@@ -46,7 +46,7 @@ Another important thing is to stay organized. I recommend setting colors to the 
 
 ![](img/FolderColor.png)
 
-Personally, in this project it would be nice to color the **3D** folder red and **2D** folder blue, since 3D nodes are red and 2D nodes are blue. Like this:
+Personally, in this project, it would be nice to color the **3D** folder red and the **2D** folder blue, since 3D nodes are red and 2D nodes are blue. Like this:
 
 ![](img/FolderColorDone.png)
 
@@ -60,7 +60,7 @@ Now open the `debug_2d_scene.tscn` and switch to the **2D tab**
 Duration: hh:mm:ss
 
 ### Sprite Sheets/Atlases
-**Sprite sheets** or **sprite atlases** are a way of storing 2D drawn images. In games, where the environment can be built in a **grid** (Super Mario, Terraria, Core Keeper, etc.) it is a useful way to save memory, draw calls to the GPU, and reduce the number of image files.
+**Sprite sheets** or **sprite atlases** are a way of storing 2D drawn images. In games, where the environment can be built in a **grid** (Super Mario, Terraria, Core Keeper, etc.), it is a useful way to save memory, draw calls to the GPU, and reduce the number of image files.
 
  The main rules for sprite sheets are:
 - One sprite sheet is **one image**
@@ -69,7 +69,7 @@ Duration: hh:mm:ss
 
 ![](img/spritesheet.png)
 
-This is an example of a sprite sheet from our game. The first tile is the **wall tile**. Next to it there is a **platform tile**. Then there are 4 sprites with the electric cable animation and one sprite for a jump pad. The second line features the test player character from the 3D game.
+This is an example of a sprite sheet from our game. The first tile is the **wall tile**. Next to it, there is a **platform tile**. Then there are 4 sprites with the electric cable animation and one sprite for a jump pad. The second line features the test player character from the 3D game.
 
 > aside positive
 > Sprite sheets are also ideal for frame-by-frame animations.
@@ -86,7 +86,7 @@ Let's create and save a new `TileSet` resource.
 5. **Double-click** the newly created resource
 
 #### TileSet Setup
-First, we need to set the tile size of the `TileSet`. In the **inspector**, set the **X** and **Y** to `32px`, since our tiles are 32x32 pixels. Now the `TileSet` is set up in the bottom of the Godot editor:
+First, we need to set the tile size of the `TileSet`. In the **inspector**, set the **X** and **Y** to `32px`, since our tiles are 32x32 pixels. Now the `TileSet` is set up at the bottom of the Godot editor:
 
 ![](img/TileSetWindow.png)
 
@@ -110,9 +110,9 @@ There are 3 main **tabs** in the tileset editor:
 
 
 #### TileSet Physics
-Let's add collision shapes to our tile, so that the player, once we add them later, will collide with the environment.
+Let's add collision shapes to our tile so that the player, once we add them later, will collide with the environment.
 
-First, we need to add a physics layer to the tileset. The **physics layer** is a specific setup of a collision layer and mask. This way, you don't need to set up collision layers and masks for each tile but only set the physics layer to those tiles.
+First, we need to add a physics layer to the tileset. The **physics layer** is a specific setup of a collision layer and mask. This way, you don't need to set up collision layers and masks for each tile, but only set the physics layer to those tiles.
 
 With the tileset resource open, look in the **Inspector** and:
 1. Open the dropdown called **Physics Layers**
@@ -130,7 +130,7 @@ Now let's paint the collision shapes. Please follow the steps in this video:
 ## TileMapLayer
 Duration: hh:mm:ss
 
-With the tileset set up, let's learn how to use it. A `TileSet` can be used in a `TileMapLayer`. There can be multiple layers in a scene. This is useful when you need for example:
+With the tileset set up, let's learn how to use it. A `TileSet` can be used in a `TileMapLayer`. There can be multiple layers in a scene. This is useful when you need, for example:
 - A background below all terrain
 - Decoration on top of the terrain
 - etc.
@@ -138,10 +138,10 @@ With the tileset set up, let's learn how to use it. A `TileSet` can be used in a
 ### Add a layer
 Let's add one to our scene:
 1. Add a `TileMapLayer` node to the scene
-2. In the **Inspector** set the property of `Tile Set` to the resource we created.
+2. In the **Inspector**, set the property of `Tile Set` to the resource we created.
 
 > aside negative
-> Do **NOT** add `TileMap`, add `TileMapLayer`. `TileMap` is a deprecated node, that is only kept for compatibility reasons.
+> Do **NOT** add `TileMap`, add `TileMapLayer`. `TileMap` is a deprecated node that is only kept for compatibility reasons.
 
 
 ### Draw an environment
@@ -160,7 +160,7 @@ Now we will use the `TileSet` and `TileMapLayer` to draw an environment. Try to 
 ## Player Controller 2D - Task
 Duration: hh:mm:ss
 
-Let's create the player character, so that we can control them and test out the `TileMapLayer` we drew. The player will be very similar to the 3D one.
+Let's create the player character so that we can control it and test out the `TileMapLayer` we drew. The player will be very similar to the 3D one.
 
 
 ### Player Node Setup
@@ -181,13 +181,13 @@ Let's also rename the second collision layer/mask to **"Player"** and change the
 A sprite is basically an image/texture that is shown on the screen. Sprites in Godot allow us to use a **"region"** of an image. We will use this to get the player sprite from the `spritesheet.png` file. With the `Sprite2D` node **selected**:
 1. Add the `spritesheet.png` to the property `Texture`
 2. Enable **Region** in the dropdown
-3. Use **Edit Region** button or manually set the `x`, `y`, `w`, and `h` properties to the ones in the picture.
+3. Use the **Edit Region** button or manually set the `x`, `y`, `w`, and `h` properties to the ones in the picture.
 
 ![](img/Sprite2DSetup.png)
 
 
 ### Pixel-art filtering
-When you use high-quality textures in your game, `Linear` filtering (similar effect to blur) makes the textures look better and not flicker at distances (for more information look up **mipmaps**).
+When you use high-quality textures in your game, `Linear` filtering (similar to blur) makes the textures look better and not flicker at distances (for more information, look up **mipmaps**).
 
 Our 2D platforming game uses pixel art. If we look at the tilemap and player close-up, we can see that it is blurry. To change this, **select** both the `Player` and `TileMapLayer` nodes and in the **Inspector** change the `Texture -> Filter` settings like so:
 
@@ -198,7 +198,7 @@ Our 2D platforming game uses pixel art. If we look at the tilemap and player clo
 
 
 ### CollisionShape2D setup
-Similarly as in 3D, let's set up the shape of the `CollisionShape2D` node. **Select** the `CollisionShape2D` node of the player and set it up like this:
+Similarly to 3D, let's set up the shape of the `CollisionShape2D` node. **Select** the `CollisionShape2D` node of the player and set it up like this:
 
 ![](img/CollisionShape2D.png)
 
@@ -222,10 +222,10 @@ Since the script that will control our player will be very similar to the 3D pla
 2. **Rename** it to `player_controller_2d.gd` and move it to a folder `2DPlatforming/Scripts`
 3. **Attach** the script to the `Player` node
 
-Now as a practice, try to rewrite the new script so that it works with the `CharacterBody2D` and in 2 dimension. The next section will have the **solution** of this task.
+Now, as a practice, try to rewrite the new script so that it works with the `CharacterBody2D` and in 2 dimensions. The next section will have the **solution** of this task.
 
 > aside positive
-> **Tip 1:** If the jump or gravity behaves weirdly, remember that in 2D in Godot the **up-direction** is `-Y`.
+> **Tip 1:** If the jump or gravity behaves weirdly, remember that in 2D in Godot, the **up-direction** is `-Y`.
 
 > aside positive
 > **Tip 2:** The 3D world units were meters, in 2D it is pixels. I recommend multiplying all parameters at least by `10` to achieve a similar behavior.
@@ -321,7 +321,7 @@ If you placed the **jump pad tile** into the environment, you might notice that 
 
 One option would be to make it a **separate scene**, code a script that would **detect** the player, and **apply** force to the player.
 
-The second and much easier option is to **paint** the physics property of `linear_velocity` to the tile in the `TileSet`. This will **apply** velocity to every movable body, that is touching the tile. (Only if the tile has the body's collision layer enabled in the collision mask).
+The second and much easier option is to **paint** the physics property of `linear_velocity` to the tile in the `TileSet`. This will **apply** velocity to every movable body that is touching the tile. (Only if the tile has the body's collision layer enabled in the collision mask).
 
 ![](img/LinearVelocity.png)
 1. Open the `platforming_tileset.tres` file
@@ -329,12 +329,12 @@ The second and much easier option is to **paint** the physics property of `linea
 3. Select the **Select** tab
 4. Select the **jump pad tile**
 5. Open the dropdown **Physics** and then **Physics Layer 0**
-6. Set the `Y` component of the property `Linear Velocity` to `-500` for example.
+6. Set the `Y` component of the property `Linear Velocity` to `-500`, for example.
 
 > aside positive
 > Remember, that in 2D the **up-direction** is in the direction of negative `Y`.
 
-Now if you play the game and step on the **jump pad** the player will be pushed upwards.
+Now, if you play the game and step on the **jump pad**, the player will be pushed upwards.
 
 
 
@@ -342,12 +342,12 @@ Now if you play the game and step on the **jump pad** the player will be pushed 
 ## Functional Electric Cables/Spikes
 Duration: hh:mm:ss
 
-Now let's look at the **electric cable** sprites, that are in the sprite sheet. I want them to act like spikes in any other 2D platforming games. You might also notice, that there are several cable tiles. That is because they are a part of an animation, and we will learn how to create an **animated tile** out of them.
+Now let's look at the **electric cable** sprites that are in the sprite sheet. I want them to act like spikes in any other 2D platforming games. You might also notice that there are several cable tiles. That is because they are a part of an animation, and we will learn how to create an **animated tile** out of them.
 
 ### Animated Tile
-First, we need to only keep the first sprite as a tile, since the other 3 tiles are only the animation of the first one. So with the `TileSet` open:
+First, we need to keep only the first sprite as a tile, since the other 3 tiles are only the animation of the first one. So with the `TileSet` open:
 
-1. Go in the `Setup` tab
+1. Go to the `Setup` tab
 2. **Right-click** on the second cable tile
 3. Press **Delete**
 4. Repeat for the 3rd and 4th cable tile
@@ -360,13 +360,13 @@ Next up:
 2. Select the **first cable tile**
 3. Open the **Animation** ⇾ **Frames** dropdown and add frames so that there are `4` frames
 
-This will create an animation with 4 tiles. The selected tile will be the first frame and the next frames are selected depending on the settings in the **Animation** dropdown. By default, this will take 4 tiles in a row.
+This will create an animation with 4 tiles. The selected tile will be the first frame, and the next frames are selected depending on the settings in the **Animation** dropdown. By default, this will take 4 tiles in a row.
 
-You can further adjust the **duration** of the frames. Something around `0.15 s` looks good.
+You can further adjust the **duration** of the frames. Something around `0.15s` looks good.
 
 
 ### Tile Custom Data and Physics Shape
-We will detect if the player is touching the spikes with **Custom Data** of a tile. With the `TileSet` selected:
+We will detect if the player is touching the spikes with the **Custom Data** of a tile. With the `TileSet` selected:
 
 ![](img/DamageOnTouch.png)
 
@@ -375,7 +375,7 @@ We will detect if the player is touching the spikes with **Custom Data** of a ti
 3. Select the **cable tile**
 4. Under the dropdown **Custom Data** set **"DamageOnTouch"** to `On`
 
-Now to detect the collision, the electric cables need a collision shape. Add it in the **select** tab, so it looks similar to this:
+Now, to detect the collision, the electric cables need a collision shape. Add it in the **select** tab, so it looks similar to this:
 
 ![](img/CablePhysics.png)
 
@@ -384,9 +384,9 @@ Now to detect the collision, the electric cables need a collision shape. Add it 
 
 
 ### Process Collisions
-Now we need to go through all the **collisions** of the player, to see if the player collided with a tile, that has the **Custom Data** "DamageOnTouch" set.
+Now we need to go through all the **collisions** of the player, to see if the player collided with a tile that has the **Custom Data** "DamageOnTouch" set.
 
-To find a collision that occurred in this frame in the `CharacterBody2D` class, we can call `get_slide_collision(idx)` function. However, this function needs to be called **AFTER** the function `move_and_slide()`, since `move_and_slide()` handles the collisions.
+To find a collision that occurred in this frame in the `CharacterBody2D` class, we can call the `get_slide_collision(idx)` function. However, this function needs to be called **AFTER** the function `move_and_slide()`, since `move_and_slide()` handles the collisions.
 
 Add a call to a function `_process_new_collision()` after the `move_and_slide()` call. Now add the following function at the end of the script:
 
@@ -406,9 +406,9 @@ func _process_new_collision():
 - The `for cycle` goes through each new collision that happened after the `move_and_slide()` call.
 - We get one of the **collisions** that happened with `get_slide_collision(i)`.
 - We get the **collider** that the player collided with using `collision.get_collider()`.
-- Next we check if the collider `is` a `TileMapLayer` ⇾ if the player collided with the tilemap.
+- Next, we check if the collider `is` a `TileMapLayer` ⇾ if the player collided with the tilemap.
 - Then we get the `RID`, which is the **unique Resource ID** of the tile we collided with.
-- We use this RID to get the **coordinates** of tile in the `TileSet`
+- We use this RID to get the **coordinates** of the tile in the `TileSet`
 - Lastly, we get the `TileData` using the tile coordinates, and we use it to check if the **Custom Data** `DamageOnTouch` is turned on.
 
 > aside positive
@@ -419,9 +419,9 @@ For now, we just print **"cable collision"**. **Place** some cables in the scene
 
 
 ### Reset on collision
-You can decide, what happens when the player touches the cables. For now, before we add the **2DPlatforming** game to the **3D** game, I want to just reset the scene.
+You can decide what happens when the player touches the cables. For now, before we add the **2DPlatforming** game to the **3D** game, I want to just reset the scene.
 
-We can do this by changing the `print` line with:
+We can do this by changing the `print` line to:
 ```GDScript
 get_tree().reload_current_scene()
 ```
@@ -430,7 +430,7 @@ If you try to jump on the cables now, you can see that it works. The more observ
 
 `player_controller_2d.gd:75 @ _process_new_collision(): Parameter "found" is null.`
 
-Looking at the code, the issue might not be so obvious. The problem arises, if there are **multiple collisions** with the cables in one frame. The first collision **resets** the scene and then the other collisions try to interact with the deleted scene. To fix this, we can easily **add** a
+Looking at the code, the issue might not be so obvious. The problem arises if there are **multiple collisions** with the cables in one frame. The first collision **resets** the scene, and then the other collisions try to interact with the deleted scene. To fix this, we can easily **add** a
 ```GDScript
 return
 ```
@@ -443,7 +443,7 @@ statement after the scene reload line.
 ## Correct Viewport Scale
 Duration: hh:mm:ss
 
-Right now if you change the **window size**, the size of objects stays the same on the monitor. You might think that this is what we want, but consider someone with a bigger monitor resolution. In this case, the player would see much more/less of the game world. Let's change it in the **Project Settings**. Watch this video and follow it step by step:
+Right now, if you change the **window size**, the size of objects stays the same on the monitor. You might think that this is what we want, but consider someone with a bigger monitor resolution. In this case, the player would see much more/less of the game world. Let's change it in the **Project Settings**. Watch this video and follow it step by step:
 
 <video id=srwBrfGeiKs></video>
 
@@ -461,20 +461,20 @@ I would be very grateful if you could take a moment to fill out a **very short f
 </button>
 
 > aside positive
-> This whole course and the game we are making is a part of my diploma thesis.
+> This whole course and the game we are making are a part of my diploma thesis.
 
 ### Recap
 Let's look at what we did in this lab.
 - We looked at **project organization** and folder management
 - Then we learned what **sprite sheets** are and how to set up a `TileSet` from one
 - We used the created `TileSet` in a `TileMapLayer` and drew an **environment**
-- Next I tasked you to create a **2D player controller**
+- Next, I tasked you to create a **2D player controller**
 - Then we made the **jump pad** functional using the `Linear Velocity` property in tiles
 - We added **electric cables**, which reset the level on touch, while learning about **Custom Data** in tiles and how to get them.
 - Lastly, we set up the camera to **correctly scale** with the window size
 
 
-If you want to see how the finished template looks like after this lab, you can download it here:
+If you want to see what the finished template looks like after this lab, you can download it here:
 <button>
   [Template Done Project](https://cent.felk.cvut.cz/courses/39HRY/godot/03_Platformer2D/template-done.zip)
 </button>
