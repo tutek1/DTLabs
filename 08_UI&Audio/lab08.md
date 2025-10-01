@@ -58,6 +58,7 @@ Duration: hh:mm:ss
 ### Gradient and Progress Tint
 
 
+
 ## Collectible UI TODO
 Duration: hh:mm:ss
 
@@ -68,14 +69,6 @@ Duration: hh:mm:ss
 ### Put UI Together
 Control nodes for transform retention
 `HBoxContainer`
-
-
-## Bonus: Collectible Tween and Particles TODO
-Duration: hh:mm:ss
-
-### Tween UI up
-
-### Particles
 
 
 
