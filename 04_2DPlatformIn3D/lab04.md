@@ -12,7 +12,7 @@ Duration: hh:mm:ss
 
 This lab will combine the 2D minigame created in the previous lab with the 3D game we were making before. We will do this using `SubViewports` and learn how to use them.
 
-Today we will look over:
+Today, we will look over:
 - See the **changes** I made from the last lab and save the **2D player scene**
 - How to set up a `SubViewport` and **view a 2D scene in 3D**
 - Learn about **signals**, how to **create** them and **use** them
@@ -39,7 +39,7 @@ I cleaned up our 3D scene a bit more by moving all the objects under the node `O
 
 
 ### 2D Changes
-I created a 2D platforming template level and a testing level for this codelab. The template will work as a base scene, that can be duplicated to easily create more 2D platforming levels. All the levels can be found in the folder `2DPlatforming/Levels/`.
+I created a 2D platforming template level and a testing level for this codelab. The template will work as a base scene that can be duplicated to easily create more 2D platforming levels. All the levels can be found in the folder `2DPlatforming/Levels/`.
 
 ![](img/2DChanges.png)
 
@@ -48,7 +48,7 @@ I created a 2D platforming template level and a testing level for this codelab. 
 
 
 ### Save the player
-Currently, if we wanted to change a property of the 2D player, for example the sprite, we would have to go into every scene with the 2D player and change it manually. This is not **very time efficient** and can produce **many bugs**. Let's save the player as a scene and replace it in all the 2D scenes.
+Currently, if we wanted to change a property of the 2D player, for example, the sprite, we would have to go into every scene with the 2D player and change it manually. This is not **very time efficient** and can produce **many bugs**. Let's save the player as a scene and replace it in all the 2D scenes.
 
 1. **Open** the `debug_2d_scene.tscn` scene (or any one of the three 2D scenes)
 2. **Right-click** the `Player2D` node
@@ -65,7 +65,7 @@ The resulting scene hierarchy in `debug_2d_scene.tscn` should look like this:
 
 ![](img/2DPlayerSaved.png)
 
-Now if we change something in the `player_2d.tscn` scene, it shows up in all 2D scenes. Try it out!
+Now, if we change something in the `player_2d.tscn` scene, it shows up in all 2D scenes. Try it out!
 
 
 
@@ -73,7 +73,7 @@ Now if we change something in the `player_2d.tscn` scene, it shows up in all 2D 
 ## Visible 2D Scene in 3D
 Duration: hh:mm:ss
 
-Now in order to make the 2D scene visible in 3D, we need a something to show it on. **Open** the `debug_3d_scene.tscn` and look at the **Scene Hierarchy**. There, you can see the node `Enviroment` ⇾ `2DPlatforming` (a container for all the 2D platforming sections), which has a single `Sprite3D` as a child (a single platforming section). `Sprite3D` node is used to display 2D sprites/images in 3D.
+Now, in order to make the 2D scene visible in 3D, we need something to show it on. **Open** the `debug_3d_scene.tscn` and look at the **Scene Hierarchy**. There, you can see the node `Enviroment` ⇾ `2DPlatforming` (a container for all the 2D platforming sections), which has a single `Sprite3D` as a child (a single platforming section). `Sprite3D` node is used to display 2D sprites/images in 3D.
 
 
 ### Adding a SubViewport
@@ -94,16 +94,16 @@ If you look at the `Sprite3D` now, there are 3 issues:
 2. The level looks blurry up close. We need to change **the sprite filtering** option.
 3. The level has a gray background. We need to toggle **transparent background** ON.
 
-To fix them do:
-1. In the **Inspector** of the `SubViewport` change the `Size` property, so the whole level is in view.
-2. In the **Inspector** of the `Sprite3D` change the `Texture Filter` property to `Nearest`.
+To fix them, do:
+1. In the **Inspector** of the `SubViewport`, change the `Size` property so that the whole level is in view.
+2. In the **Inspector** of the `Sprite3D`, change the `Texture Filter` property to `Nearest`.
 3. In the **Inspector** of the `SubViewport` switch the `Transparent BG` on. 
 
 The result should look like this:
 ![](img/2DIn3D.png)
 
 > aside positive
-> The size of the `SubViewport` should be in multiples of `32px` because the size of a single tile is `32px` by `32px`. That way there can't be any cut off tiles.
+> The size of the `SubViewport` should be in multiples of `32px` because the size of a single tile is `32px` by `32px`. That way, there can't be any cut-off tiles.
 
 
 
@@ -111,7 +111,7 @@ The result should look like this:
 ## PlatformingManager2D and ProcessMode
 Duration: hh:mm:ss
 
-Try to play the game now. You can see that you can control **both** the 2D and 3D player at the same time. This is not how the game is supposed to work. Let's make a script called `PlatformingManager2D`, which will control the winning, losing, starting, and ending the 2D platforming level.
+Try to play the game now. You can see that you can control **both** the 2D and 3D players at the same time. This is not how the game is supposed to work. Let's make a script called `PlatformingManager2D`, which will control the winning, losing, starting, and ending of the 2D platforming level.
 
 1. **Create** a new script `platforming_manager_2d.gd` in the folder `2DPlatforming/Scripts`
 2. **Add** a function `turn_on()` and `turn_off()` with no parameters and return type of `void`
@@ -123,9 +123,9 @@ What to put into the new functions? 🤔
 
 
 ### ProcessMode
-We want the 2D level to be inactive until we "enter" it, how do we do that? Each node that inherits from `Node` (which is basically every node there is) has a property of `Mode` in the `Process` category. This determines if the node runs the `_process()` and `_physics_process()` function every frame. For example, when you disable a `CharacterBody2D` it will stop moving and processing all collisions.
+We want the 2D level to be inactive until we "enter" it. How do we do that? Each node that inherits from `Node` (which is basically every node there is) has a property of `Mode` in the `Process` category. This determines if the node runs the `_process()` and `_physics_process()` functions every frame. For example, when you disable a `CharacterBody2D`, it will stop moving and processing all collisions.
 
-Here you can see all the modes, that can be set:
+Here you can see all the modes that can be set:
 
 ![](img/ProcessMode.png)
 
@@ -182,12 +182,12 @@ Here is what the resulting scene should look like.
 
 
 ### Create PlatformingSection Script
-With the setup complete, let's create and add a script to the `Sprite3D`, which will control the entering and exiting the 2D platforming level from the 3D world.
+With the setup complete, let's create and add a script to the `Sprite3D`, which will control the entering and exiting of the 2D platforming level from the 3D world.
 
 1. **Create** a new script `platforming_section.gd` in the `2DPlatforming/Scripts` folder
 2. **Add** the script to the `Sprite3D`, which has the `SubViewport` as a child
 
-Now we would like to be notified, when the player enters the `Area3D`. This can be easily done using Godot **Signals**.
+Now we would like to be notified when the player enters the `Area3D`. This can be easily done using Godot **Signals**.
 
 ### Godot Signals
 They are very similar to events in other programming languages. Any node can **connect** to a signal of another node with a given **Callable** function. Once the signal is fired, all the connected nodes are **notified** and the given functions are **called**. You can also create your own signals, which we will do in this codelab later on. Let's try them out!
@@ -197,7 +197,7 @@ If you select the `Area3D`, you can switch the tab at the top of the **inspector
 
 ![](img/Area3DSignals.png)
 
-The `Area3D` has many signals that can be connected. We are interested in the signal `body_entered(body: Node3D)` since we want to detect the player entering and our player is a `CharacterBody3D`.
+The `Area3D` has many signals that can be connected. We are interested in the signal `body_entered(body: Node3D)` since we want to detect the player entering, and our player is a `CharacterBody3D`.
 
 1. **Select** the `body_entered(body: Node3D)` signal
 2. **Press** the `Connect...` button on the bottom right
@@ -219,12 +219,12 @@ Try to play the game and enter/exit the `Area3D`. The console should print `"Pla
 Duration: hh:mm:ss
 
 ### Reference to the 2D scene
-Our 2D platforming scene has the script with the `turn_off()` and `turn_on()` function. To call it from the `platforming_section.gd` we need a reference to the script. To have a reference to a script we need to set the name of the script class.
+Our 2D platforming scene has the script with the `turn_off()` and `turn_on()` functions. To call it from the `platforming_section.gd`, we need a reference to the script. To have a reference to a script, we need to set the name of the script class.
 
 1. **Open** the `platforming_manager_2d.gd` script
 2. **Add** the line `class_name PlatformingManager2D` as the first line of the script
 
-Now in the `platforming_section.gd` let's get the reference to the 2D level and turn the level off in the `_ready()` function. This will make the 2D player stop moving with the 3D one.
+Now, in the `platforming_section.gd` let's get the reference to the 2D level and turn the level off in the `_ready()` function. This will make the 2D player stop moving with the 3D one.
 
 Place this in the script:
 ```GDScript
@@ -250,7 +250,7 @@ This just turns on the 2D level, when we enter the `Area3D` for now.
 
 
 #### Player 3D reference
-Once in the 2D level, we want to **turn off** the 3D player, so we need a reference to it. We could add a `export` reference to the player, but we would have to set all the references **manually**, which would be quite cumbersome if we had a lot of 2D platforming sections. In this case, we can easily get the reference to the 3D player once it **collides** with the `Area3D`.
+Once in the 2D level, we want to **turn off** the 3D player, so we need a reference to it. We could add an `export` reference to the player, but we would have to set all the references **manually**, which would be quite cumbersome if we had a lot of 2D platforming sections. In this case, we can easily get the reference to the 3D player once it **collides** with the `Area3D`.
 
 In the `player_controller_3d.gd` script:
 1. **Add** the line `class_name PlayerController3D` as the first line of the script
@@ -269,21 +269,21 @@ func _on_area_3d_body_entered(body : Node3D) -> void:
 > The keyword `is` is used to check the class type.
 
 #### Turn off the Player
-Now the next step is to **turn off** the 3D player. We will do this the same way as we did the for the 2D player.
+Now the next step is to **turn off** the 3D player. We will do this the same way as we did for the 2D player.
 
 Add this line to the `_enter2D()` function:
 ```GDScript
 _player_3d.process_mode = Node.PROCESS_MODE_DISABLED
 ```
 
-It would also be nice if the player 2D was not **visible** until we enter the 2D world and if the player 3D was invisible until we exit the 2D world. There are several ways to do it and each has a pro and con, we will stick with the simplest and just set the **scale** of the player to `0`.
+It would also be nice if the player 2D was not **visible** until we enter the 2D world, and if the player 3D was invisible until we exit the 2D world. There are several ways to do it, and each has its pros and cons. We will stick with the simplest and just set the **scale** of the player to `0`.
 
 For the 3D player, add this line to the `_enter2D()` function:
 ```GDScript
 _player_3d.scale = Vector3.ZERO
 ```
 
-For the 2D player in the script `platforming_manager_2d.gd` we need to add the reference to the player with `export` and add the correct lines to the `turn_on()` and `turn_off()` functions. The script should look like this:
+For the 2D player in the script `platforming_manager_2d.gd`, we need to add the reference to the player with `export` and add the correct lines to the `turn_on()` and `turn_off()` functions. The script should look like this:
 ```GDScript
 class_name PlatformingManager2D
 extends Node
@@ -308,7 +308,7 @@ Remember to set the `export` variable in the **inspector** in all the 2D platfor
 ## Camera Follow 2D Player
 Duration: hh:mm:ss
 
-Playing the game it looks like the player enters the 2D world. One problem is that the camera stays on the position of the 3D Player. We would like it to follow the 2D player.
+Playing the game, it looks like the player enters the 2D world. One problem is that the camera stays in the position of the 3D Player. We would like it to follow the 2D player.
 
 
 ### Dummy target
@@ -319,7 +319,7 @@ To easily see and debug the position translation from 2D to 3D, let's add a `Nod
 
 
 ### Player2D position
-How do we get the 2D player position in the `platforming_section.gd` script? We have a reference to the `PlatformingManager2D`, and it has a reference to the 2D player. Let's add a function to the `PlatformingManager2D`, that will return the player 2D reference.
+How do we get the 2D player position in the `platforming_section.gd` script? We have a reference to the `PlatformingManager2D`, and it has a reference to the 2D player. Let's add a function to the `PlatformingManager2D` that will return the player 2D reference.
 
 ```GDScript
 func get_player2D() -> Node2D:
@@ -338,7 +338,7 @@ Another thing is that the units of the 2D player position are in **pixels** and 
 
 
 ### The code
-Since these changes are quite big and the codelab will be quite long already, I won't through the code in great detail. Here is the full `platforming_section.gd` script:
+Since these changes are quite big and the codelab will be quite long already, I won't go through the code in great detail. Here is the full `platforming_section.gd` script:
 
 ```GDScript
 extends Sprite3D
@@ -388,7 +388,7 @@ func _on_area_3d_body_entered(body : Node3D) -> void:
 ```
 
 ### PlayerCamera3D changes
-Now if you play the game, the camera follows the 2D player with the cube pretty well. However, the camera is too **zoomed** in, due to the camera shapecasting in to the wall, and we can still **rotate** the camera.
+Now, if you play the game, the camera follows the 2D player with the cube pretty well. However, the camera is too **zoomed** in, due to the camera shapecasting into the wall, and we can still **rotate** the camera.
 
 #### Shapecasting problem
 The easiest way to fix this is to move the camera target a bit out of the wall, so that the shapecast does not hit it. We can easily adjust it in the function `_update_camera_target()` by setting:
@@ -397,13 +397,13 @@ camera_target.position.z = 0.5
 ```
 
 > aside positive
-> You can put a different number to the `position.z` than `0.5`. I just find this value to work and look well with our setup.
+> You can put a different number to the `position.z` than `0.5`. I just found this value to work well with our setup.
 
 
 #### Rotation problem
 We will fix this by adding a function to switch off and on the ability to rotate the camera with the mouse. 
 
-To do this we will need to expand the `player_camera_3d.gd` script with the following "public" **function**, a **new bool variable** so that we know if we should rotate or not, and a rotation **check**:
+To do this, we will need to expand the `player_camera_3d.gd` script with the following "public" **function**, a **new bool variable** so that we know if we should rotate or not, and a rotation **check**:
 ```GDScript
 ...
 var _do_rotate_camera : bool = true
@@ -419,7 +419,7 @@ func set_user_rotation_control(value : bool, fixed_rotation : Vector3) -> void:
 - `value` will determine if we want the rotation to turn on or off
 - `fixed_rotation` will determine the rotation, which will be set and constant throughout the 2D level
 
-Some 2D platforming levels might be set at a different angle in the 3D world, that is why we will add an `@export` variable, that will be used as the `fixed_rotation` parameter. **Add** this to the top of the `platforming_section.gd` script:
+Some 2D platforming levels might be set at a different angle in the 3D world, which is why we will add an `@export` variable that will be used as the `fixed_rotation` parameter. **Add** this to the top of the `platforming_section.gd` script:
 ```GDScript
 @export var camera_angle : Vector3 = Vector3.ZERO
 ```
@@ -429,9 +429,9 @@ The last thing to do is to **call** the function at the end of the `_enter2D()` 
 _player_3d.camera_pivot.set_user_rotation_control(false, camera_angle)
 ```
 
-You can of course play around with the angle in the **Inspector** of the `Sprite3D` but our testing 2D platforming section looks fine with `Vector3.ZERO`.
+You can, of course, play around with the angle in the **Inspector** of the `Sprite3D`, but our testing 2D platforming section looks fine with `Vector3.ZERO`.
 
-Playing the game now and touching the `Area3D`, you should be transported into the 2D world and the camera should behave correctly.
+Playing the game now and touching the `Area3D`, you should be transported into the 2D world, and the camera should behave correctly.
 
 
 
@@ -439,7 +439,7 @@ Playing the game now and touching the `Area3D`, you should be transported into t
 ## 2D Level Result
 Duration: hh:mm:ss
 
-Currently, if we run through the whole 2D level we can just fall out and if we jump on spikes the whole game reloads (even the 3D). Let's change this.
+Currently, if we run through the whole 2D level, the player can just fall out of bounds, and if we jump on spikes, the whole game reloads (even the 3D). Let's change this.
 
 We will add a **signal** to the 2D player, which will notify the platforming manager when the **player dies**. Then we will add a **`Area2D`**, which will notify the manager that the **player has won** (a sort of goal). Next, we will add another **signal** to the manager, which will notify the section manager (the one in 3D) that the **game ended** with a result (died or won). Here is a small diagram to better understand what we are trying to do:
 
@@ -447,11 +447,11 @@ We will add a **signal** to the 2D player, which will notify the platforming man
 
 
 ### Platforming Complete Signal
-To create our own signal we need to write the next line into the `platforming_manager_2d.gd`. Place near the top of the script, after the `class_name` and `extends`:
+To create our own signal, we need to write the next line into the `platforming_manager_2d.gd`. Place near the top of the script, after the `class_name` and `extends`:
 ```GDScript
 signal platforming_complete(bool)
 ```
-This signal is special, because it is called with a `bool` variable, which will determine if the player completed the 2D platforming successfully or not.
+This signal is special because it is called with a `bool` variable, which will determine if the player completed the 2D platforming successfully or not.
 
 
 ### Adding the WinArea
@@ -460,7 +460,7 @@ This signal is special, because it is called with a `bool` variable, which will 
 1. **Open** the `level_codelabs.tscn` scene
 2. **Add** a `Area2D` node and rename it to `WinArea`
 3. **Add** a `CollisionShape2D` as a child of the `Area2D`
-4. **Set up** the collision layer and mask of the `Area2D` same as the image below
+4. **Set up** the collision layer and mask of the `Area2D`, same as the image below
 
 ![](img/WinAreaMask.png)
 
@@ -506,7 +506,7 @@ func _ready():
 ```
 - **`player`** is the reference to the `PlayerController2D`
 - **`player2D_died`** is the signal, which will be emitted when the player dies
-- **`connect()`** is a function of a signal, its parameter is the function, which will be called once the signal is emitted
+- **`connect()`** is a function of a signal with a parameter of the function, which will be called once the signal is emitted
 - **`platforming_complete.emit`** is the function emitting the `platforming_complete` signal that will be called once the `player2D_died` signal is emitted
 - **`bind(false)`** adds the value `false` as the parameter of the function call of `platforming_complete.emit` (this will not call the function but only add the parameter once the function is called in the future)
 
@@ -520,7 +520,7 @@ func _ready():
 
 
 ### Connect the Platforming Manager (2D) to Platforming Section (3D)
-To connect it we can easily put the following line into the `platforming_section.gd` script:
+To connect it, we can easily put the following line into the `platforming_section.gd` script:
 
 ```GDScript
 func _ready() -> void:
@@ -536,11 +536,11 @@ For now, let's just print out the bool of the signal ⇾ success or not. Try to 
 ## Exiting 2D
 Duration: hh:mm:ss
 
-Now it is time to make a function to **exit the 2D world**. It will work similarly as the enter function but in **reverse**. The result of the 2D platforming section will determine if the player will be pushed **up and forward** (success) or **down and backwards** (failure).
+Now it is time to make a function to **exit the 2D world**. It will work similarly to the enter function but in **reverse**. The result of the 2D platforming section will determine if the player will be pushed **up and forward** (success) or **down and backwards** (failure).
 
 
 ### The Exit Function
-The `_exit2D()` function is very straightforward, we just need to reverse the changes done in `_enter2D()`.
+The `_exit2D()` function is very straightforward. We just need to reverse the changes done in `_enter2D()`.
 
 ```GDScript
 # Handles the transition from 2D platforming to 3D 
@@ -566,10 +566,10 @@ func _exit2D(success : bool) -> void:
 
 
 ### Player 2D Death Glitch
-If you run the game and exit the 2D level, you can start looping **back and forth** between 2D and 3D. To correct this we will need to fix the following 3 problems.
+If you run the game and exit the 2D level, you can start looping **back and forth** between 2D and 3D. To correct this, we will need to fix the following 3 problems.
 
 #### 1. Move Player 3D Outside of the `Area3D`
-The first problem is, that the player 3D stays in the `Area3D` and is disabled. This is problematic, since once they are enabled, the collision is triggered again resulting in constant exiting and entering loop. To fix this we will **move** the player 3D out of the `Area3D`, **wait** one frame, and then disable them.
+The first problem is that the player 3D stays in the `Area3D` and is disabled. This is problematic, since once they are enabled, the collision is triggered again, resulting in a constant exiting and entering loop. To fix this, we will **move** the player 3D out of the `Area3D`, **wait** one frame, and then disable them.
 
 ```GDScript
 func _enter2D() -> void:
@@ -598,7 +598,7 @@ The **`await`** keyword pauses the execution of the function (not the whole game
 > We need to use `get_tree().process_frame` since we are setting the `process_mode` property and `process` updates more frequently than `physics_process`.
 
 #### 2. Reset Player 2D Position
-The second problem is that once the 2D player dies, they stay on the spikes and constantly **die over and over**. To fix this we need to reset the 2D player position upon **losing or winning** the 2D level. We will do this by **caching** the position of the player at the beginning of the game and then **moving** the 2D player to that position once the 2D game ends.
+The second problem is that once the 2D player dies, they stay on the spikes and constantly **die over and over**. To fix this, we need to reset the 2D player position upon **losing or winning** the 2D level. We will do this by **caching** the position of the player at the beginning of the game and then **moving** the 2D player to that position once the 2D game ends.
 
 Apply these changes to the `platforming_manager_2d.gd`:
 ```GDScript
@@ -627,11 +627,11 @@ func turn_off() -> void:
 
 
 ### Error in Debugger
-If you try playing the game, everything seems to work perfectly well. However, looking at the `Debugger` you can see these errors:
+If you try playing the game, everything seems to work perfectly well. However, looking at the `Debugger`, you can see these errors:
 
 ![](img/ScaleError.png)
 
-This error `det==0` means that the **determinant** of the transformation matrix of a node (the player) is `0`. This is due to the fact that, we are **setting the scale** of the player to `(0, 0, 0)`. After that some **physics frames** still manage to run until we **disable** the node later.
+This error `det==0` means that the **determinant** of the transformation matrix of a node (the player) is `0`. This is due to the fact that we are **setting the scale** of the player to `(0, 0, 0)`. After that, some **physics frames** still manage to run until we **disable** the node later.
 
 - One fix is to **scale** the player to some small but non-zero number like `(0.001, 0.001, 0.001)`. This will make the determinant non-zero.
 - The second fix is to move the `_player_3d.scale = Vector3.ZERO` line **after the wait** and execute it at the same time as the disabling of the node. This way, there will be no physics updates, where the scale is `0`.
@@ -664,13 +664,13 @@ func _exit2D(success : bool) -> void:
 ```
 
 > aside positive
-> We use `global_position` instead of `position` to avoid unnecessary manual coordinate space transformation between the `CameraTarget` basis and the 3D player basis. `global_position` tells us the position of a node in the relation to the scene tree root. 
+> We use `global_position` instead of `position` to avoid unnecessary manual coordinate space transformation between the `CameraTarget` basis and the 3D player basis. `global_position` tells us the position of a node in relation to the scene tree root. 
 
 
 #### Pushing the player
-Right now, when the player exits the 2D level, they just **pop out** based on the player 2D position. That's not very interesting, and it can make the 3D player **fall off** the obstacle that they are climbed successfully using the platforming section. We will push (apply velocity) to the player in a given direction to make it more interesting.
+Right now, when the player exits the 2D level, they just **pop out** based on the player's 2D position. That's not very interesting, and it can make the 3D player **fall off** the obstacle that they have climbed successfully using the platforming section. We will push (apply velocity) to the player in a given direction to make it more interesting.
 
-Let's define 3 `export` variables, that will determine the **success** (entered `WinArea`) and **failure** (fell on spikes) force the player should be pushed by and a variable that will determine for **how long** the player should be pushed for. Add this to the top of the `platforming_section.gd`:
+Let's define 3 `export` variables that will determine the **success** (entered `WinArea`) and **failure** (fell on spikes) force the player should be pushed by, and a variable that will determine for **how long** the player should be pushed for. Add this to the top of the `platforming_section.gd`:
 ```GDScript
 @export var success_push_force : Vector3
 @export var failure_push_force : Vector3
@@ -686,7 +686,7 @@ func _exit2D(success : bool) -> void:
     _player_3d.velocity = success_push_force if success else failure_push_force
 ```
 
-However trying it now, the force gets **overridden** by the velocity dampening of the player (`_movement()` function). We can fix this by using a function that I have added to the 3D player between the last codelab and this one. The function `set_do_movement(...)` sets a variable, that **disables/enables** the calling of the movement function of the player (handles WASD input, dampening, etc.). So the plan is to **disable the player** movement, then **wait a while** (`push_time`), and then **enable the player** movement. How do we wait?
+However, trying it now, the force gets **overridden** by the velocity dampening of the player (`_movement()` function). We can fix this by using a function that I have added to the 3D player between the last codelab and this one. The function `set_do_movement(...)` sets a variable that **disables/enables** the calling of the movement function of the player (handles WASD input, dampening, etc.). So the plan is to **disable the player** movement, then **wait a while** (`push_time`), and then **enable the player** movement. How do we wait?
 
 Waiting can be done either by the `Timer` node, which we will do in a later codelab, or by using `get_tree().create_time()` with `await`. Paste this code at the end of the `_exit2D(...)` function:
 ```GDScript
@@ -706,7 +706,7 @@ Try using different values for the push forces to make them feel right. I set th
 ## WinArea Error
 Duration: hh:mm:ss
 
-If you play the game and manage to exit the 2D level by entering the `WinArea` the **Debugger** shows this error:
+If you play the game and manage to exit the 2D level by entering the `WinArea`, the **Debugger** shows this error:
 ```
 E 0:00:36:347   platforming_manager_2d.gd:19 @ turn_off(): Disabling a CollisionObject node during a physics callback is not allowed and will cause undesired behavior. Disable with call_deferred() instead.
     <C++ Source>  scene/2d/physics/collision_object_2d.cpp:244 @ _apply_disabled()
@@ -729,9 +729,9 @@ The "... during a physics callback" part happens because the previous line is ca
 
 
 ### Deferred Calls
-We can fix this by postponing the signal emission `platforming_complete.emit(true)` in the `_on_win_area_body_entered()` function. To do this we will need to learn about `deferred` **calling** and **setting**.
+We can fix this by postponing the signal emission `platforming_complete.emit(true)` in the `_on_win_area_body_entered()` function. To do this, we will need to learn about `deferred` **calling** and **setting**.
 
-Calling a function or setting a variable **deferred** makes the action take place during idle time, which takes place after the `process` and `physics_process`. This is useful when you want or need something to happen at the **end of the frame**. In our case we will use it to make our signal emit after the physics have been resolved in this frame. Calling a **function deferred** can be done like this:
+Calling a function or setting a variable **deferred** makes the action take place during idle time, which takes place after the `process` and `physics_process`. This is useful when you want or need something to happen at the **end of the frame**. In our case, we will use it to make our signal emit after the physics have been resolved in this frame. Calling a **function deferred** can be done like this:
 
 ```GDScript
 # Template, {var} is a placeholder for a real value
@@ -753,7 +753,7 @@ set_deferred("{var_name}", {value})`
 ### Fix - Deferred Signal
 Signals are a bit different. To make a signal **emit deferred**, we need to set a **flag** when we are connecting it. When we connect a signal in the editor, we can set it to **deferred** in the pop-up window after toggling the `advanced` option.
 
-When we connect a signal using code, like in our case in `_ready()` function in `platforming_section.gd`, we can add the flags as parameters. **Replace** the signal connection line with this:
+When we connect a signal using code, like in our case in the `_ready()` function in `platforming_section.gd`, we can add the flags as parameters. **Replace** the signal connection line with this:
 ```GDScript
 func _ready() -> void:
     ...
@@ -772,19 +772,19 @@ What are tweens? Here is an excerpt from the [Godot Documentation](https://docs.
 
 *Tweens are mostly useful for animations requiring a numerical property to be interpolated over a range of values. The name tween comes from in-betweening, an animation technique where you specify keyframes and the computer interpolates the frames that appear between them. Animating something with a Tween is called tweening. ...*
 
-Overall, they are a very powerful tool for making **small animations** or things that happen instantly **more smooth** such as UI bars, text micro movements, fade in/out character bobbing, screen transitions, recoil, static camera movements, rotating/scaling objects, moving objects to mouse, and much more.
+Overall, they are a very powerful tool for making **small animations** or things that happen instantly **smoother**, such as UI bars, text micro movements, fade in/out character bobbing, screen transitions, recoil, static camera movements, rotating/scaling objects, moving objects to the mouse, and much more.
 
 
 ### Tweens in Godot
 To create a tween in Godot, you can simply call the `create_tween()` function, which will return a **`Tween`** object. The `Tween` class has two functions that are relevant to us:
-- `tween_property(node, "property", final_value, time)` - tweens a property (variable) from its current value to a given value taking given time
+- `tween_property(node, "property", final_value, time)` - tweens a property (variable) from its current value to a given value, taking the given time
 - `tween_method(function, start, end, time)` - tweens a value from `start` to `end` and calls a given function with that value (useful for more complex scenarios, where you don't just set a value)
 
 These functions return a variable of type **`Tweener`**. This variable tells you everything about the animation you created. You can change the `easing` and `transition`, which determine **how the value** will be interpolated (changed in time). An example of how these settings change the animation can be seen in this [cheatsheet](https://easings.net/en#) (I recommend bookmarking it).
 
 
 ### Enter2D
-Let's start in the `_enter2D()` function in the `platforming_section.gd` script. I would like the player to slowly **scale down** to 0 and **move** to the position of the 2D player. The tweens will take some time to play out and this **time** should be easily configurable.
+Let's start in the `_enter2D()` function in the `platforming_section.gd` script. I would like the player to slowly **scale down** to 0 and **move** to the position of the 2D player. The tweens will take some time to play out, and this **time** should be easily configurable.
 
 **Add** another `export` variable called `tween_time` of type `float`.
 
@@ -819,7 +819,7 @@ func _enter2D() -> void:
 3. **Awaiting** the end of the Tweens (only the position one, but both take the same time to complete).
 4. **Disabling** the process mode of the player after waiting.
 
-Try to play the game and see how it looks. We will now try to use `easings` and `transtions` to make it look much better.
+Try to play the game and see how it looks. We will now try to use `easings` and `transitions` to make it look much better.
 
 Simply **add** these lines above the `await`:
 ```GDScript
@@ -832,11 +832,11 @@ scale_tween.set_ease(Tween.EASE_IN)
 The tweens should look much better now. Here is a video of the difference:
 <video id=10Lpj4ArnxU></video>
 
-You can see in the video, that even when we place the 2D player far away, it works quite well.
+You can see in the video that even when we place the 2D player far away, it works quite well.
 
 
 ### Exit2D
-The exiting of 2D will be very similar. This time we only care about the **scale** of the 3D player. Let's just try to reverse the **scale tween** in the enter function.
+The exit from 2D will be very similar. This time, we only care about the **scale** of the 3D player. Let's just try to reverse the **scale tween** in the enter function.
 
 #### Task
 Try to do this part of the codelab yourself.
@@ -881,7 +881,7 @@ As you can see, Tweening can make a huge difference in the feel and look of your
 
 
 ### One more thing
-Don't forget to hide the cube mesh of the `CameraTarget`. We had it there only for testing of the player 2D position.
+Don't forget to hide the cube mesh of the `CameraTarget`. We had it there only for the testing of the player's 2D position.
 
 ![](img/HideHelper.png)
 
@@ -898,7 +898,7 @@ I would be very grateful if you could take a moment to fill out a **very short f
 </button>
 
 > aside positive
-> This whole course and the game we are making is a part of my diploma thesis.
+> This whole course and the game we are making are a part of my diploma thesis.
 
 ### Recap
 Let's look at what we did in this lab.
@@ -908,11 +908,11 @@ Let's look at what we did in this lab.
 - Next, we learned about what **signals** are, how to **create** them, and **use** them
 - Then, we made the **camera follow** the 2D player by **recalculating 2D coordinates** to 3D
 - We made the **result** of the 2D game **propagate upwards** the tree to the section manager
-- Next, we fixed many **errors** that sprung up during the implementation
+- Next, we fixed many **errors** that sprang up during the implementation
 - Lastly, we made the **entering** and **exiting** 2D smoothly animated using **Tweens**
 
 
-If you want to see how the finished template looks like after this lab, you can download it here:
+If you want to see what the finished template looks like after this lab, you can download it here:
 <button>
   [Template Done Project](https://cent.felk.cvut.cz/courses/39HRY/godot/04_2DPlatformIn3D/template-done.zip)
 </button>
