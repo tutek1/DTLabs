@@ -8,6 +8,12 @@ func _ready():
 	if _node_a != null: _node_a = get_node(node_a)
 	_node_b = get_node(node_b)
 
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _physics_process(delta):
+	if not _node_b is RigidBody3D: return
+	_linear_motor(delta)
+	_linear_spring()
+
 # Applies the linear motor based on set parameters
 func _linear_motor(delta : float) -> void:
 	var lin_vel : Vector3 = _node_b.linear_velocity
@@ -36,7 +42,7 @@ func _linear_motor(delta : float) -> void:
 	_node_b.linear_velocity = lin_vel
 
 # Applies the linear spring based on set parameters
-func _linear_spring(delta : float) -> void:
+func _linear_spring() -> void:
 	# Get the position and velocity (if there is any) of the node_a
 	var node_a_pos : Vector3
 	var node_a_vel : Vector3
@@ -98,10 +104,3 @@ func _linear_spring(delta : float) -> void:
 		
 		# Apply force along axis to both bodies
 		_node_b.apply_central_force(force * Vector3.BACK)
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _physics_process(delta):
-	if not _node_b is RigidBody3D: return
-	_linear_motor(delta)
-	_linear_spring(delta)

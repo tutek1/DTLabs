@@ -16,7 +16,7 @@ func _ready() -> void:
 	platforming_manager.turn_off()
 	platforming_manager.platforming_complete.connect(_exit2D, ConnectFlags.CONNECT_DEFERRED)
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	_update_camera_target()
 
 # When in 2D moves the 3D camera target to be at the same place as the 2D player
@@ -25,8 +25,8 @@ func _update_camera_target() -> void:
 	
 	# Get the position, offset it, and multiply it by pixel size
 	var player2D_position : Vector2 = platforming_manager.get_player2D().position
-	camera_target.position.x = (player2D_position.x - texture.get_width()/2) * pixel_size
-	camera_target.position.y = (-player2D_position.y + texture.get_height()/2) * pixel_size
+	camera_target.position.x = (player2D_position.x - texture.get_width()/2.0) * pixel_size
+	camera_target.position.y = (-player2D_position.y + texture.get_height()/2.0) * pixel_size
 	camera_target.position.z = 0.5
 
 # Handles the transition from 3D to 2D platforming

@@ -5,7 +5,7 @@ var projectile_prefab : PackedScene = preload("res://3D/Enemies/Projectiles/elec
 
 var _start_time : float
 
-func before_run(actor: Node, blackboard: Blackboard) -> void:
+func before_run(_actor: Node, _blackboard: Blackboard) -> void:
 	_start_time = Time.get_ticks_msec()
 
 func tick(actor, blackboard: Blackboard):

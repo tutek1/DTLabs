@@ -47,7 +47,7 @@ func _behavior() -> void:
 func _steering(delta : float) -> void:
 	
 	# Accumulate all forces from all steerings
-	var force : Vector3
+	var force : Vector3 = Vector3.ZERO
 	for steering in steerings:
 		force += steering.act(self)
 		if draw_debug: steering.debug_draw(self)

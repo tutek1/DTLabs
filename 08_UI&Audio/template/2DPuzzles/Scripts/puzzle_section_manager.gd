@@ -103,8 +103,7 @@ func enter_2D(player3D : PlayerController3D) -> void:
 	
 	# Tween to the correct location after walking there, just to be sure
 	create_tween()\
-	.tween_property(player3D, "global_position", target_position, pos_tween_time)\
-	.finished
+	.tween_property(player3D, "global_position", target_position, pos_tween_time)
 	
 	# Play connect animation
 	player3D.set_connect_anim_bool(true)

@@ -14,12 +14,6 @@ signal player2D_died
 
 var _has_double_jumped : bool = false
 
-func _ready() -> void:
-	pass
-
-func _process(delta : float) -> void:
-	pass
-
 func _physics_process(delta : float) -> void:
 	_movement(delta)
 	_apply_gravity(delta)

@@ -40,9 +40,6 @@ var _connected : bool
 func _ready() -> void:
 	_current_hp = stats.health
 
-func _process(delta : float) -> void:
-	pass
-
 func _physics_process(delta : float) -> void:
 	_movement(delta)
 	_rotate_player(delta)
@@ -189,7 +186,7 @@ func _check_collisions(delta : float) -> void:
 			collider.apply_impulse(force * delta, pos_offset)
 
 # Updates the parameters of the animation tree
-func _animation_tree_update():
+func _animation_tree_update() -> void:
 	# Blend amount Fall
 	var fall_coef : float = 0 
 	if velocity.y < 0:
@@ -215,6 +212,10 @@ func _animation_tree_update():
 	var walkscale : float = (local_velocity.length() / stats.speed) * walk_mult
 	animation_tree["parameters/FreeMoveBlendTree/TimeScale/scale"] = walkscale
 
+# TODO Fill out during codelab
+func collectible_touched(collectible : Collectible) -> void:
+	pass
+
 # Sets a control variable if the _movement() function should be run or not
 func set_do_movement(value : bool, delay : float = 0) -> void:
 	if delay == 0:
@@ -223,7 +224,6 @@ func set_do_movement(value : bool, delay : float = 0) -> void:
 	
 	await get_tree().create_timer(delay).timeout
 	_do_movement = value
-
 
 func receive_damage(value : float, from : Node3D):
 	if not _can_be_damaged: return

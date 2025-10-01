@@ -21,9 +21,9 @@ func _process(_delta):
 		DebugDraw3D.draw_line(points[points.size() - 1], points[0], Color.RED)
 
 # Handles "." in property paths
-func get_nested_property(node: Node3D, path: String):
+func get_nested_property(curr_node : Node3D, path: String):
 	var parts = path.split(".")
-	var value = node
+	var value = curr_node
 	for part in parts:
 		if value == null: return null
 		value = value.get(part)

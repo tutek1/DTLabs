@@ -2,7 +2,7 @@
 extends ActionLeaf
 
 
-func tick(actor, blackboard: Blackboard):
+func tick(actor, _blackboard: Blackboard):
 	if not actor is GroundEnemyBH: return FAILURE
 	var enemy : GroundEnemyBH = actor as GroundEnemyBH
 	var tween : Tween = enemy.create_tween()

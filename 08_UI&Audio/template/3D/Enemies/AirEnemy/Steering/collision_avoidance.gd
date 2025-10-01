@@ -28,10 +28,10 @@ func act(air_enemy : AirEnemy) -> Vector3:
 		
 		# Get each collision point and find the strongest
 		for idx in range(0, _shape_cast.get_collision_count()):
-			var point : Vector3 = _shape_cast.get_collision_point(idx)
+			var curr_point : Vector3 = _shape_cast.get_collision_point(idx)
 			
 			# Strength of the possible collision point (distance - enemy radius)
-			var strength : float = point.distance_to(air_enemy.global_position) - avoidance_radius
+			var strength : float = curr_point.distance_to(air_enemy.global_position) - avoidance_radius
 			strength = max(strength * strength, 0.1) # makes the strength have curve effect x^2
 			
 			if strength < max_strength: continue
@@ -53,7 +53,7 @@ func act(air_enemy : AirEnemy) -> Vector3:
 	return force * avoidance_strength - air_enemy.velocity
 
 # Draws all the collision points
-func debug_draw(air_enemy : AirEnemy) -> void:
+func debug_draw(_air_enemy : AirEnemy) -> void:
 	if _shape_cast.is_colliding():
 		for idx in range(0, _shape_cast.get_collision_count()):
 			DebugDraw3D.draw_sphere(_shape_cast.get_collision_point(idx), 0.1, Color.BLUE, 0.1)
