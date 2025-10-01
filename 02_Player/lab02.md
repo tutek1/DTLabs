@@ -808,7 +808,7 @@ camera_3d.position = camera_offset
 Try playing the game and adjust the values of `camera_offset` and `follow_speed` to your liking.
 
 > aside positive
-> It is recommended to use the relative node references `$node_name` if we are referencing a **child** node and `@export` is we are referencing a node outside the subtree of the current node.
+> It is recommended to use the relative node references `$node_name` if we are referencing a **child** node and `@export` if we are referencing a node outside the subtree of the current node.
 
 
 ### Camera limit
@@ -959,10 +959,9 @@ Open the `player_controller.gd` file and look in the `_movement()` function. If 
 1. **Add** an `@export` variable as a reference to the **camera pivot**.
 2. **Change** the `direction` calculation to use the **basis** of the camera pivot
 
-If we run the game now, it crashes with an error:
+**Don't forget** to set the reference to the camera in the **Inspector** or you will get this error:
 ![](img/ReferenceError.png)
 
-If we look at the error message, we can deduce that the `camera_pivot` must be `Nil` (null). That is indeed the case, because we forgot to set the player scripts **reference** to the **camera pivot** in the **Inspector**. 
 
 ### Wrong direction
 If you are very observant, you might have noticed that when you are looking down, the player moves **slower** than when you are looking forward. This happens because of the way that we are calculating the **direction** vector. Since the forward vector of the camera pivots basis can point down/up the resulting direction will be skewed by this.
