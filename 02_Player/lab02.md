@@ -959,7 +959,7 @@ Open the `player_controller.gd` file and look in the `_movement()` function. If 
 1. **Add** an `@export` variable as a reference to the **camera pivot**.
 2. **Change** the `direction` calculation to use the **basis** of the camera pivot
 
-**Don't forget** to set the reference to the camera in the **Inspector** or you will get this error:
+**Don't forget** to set the reference to the camera in the **Inspector** of the player script, or you will get this error:
 ![](img/ReferenceError.png)
 
 
