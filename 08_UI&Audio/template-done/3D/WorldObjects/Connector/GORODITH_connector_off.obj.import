@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://c07l8hdj15le4"
+path="res://.godot/imported/GORODITH_connector_off.obj-8c636e68966398fce27cc635cb77a2f2.mesh"
+
+[deps]
+
+files=["res://.godot/imported/GORODITH_connector_off.obj-8c636e68966398fce27cc635cb77a2f2.mesh"]
+
+source_file="res://3D/WorldObjects/Connector/GORODITH_connector_off.obj"
+dest_files=["res://.godot/imported/GORODITH_connector_off.obj-8c636e68966398fce27cc635cb77a2f2.mesh", "res://.godot/imported/GORODITH_connector_off.obj-8c636e68966398fce27cc635cb77a2f2.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(-1, 0, 0)
+force_disable_mesh_compression=false
