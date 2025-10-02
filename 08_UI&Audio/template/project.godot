@@ -40,7 +40,9 @@ enabled=PackedStringArray("res://addons/beehave/plugin.cfg")
 folder_colors={
 "res://2DPlatforming/": "blue",
 "res://2DPuzzles/": "green",
-"res://3D/": "red"
+"res://3D/": "red",
+"res://Audio/": "yellow",
+"res://UI/": "orange"
 }
 
 [global_group]
