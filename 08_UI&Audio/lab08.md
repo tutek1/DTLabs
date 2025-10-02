@@ -88,8 +88,6 @@ Duration: hh:mm:ss
 
 ### Bus Layout
 
-### Fill UI Callback
-
 ### Audio Nodes
 
 
@@ -103,12 +101,15 @@ Duration: hh:mm:ss
 
 
 
-## Crate an `AudioManager` TODO
+## Complex Audio using an `AudioManager` TODO
 Duration: hh:mm:ss
 
 ### Overview of `AudioManager`
 
 ### Play Music
+
+### Fill DEBUG UI Callback
+
 
 ### SFX Settings
 
@@ -149,7 +150,7 @@ I would be very grateful if you could take a moment to fill out a **very short f
 </button>
 
 > aside positive
-> This whole course and the game we are making is a part of my diploma thesis.
+> This whole course and the game we are making are a part of my diploma thesis.
 
 ### Recap
 Let's look at what we did in this lab.
@@ -174,7 +175,7 @@ X
 X
 
 ### Project Download
-If you want to see how the finished template looks like after this lab, you can download it here:
+If you want to see what the finished template looks like after this lab, you can download it here:
 <button>
   [Template Done Project](https://cent.felk.cvut.cz/courses/39HRY/godot/07_Animation&Physics/template-done.zip)
 </button>

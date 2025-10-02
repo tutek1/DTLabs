@@ -34,67 +34,11 @@ func play_sfx(type : SFX_TYPE) -> void:
 	if sfx_settings.is_over_limit(): return
 	sfx_settings.change_count(1)
 	
-	# Create AudioStreamPlayer
-	var audio_player : AudioStreamPlayer = AudioStreamPlayer.new()
-	add_child(audio_player)
-	
-	# Set params of AudioStreamPlayer
-	audio_player.bus = SFX_BUS
-	audio_player.stream = sfx_settings.get_clip()
-	audio_player.volume_db = sfx_settings.volume_adjust
-	audio_player.finished.connect(audio_player.queue_free)
-	audio_player.finished.connect(sfx_settings.change_count.bind(-1))
-	
-	audio_player.play()
-
-# Same as play_sfx but plays the audio at location -> 3D sound
-func play_sfx_at_location(type : SFX_TYPE, location : Vector3) -> void:
-	# Check and get the settings
-	if not sfx_bank.has(type): return
-	var sfx_settings : SFXSettings = sfx_bank[type]
-	
-	# Handle sfx limit
-	if sfx_settings.is_over_limit(): return
-	sfx_settings.change_count(1)
-	
-	# Create AudioStreamPlayer
-	var audio_player : AudioStreamPlayer3D = AudioStreamPlayer3D.new()
-	add_child(audio_player)
-	
-	# Set params of AudioStreamPlayer (+ location)
-	audio_player.bus = SFX_BUS
-	audio_player.position = location
-	audio_player.stream = sfx_settings.get_clip()
-	audio_player.volume_db = sfx_settings.volume_adjust
-	audio_player.unit_size = sfx_settings.unit_size
-	audio_player.finished.connect(audio_player.queue_free)
-	audio_player.finished.connect(sfx_settings.change_count.bind(-1))
-	
-	audio_player.play()
-
-# Same as play_sfx_at_location() but parents the audioplayer to a node for moving audio
-func play_sfx_as_child(type : SFX_TYPE, parent : Node) -> void:
-	# Check and get the settings
-	if not sfx_bank.has(type): return
-	var sfx_settings : SFXSettings = sfx_bank[type]
-	
-	# Handle sfx limit
-	if sfx_settings.is_over_limit(): return
-	sfx_settings.change_count(1)
-	
-	# Create AudioStreamPlayer (+ parent)
-	var audio_player : AudioStreamPlayer3D = AudioStreamPlayer3D.new()
-	parent.add_child(audio_player)
-	
-	# Set params of AudioStreamPlayer
-	audio_player.bus = SFX_BUS
-	audio_player.stream = sfx_settings.get_clip()
-	audio_player.volume_db = sfx_settings.volume_adjust
-	audio_player.unit_size = sfx_settings.unit_size
-	audio_player.finished.connect(audio_player.queue_free)
-	audio_player.finished.connect(sfx_settings.change_count.bind(-1))
-	
-	audio_player.play()
+	# TODO Create AudioStreamPlayer
+	# Add as child
+	# Set: bus, stream, volume
+	# Connect finished signal to: streamplayer queue_free, sfx_settings change_count(-1)
+	# Call Play 
 
 # Starts to play music with settable fade-in
 func play_music(fade_time : float = 0) -> void:

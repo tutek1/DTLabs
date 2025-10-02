@@ -13,6 +13,8 @@ func _input(event : InputEvent):
 	
 	_switch_mouse_mode()
 	_time_change()
+	_toggle_music()
+	_play_test_sound()
 
 # Unlocks and locks the mouse
 func _switch_mouse_mode() -> void:
@@ -33,4 +35,20 @@ func _time_change() -> void:
 	if Input.is_key_pressed(KEY_F3):
 		Engine.time_scale *= 2
 		print("DEBUG: upped time scale to => " + str(Engine.time_scale))
-		
+
+
+func _toggle_music() -> void:
+	pass
+	#if Input.is_key_pressed(KEY_F4):
+		#if AudioManager.music_stream_player.is_playing():
+			#print("DEBUG: Stopped music")
+			#AudioManager.stop_music(5)
+		#else:
+			#print("DEBUG: Started music")
+			#AudioManager.play_music(5)
+
+func _play_test_sound() -> void:
+	pass
+	#if Input.is_key_pressed(KEY_F6):
+		#print("DEBUG: Played Test Sound")
+		#AudioManager.play_sfx_at_location(AudioManager.SFX_TYPE.TEST_SOUND, Vector3.ZERO)
