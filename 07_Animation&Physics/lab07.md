@@ -936,7 +936,7 @@ Many other joint types can be used. The selection of `2D` and `3D` joints also d
 
 
 ### Problem with the `Generic6DOFJoint3D`
-Currently in `Godot 4.4.1`, the `Generic6DOFJoint3D` is broken and only the **limiting** of movement and rotation work. Both of the `Linear` and `Angular` **Springs** and **Motors** are broken and do not work at all.
+Currently in `Godot 4.4.1`, the `Generic6DOFJoint3D` node is broken and only the **limiting** of movement and rotation work. Both of the `Linear` and `Angular` **Springs** and **Motors** are broken and do not work at all.
 
 I created a **script** that can be attached to a `Generic6DOFJoint3D` node, which makes at least the `Linear Spring` and `Linear Motor` work in a somewhat reliable way. Hopefully, this issue will be fixed in future releases.
 
