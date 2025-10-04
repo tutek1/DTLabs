@@ -144,3 +144,7 @@
 {"rule":"ID_CASING","sentence":"^\\Qsummary: Animation & Physics id: export categories: Animation, Physics, Colliders, 3D, Models, Joints, Animation Tree, Skeleton, Bones, Light status: Published authors: Ondřej Kyzr Feedback Link: https://google.com\\E$"}
 {"rule":"ID_CASING","sentence":"^\\Qsummary: Animation & Physics id: export categories: Animation, Physics, Colliders, 3D, Models, Joints, Animation Tree, Skeleton, Bones, Light status: Published authors: Ondřej Kyzr Feedback Link: https://forms.gle/J8eeuQAJ3wMY1Wnq7\\E$"}
 {"rule":"EN_A_VS_AN","sentence":"^\\QCrate an \\E(?:Dummy|Ina|Jimmy-|Dummy-|Maniquí-|Maniquíes-)[0-9]+\\Q TODO\nDuration: hh:mm:ss\\E$"}
+{"rule":"EN_A_VS_AN","sentence":"^\\QComplex Audio using an \\E(?:Dummy|Ina|Jimmy-|Dummy-|Maniquí-|Maniquíes-)[0-9]+\\Q TODO\nDuration: hh:mm:ss\\E$"}
+{"rule":"WHITESPACE_RULE","sentence":"^\\QProject Download\nIf you want to see what the finished template looks like after this lab, you can download it here:  Template Done Project\\E$"}
+{"rule":"EN_A_VS_AN","sentence":"^\\QThe \\E(?:Dummy|Ina|Jimmy-|Dummy-|Maniquí-|Maniquíes-)[0-9]+\\Q node should now have a  icon and can be referenced in code easily.\\E$"}
+{"rule":"CONSECUTIVE_SPACES","sentence":"^\\QThe \\E(?:Dummy|Ina|Jimmy-|Dummy-|Maniquí-|Maniquíes-)[0-9]+\\Q node should now have a  icon and can be referenced in code easily.\\E$"}

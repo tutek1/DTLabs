@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://uqgmb58ky63x"]
+
+[ext_resource type="Texture2D" uid="uid://ddva44e86rve8" path="res://UI/PlayerHUD/HPBar/hp_bar_under.png" id="1_e6gg6"]
+[ext_resource type="Script" uid="uid://dl273npny3y32" path="res://UI/ui.gd" id="1_hat8c"]
+[ext_resource type="Texture2D" uid="uid://bjd5aiui540o8" path="res://UI/PlayerHUD/HPBar/hp_bar.png" id="2_hat8c"]
+[ext_resource type="Texture2D" uid="uid://cemcuyppcxcl3" path="res://UI/PlayerHUD/HPBar/hp_bar_fill.png" id="3_3sbvi"]
+
+[node name="UI" type="CanvasLayer"]
+script = ExtResource("1_hat8c")
+
+[node name="HPBar" type="TextureProgressBar" parent="."]
+unique_name_in_owner = true
+texture_filter = 1
+offset_right = 40.0
+offset_bottom = 40.0
+max_value = 1.0
+step = 0.01
+value = 0.5
+texture_under = ExtResource("1_e6gg6")
+texture_over = ExtResource("2_hat8c")
+texture_progress = ExtResource("3_3sbvi")
+texture_progress_offset = Vector2(9, 6)
