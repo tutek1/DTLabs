@@ -3,6 +3,7 @@ extends Resource
 
 @export_group("Entity")
 @export var health : float = 100
+@export var current_health : float = 100
 @export var invincivility_time : float = 0.75
 @export var knockback_force : Vector2 = Vector2(10, 8)
 @export var knockback_time : float = 0.5

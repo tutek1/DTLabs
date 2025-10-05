@@ -9,4 +9,4 @@ func _ready():
 
 
 func _update_hp() -> void:
-	hp_bar.value = player.get_curr_hp() / player.stats.health
+	hp_bar.value = GlobalState.player_stats.current_health / GlobalState.player_stats.health

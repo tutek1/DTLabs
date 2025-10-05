@@ -36,11 +36,30 @@ Duration: hh:mm:ss
 Since the last codelab I have added and changed quite a few things in our game.
 
 ### Collectibles
-I added a 3D model for the malware trace, which will be a collectible item working as currency in this game. I also made the complete scene and script, and we will only fill out a small function in the player script.
+I added a 3D model for the malware trace, which will be a collectible item working as currency in this game. I also made the complete scene and script for the collectible, and we will only fill out a small function in the player script.
 
 ![](img/Collectible3D.gif)
 
 To remember the amount of traces collected I added a variable for this in the `player_stats.gd` script.
+
+
+### `player_stats.gd` change
+Since we will be adding the **main menu** and a **save and load system** I decided to move the variable of the player `player_stats` to a new autoload script.
+
+This script is called `GlobalState` and is located in the `Global` folder. It will be responsible for loading, saving, and holding the current state (or save) of the game. The script is added as autoload so it can be used from everywhere.
+
+> aside positive
+> **Reminder:** `player_stats.gd` resource script holds the current stats of the player (health, jump, speed, damage, etc.) and the player script uses the values from it.
+
+> aside positive
+> **Reminder:** autoloaded scenes/scripts are created above the current scene as a child of the root and are accessible from anywhere just by their name.
+>
+> ![](img/Root.png)
+> - `@_DD3D_...` and `@DebugDraw...` are autoloads from the **Debug Draw 3D** plugin (lab05)
+> - Both `Beehave...` autoloads are from the **Beehave** plugin (lab06)
+> - `GlobalDebug` our helpful script for testing (lab05)
+> - `GlobalState` holds the current state of the player and will save and load it
+
 
 
 ### UI textures
@@ -50,13 +69,7 @@ I drew sprites, which we will use in the UI for a **Health Bar** and **Collectib
 
 <img src="img/Collectible.png" width="300"/>
 
-
-### Sounds
-I have created and added many sound effects for us to try out and use. I also downloaded some free to use music and ambient sounds. All can be found in the folder `Audio`.
-
-### Audio Manager
-I prepared a script `audio_manager.gd` script and `audio_manager.tscn` scene. We will focus on this scene and script in the second part of the lab.
-
+TODO add logo to menu
 
 
 ## Health Bar UI TODO

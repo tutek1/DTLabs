@@ -14,7 +14,7 @@ func _input(event : InputEvent):
 	_switch_mouse_mode()
 	_time_change()
 	_toggle_music()
-	_play_test_sound()
+	_quick_save()
 
 # Unlocks and locks the mouse
 func _switch_mouse_mode() -> void:
@@ -47,8 +47,10 @@ func _toggle_music() -> void:
 			#print("DEBUG: Started music")
 			#AudioManager.play_music(5)
 
-func _play_test_sound() -> void:
-	pass
-	#if Input.is_key_pressed(KEY_F6):
-		#print("DEBUG: Played Test Sound")
-		#AudioManager.play_sfx_at_location(AudioManager.SFX_TYPE.TEST_SOUND, Vector3.ZERO)
+func _quick_save() -> void:
+	if Input.is_key_pressed(KEY_F5):
+		var result : int = GlobalState.save_game()
+		if result == 0:
+			print("DEBUG: Quick Save Complete!")
+		else:
+			print("DEBUG: Quick Save Failed! Err num: %s" % [result])

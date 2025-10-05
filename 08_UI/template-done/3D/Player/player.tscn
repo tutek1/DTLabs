@@ -1,25 +1,7 @@
-[gd_scene load_steps=28 format=3 uid="uid://8sbvl7rcejq5"]
+[gd_scene load_steps=25 format=3 uid="uid://8sbvl7rcejq5"]
 
 [ext_resource type="Script" uid="uid://bsumix7xtjux1" path="res://3D/Player/player_controller_3d.gd" id="1_d17s7"]
-[ext_resource type="PackedScene" uid="uid://b20m6c0e0bfdu" path="res://3D/Player/Projectile/player_projectile.tscn" id="2_46t1g"]
 [ext_resource type="PackedScene" uid="uid://b4ueia53ak6r0" path="res://3D/Player/GORODITH_Player_anim.fbx" id="2_d17s7"]
-[ext_resource type="Script" uid="uid://dtuvy1vh7q3x4" path="res://3D/Player/player_stats.gd" id="2_lfm5r"]
-
-[sub_resource type="Resource" id="Resource_46t1g"]
-script = ExtResource("2_lfm5r")
-health = 100.0
-invincivility_time = 0.75
-knockback_force = Vector2(10, 8)
-knockback_time = 0.5
-speed = 7.0
-jump_force = 10.0
-projectile = ExtResource("2_46t1g")
-projectile_damage = 5.0
-projectile_speed = 30.0
-shoot_cooldown = 0.7
-has_double_jump = true
-collectible_count = 0
-metadata/_custom_type_script = "uid://dtuvy1vh7q3x4"
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hn7em"]
 
@@ -125,7 +107,6 @@ collision_mask = 13
 floor_max_angle = 1.0472
 platform_floor_layers = 4294967287
 script = ExtResource("1_d17s7")
-stats = SubResource("Resource_46t1g")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_hn7em")

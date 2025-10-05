@@ -4,7 +4,6 @@ extends CharacterBody3D
 signal hp_change
 
 @export var camera_pivot : PlayerCamera3D
-@export var stats : PlayerStats
 
 @export_group("Movement")
 @export var acceleration : float = 75
@@ -36,11 +35,8 @@ var _do_movement : bool = true
 var _can_be_damaged : bool = true
 var _interact_node_in_area : Node3D
 var _controllable : bool = true
-var _current_hp : float
 var _connected : bool
 
-func _ready() -> void:
-	_current_hp = stats.health
 
 func _physics_process(delta : float) -> void:
 	_movement(delta)
@@ -78,8 +74,8 @@ func _movement(delta : float) -> void:
 	
 	# Clamp max speed
 	var horizontal_velocity : Vector3 = Vector3(velocity.x, 0, velocity.z)
-	if horizontal_velocity.length() > stats.speed:
-		horizontal_velocity = horizontal_velocity.normalized() * stats.speed
+	if horizontal_velocity.length() > GlobalState.player_stats.speed:
+		horizontal_velocity = horizontal_velocity.normalized() * GlobalState.player_stats.speed
 		velocity.x = horizontal_velocity.x
 		velocity.z = horizontal_velocity.z
 	
@@ -110,11 +106,11 @@ func _jump() -> void:
 	if not Input.is_action_just_pressed("jump"): return
 	if not is_on_floor(): return
 	
-	velocity.y = stats.jump_force
+	velocity.y = GlobalState.player_stats.jump_force
 
 # Handles the double jump of the player, conditions, reset, and apply
 func _double_jump() -> void:
-	if not stats.has_double_jump: return
+	if not GlobalState.player_stats.has_double_jump: return
 	if not _controllable: return
 	
 	# Double jump reset when on ground
@@ -128,7 +124,7 @@ func _double_jump() -> void:
 	
 	# Jump
 	_has_double_jumped = true
-	velocity.y = stats.jump_force
+	velocity.y = GlobalState.player_stats.jump_force
 
 # Interacts with node in the interact area 3D
 func _interact() -> void:
@@ -155,20 +151,20 @@ func _update_gun_target() -> void:
 func _shoot() -> void:
 	if not shoot_cooldown.time_left <= 0: return
 	if not Input.is_action_just_pressed("shoot"): return
-	shoot_cooldown.start(stats.shoot_cooldown)
+	shoot_cooldown.start(GlobalState.player_stats.shoot_cooldown)
 	
 	# Create projectile
-	var projectile : PlayerProjectile = stats.projectile.instantiate()
+	var projectile : PlayerProjectile = GlobalState.player_stats.projectile.instantiate()
 	get_tree().current_scene.add_child(projectile)
 	
 	# Set position, rotation, damage
 	projectile.global_position =  shoot_point.global_position
 	projectile.global_rotation = shoot_point.global_rotation
-	projectile.set_damage(stats.projectile_damage)
+	projectile.set_damage(GlobalState.player_stats.projectile_damage)
 	
 	# Set velocity
 	var direction : Vector3 = (gun_target.global_position - projectile.global_position).normalized()
-	projectile.set_velocity(direction * stats.projectile_speed)
+	projectile.set_velocity(direction * GlobalState.player_stats.projectile_speed)
 
 # Process collisions with rigidbodies
 func _check_collisions(delta : float) -> void:
@@ -204,14 +200,14 @@ func _animation_tree_update() -> void:
 	# Blend amount Walk
 	var local_velocity : Vector3 = velocity * basis
 	local_velocity.y = 0
-	animation_tree.set("parameters/FreeMoveBlendTree/WalkBlend/blend_amount", (local_velocity.length() / stats.speed))
+	animation_tree.set("parameters/FreeMoveBlendTree/WalkBlend/blend_amount", (local_velocity.length() / GlobalState.player_stats.speed))
 	
 	# BlendSpace2D walking
 	var vel2 : Vector2 = Vector2(local_velocity.x, -local_velocity.z).normalized()
 	animation_tree.set("parameters/FreeMoveBlendTree/WalkSpace2D/blend_position", vel2)
 	
 	# BlendSpace2D walking timescale
-	var walkscale : float = (local_velocity.length() / stats.speed) * walk_mult
+	var walkscale : float = (local_velocity.length() / GlobalState.player_stats.speed) * walk_mult
 	animation_tree["parameters/FreeMoveBlendTree/TimeScale/scale"] = walkscale
 
 # TODO Fill out during codelab
@@ -231,29 +227,29 @@ func receive_damage(value : float, from : Node3D):
 	if not _can_be_damaged: return
 	_can_be_damaged = false
 	
-	_current_hp -= value
-	if _current_hp <= 0:
-		_current_hp = 0
+	GlobalState.player_stats.current_health -= value
+	if GlobalState.player_stats.current_health <= 0:
+		GlobalState.player_stats.current_health = 0
 		print("Player dead")
 	
-	print("Player hit! hp: " + str(_current_hp))
+	print("Player hit! hp: " + str(GlobalState.player_stats.current_health))
 	
 	hp_change.emit()
 	
 	# Restrict movement for a while
 	_do_movement = false
-	set_do_movement(true, stats.knockback_time)
+	set_do_movement(true, GlobalState.player_stats.knockback_time)
 	
 	# Knockback the player
 	var dir_to_player : Vector3 = (global_position - from.global_position).normalized()
-	dir_to_player.x *= stats.knockback_force.x
-	dir_to_player.z *= stats.knockback_force.x
-	dir_to_player.y = stats.knockback_force.y
+	dir_to_player.x *= GlobalState.player_stats.knockback_force.x
+	dir_to_player.z *= GlobalState.player_stats.knockback_force.x
+	dir_to_player.y = GlobalState.player_stats.knockback_force.y
 	velocity = dir_to_player
 	
 	# Do not collide with enemies for invincibility time
 	collision_mask -= ENEMY_LAYER
-	await get_tree().create_timer(stats.invincivility_time).timeout
+	await get_tree().create_timer(GlobalState.player_stats.invincivility_time).timeout
 	collision_mask += ENEMY_LAYER
 	_can_be_damaged = true
 
@@ -264,10 +260,6 @@ func set_connect_anim_bool(value : bool) -> void:
 func set_controllable(value : bool) -> void:
 	_controllable = value
 	velocity = Vector3.ZERO
-
-# Returns the current HP of the player
-func get_curr_hp() -> float:
-	return _current_hp
 
 func _on_interact_area_body_entered(body: Node3D) -> void:
 	if body.is_in_group("Interactable"):
