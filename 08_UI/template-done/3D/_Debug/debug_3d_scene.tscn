@@ -17,7 +17,7 @@
 [ext_resource type="Script" uid="uid://c8gax33ifuogc" path="res://3D/Enemies/AirEnemy/Steering/collision_avoidance.gd" id="13_itcoc"]
 [ext_resource type="Script" uid="uid://c3wds62fiwue6" path="res://3D/Enemies/AirEnemy/Steering/hover.gd" id="14_vdnx2"]
 [ext_resource type="PackedScene" uid="uid://bbpnrywhpjt8u" path="res://2DPuzzles/puzzle.tscn" id="15_x3b60"]
-[ext_resource type="PackedScene" uid="uid://uqgmb58ky63x" path="res://UI/ui.tscn" id="19_t1pn0"]
+[ext_resource type="PackedScene" uid="uid://hplefwvgliy6" path="res://UI/PlayerHUD/hud.tscn" id="19_t1pn0"]
 [ext_resource type="PackedScene" uid="uid://byh0a2vnett5q" path="res://3D/Enemies/GroundEnemy/Beehave/ground_enemy_bh.tscn" id="21_0v0jw"]
 
 [sub_resource type="Environment" id="Environment_ndwkr"]
@@ -589,6 +589,9 @@ camera_target = NodePath("../Player")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.50289, 1.53008, 35.1639)
 camera_pivot = NodePath("../CameraPivot")
 
+[node name="HUD" parent="." node_paths=PackedStringArray("player") instance=ExtResource("19_t1pn0")]
+player = NodePath("../Player")
+
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 visible = false
 navigation_mesh = SubResource("NavigationMesh_oikrr")
@@ -619,8 +622,5 @@ steerings = Array[ExtResource("11_vdnx2")]([SubResource("Resource_vdnx2"), SubRe
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.41741, 0)
 collision_mask = 7
 patrol_points = Array[Vector3]([Vector3(3.46, 1, -2.975), Vector3(36.425, 1, -37.265), Vector3(-24.995, 5, -25.53)])
-
-[node name="UI" parent="." node_paths=PackedStringArray("player") instance=ExtResource("19_t1pn0")]
-player = NodePath("../Player")
 
 [connection signal="body_entered" from="Enviroment/2DPlatforming/Sprite3D/Area3D" to="Enviroment/2DPlatforming/Sprite3D" method="_on_area_3d_body_entered"]

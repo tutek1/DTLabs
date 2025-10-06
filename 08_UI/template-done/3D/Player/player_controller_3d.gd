@@ -37,7 +37,6 @@ var _interact_node_in_area : Node3D
 var _controllable : bool = true
 var _connected : bool
 
-
 func _physics_process(delta : float) -> void:
 	_movement(delta)
 	_rotate_player(delta)
@@ -227,12 +226,12 @@ func receive_damage(value : float, from : Node3D):
 	if not _can_be_damaged: return
 	_can_be_damaged = false
 	
-	GlobalState.player_stats.current_health -= value
-	if GlobalState.player_stats.current_health <= 0:
-		GlobalState.player_stats.current_health = 0
+	GlobalState.player_stats.curr_health -= value
+	if GlobalState.player_stats.curr_health <= 0:
+		GlobalState.player_stats.curr_health = 0
 		print("Player dead")
 	
-	print("Player hit! hp: " + str(GlobalState.player_stats.current_health))
+	print("Player hit! hp: " + str(GlobalState.player_stats.curr_health))
 	
 	hp_change.emit()
 	
