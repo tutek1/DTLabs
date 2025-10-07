@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://chnffv2lmano5"]
+[gd_scene load_steps=49 format=3 uid="uid://chnffv2lmano5"]
 
 [ext_resource type="PackedScene" uid="uid://44guktn5iwdy" path="res://3D/WorldObjects/resistor.tscn" id="1_oikrr"]
 [ext_resource type="PackedScene" uid="uid://co65xg3ltrdrq" path="res://3D/WorldObjects/big_resistor.tscn" id="2_kdw4m"]
@@ -18,6 +18,7 @@
 [ext_resource type="Script" uid="uid://c3wds62fiwue6" path="res://3D/Enemies/AirEnemy/Steering/hover.gd" id="14_vdnx2"]
 [ext_resource type="PackedScene" uid="uid://bbpnrywhpjt8u" path="res://2DPuzzles/puzzle.tscn" id="15_x3b60"]
 [ext_resource type="PackedScene" uid="uid://hplefwvgliy6" path="res://UI/PlayerHUD/hud.tscn" id="19_t1pn0"]
+[ext_resource type="PackedScene" uid="uid://da6wb2nfv0gmc" path="res://3D/WorldObjects/Collectible/collectible.tscn" id="20_gw1uw"]
 [ext_resource type="PackedScene" uid="uid://byh0a2vnett5q" path="res://3D/Enemies/GroundEnemy/Beehave/ground_enemy_bh.tscn" id="21_0v0jw"]
 
 [sub_resource type="Environment" id="Environment_ndwkr"]
@@ -471,11 +472,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.585, 2.40508, -0.75)
 use_collision = true
 size = Vector3(2.5, 3.75, 2.5)
 
-[node name="2DPlatforming" type="Node3D" parent="Enviroment"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -13)
+[node name="2DPlatforming" type="Node" parent="Enviroment"]
 
 [node name="Sprite3D" type="Sprite3D" parent="Enviroment/2DPlatforming"]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 19.111, 5.623, -22.8)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 11.111, 5.623, -35.8)
 texture_filter = 0
 texture = SubResource("ViewportTexture_b5ujk")
 script = ExtResource("4_7xjr7")
@@ -507,7 +507,7 @@ mesh = SubResource("TextMesh_b2o0j")
 visible = false
 mesh = SubResource("BoxMesh_72jxc")
 
-[node name="2DPuzzles" type="Node3D" parent="Enviroment"]
+[node name="2DPuzzles" type="Node" parent="Enviroment"]
 
 [node name="Puzzle" parent="Enviroment/2DPuzzles" instance=ExtResource("15_x3b60")]
 transform = Transform3D(-1, -8.74228e-08, -3.82137e-15, 0, -4.37114e-08, 1, -8.74228e-08, 1, 4.37114e-08, 5.50242, 1.55608, 41.256)
@@ -580,6 +580,56 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -20.73
 node_a = NodePath("../Cube4")
 node_b = NodePath("../Cube2")
 exclude_nodes_from_collision = false
+
+[node name="Collectibles" type="Node" parent="Enviroment"]
+
+[node name="Collectible" parent="Enviroment/Collectibles" instance=ExtResource("20_gw1uw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.3922, 3.03008, 18.4607)
+
+[node name="Collectible2" parent="Enviroment/Collectibles" instance=ExtResource("20_gw1uw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.0611, 19.0301, 8.55412)
+
+[node name="Collectible3" parent="Enviroment/Collectibles" instance=ExtResource("20_gw1uw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.16706, 7.14058, 43.2952)
+
+[node name="Collectible4" parent="Enviroment/Collectibles" instance=ExtResource("20_gw1uw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.4396, 5.03008, 10.9149)
+
+[node name="Collectible5" parent="Enviroment/Collectibles" instance=ExtResource("20_gw1uw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.19633, 1.03008, 29.5484)
+
+[node name="Collectible6" parent="Enviroment/Collectibles" instance=ExtResource("20_gw1uw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.95516, 1.03008, 29.1126)
+
+[node name="Collectible7" parent="Enviroment/Collectibles" instance=ExtResource("20_gw1uw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.2177, 5.06391, -31.7344)
+
+[node name="Collectible8" parent="Enviroment/Collectibles" instance=ExtResource("20_gw1uw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.0786, 5.06391, -26.01)
+
+[node name="Collectible9" parent="Enviroment/Collectibles" instance=ExtResource("20_gw1uw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.9616, 11.0301, 38.3499)
+
+[node name="Collectible10" parent="Enviroment/Collectibles" instance=ExtResource("20_gw1uw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.0345, 11.0301, 37.9326)
+
+[node name="Collectible11" parent="Enviroment/Collectibles" instance=ExtResource("20_gw1uw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.9269, 11.0301, 44.7029)
+
+[node name="Collectible12" parent="Enviroment/Collectibles" instance=ExtResource("20_gw1uw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.546, 11.0301, 44.4591)
+
+[node name="Collectible13" parent="Enviroment/Collectibles" instance=ExtResource("20_gw1uw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.31225, 11.0301, -43.4332)
+
+[node name="Collectible14" parent="Enviroment/Collectibles" instance=ExtResource("20_gw1uw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.23919, 11.0301, -37.899)
+
+[node name="Collectible15" parent="Enviroment/Collectibles" instance=ExtResource("20_gw1uw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.4244, 11.0301, -43.5616)
+
+[node name="Collectible16" parent="Enviroment/Collectibles" instance=ExtResource("20_gw1uw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.1371, 11.0301, -38.1695)
 
 [node name="CameraPivot" parent="." node_paths=PackedStringArray("camera_target") instance=ExtResource("6_vdnx2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.8935, 14.1815, 2.42364)

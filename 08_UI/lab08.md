@@ -1,11 +1,11 @@
-summary: UI & Audio
+summary: UI
 id: export
-categories: UI, Canvas, Slider, Label, Alignment, Anchors, Container, Gradient, Progress Bar, Health, Collectibles, Audio, Audio Manager, Audio Bus, Audio Stream, Audio Listener, Tween
+categories: UI, Canvas, Slider, Label, Alignment, Anchors, Container, Gradient, Progress Bar, Health, Collectibles, Tween
 status: Published
 authors: Ondřej Kyzr
 Feedback Link: https://forms.gle/J8eeuQAJ3wMY1Wnq7
 
-# Lab08 - UI & Audio
+# Lab08 - UI
 
 ## Overview TODO
 Duration: hh:mm:ss
@@ -72,7 +72,7 @@ I drew sprites, which we will use in the UI for a **Health Bar**, **Collectible 
 
 
 
-## Health Bar UI TODO
+## Health Bar HUD
 Duration: hh:mm:ss
 
 Let's start by creating a player HUD with a health bar.
@@ -251,7 +251,7 @@ Here is the final `HPBar` in action:
 ![](img/HPBarChange.gif)
 
 
-## Collectible UI TODO
+## Collectible HUD TODO
 Duration: hh:mm:ss
 
 In this section, we will add collectible counter and put it all together with `HPBar` we created in the last section.
@@ -284,7 +284,7 @@ This makes the `TextureRect` have a **texture**, **bigger**, and render as **pix
 This makes the `Label` **visible**, so that we easily set it, **formats the text** and makes it **closer** to the `TextureRect`
 
 
-### Put `HPBar` and `CollectibleCounter` Together
+### Put the `HPBar` and `CollectibleCounter` Together
 I would like to move the **collectible counter** to be on the right of the `HPBar`. We could set the anchor to `Bottom Left` and offset it manually. However, this is very error-prone and could hinder us in the future if we wanted to change some aspects of the UI.
 
 #### The Horizontal Container
@@ -300,87 +300,135 @@ Now, the problematic part comes in. If we were to set the `HPBar` as a child of 
 
 #### Retain Transform
 1. **Add** a `Control` node as a child of the `HUD`
-2. reset anchor 
-3. reparent
-4. set min size to (96.0, 384.0) (texture size * 6 since scale)
-5. hpbar pivot offset (32, 8)
-6. hpbar anchor center
-7. put the `Control` as a child of hbox
-8. set alignment of CollectibleVBox to end
+2. **Reset** the `Anchor Preset` of the `HPBar` back to `Top Left` 
+3. **Set** the `HPBar` node as a child of the `Control` node
+4. **Set** the `Control` node as the **FIRST** child of the `HBoxContainer`
 
+Now, the `HPBar` should keep its size. However, it still overlays the `CollectibleCounter`. Why?
 
+#### Correct `Control` Size
+The reason is that the `Control` node has a size of `0` on the `X-axis`. We cannot directly change this, as the `Anchor Preset`, `size`, `position`, etc. is all controlled by the `HBoxContainer`. However, we can use the `Custom Minimum Size` property.
+
+1. **Set** the `Custom Minimum Size` of the `Control` node to `(96.0, 384.0)` (texture size * scale)
+2. **Set** the `Pivot Offset` of the `HPBar` to `(32, 8)` (middle of the texture)
+3. **Set** the `Anchor Preset` of the `HPBar` to `Center`
+
+#### Alignment of `CollectibleVBox`
+Ok, now it looks much better. One small tweak I would like to implement is that the `CollectibleCounter` should be positioned at the very bottom of the screen.
+
+1. **Set** the `Alignment` property of `CollectibleVBox` node to `End`
+
+The resulting `HUD` should look like this:
+
+![](img/HUDDone.png)
+![](img/HUDDoneStructure.png)
 
 > aside negative
-> I don't blame you if all of these setting of the UI are a bit confusing. For me personally it is always a bit of trial and error to get it right.
+> I don't blame you if you find these UI settings a bit unintuitive. For me personally it is always a bit of trial and error to get it right.
 
 `HBoxContainer`
 Control nodes for transform retention
 
-## Temporary Audio Sliders TODO
+
+### Updating the `CollectibleCounter`
+Finally, after setting all the HUD elements the final thing we need to do is to actually **update** the `Label` showing the amount of malware traces the player has.
+
+#### Player Script
+When the player touches the collectible it calls a function in the player script called `func collectible_touched()`. Please **navigate** to the function and let's **fill it out**.
+
+First, we would like to **update the count** in `player_stats`:
+```GDScript
+GlobalState.player_stats.collectible_count += 1
+```
+
+Then, let's **add a signal** to the top of the player script, so that other nodes can know when a collectible has been collected:
+```GDScript
+signal collectible_gathered
+```
+
+Lastly, we need to **emit the signal** when the collectible is touched. Here is the full function:
+```GDScript
+# Updates the count and emits a signal
+func collectible_touched(collectible : Collectible) -> void:
+    GlobalState.player_stats.collectible_count += 1
+    collectible_gathered.emit()
+```
+
+#### HUD Script
+Now, we need a **reference to the label**. Let's also use the `Access as Unique Name` option.
+1. **Right-Click** the `CollectibleCounter` node.
+2. **Select** the `Access as Unique Name` option
+3. **Add** this line to the top of the `hud.gd` script
+    - `@onready var collectible_counter : Label = %CollectibleCounter`
+
+Next, in the `hud.gd` script, let's **add a function** for updating the label:
+```GDScript
+func _update_collectible_counter() -> void:
+    collectible_counter.text = str(GlobalState.player_stats.collectible_count)
+```
+
+Lastly, we need to **connect** the function to the players signal in the `_ready()` function and **update it** right away:
+```GDScript
+func _ready() -> void:
+    ...
+    player.collectible_gathered.connect(_update_collectible_counter)
+    _update_collectible_counter()
+```
+
+### Try it out
+Let's try it out. **Instantiate** any number of the `collectible.tscn` scenes around the level or close to the player in the `debug_3d_scene.tscn` scene.
+
+Play the game and:
+- Walk around and **collect malware traces**.
+- Watch the **HUD update** with the correct count.
+- See how the malware trace **fly towards the HUD**
+
+![](img/Collectibles.gif)
+
+> aside positive
+> Making the malware fly towards the HUD was not covered here, you can look at the tween code in `collectible.gd` for more details.
+
+
+## Bonus: Hide the `CollectibleCounter`
 Duration: hh:mm:ss
 
-### `GridContainer`
+As a bonus exercise I would like to implement the `CollectibleCounter` to move down below the screen after a while without picking up traces.
 
-### Label and Slider
+### Setup
+First, we need to have a reference to the whole `CollectibleVBox`.
 
-### Slider Signals
+1. **Right-click** the `CollectibleVBox` node and **select** the `Access as Unique Name` option
+2. **Add** all of these `@export` parameters to the `hud.gd` script:
+    - `@export var malware_move_px : float = 200`
+    - `@export var malware_tween_time : float = 0.5`
+    - `@export var malware_stay_up_time : float = 3`
+
+Now, we will **define all states** that the counter can be in and **add** a variable to track the current state:
+```GDScript
+enum MalwareStates
+{
+    DOWN = 0,
+    GOING_UP = 1,
+    UP = 2,
+    GOING_DOWN = 3
+}
+
+var _malware_state : MalwareStates
+```
+
+- reference to vbox
+- define how long, delay, amount px params
+- define states of the box and current
+- remember the start position set down pos and current state
+-
 
 
-
-## Audio Basics TODO
+## Main Menu UI
 Duration: hh:mm:ss
 
-### Bus Layout
-
-### Audio Nodes
 
 
 
-## Play Simple Audio TODO
-Duration: hh:mm:ss
-
-### Sound Import Loop
-
-### `AudioStreamPlayer3D` Setup
-
-
-
-## Complex Audio using an `AudioManager` TODO
-Duration: hh:mm:ss
-
-### Overview of `AudioManager`
-
-### Play Music
-
-### Fill DEBUG UI Callback
-
-
-### SFX Settings
-
-### Play SFX Methods
-
-
-
-## Play SFX
-Duration: hh:mm:ss
-
-### Player Walk
-#### physics could work but no
-#### bone attachments yes
-
-### Player Jump
-
-### Player Damaged
-
-### Player Shooting
-
-### Collectible Gather
-
-### `GroundEnemy` - Damage
-
-### `GroundEnemy` - Shooting
-
-### `AirEnemy` - Damage
 
 
 

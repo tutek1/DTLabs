@@ -470,11 +470,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.585, 2.40508, -0.75)
 use_collision = true
 size = Vector3(2.5, 3.75, 2.5)
 
-[node name="2DPlatforming" type="Node3D" parent="Enviroment"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -13)
+[node name="2DPlatforming" type="Node" parent="Enviroment"]
 
 [node name="Sprite3D" type="Sprite3D" parent="Enviroment/2DPlatforming"]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 19.111, 5.623, -22.8)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 11.111, 5.623, -35.8)
 texture_filter = 0
 texture = SubResource("ViewportTexture_b5ujk")
 script = ExtResource("4_7xjr7")
@@ -506,7 +505,7 @@ mesh = SubResource("TextMesh_b2o0j")
 visible = false
 mesh = SubResource("BoxMesh_72jxc")
 
-[node name="2DPuzzles" type="Node3D" parent="Enviroment"]
+[node name="2DPuzzles" type="Node" parent="Enviroment"]
 
 [node name="Puzzle" parent="Enviroment/2DPuzzles" instance=ExtResource("15_x3b60")]
 transform = Transform3D(-1, -8.74228e-08, -3.82137e-15, 0, -4.37114e-08, 1, -8.74228e-08, 1, 4.37114e-08, 5.50242, 1.55608, 41.256)

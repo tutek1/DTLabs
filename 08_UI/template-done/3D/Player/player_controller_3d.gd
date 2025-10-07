@@ -2,6 +2,7 @@ class_name PlayerController3D
 extends CharacterBody3D
 
 signal hp_change
+signal collectible_gathered
 
 @export var camera_pivot : PlayerCamera3D
 
@@ -209,9 +210,10 @@ func _animation_tree_update() -> void:
 	var walkscale : float = (local_velocity.length() / GlobalState.player_stats.speed) * walk_mult
 	animation_tree["parameters/FreeMoveBlendTree/TimeScale/scale"] = walkscale
 
-# TODO Fill out during codelab
+# Updates the count and emits a signal
 func collectible_touched(collectible : Collectible) -> void:
-	pass
+	GlobalState.player_stats.collectible_count += 1
+	collectible_gathered.emit()
 
 # Sets a control variable if the _movement() function should be run or not
 func set_do_movement(value : bool, delay : float = 0) -> void:

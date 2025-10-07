@@ -69,6 +69,7 @@ layout_mode = 2
 texture = ExtResource("5_p5p0f")
 
 [node name="CollectibleCounter" type="Label" parent="HBoxContainer/CollectibleVBox"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "0"
 label_settings = SubResource("LabelSettings_p5p0f")
