@@ -58,6 +58,7 @@ texture_progress = ExtResource("3_p5p0f")
 texture_progress_offset = Vector2(9, 6)
 
 [node name="CollectibleVBox" type="VBoxContainer" parent="HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = -10
 alignment = 2

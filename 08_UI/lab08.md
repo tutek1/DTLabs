@@ -392,17 +392,22 @@ Play the game and:
 ## Bonus: Hide the `CollectibleCounter`
 Duration: hh:mm:ss
 
-As a bonus exercise I would like to implement the `CollectibleCounter` to move down below the screen after a while without picking up traces.
+As a bonus exercise I would like to implement the `CollectibleCounter` to **move down below the screen** when the player doesn't pick up any traces for a while.
 
 ### Setup
-First, we need to have a reference to the whole `CollectibleVBox`.
+
+#### Reference
+First, we need to have a reference to the whole `CollectibleVBox`, that represents the whole counter.
 
 1. **Right-click** the `CollectibleVBox` node and **select** the `Access as Unique Name` option
-2. **Add** all of these `@export` parameters to the `hud.gd` script:
+2. **Add** a reference to it by **CTRL + drag** to script or **copy** this line:
+    - `@onready var collectible_v_box : VBoxContainer = %CollectibleVBox`
+3. **Add** all of these `@export` parameters to the `hud.gd` script:
     - `@export var malware_move_px : float = 200`
     - `@export var malware_tween_time : float = 0.5`
     - `@export var malware_stay_up_time : float = 3`
 
+#### Counter States
 Now, we will **define all states** that the counter can be in and **add** a variable to track the current state:
 ```GDScript
 enum MalwareStates
@@ -416,11 +421,32 @@ enum MalwareStates
 var _malware_state : MalwareStates
 ```
 
-- reference to vbox
-- define how long, delay, amount px params
-- define states of the box and current
-- remember the start position set down pos and current state
--
+> aside positive
+> This will help us to react precisely to the current state, that the counter can be in.
+
+#### Start Position
+The last thing we need, is to remember the starting position of the counter. First, we will **declare a variable** for keeping track and then in the `_ready()` method we will **set it**. Lastly, we will **set the counter as hidden** by default.
+
+However, we need to **wait one frame**, so that the `CollectibleVBox` can finish its own `_ready()` function, where it sets the **correct position** of the counter based on the current resolution and aspect ratio.  
+
+Here is the code for the setup, please **add it** to the `hud.gd` script:
+```
+var _counter_up_pos : Vector2
+...
+func _ready() -> void
+    ...
+    await get_tree().process_frame
+	
+    _counter_up_pos = collectible_v_box.global_position
+	
+    collectible_v_box.global_position = _counter_up_pos + Vector2.DOWN * malware_move_px
+    _malware_state = MalwareStates.DOWN
+```
+
+### Animate Option
+
+
+
 
 
 ## Main Menu UI
