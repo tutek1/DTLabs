@@ -250,6 +250,26 @@ Here is the final `HPBar` in action:
 
 ![](img/HPBarChange.gif)
 
+and here is the code:
+```GDScript
+extends CanvasLayer
+
+@export var player : PlayerController3D
+@export var hp_gradient : Gradient
+
+@onready var hp_bar : TextureProgressBar = %HPBar
+
+func _ready() -> void:
+    player.hp_change.connect(_update_hp)
+    _update_hp()
+
+func _update_hp() -> void:
+    var hp_ratio : float = GlobalState.player_stats.curr_health / GlobalState.player_stats.health
+	
+    hp_bar.value = hp_ratio
+    hp_bar.tint_progress = hp_gradient.sample(hp_ratio)
+```
+
 
 ## Collectible HUD TODO
 Duration: hh:mm:ss
@@ -385,6 +405,34 @@ Play the game and:
 
 ![](img/Collectibles.gif)
 
+Here is the full code of the `hud.gd` script:
+```GDScript
+extends CanvasLayer
+
+@export var player : PlayerController3D
+@export var hp_gradient : Gradient
+
+@onready var hp_bar : TextureProgressBar = %HPBar
+@onready var collectible_counter : Label = %CollectibleCounter
+
+
+func _ready() -> void:
+    player.hp_change.connect(_update_hp)
+    _update_hp()
+	
+    player.collectible_gathered.connect(_update_collectible_counter)
+    _update_collectible_counter()
+
+func _update_hp() -> void:
+	var hp_ratio : float = GlobalState.player_stats.curr_health / GlobalState.player_stats.health
+	
+	hp_bar.value = hp_ratio
+	hp_bar.tint_progress = hp_gradient.sample(hp_ratio)
+
+func _update_collectible_counter() -> void:
+	collectible_counter.text = str(GlobalState.player_stats.collectible_count)
+```
+
 > aside positive
 > Making the malware fly towards the HUD was not covered here, you can look at the tween code in `collectible.gd` for more details.
 
@@ -425,9 +473,9 @@ var _malware_state : MalwareStates
 > This will help us to react precisely to the current state, that the counter can be in.
 
 #### Start Position
-The last thing we need, is to remember the starting position of the counter. First, we will **declare a variable** for keeping track and then in the `_ready()` method we will **set it**. Lastly, we will **set the counter as hidden** by default.
+The last thing we need, is to remember the starting position of the counter. First, we will **declare a variable** for keeping track of the starting position and then in the `_ready()` method we will **set it**. Lastly, we will **set the counter as hidden** by default.
 
-However, we need to **wait one frame**, so that the `CollectibleVBox` can finish its own `_ready()` function, where it sets the **correct position** of the counter based on the current resolution and aspect ratio.  
+However, before we set the variable we need to **wait one frame**, so that the `CollectibleVBox` can finish its own `_ready()` function, where the **correct position** of the counter is set, based on the current resolution and aspect ratio.  
 
 Here is the code for the setup, please **add it** to the `hud.gd` script:
 ```
@@ -441,11 +489,188 @@ func _ready() -> void
 	
     collectible_v_box.global_position = _counter_up_pos + Vector2.DOWN * malware_move_px
     _malware_state = MalwareStates.DOWN
+
+    # Connect the collectible_gathered signal and update it
+    player.collectible_gathered.connect(_update_collectible_counter)
+    _update_collectible_counter()
 ```
 
-### Animate Option
+> aside negative
+> Be sure to put the signal connection and function call **after** the setup, so that the correct positions are used.
 
+#### Moving Tween
+For moving the counter, we will use a `Tween` and remember it globally in the script. We will do this so that we can cancel the animation depending on the current state. **Add** this line to the top of the script, we will use it later:
+```GDScript
+var _counter_tween : Tween
+```
 
+### Structure
+Each call of the `_update_collectibles()` function, should **move the counter up** (if not already) and after a while **move it back down** (if not already). Let's start with the first part.
+
+#### Move the counter up
+Here is the code with explanations:
+
+```GDScript
+# If the counter is going down or is down, move it up
+if _malware_state == MalwareStates.DOWN or _malware_state == MalwareStates.GOING_DOWN:
+    if _counter_tween != null: _counter_tween.kill()
+        
+    # Animate
+    _counter_tween = create_tween()
+    _counter_tween.tween_property(collectible_v_box, "global_position", _counter_up_pos , malware_tween_time)\
+    .set_ease(Tween.EASE_IN)\
+    .set_trans(Tween.TRANS_CUBIC)
+        
+    # State change wait
+    _malware_state = MalwareStates.GOING_UP
+    await _counter_tween.finished
+    _malware_state = MalwareStates.UP
+```
+- We check if the counter should move up based on the current state.
+- If the tween is running (`!= null`) we stop it
+- We create the animation of moving up
+- Change the state tracker
+- Wait for the animation to stop and update the tracker again
+
+#### Move the counter down
+Here is the code with explanations:
+
+```GDScript
+# Wait to hide
+await get_tree().create_timer(malware_stay_up_time).timeout
+
+# If the counter is UP, move it down
+if _malware_state == MalwareStates.UP:
+    _counter_tween = create_tween()
+    _counter_tween.tween_property(collectible_v_box, "global_position",\
+        _counter_up_pos + Vector2.DOWN * malware_move_px, malware_tween_time)\
+    .set_ease(Tween.EASE_IN)\
+    .set_trans(Tween.TRANS_CUBIC)
+
+    # State change wait
+    _malware_state = MalwareStates.GOING_DOWN
+    await _counter_tween.finished
+    _malware_state = MalwareStates.DOWN
+```
+- We create a timer and wait a set while
+- If the counter is still up, we animate it moving down
+- The state also needs to be updated accordingly
+
+### One small problem
+Currently, the animation of counter seems to work correctly. However, let's say the counter is set to stay up for `3 seconds`, if a collectible is picked up and another one is picked up after `2.9 seconds` the timer will still move down after `0.1 seconds` instead of waiting additional `3` seconds. We will fix this be **remembering the number of collectibles**.
+
+```GDScript
+func _update_collectible_counter() -> void:
+    var collectible_count : int = GlobalState.player_stats.collectible_count
+    ...
+```
+
+Now after waiting, we will check if the counter changed, which would mean that another collectible was picked up and our current call should not be the one to move the counter down.
+
+```
+func _update_collectible_counter() -> void:
+    ...
+    # Wait to hide
+    await get_tree().create_timer(malware_stay_up_time).timeout
+
+    # A new collectible was gathered -> we should not move down, new collection will move it
+    if collectible_count != GlobalState.player_stats.collectible_count: return
+
+    # If the counter is UP, move it down
+    if _malware_state == MalwareStates.UP:
+        ...
+```
+
+The counter animation should work correctly now. Here is how it looks:
+![](img/CollectiblesBonus.gif)
+
+Here is the full `hud.gd` code with all the previous changes:
+```GDScript
+extends CanvasLayer
+
+@export var player : PlayerController3D
+@export var hp_gradient : Gradient
+
+@export var malware_move_px : float = 200
+@export var malware_tween_time : float = 0.5
+@export var malware_stay_up_time : float = 3
+
+enum MalwareStates
+{
+    DOWN = 0,
+    GOING_UP = 1,
+    UP = 2,
+    GOING_DOWN = 3
+}
+
+@onready var hp_bar : TextureProgressBar = %HPBar
+@onready var collectible_counter : Label = %CollectibleCounter
+@onready var collectible_v_box : VBoxContainer = %CollectibleVBox
+
+var _malware_state : MalwareStates
+var _counter_tween : Tween
+var _counter_up_pos : Vector2
+
+func _ready() -> void:
+    player.hp_change.connect(_update_hp)
+    _update_hp()
+	
+    # Remember the starting position of the collectible counter
+    await get_tree().process_frame
+	
+    _counter_up_pos = collectible_v_box.global_position
+	
+    collectible_v_box.global_position = _counter_up_pos + Vector2.DOWN * malware_move_px
+    _malware_state = MalwareStates.DOWN
+	
+    # Connect the collectible_gathered signal and update it
+    player.collectible_gathered.connect(_update_collectible_counter)
+    _update_collectible_counter()
+
+func _update_hp() -> void:
+    var hp_ratio : float = GlobalState.player_stats.curr_health / GlobalState.player_stats.health
+	
+    hp_bar.value = hp_ratio
+    hp_bar.tint_progress = hp_gradient.sample(hp_ratio)
+
+func _update_collectible_counter() -> void:
+    var collectible_count : int = GlobalState.player_stats.collectible_count
+    collectible_counter.text = str(GlobalState.player_stats.collectible_count)
+	
+    # If the counter is going down or is down, move it up
+    if _malware_state == MalwareStates.DOWN or _malware_state == MalwareStates.GOING_DOWN:
+        if _counter_tween != null: _counter_tween.kill()
+
+        # Animate
+        _counter_tween = create_tween()
+        _counter_tween.tween_property(collectible_v_box, "global_position", _counter_up_pos , malware_tween_time)\
+        .set_ease(Tween.EASE_IN)\
+        .set_trans(Tween.TRANS_CUBIC)
+
+        # State change wait
+        _malware_state = MalwareStates.GOING_UP
+        await _counter_tween.finished
+        _malware_state = MalwareStates.UP
+	
+    # Wait to hide
+    await get_tree().create_timer(malware_stay_up_time).timeout
+	
+    # A new collectible was gathered -> we should not move down, new collection will move it
+    if collectible_count != GlobalState.player_stats.collectible_count: return
+	
+    # If the counter is UP, move it down
+    if _malware_state == MalwareStates.UP:
+        _counter_tween = create_tween()
+        _counter_tween.tween_property(collectible_v_box, "global_position",\
+            _counter_up_pos + Vector2.DOWN * malware_move_px, malware_tween_time)\
+        .set_ease(Tween.EASE_IN)\
+        .set_trans(Tween.TRANS_CUBIC)
+
+        # State change wait
+        _malware_state = MalwareStates.GOING_DOWN
+        await _counter_tween.finished
+        _malware_state = MalwareStates.DOWN
+```
 
 
 
