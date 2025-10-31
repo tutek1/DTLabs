@@ -10,7 +10,7 @@ Feedback Link: https://forms.gle/J8eeuQAJ3wMY1Wnq7
 ## Overview
 Duration: hh:mm:ss
 
-This lab will focus on learning about the UI in Godot. We will learn the basics by creating a **Player HUD**, that will show the health of the player and amount of collectibles the player has. Then we will create a **main menu** for our game with a loading and saving system.
+This lab will focus on learning about the UI in Godot. We will learn the basics by creating a **Player HUD**, which will show the health of the player and the amount of collectibles the player has. Then we will create a **main menu** for our game with a loading and saving system.
 
 In a bullet point format, we will:
 - Look at the **changes I made** in the project.
@@ -28,23 +28,23 @@ Here is the template for this lab. Please **download it**, there are scripts, mo
 ## Changes Made in the Project
 Duration: hh:mm:ss
 
-Since the last codelab I have added and changed quite a few things in our game.
+Since the last codelab, I have added and changed quite a few things in our game.
 
 ### Collectibles
 I added a 3D model for the malware trace, which will be a collectible item working as currency in this game. I also made the complete scene and script for the collectible, and we will only fill out a small function in the player script.
 
 ![](img/Collectible3D.gif)
 
-To remember the amount of traces collected I added a variable for this in the `player_stats.gd` script.
+To remember the amount of traces collected, I added a variable for this in the `player_stats.gd` script.
 
 
 ### `player_stats.gd` change
-Since we will be adding the **main menu** and a **save and load system** I decided to move the variable of the player `player_stats` to a new autoload script.
+Since we will be adding the **main menu** and a **save and load system**, I decided to move the variable of the player `player_stats` to a new autoload script.
 
-This script is called `GlobalState` and is located in the `Global` folder. It will be responsible for loading, saving, and holding the current state (or save) of the game. The script is added as autoload so it can be used from everywhere.
+This script is called `GlobalState` and is located in the `Global` folder. It will be responsible for loading, saving, and holding the current state (or save) of the game. The script is added as autoload, so it can be used from everywhere.
 
 > aside positive
-> **Reminder:** `player_stats.gd` resource script holds the current stats of the player (health, jump, speed, damage, etc.) and the player script uses the values from it.
+> **Reminder:** `player_stats.gd` resource script holds the current stats of the player (health, jump, speed, damage, etc.), and the player script uses the values from it.
 
 > aside positive
 > **Reminder:** autoloaded scenes/scripts are created above the current scene as a child of the root and are accessible from anywhere just by their name.
@@ -73,7 +73,7 @@ Duration: hh:mm:ss
 Let's start by creating a player HUD with a health bar.
 
 ### HUD setup
-First, we need to somehow draw sprites, text, and buttons to the screen regardless of if we are in 2D or 3D. For these purposes the `CanvasLayer` node exists.
+First, we need to somehow draw sprites, text, and buttons to the screen, regardless of whether we are in 2D or 3D. For these purposes, the `CanvasLayer` node exists.
 
 1. **Create** a new scene of type `CanvasLayer` (`CTRL+N` ⇾ `Other node`)
 2. **Rename** the root `CanvasLayer` to `HUD`
@@ -105,12 +105,12 @@ We can see that the `Fill` is in the wrong place. **Change** the `Offset Progres
 ### HUD Script
 Let's now create a script that will set the `Value` of the `TextureProgressBar` based on the amount of HP the player has.
 
-1. **Create** and a script called `hud.gd` in the folder `UI/PlayerHUD`
+1. **Create** a script called `hud.gd` in the folder `UI/PlayerHUD`
 2. **Make** it `extend` the `CanvasLayer` class
 3. **Attach** the script to the `HUD` node
 
 #### Player Signal
-Now, we need to be notified every time the players HP changes. We can do that by **adding a signal** to the player script `player_controller_3d.gd`:
+Now, we need to be notified every time the player's HP changes. We can do that by **adding a signal** to the player script `player_controller_3d.gd`:
 ```GDScript
 class_name PlayerController3D
 extends CharacterBody3D
@@ -129,7 +129,7 @@ func receive_damage(value : float, from : Node3D):
 ```
 
 #### Connect the signal
-Now, let's go back to the `hud.gd` script. **Create** a function for the updating the HP in the HUD:
+Now, let's go back to the `hud.gd` script. **Create** a function for updating the HP in the HUD:
 ```GDScript
 func _update_hp() -> void:
     pass
@@ -159,7 +159,7 @@ The `HPBar` node should now have a ![](img/UniquePercent.png) icon and can be re
 @onready var hp_bar : TextureProgressBar = %HPBar
 ```
 
-The last thing to do, is to set the actual `Value` in the `_update_hp()` function:
+The last thing to do is to set the actual `Value` in the `_update_hp()` function:
 ```GDScript
 func _update_hp() -> void:
     hp_bar.value = GlobalState.player_stats.curr_health / GlobalState.player_stats.health
@@ -182,8 +182,8 @@ The `HPBar` is now functional, but there are still some things that need to be d
 One of the most important settings for UI is the ability to anchor it. Anchors basically say how the **UI elements should behave** with respect to **the aspect ratio** of the screen.
 
 #### How to change anchors
-To change the anchors you can either:
-- Use the **context menu** on the top of the scene view with a node, that inherits from `Control` (green color), selected.
+To change the anchors, you can either:
+- Use the **context menu** on the top of the scene view with a node that inherits from `Control` (green color), selected.
 
 ![](img/AnchorContextMenu.png)
 
@@ -208,7 +208,7 @@ Here is the full viewport with the `HPBar`:
 
 
 ### Gradient and Progress Tint
-The last thing I want to do with the `HPBar` is to make the progress bar change color from **green to red** based on the amount of hp.
+The last thing I want to do with the `HPBar` is to make the progress bar change color from **green to red** based on the amount of HP.
 
 **Add** a new `@export` variable to `hud.gd`:
 ```GDScript
@@ -233,7 +233,7 @@ func _update_hp() -> void:
 
 
 ### Bug Fix
-The current implementation has a one small bug. Until the player takes damage, the `HPBar` keeps displaying as half full. To fix this, simply **add** a call to the `_update_hp()` in the `_ready()` function of the `hud.gd` script.
+The current implementation has one small bug. Until the player takes damage, the `HPBar` keeps displaying as half full. To fix this, simply **add** a call to the `_update_hp()` in the `_ready()` function of the `hud.gd` script.
 
 ```GDScript
 func _ready() -> void:
@@ -245,7 +245,7 @@ Here is the final `HPBar` in action:
 
 ![](img/HPBarChange.gif)
 
-and here is the code:
+And here is the code:
 ```GDScript
 extends CanvasLayer
 
@@ -269,10 +269,10 @@ func _update_hp() -> void:
 ## Collectible HUD
 Duration: hh:mm:ss
 
-In this section, we will add collectible counter and put it all together with `HPBar` we created in the last section.
+In this section, we will add a collectible counter and put it all together with the `HPBar` we created in the last section.
 
 ### Collectible Texture and Label
-I want the texture and label (text with number) to be located one after another in a vertical list. To do this we will use a `VBoxContainer`, which will automatically align the elements.
+I want the texture and label (text with a number) to be located one after another in a vertical list. To do this, we will use a `VBoxContainer`, which will automatically align the elements.
 
 1. **Add** a `VBoxContainer` node as a child of the `HUD` (rename to `CollectibleVBox`)
 2. **Add** a `TextureRect` node as a child of the `VBoxContainer`
@@ -311,7 +311,7 @@ Similarly to when we wanted the collectible label and texture to be above each o
 
 ![](img/HBoxPart1.png)
 
-Now, the problematic part comes in. If we were to set the `HPBar` as a child of the `HBoxContainer`, its scale and rotation would be reset. To circumvent this we need to add a `Control` node and put the `HPBar` as a child of it.
+Now, the problematic part comes in. If we were to set the `HPBar` as a child of the `HBoxContainer`, its scale and rotation would be reset. To circumvent this, we need to add a `Control` node and put the `HPBar` as a child of it.
 
 #### Retain Transform
 1. **Add** a `Control` node as a child of the `HUD`
@@ -322,7 +322,7 @@ Now, the problematic part comes in. If we were to set the `HPBar` as a child of 
 Now, the `HPBar` should keep its size. However, it still overlays the `CollectibleCounter`. Why?
 
 #### Correct `Control` Size
-The reason is that the `Control` node has a size of `0` on the `X-axis`. We cannot directly change this, as the `Anchor Preset`, `size`, `position`, etc. is all controlled by the `HBoxContainer`. However, we can use the `Custom Minimum Size` property.
+The reason is that the `Control` node has a size of `0` on the `X-axis`. We cannot directly change this, as the `Anchor Preset`, `size`, `position`, etc., are all controlled by the `HBoxContainer`. However, we can use the `Custom Minimum Size` property.
 
 1. **Set** the `Custom Minimum Size` of the `Control` node to `(96.0, 384.0)` (texture size * scale)
 2. **Set** the `Pivot Offset` of the `HPBar` to `(32, 8)` (middle of the texture)
@@ -339,17 +339,17 @@ The resulting `HUD` should look like this:
 ![](img/HUDDoneStructure.png)
 
 > aside negative
-> I don't blame you if you find these UI settings a bit unintuitive. For me personally it is always a bit of trial and error to get it right.
+> I don't blame you if you find these UI settings a bit unintuitive. For me personally, it is always a bit of trial and error to get it right.
 
 `HBoxContainer`
 Control nodes for transform retention
 
 
 ### Updating the `CollectibleCounter`
-Finally, after setting all the HUD elements the final thing we need to do is to actually **update** the `Label` showing the amount of malware traces the player has.
+Finally, after setting all the HUD elements, the final thing we need to do is to actually **update** the `Label` showing the amount of malware traces the player has.
 
 #### Player Script
-When the player touches the collectible it calls a function in the player script called `func collectible_touched()`. Please **navigate** to the function and let's **fill it out**.
+When the player touches the collectible, it calls a function in the player script called `func collectible_touched()`. Please **navigate** to the function and let's **fill it out**.
 
 First, we would like to **update the count** in `player_stats`:
 ```GDScript
@@ -396,7 +396,7 @@ Let's try it out. **Instantiate** any number of the `collectible.tscn` scenes ar
 Play the game and:
 - Walk around and **collect malware traces**.
 - Watch the **HUD update** with the correct count.
-- See how the malware trace **fly towards the HUD**
+- See how the malware trace **flies towards the HUD**
 
 ![](img/Collectibles.gif)
 
@@ -429,18 +429,18 @@ func _update_collectible_counter() -> void:
 ```
 
 > aside positive
-> Making the malware fly towards the HUD was not covered here, you can look at the tween code in `collectible.gd` for more details.
+> Making the malware fly towards the HUD was not covered here. You can look at the tween code in `collectible.gd` for more details.
 
 
 ## Bonus: Hide the `CollectibleCounter`
 Duration: hh:mm:ss
 
-As a bonus exercise I would like to implement the `CollectibleCounter` to **move down below the screen** when the player doesn't pick up any traces for a while.
+As a bonus exercise, I would like to implement the `CollectibleCounter` to **move down below the screen** when the player doesn't pick up any traces for a while.
 
 ### Setup
 
 #### Reference
-First, we need to have a reference to the whole `CollectibleVBox`, that represents the whole counter.
+First, we need to have a reference to the whole `CollectibleVBox`, which represents the whole counter.
 
 1. **Right-click** the `CollectibleVBox` node and **select** the `Access as Unique Name` option
 2. **Add** a reference to it by **CTRL + drag** to script or **copy** this line:
@@ -465,12 +465,12 @@ var _malware_state : MalwareStates
 ```
 
 > aside positive
-> This will help us to react precisely to the current state, that the counter can be in.
+> This will help us to react precisely to the current state that the counter can be in.
 
 #### Start Position
-The last thing we need, is to remember the starting position of the counter. First, we will **declare a variable** for keeping track of the starting position and then in the `_ready()` method we will **set it**. Lastly, we will **set the counter as hidden** by default.
+The last thing we need is to remember the starting position of the counter. First, we will **declare a variable** for keeping track of the starting position, and then in the `_ready()` method we will **set it**. Lastly, we will **set the counter as hidden** by default.
 
-However, before we set the variable we need to **wait one frame**, so that the `CollectibleVBox` can finish its own `_ready()` function, where the **correct position** of the counter is set, based on the current resolution and aspect ratio.  
+However, before we set the variable, we need to **wait one frame**, so that the `CollectibleVBox` can finish its own `_ready()` function, where the **correct position** of the counter is set, based on the current resolution and aspect ratio.  
 
 Here is the code for the setup, please **add it** to the `hud.gd` script:
 ```
@@ -500,7 +500,7 @@ var _counter_tween : Tween
 ```
 
 ### Structure
-Each call of the `_update_collectibles()` function, should **move the counter up** (if not already) and after a while **move it back down** (if not already). Let's start with the first part.
+Each call of the `_update_collectibles()` function should **move the counter up** (if not already) and after a while **move it back down** (if not already). Let's start with the first part.
 
 #### Move the counter up
 Here is the code with explanations:
@@ -522,7 +522,7 @@ if _malware_state == MalwareStates.DOWN or _malware_state == MalwareStates.GOING
     _malware_state = MalwareStates.UP
 ```
 - We check if the counter should move up based on the current state.
-- If the tween is running (`!= null`) we stop it
+- If the tween is running (`!= null`), we stop it
 - We create the animation of moving up
 - Change the state tracker
 - Wait for the animation to stop and update the tracker again
@@ -547,12 +547,12 @@ if _malware_state == MalwareStates.UP:
     await _counter_tween.finished
     _malware_state = MalwareStates.DOWN
 ```
-- We create a timer and wait a set while
+- We create a timer and wait for a set while
 - If the counter is still up, we animate it moving down
 - The state also needs to be updated accordingly
 
 ### One small problem
-Currently, the animation of counter seems to work correctly. However, let's say the counter is set to stay up for `3 seconds`, if a collectible is picked up and another one is picked up after `2.9 seconds` the timer will still move down after `0.1 seconds` instead of waiting additional `3` seconds. We will fix this be **remembering the number of collectibles**.
+Currently, the animation of the counter seems to work correctly. However, let's say the counter is set to stay up for `3 seconds`, if a collectible is picked up and another one is picked up after `2.9 seconds`, the timer will still move down after `0.1 seconds` instead of waiting an additional `3` seconds. We will fix this be **remembering the number of collectibles**.
 
 ```GDScript
 func _update_collectible_counter() -> void:
@@ -560,7 +560,7 @@ func _update_collectible_counter() -> void:
     ...
 ```
 
-Now after waiting, we will check if the counter changed, which would mean that another collectible was picked up and our current call should not be the one to move the counter down.
+Now, after waiting, we will check if the counter changed, which would mean that another collectible was picked up, and our current call should not be the one to move the counter down.
 
 ```
 func _update_collectible_counter() -> void:
@@ -672,17 +672,17 @@ func _update_collectible_counter() -> void:
 ## Main Menu UI
 Duration: hh:mm:ss
 
-This section will focus on creating a working **Main Menu** using the UI system for our game. It will feature a basic background, game name, few buttons, and images.
+This section will focus on creating a working **Main Menu** using the UI system for our game. It will feature a basic background, game name, a few buttons, and images.
 
 Please **open** the `UI/MainMenu/main_menu.tscn` scene.
 
 ### What is already present?
-I have already created a basic UI scene (`Control` node as the root) with a background created from a randomized tilemap, that I have previously used for the **2D puzzle sections**. 
+I have already created a basic UI scene (`Control` node as the root) with a background created from a randomized tilemap, which I have previously used for the **2D puzzle sections**. 
 
-I also made a basic empty script with the headers of functions, that will be called by all the different UI buttons, that we will create.
+I also made a basic empty script with the headers of functions, which will be called by all the different main menu buttons.
 
 > aside positive
-> For more information on how to do this, you can check out the **Lab03 - 2D Platformer** lab, that goes in depth on `TileMaps`.
+> For more information on how to do this, you can check out the **Lab03 - 2D Platformer** lab, which goes in depth on `TileMaps`.
 
 
 ### Buttons - UI
@@ -692,13 +692,13 @@ Let's start by creating a **game name** and the **three buttons**. To keep all t
 2. **Set** the `Anchor Preset` to `Center`
 
 #### Anchor Problem
-You might notice, that even thought we set the `Anchor Preset` of the `VBoxContainer` to `Center` it is **not in the center of the screen**. The `Anchor Preset` option sets the position the `Control` node (all 2D UI nodes) in relation to its parent `Control` node.
+You might notice that even though we set the `Anchor Preset` of the `VBoxContainer` to `Center`, it is **not in the center of the screen**. The `Anchor Preset` option sets the position of the `Control` node (all 2D UI nodes) in relation to its parent `Control` node.
 
 If we look at the `Control` parent node → `MainMenu`, we can see that its size is `(0, 0)`, and it is aligned to the `Top Left`. We want the `MainMenu` to encompass the whole screen, and we can do it easily, without setting exact values of the screen.
 
 - **Set** the `Anchor Preset` of the `MainMenu` to `Full Rect`.
 
-Now, the outline of the `MainMenu` fills the whole screen and the `VBoxContainer` is in the middle of the screen.
+Now, the outline of the `MainMenu` fills the whole screen, and the `VBoxContainer` is in the middle of the screen.
 
 ![](img/AnchorMainMenuTop.png)
 
@@ -709,7 +709,7 @@ Let's now add the buttons.
 2. **Set** the text to `Start New Game`
 3. **Repeat** 2 more times with `Continue Game` and `Exit Game`
 
-Furthermore, you can style the buttons as you like using the `Theme Overrides` or by making a whole `Theme` **resource**, which is useful when creating an UI-heavy game. `Themes` allow you to define the **style of all UI elements** with a complex yet easy to use interactive editor.
+Furthermore, you can style the buttons as you like using the `Theme Overrides` or by making a whole `Theme` **resource**, which is useful when creating a UI-heavy game. `Themes` allow you to define the **style of all UI elements** with a complex yet easy-to-use interactive editor.
 
 ![](img/ThemeSettings.png)
 
@@ -721,9 +721,9 @@ We will now add the game name to the top of the screen. We will use a `Label` no
 
 1. **Add** a `Label` node as the **FIRST** child of the `VBoxContainer`
 2. **Set** the text to `GORODITH`
-3. **Set** the `Label Settings` to `New LabelSettings` an style the text (size, color, outline)
+3. **Set** the `Label Settings` to `New LabelSettings` and style the text (size, color, outline)
 
-In my case, the buttons stretched to the width of the `Label`. If you do not want this to be the case you can set the `Horizontal Alignment` in the **Context Menu**:
+In my case, the buttons stretched to the width of the `Label`. If you do not want this to be the case, you can set the `Horizontal Alignment` in the **Context Menu**:
 
 ![](img/ButtonAlignment.png)
 
@@ -735,7 +735,7 @@ The main menu should now look like this:
 ![](img/GameName.png)
 
 ### Side Images
-The final visual step we will do, is to add images of the main character on the both sides of the main menu.
+The final visual step we will do is to add images of the main character on both sides of the main menu.
 
 1. **Add** a `TextureRect` node as the child of the `MainMenu`
 2. **Rename** it to `LogoRight`
@@ -744,10 +744,10 @@ The final visual step we will do, is to add images of the main character on the 
 5. **Multiply** the `Layout/Transform/Size` by `4` (should be `(404, 288)`)
 6. **Set** the `Anchor Preset` to `Centered Right`
 7. **Set** the `Layout/Custom Minimum Size` to `(500, 0)` to offset the image from the border
-8. **Set** the `CanvasItem/Texture/Filter` to `Nearest` to make the image pixel perfect
+8. **Set** the `CanvasItem/Texture/Filter` to `Nearest` to make the image pixel-perfect
 
 Now let's do the other side:
-1. **Duplicate** the `LogoRight` node and rename to `LogoLeft`
+1. **Duplicate** the `LogoRight` node and rename it to `LogoLeft`
 2. **Switch** the `Flip H` property to `On`
 3. **Set** the `Anchor Preset` to `Centered Left`
 
@@ -782,7 +782,7 @@ func _start_new_game() -> void:
 ```
 
 ### Continue Game Button
-The functionality of this button will be a bit more complex on the `GlobalState` side. The function will be very straight forward:
+The functionality of this button will be a bit more complex on the `GlobalState` side. The function will be very straightforward:
 
 ```GDScript
 func _continue_game() -> void:
@@ -791,11 +791,11 @@ func _continue_game() -> void:
 ```
 
 > aside positive
-> We do not need to reset the `PlayerStats` in `GlobalState` when starting a new game, since without loading a savefile the `PlayerStats` will be created in the `_ready()` function in `GlobalState` with the default values.
+> We do not need to reset the `PlayerStats` in `GlobalState` when starting a new game, since without loading a savefile, the `PlayerStats` will be created in the `_ready()` function in `GlobalState` with the default values.
 
 
 #### `load_game()` and `save_game()` functions
-We will use the `PlayerStats` as the savefile of the game. This class is a resource and all resources can be easily loaded and saved with the `ResourceLoader` and `ResourceSaver` classes.
+We will use the `PlayerStats` as the save file of the game. This class is a resource, and all resources can be easily loaded and saved with the `ResourceLoader` and `ResourceSaver` classes.
 
 **Open** the `global_state.gd` script and **fill the functions** as such:
 ```GDScript
@@ -808,7 +808,7 @@ func save_game() -> int:
 ```
 
 > aside positive
-> There are many ways we can save and load the game. If your game needs to save extra info, like nodes in a scene with their properties you can use [this tutorial](https://docs.godotengine.org/en/stable/tutorials/io/saving_games.html) from the documentation of Godot. 
+> There are many ways we can save and load the game. If your game needs to save extra info, like nodes in a scene with their properties, you can use [this tutorial](https://docs.godotengine.org/en/stable/tutorials/io/saving_games.html) from the documentation of Godot. 
 
 ### Exit Game Button
 The last button to make functional is the **exit game button**. This will also be very straightforward:
@@ -841,13 +841,13 @@ I would be very grateful if you could take a moment to fill out a **very short f
 
 ### Recap
 Let's look at what we did in this lab.
-- We looked at the **changes I made** in the project such as:
+- We looked at the **changes I made** in the project, such as:
     - Added a **3D model** for the Collectible
     - Added **textures** for the UI
 - Then, we implemented the **Health Bar** on the player HUD using a `TextureProgressBar`
 - Next, we looked at `Anchors Preset` and **positioning** of UI nodes
 - We implemented a **collectible counter** and made it work with the health bar
-- In the bonus chapter we made the **collectible counter** animated - move offscreen after a while 
+- In the bonus chapter, we made the **collectible counter** animated - move offscreen after a while 
 - After that, we created the visual side of the **main menu** for our game with:
     - `Start New Game`, `Continue Game`, and `Exit Game` buttons
     - Game name using a `Label`
@@ -858,7 +858,7 @@ Let's look at what we did in this lab.
 
 
 ### More on UI
-For a more extensive tutorial that shows how to create an interactive multi-level menu I recommend this video:
+For a more extensive tutorial that shows how to create an interactive multi-level menu, I recommend this video:
 <video id=KOyREJu1P3I></video>
 
 ### Project Download
