@@ -24,7 +24,7 @@ In a bullet point format, we will:
 - Use the `HingeJoint3D` node to set up a **seesaw**-like object.
 - Lastly, look at **other joint types** (both for `2D` and `3D`).
 
-Here is the template for this lab. Please download it. There are scripts, models, and scenes needed for the Behavior Trees and Steering Behaviors.
+Here is the template for this lab. Please download it. There are scripts, models, and scenes needed for the Animation and Physics.
 <button>
   [Template Project](https://cent.felk.cvut.cz/courses/39HRY/godot/07_Animation&Physics/template.zip)
 </button>
