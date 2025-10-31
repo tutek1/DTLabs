@@ -102,3 +102,4 @@ Trimesh
 performant
 Mixamo
 PlayerStats
+savefile

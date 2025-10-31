@@ -8,7 +8,8 @@ func _ready():
 	player_stats = PlayerStats.new()
 
 func load_game() -> void:
-	pass
+	if ResourceLoader.exists(SAVE_PATH):
+		player_stats = ResourceLoader.load(SAVE_PATH)
 
 func save_game() -> int:
-	return 1
+	return ResourceSaver.save(player_stats, SAVE_PATH)

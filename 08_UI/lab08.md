@@ -677,8 +677,157 @@ func _update_collectible_counter() -> void:
 ## Main Menu UI
 Duration: hh:mm:ss
 
+This section will focus on creating a working **Main Menu** using the UI system for our game. It will feature a basic background, game name, few buttons, and images.
+
+Please **open** the `UI/MainMenu/main_menu.tscn` scene.
+
+### What is already present?
+I have already created a basic UI scene (`Control` node as the root) with a background created from a randomized tilemap, that I have previously used for the **2D puzzle sections**. 
+
+I also made a basic empty script with the headers of functions, that will be called by all the different UI buttons, that we will create.
+
+> aside positive
+> For more information on how to do this, you can check out the **Lab03 - 2D Platformer** lab, that goes in depth on `TileMaps`.
 
 
+### Buttons - UI
+Let's start by creating a **game name** and the **three buttons**. To keep all these nodes aligned properly, we will use a `VBoxContainer` for this whole middle section.
+
+1. **Add** a new `VBoxContainer` node as a child of the `MainMenu` node
+2. **Set** the `Anchor Preset` to `Center`
+
+#### Anchor Problem
+You might notice, that even thought we set the `Anchor Preset` of the `VBoxContainer` to `Center` it is **not in the center of the screen**. The `Anchor Preset` option sets the position the `Control` node (all 2D UI nodes) in relation to its parent `Control` node.
+
+If we look at the `Control` parent node → `MainMenu`, we can see that its size is `(0, 0)`, and it is aligned to the `Top Left`. We want the `MainMenu` to encompass the whole screen, and we can do it easily, without setting exact values of the screen.
+
+- **Set** the `Anchor Preset` of the `MainMenu` to `Full Rect`.
+
+Now, the outline of the `MainMenu` fills the whole screen and the `VBoxContainer` is in the middle of the screen.
+
+![](img/AnchorMainMenuTop.png)
+
+#### Button Nodes
+Let's now add the buttons.
+
+1. **Add** a `Button` node as a child of the `VBoxContainer`
+2. **Set** the text to `Start New Game`
+3. **Repeat** 2 more times with `Continue Game` and `Exit Game`
+
+Furthermore, you can style the buttons as you like using the `Theme Overrides` or by making a whole `Theme` **resource**, which is useful when creating an UI-heavy game. `Themes` allow you to define the **style of all UI elements** with a complex yet easy to use interactive editor.
+
+![](img/ThemeSettings.png)
+
+An example `Theme` I created for the menu buttons can be seen in the **completed template project**.
+
+
+### Game Name
+We will now add the game name to the top of the screen. We will use a `Label` node to add the text.
+
+1. **Add** a `Label` node as the **FIRST** child of the `VBoxContainer`
+2. **Set** the text to `GORODITH`
+3. **Set** the `Label Settings` to `New LabelSettings` an style the text (size, color, outline)
+
+In my case, the buttons stretched to the width of the `Label`. If you do not want this to be the case you can set the `Horizontal Alignment` in the **Context Menu**:
+
+![](img/ButtonAlignment.png)
+
+
+#### Game Name Spacing
+Moreover, I would like the `Label` to be a **bit higher above the buttons**. We can achieve this in multiple ways, but the simplest is to set the `Layout/Custom Minimum Size` to `(0, 400.0)` or higher and keep the text vertically aligned to `Top`.
+
+The main menu should now look like this:
+![](img/GameName.png)
+
+### Side Images
+The final visual step we will do, is to add images of the main character on the both sides of the main menu.
+
+1. **Add** a `TextureRect` node as the child of the `MainMenu`
+2. **Rename** it to `LogoRight`
+3. **Set** the `Texture` property to `UI/MainMenu/MainMenuLogo.png`
+4. **Set** the `Stretch Mode` property to `Keep Aspect Centered`
+5. **Multiply** the `Layout/Transform/Size` by `4` (should be `(404, 288)`)
+6. **Set** the `Anchor Preset` to `Centered Right`
+7. **Set** the `Layout/Custom Minimum Size` to `(500, 0)` to offset the image from the border
+8. **Set** the `CanvasItem/Texture/Filter` to `Nearest` to make the image pixel perfect
+
+Now let's do the other side:
+1. **Duplicate** the `LogoRight` node and rename to `LogoLeft`
+2. **Switch** the `Flip H` property to `On`
+3. **Set** the `Anchor Preset` to `Centered Left`
+
+The final look of the main menu should look like this:
+
+![](img/MainMenuVisualDone.png)
+
+
+## Main Menu Logic
+Duration: hh:mm:ss
+
+The visual side of the main menu is complete. Let's now make it functional.
+
+### Button Signals
+The First step is to connect the `pressed()` signals of the buttons to the prepared functions in `main_menu.gd`. We will start with the **first button**.
+
+1. **Select** the `Button` node
+2. **Go** to the `Signals` tab
+3. **Follow** the steps in the following image: ![](img/ButtonConnect.png)
+4. **Repeat** the process for the **other two buttons** (`_continue_game()`, `_exit_game()`)
+
+
+### Start New Game Button
+Let's start with the first button. To switch a scene, we can easily call `get_tree().change_scene_to_packed(...)` with the `@export` variable I prepared beforehand.
+
+1. **Set** the `New Game Scene` variable of the `MainMenu` to the `debug_3d_scene.tscn` scene.
+2. **Open** the `main_menu.gd` script and **fill** the `_start_new_game()` function:
+
+```GDScript
+func _start_new_game() -> void:
+    get_tree().change_scene_to_packed(new_game_scene)
+```
+
+### Continue Game Button
+The functionality of this button will be a bit more complex on the `GlobalState` side. The function will be very straight forward:
+
+```GDScript
+func _continue_game() -> void:
+    GlobalState.load_game()
+    get_tree().change_scene_to_packed(new_game_scene)
+```
+
+> aside positive
+> We do not need to reset the `PlayerStats` in `GlobalState` when starting a new game, since without loading a savefile the `PlayerStats` will be created in the `_ready()` function in `GlobalState` with the default values.
+
+
+#### `load_game()` and `save_game()` functions
+We will use the `PlayerStats` as the savefile of the game. This class is a resource and all resources can be easily loaded and saved with the `ResourceLoader` and `ResourceSaver` classes.
+
+**Open** the `global_state.gd` script and **fill the functions** as such:
+```GDScript
+func load_game() -> void:
+    if ResourceLoader.exists(SAVE_PATH):
+        player_stats = ResourceLoader.load(SAVE_PATH)
+
+func save_game() -> int:
+    return ResourceSaver.save(player_stats, SAVE_PATH)
+```
+
+> aside positive
+> There are many ways we can save and load the game. If your game needs to save extra info, like nodes in a scene with their properties you can use [this tutorial](https://docs.godotengine.org/en/stable/tutorials/io/saving_games.html) from the documentation of Godot. 
+
+### Exit Game Button
+The last button to make functional is the **exit game button**. This will also be very straightforward:
+
+```GDScript
+func _exit_game() -> void:
+    get_tree().quit()
+```
+
+### The Result
+I added a **quick save button** (`F5`) to the `GlobalDebug` before the codelab, so that you can try out the **loading and saving** system. Currently, the only way you can notice a difference is in the **number of collectibles** that the player has.
+
+Here is a video showing just that:
+<video id=BpZtfy93EBw></video>
 
 
 
