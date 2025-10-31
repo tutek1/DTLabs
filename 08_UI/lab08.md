@@ -7,26 +7,21 @@ Feedback Link: https://forms.gle/J8eeuQAJ3wMY1Wnq7
 
 # Lab08 - UI
 
-## Overview TODO
+## Overview
 Duration: hh:mm:ss
 
-This lab will focus on learning about 
-
-Then we will learn about 
+This lab will focus on learning about the UI in Godot. We will learn the basics by creating a **Player HUD**, that will show the health of the player and amount of collectibles the player has. Then we will create a **main menu** for our game with a loading and saving system.
 
 In a bullet point format, we will:
-- Look at the **changes I made** in the project such as.
-- **Import** 
-- Learn about 
-- Look at the 
-- Implement 
-- Learn how to create 
-- Use the 
-- Lastly, look at 
+- Look at the **changes I made** in the project.
+- Learn about **UI containers** and **UI nodes**
+- Implement a **health bar** and a **collectible counter** for the player HUD 
+- Learn how to create a **main menu** for a game and hook up buttons to functions
+- Lastly, we will implement the logic behind **loading and saving** the game state
 
-Here is the template for this lab. Please download it, there are scripts, models, and scenes needed for the Behavior Trees and Steering Behaviors.
+Here is the template for this lab. Please **download it**, there are scripts, models, and scenes needed for the UI implementation.
 <button>
-  [Template Project](https://cent.felk.cvut.cz/courses/39HRY/godot/08_UI&Audio/template.zip)
+  [Template Project](https://cent.felk.cvut.cz/courses/39HRY/godot/08_UI/template.zip)
 </button>
 
 
@@ -271,7 +266,7 @@ func _update_hp() -> void:
 ```
 
 
-## Collectible HUD TODO
+## Collectible HUD
 Duration: hh:mm:ss
 
 In this section, we will add collectible counter and put it all together with `HPBar` we created in the last section.
@@ -832,7 +827,7 @@ Here is a video showing just that:
 
 
 
-## Recap TODO
+## Recap
 Duration: hh:mm:ss
 
 ### Feedback
@@ -847,27 +842,27 @@ I would be very grateful if you could take a moment to fill out a **very short f
 ### Recap
 Let's look at what we did in this lab.
 - We looked at the **changes I made** in the project such as:
-    - s
-    - s
-    - s
-- Then, we 
-- Next, we looked at 
-- We looked at the 3 types 
-- The second part of the codelab looked closely 
-- We implemented 
-- We made a little detour into 
-- After that, we used 
-- Lastly, we looked at 
+    - Added a **3D model** for the Collectible
+    - Added **textures** for the UI
+- Then, we implemented the **Health Bar** on the player HUD using a `TextureProgressBar`
+- Next, we looked at `Anchors Preset` and **positioning** of UI nodes
+- We implemented a **collectible counter** and made it work with the health bar
+- In the bonus chapter we made the **collectible counter** animated - move offscreen after a while 
+- After that, we created the visual side of the **main menu** for our game with:
+    - `Start New Game`, `Continue Game`, and `Exit Game` buttons
+    - Game name using a `Label`
+    - Side images of the main character
+- Lastly, we implemented the **logic** behind:
+    - The main menu buttons
+    - Saving and Loading game
 
 
-### Note on Audacity
-X
-
-### Note on Freesound.org
-X
+### More on UI
+For a more extensive tutorial that shows how to create an interactive multi-level menu I recommend this video:
+<video id=KOyREJu1P3I></video>
 
 ### Project Download
 If you want to see what the finished template looks like after this lab, you can download it here:
 <button>
-  [Template Done Project](https://cent.felk.cvut.cz/courses/39HRY/godot/07_Animation&Physics/template-done.zip)
+  [Template Done Project](https://cent.felk.cvut.cz/courses/39HRY/godot/08_UI/template-done.zip)
 </button>
