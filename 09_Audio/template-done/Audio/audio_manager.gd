@@ -50,7 +50,7 @@ func play_sfx_at_location(type : SFX_TYPE, location : Vector3) -> void:
 	if sfx_settings.is_over_limit(): return
 	sfx_settings.change_count(1)
 	
-	# TODO Create AudioStreamPlayer
+	# TODO Create AudioStreamPlayer3D
 	# Add as child of AudioManager
 	# Set: bus, location, stream, volume, unit size
 	# Connect finished signal to: streamplayer queue_free, sfx_settings change_count(-1)
@@ -66,7 +66,7 @@ func play_sfx_as_child(type : SFX_TYPE, parent : Node) -> void:
 	if sfx_settings.is_over_limit(): return
 	sfx_settings.change_count(1)
 	
-	# TODO Create AudioStreamPlayer
+	# TODO Create AudioStreamPlayer3D
 	# Add as child of the parameter parent
 	# Set: bus, stream, volume, unit size
 	# Connect finished signal to: streamplayer queue_free, sfx_settings change_count(-1)
