@@ -30,21 +30,58 @@ Here is the template for this lab. Please download it, there are scripts, models
 </button>
 
 
-## Changes Made in the Project TODO
+
+## Audio Basics
 Duration: hh:mm:ss
 
-TODO
+Let's first go through the basics of **playing audio** in Godot and look at the new folder with files I added.
+
+### Audio Folder
+I added a yellow-colored folder `Audio` with all the necessary stuff needed for this codelab. 
+
+- `Ambient` folder - Hosts ambient sounds that will be played in certain areas
+- `Music` folder - Hosts the music tracks that will be used in the game
+- `SFX` folder - Hosts all the sound effects for the player and enemies
+- `audio_manager.tscn` and `audio_manager.gd` - Autoloaded manager, that I made to make playing sounds and music easier, which we will complete in this codelab
+- `sfx_settings.gd` - Resource to modify SFX settings which keeps track of the number of actively playing SFX
 
 
-## Audio Basics TODO
-Duration: hh:mm:ss
+### Audio Bus
+Every audio, that is played in Godot must be played on a **Audio Bus**. The most common use-case for having multiple buses is to play each audio type (music, SFX, ambient, voices...) on a separate audio bus. This allows you to set the volume, solo/mono, etc. for each audio type, as it is done in almost all games.
 
-### Bus Layout
+#### Definition
+*An audio bus (also called an audio channel) can be considered a place that audio is channeled through on the way to playback through a device's speakers. Audio data can be modified and re-routed by an audio bus.* - [Godot Documentation](https://docs.godotengine.org/en/latest/tutorials/audio/audio_buses.html)
 
-### Debug Audio Sliders
+#### Godot Bus Layout
+In Godot, you can find the Audio Bus settings at the bottom of the editor next to the `Debugger` tab. This is how it looks in our template:
+
+![](img/AudioBusDefault.png)
+
+There is a single "Master" audio bus present through which all audio is played by default. You can set many things for each bus such as the **volume**, **audio effects**, or **route bus** though another one (dropdown at the bottom).
+
+#### Our Setup
+We will create a very standard audio bus setup. Please **recreate the audio buses** as seen in the following picture:
+
+![](img/AudioBusSetup.png)
+
+> aside negative
+> Make sure to **name the buses the same** as I did, since I already connected audio sliders to these bus names, more on that later on.
+
+> aside positive
+> **Bus routing** can be used to composite different buses, in our case we will just route all the buses to the `Master Bus`. This way the `Master Bus` will control the volume of all the other buses. 
+
 
 ### Audio Nodes
+To play and listen to audio Godot provides several audio nodes. Here is a brief overview:
+- <img src="img/AL2D.png" width="25"/> <img src="img/AL3D.png" width="25"/> `AudioListener2D/3D` - Usually not used since the current camera works as a listener by default, **overrides the location** sounds are heard from in 2D/3D, 
+- <img src="img/AP.png" width="25"/> `AudioStreamPlayer` - **Plays the audio** equally loud in both speakers
+- <img src="img/AP2D.png" width="25"/> <img src="img/AP3D.png" width="25"/> `AudioStreamPlayer2D/3D` - **Plays the audio** in 2D/3D space, that is **attenuated with distance and angle** to the listener, e.g. audio played 10 meters to the left of listener is quieter and heard more from the left speaker
 
+
+### Debug Audio Sliders
+For our convenience, I also created debug audio sliders for each audio bus and placed them on the player HUD, so that we can easily adjust the audio levels during this codelab.
+
+![](img/DebugAudioSliders.png)
 
 
 ## Play Simple Audio TODO
