@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://sml0qph5yhfm"]
+
+[ext_resource type="Texture2D" uid="uid://clkft3d0fgj36" path="res://2DPuzzles/Sprites/spritesheet_puzzles.png" id="1_edmfy"]
+[ext_resource type="Script" uid="uid://dasr2cxl3d1ta" path="res://2DPuzzles/Gates/gate.gd" id="2_lldk8"]
+
+[node name="AndGate" type="Sprite2D"]
+texture_filter = 1
+texture = ExtResource("1_edmfy")
+region_enabled = true
+region_rect = Rect2(0, 64, 96, 96)
+region_filter_clip_enabled = true
+script = ExtResource("2_lldk8")
