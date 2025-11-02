@@ -26,7 +26,7 @@ In a bullet point format, we will:
 
 Here is the template for this lab. Please download it, there are scripts, models, and scenes needed for the Behavior Trees and Steering Behaviors.
 <button>
-  [Template Project](https://cent.felk.cvut.cz/courses/39HRY/godot/08_UI&Audio/template.zip)
+  [Template Project](https://cent.felk.cvut.cz/courses/39HRY/godot/09_Audio/template.zip)
 </button>
 
 
@@ -40,6 +40,8 @@ TODO
 Duration: hh:mm:ss
 
 ### Bus Layout
+
+### Debug Audio Sliders
 
 ### Audio Nodes
 
@@ -133,5 +135,5 @@ X
 ### Project Download
 If you want to see what the finished template looks like after this lab, you can download it here:
 <button>
-  [Template Done Project](https://cent.felk.cvut.cz/courses/39HRY/godot/07_Animation&Physics/template-done.zip)
+  [Template Done Project](https://cent.felk.cvut.cz/courses/39HRY/godot/09_Audio/template-done.zip)
 </button>

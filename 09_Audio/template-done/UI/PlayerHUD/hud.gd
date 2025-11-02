@@ -82,3 +82,19 @@ func _update_collectible_counter() -> void:
 		_malware_state = MalwareStates.GOING_DOWN
 		await _counter_tween.finished
 		_malware_state = MalwareStates.DOWN
+
+# Master volume slider
+func _on_master_slider_value_changed(value : float):
+	AudioServer.set_bus_volume_linear(AudioServer.get_bus_index("Master"), value)
+
+# SFX volume slider
+func _on_sfx_slider_value_changed(value : float):
+	AudioServer.set_bus_volume_linear(AudioServer.get_bus_index("SFX"), value)
+
+# Music volume slider
+func _on_music_slider_value_changed(value : float):
+	AudioServer.set_bus_volume_linear(AudioServer.get_bus_index("Music"), value)
+
+# Ambient volume slider
+func _on_ambient_slider_value_changed(value : float):
+	AudioServer.set_bus_volume_linear(AudioServer.get_bus_index("Ambient"), value)
