@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://6gvfsuhehedg"]
+
+[ext_resource type="Script" uid="uid://enkbur060f1" path="res://3D/Enemies/Projectiles/electric_projectile.gd" id="1_3cqqf"]
+[ext_resource type="ArrayMesh" uid="uid://ua8qwnr362l2" path="res://3D/Enemies/Projectiles/GORODITH_projectile1.obj" id="2_4v38d"]
+[ext_resource type="ArrayMesh" uid="uid://c0r78ve28sn8o" path="res://3D/Enemies/Projectiles/GORODITH_projectile2.obj" id="3_ye3x0"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_q4q8o"]
+radius = 0.25
+
+[node name="ElectricProjectile" type="Area3D"]
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_3cqqf")
+mesh_array = Array[ArrayMesh]([ExtResource("2_4v38d"), ExtResource("3_ye3x0")])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_q4q8o")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+mesh = ExtResource("2_4v38d")
+skeleton = NodePath("../..")
+
+[node name="MeshSwitchTimer" type="Timer" parent="."]
+wait_time = 0.5
+autostart = true
+
+[node name="LifeTimer" type="Timer" parent="."]
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

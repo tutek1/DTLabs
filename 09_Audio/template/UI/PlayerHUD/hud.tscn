@@ -1,0 +1,78 @@
+[gd_scene load_steps=8 format=3 uid="uid://hplefwvgliy6"]
+
+[ext_resource type="Script" uid="uid://cl8ijo4s1q3ua" path="res://UI/PlayerHUD/hud.gd" id="1_ncaqm"]
+[ext_resource type="Texture2D" uid="uid://ddva44e86rve8" path="res://UI/PlayerHUD/HPBar/hp_bar_under.png" id="1_ufcla"]
+[ext_resource type="Texture2D" uid="uid://bjd5aiui540o8" path="res://UI/PlayerHUD/HPBar/hp_bar_over.png" id="2_ncaqm"]
+[ext_resource type="Texture2D" uid="uid://cemcuyppcxcl3" path="res://UI/PlayerHUD/HPBar/hp_bar_progress.png" id="3_p5p0f"]
+[ext_resource type="Texture2D" uid="uid://br5p2cdc4mnlm" path="res://UI/PlayerHUD/Collectible/collectible.png" id="5_p5p0f"]
+
+[sub_resource type="Gradient" id="Gradient_ncaqm"]
+offsets = PackedFloat32Array(0, 0.494949, 1)
+colors = PackedColorArray(1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_p5p0f"]
+font_size = 40
+outline_size = 20
+outline_color = Color(0, 0, 0, 1)
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_ncaqm")
+hp_gradient = SubResource("Gradient_ncaqm")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -157.0
+offset_right = 112.0
+grow_vertical = 0
+
+[node name="Control" type="Control" parent="HBoxContainer"]
+custom_minimum_size = Vector2(96, 384)
+layout_mode = 2
+
+[node name="HPBar" type="TextureProgressBar" parent="HBoxContainer/Control"]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -8.0
+offset_right = 32.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -1.5708
+scale = Vector2(6, 6)
+pivot_offset = Vector2(32, 8)
+max_value = 1.0
+step = 0.01
+value = 0.5
+texture_under = ExtResource("1_ufcla")
+texture_over = ExtResource("2_ncaqm")
+texture_progress = ExtResource("3_p5p0f")
+texture_progress_offset = Vector2(9, 6)
+
+[node name="CollectibleVBox" type="VBoxContainer" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = -10
+alignment = 2
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/CollectibleVBox"]
+texture_filter = 1
+custom_minimum_size = Vector2(112, 112)
+layout_mode = 2
+texture = ExtResource("5_p5p0f")
+
+[node name="CollectibleCounter" type="Label" parent="HBoxContainer/CollectibleVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+label_settings = SubResource("LabelSettings_p5p0f")
+horizontal_alignment = 1
+vertical_alignment = 1
