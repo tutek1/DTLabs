@@ -270,6 +270,7 @@ func _update_hp() -> void:
 >
 > <img src="img/1BatteryFull.png" width="179"/> <img src="img/2BatteryMid.png" width="200"/> <img src="img/3BatteryLow.png" width="184"/>
 
+
 ## Collectible HUD
 Duration: hh:mm:ss
 

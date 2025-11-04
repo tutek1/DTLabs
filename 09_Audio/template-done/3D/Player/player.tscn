@@ -1,9 +1,12 @@
-[gd_scene load_steps=25 format=3 uid="uid://8sbvl7rcejq5"]
+[gd_scene load_steps=26 format=3 uid="uid://8sbvl7rcejq5"]
 
 [ext_resource type="Script" uid="uid://bsumix7xtjux1" path="res://3D/Player/player_controller_3d.gd" id="1_d17s7"]
 [ext_resource type="PackedScene" uid="uid://b4ueia53ak6r0" path="res://3D/Player/GORODITH_Player_anim.fbx" id="2_d17s7"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hn7em"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_d17s7"]
+size = Vector3(0.001, 0.002, 0.001)
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_w2xrt"]
 animation = &"Armature|Connect"
@@ -115,25 +118,26 @@ shape = SubResource("CapsuleShape3D_hn7em")
 transform = Transform3D(-2.18557e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.18557e-08, 0, -1, 0)
 
 [node name="Skeleton3D" parent="Mesh/Armature" index="0"]
-bones/0/position = Vector3(0, 0, 0.0117793)
+bones/0/position = Vector3(0, 0, 0.0117766)
 bones/0/rotation = Quaternion(0.707107, 8.42937e-08, 8.42937e-08, 0.707107)
 bones/0/scale = Vector3(1, 1, 1)
-bones/1/rotation = Quaternion(-0.0308727, -0.0424797, 0.0030038, 0.998616)
+bones/1/rotation = Quaternion(-0.00232366, 6.50523e-19, -5.54005e-10, 0.999997)
 bones/1/scale = Vector3(1, 1, 0.999999)
 bones/3/position = Vector3(-0.000499998, 0.0107497, -0.0105217)
-bones/3/rotation = Quaternion(0.965172, -0.246836, 0.0838968, -0.0218214)
+bones/3/rotation = Quaternion(0.989824, -0.134231, 0.045666, -0.0120371)
 bones/5/position = Vector3(-0.000447049, -0.000234075, -0.00350103)
 bones/5/rotation = Quaternion(0.995069, -0.0986878, 0.00985678, 0.000977564)
-bones/6/rotation = Quaternion(0.00141416, -0.0108693, -0.160752, 0.986934)
+bones/6/rotation = Quaternion(0.00142348, -0.0108678, -0.161806, 0.986762)
 bones/6/scale = Vector3(1, 1, 1)
 bones/8/position = Vector3(-0.000447051, -0.000234075, 0.00350103)
-bones/8/rotation = Quaternion(0.999952, -5.99422e-19, 0.00978963, 6.12274e-17)
+bones/8/rotation = Quaternion(0.999952, -5.99422e-19, 0.00978962, 6.12274e-17)
+bones/9/rotation = Quaternion(0, -0.0108974, 0, 0.999941)
 bones/9/scale = Vector3(1, 1, 1)
 bones/11/rotation = Quaternion(0.706465, -0.706465, 0.0301203, 0.0301202)
 bones/11/scale = Vector3(1, 1, 1)
 
 [node name="BoneAttachment3D" type="BoneAttachment3D" parent="Mesh/Armature/Skeleton3D" index="1"]
-transform = Transform3D(0.996373, -0.00337637, -0.085027, -0.0846561, 0.061915, -0.994484, 0.0086222, 0.998076, 0.0614045, -2.43616e-05, 0.000446734, 0.035806)
+transform = Transform3D(1, 4.91829e-14, 2.38418e-07, 2.38416e-07, 0.0046472, -0.999988, -1.10802e-09, 0.999989, 0.00464719, 1.19172e-15, 3.3529e-05, 0.0358171)
 bone_name = "Head_end"
 bone_idx = 2
 
@@ -163,11 +167,21 @@ secondary_limit_angle = 6.28319
 secondary_damp_threshold = 1.0
 
 [node name="BoneAttachment3D2" type="BoneAttachment3D" parent="Mesh/Armature/Skeleton3D" index="3"]
-transform = Transform3D(-0.519706, -0.831438, 0.196513, -0.0727181, 0.27223, 0.959481, -0.851245, 0.484357, -0.20194, -0.0104798, -0.00904094, 0.0184974)
+transform = Transform3D(-0.51975, -0.831414, 0.196497, -0.0727158, 0.272222, 0.959483, -0.851218, 0.484402, -0.201944, -0.0104796, -0.009041, 0.0184951)
 bone_name = "GunBone_end"
 bone_idx = 12
 
 [node name="ShootPoint" type="Node3D" parent="Mesh/Armature/Skeleton3D/BoneAttachment3D2"]
+
+[node name="BoneAttachment3D3" type="BoneAttachment3D" parent="Mesh/Armature/Skeleton3D" index="4"]
+transform = Transform3D(0.9919, 0.127002, -0.00219792, 0.00221585, 7.12462e-08, 0.999997, 0.127002, -0.991902, -0.000281348, -0.000803179, 0.00350103, 0.000561423)
+bone_name = "RightFoot_end"
+bone_idx = 7
+
+[node name="Area3D" type="Area3D" parent="Mesh/Armature/Skeleton3D/BoneAttachment3D3"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Mesh/Armature/Skeleton3D/BoneAttachment3D3/Area3D"]
+shape = SubResource("BoxShape3D_d17s7")
 
 [node name="AnimationTree" type="AnimationTree" parent="Mesh"]
 tree_root = SubResource("AnimationNodeStateMachine_46t1g")
@@ -191,6 +205,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0668404, 0.848085, -2.10876
 [node name="ShootCooldown" type="Timer" parent="."]
 one_shot = true
 
+[connection signal="body_entered" from="Mesh/Armature/Skeleton3D/BoneAttachment3D3/Area3D" to="." method="_took_a_step"]
 [connection signal="body_entered" from="InteractArea" to="." method="_on_interact_area_body_entered"]
 [connection signal="body_exited" from="InteractArea" to="." method="_on_interact_area_body_exited"]
 

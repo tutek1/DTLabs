@@ -107,6 +107,7 @@ func _jump() -> void:
 	if not is_on_floor(): return
 	
 	velocity.y = GlobalState.player_stats.jump_force
+	AudioManager.play_sfx_as_child(AudioManager.SFX_TYPE.PLAYER_JUMP, self)
 
 # Handles the double jump of the player, conditions, reset, and apply
 func _double_jump() -> void:
@@ -125,6 +126,7 @@ func _double_jump() -> void:
 	# Jump
 	_has_double_jumped = true
 	velocity.y = GlobalState.player_stats.jump_force
+	AudioManager.play_sfx_as_child(AudioManager.SFX_TYPE.PLAYER_DOUBLE_JUMP, self)
 
 # Interacts with node in the interact area 3D
 func _interact() -> void:
@@ -165,6 +167,8 @@ func _shoot() -> void:
 	# Set velocity
 	var direction : Vector3 = (gun_target.global_position - projectile.global_position).normalized()
 	projectile.set_velocity(direction * GlobalState.player_stats.projectile_speed)
+	
+	AudioManager.play_sfx_at_location(AudioManager.SFX_TYPE.PLAYER_SHOOT, shoot_point.global_position)
 
 # Process collisions with rigidbodies
 func _check_collisions(delta : float) -> void:
@@ -228,6 +232,7 @@ func receive_damage(value : float, from : Node3D):
 	if not _can_be_damaged: return
 	_can_be_damaged = false
 	
+	AudioManager.play_sfx_as_child(AudioManager.SFX_TYPE.PLAYER_DAMAGED, self)
 	GlobalState.player_stats.curr_health -= value
 	if GlobalState.player_stats.curr_health <= 0:
 		GlobalState.player_stats.curr_health = 0
@@ -271,3 +276,6 @@ func _on_interact_area_body_exited(body: Node3D) -> void:
 	if body.is_in_group("Interactable"):
 		print(body.name + " exitted interact area")
 		_interact_node_in_area = null
+
+func _took_a_step(body):
+	pass # Replace with function body.

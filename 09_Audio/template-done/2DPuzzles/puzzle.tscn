@@ -1,10 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://bbpnrywhpjt8u"]
+[gd_scene load_steps=12 format=3 uid="uid://bbpnrywhpjt8u"]
 
 [ext_resource type="Script" uid="uid://blwuscb1yy8h0" path="res://2DPuzzles/Scripts/puzzle_section_manager.gd" id="1_sdnea"]
 [ext_resource type="PackedScene" uid="uid://cp740ldwmrs6i" path="res://2DPuzzles/Debug/debug_2d_puzzle_scene.tscn" id="2_q1rx7"]
 [ext_resource type="Script" uid="uid://cpd0bqnx4posl" path="res://2DPuzzles/Scripts/puzzle_interact.gd" id="3_6lso6"]
 [ext_resource type="ArrayMesh" uid="uid://dt8id16d0m6s5" path="res://3D/WorldObjects/Connector/GORODITH_connector_on.obj" id="4_7ksy8"]
 [ext_resource type="ArrayMesh" uid="uid://c07l8hdj15le4" path="res://3D/WorldObjects/Connector/GORODITH_connector_off.obj" id="5_rgqnm"]
+[ext_resource type="AudioStream" uid="uid://dxfr6kdujyxk" path="res://Audio/Ambient/beep_boop_ambient.wav" id="6_q1rx7"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_72jxc"]
 viewport_path = NodePath("SubViewport")
@@ -69,3 +70,9 @@ shape = SubResource("BoxShape3D_sdnea")
 [node name="Base" type="MeshInstance3D" parent="PuzzleInteract/BaseCollider"]
 mesh = SubResource("BoxMesh_sdnea")
 skeleton = NodePath("../../../..")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("6_q1rx7")
+autoplay = true
+max_distance = 30.0
+bus = &"Ambient"

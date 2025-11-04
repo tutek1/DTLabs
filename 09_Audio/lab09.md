@@ -68,7 +68,7 @@ We will create a very standard audio bus setup. Please **recreate the audio buse
 > Make sure to **name the buses the same** as I did, since I already connected audio sliders to these bus names, more on that later on.
 
 > aside positive
-> **Bus routing** can be used to composite different buses, in our case we will just route all the buses to the `Master Bus`. This way the `Master Bus` will control the volume of all the other buses. 
+> **Bus routing** can be used to composite different buses, in our case we will just route all the buses to the `Master Bus`. This way, the `Master Bus` will control the volume of all the other buses. 
 
 
 ### Audio Nodes
@@ -84,43 +84,294 @@ For our convenience, I also created debug audio sliders for each audio bus and p
 ![](img/DebugAudioSliders.png)
 
 
-## Play Simple Audio TODO
+
+## Play Simple Audio
 Duration: hh:mm:ss
 
-### Sound Import Loop
+Let's first create a simple audio player without the use of the `AudioManager`. We will use it for playing an ambient computer noises near the 2D puzzle section.
 
 ### `AudioStreamPlayer3D` Setup
+**Open** the `2DPuzzles/puzzle.tscn` scene, which hosts the 3D scene setup of the puzzle.
+
+1. **Add** a `AudioStreamPlayer3D` node as a child of the `PuzzleSection`
+2. **Set** the `Stream` property to `beep_boop_ambient.wav`
+3. **Set** the `Autoplay` property to `On`, which makes the sound automatically play on starting the game
+4. **Set** the `Bus` to `Ambient`
+
+#### Distance Attenuation
+The attenuation of sound over distances is an important effect, that makes sounds believable. To set how the sound is attenuated with distance Godot offers these parameters:
+- `Attenuation Mode` - changes the way the audio gets quieter with distance (linear, quadratic, logarithmic)
+- `Unit Size` - factor of the attenuation, higher values make the sound hearable over larger distances
+- `Max Distance` - works in tandem with `Attenuation Mode`, sets the maximum distance the sound can be heard from and linearly makes the sound quieter
+
+I only changed the `Max Distance` to `30m` but feel free to change the parameters and see how they change the sound. Here is the full setup:
+
+![](img/Ambient.png)
+
+
+### Sound Import Loop
+The last thing we need to change is to make the sound loop.
+
+1. **Select** the `beep_boop_ambient.wav` sound file in the **FileSystem**
+2. **Switch** to the `Import` tab in the **Scene Hierarchy**
+3. **Set** the `Loop Mode` to `Forward`
+4. **Press** the `Reimport` button
+
+![](img/SoundImport.png)
+
+> aside positive
+> There are many more parameters, that can be set, for example the Doppler Effect. That I won't go over, since most of them are very straightforward and can be looked up in the documentation.
 
 
 
 ## Complex Audio using an `AudioManager` TODO
 Duration: hh:mm:ss
 
+Simply playing audio with audio players, like we did in the last section, is a good practice for playing looping sounds (ambience) without any complex logic. Playing SFX like the player walking, enemy shooting, or music can be done in the same way but making an `AudioManager` with helpful methods is the recommended approach.
+
 ### Overview of `AudioManager`
+Let's now look at the `AudioManager` I prepared.
+
+#### SFX settings and SFX bank
+The first thing the `AudioManager` hosts, is an `enum` for all the different SFX, that can be played. These `enums` are used as keys in the `sfx_bank`, which has the settings for each SFX.
+
+![](img/SFXEnumBank.png)
+
+#### Methods
+There several implemented and ready-to-implement methods.
+
+![](img/AudioManagerMethods.png)
+
+- `play_sfx()` - plays a SFX sound without distance attenuation (`AudioStreamPlayer`)
+- `play_sfx_at_location()` - plays an attenuated SFX sound at given location (`AudioStreamPlayer3D`)
+- `play_sfx_as_child()` - plays an attenuated SFX sound as a child of a given node (`AudioStreamPlayer3D`)
+- `play_music()` - starts playing music with given fade-in
+- `stop_music()` - stops playing music with given fade-in
+
 
 ### Play Music
+Let's now complete the implementation of the music player, so that we can test it out. Since there will only ever be one type of music playing in our game, we will use a single `AudioStreamPlayer` as a child of the `AudioManager`, that will be reused.
 
-### Fill DEBUG UI Callback
+1. **Add** a `AudioStreamPlayer` node as a child of the `AudioManager`
+2. **Rename** the node to `MusicStreamPlayer`
+3. **Set** the `Stream` property to `music_better.wav`
+4. **Set** the `Volume` property to `-80.0 dB`
+5. **Set** the `Bus` property to `Music`
+
+Now, try to **run the game** and **press** `F4`. The music should slowly fade-in and with another press of `F4` it should slowly fade-out. 
 
 
 ### SFX Settings
+We will quickly look over the `SFXSettings` so that we can then work with the parameters of each SFX.
 
-### Play SFX Methods
+![](img/SFXSettings.png)
+- `audio_clips` - All the clips that correspond to the SFX (useful for variants of often repeating sounds)
+- `limit` - The maximum number of instances of the SFX that can be playing at once.
+- `volume_adjust` - Volume of the SFX for quick changes without needing to change the sound file
+- `unit_size` - Same as the `AudioStreamPlayer3D` parameter
+- `func get_clip()` - Returns a random audio clip from the list
+- `func change_count()` - Changes the counter of each SFX, should be called when SFX starts and stops playing
+- `func is_over_limit()` - Simple check if there aren't too many instances of the SFX playing
+
+### Fill the `sfx_bank`
+The setup is now almost complete, we need to only fill out the `sfx_bank` with the `SFXSettings`. **Open** the `audio_manager.tscn` scene, **select** the `AudioManager` node, and **click** the `Dictionary[int, SFXSettings]` in the **Inspector**.
+
+1. **Set** the `New Key` to `Player Walk`
+2. **Set** the `New Value` to a `New SFXSettings`
+3. **Fill** the `Audio Clips` with `player_walk1.wav` though `player_walk5.wav`
+4. **Set** the `Limit` to `1` (avoids audio spamming)
+5. **Set** the `Volume Adjust` to `-6.5`
+6. **Press** the `+ Add Key/Value Pair`
+
+Here is how it should look like:
+
+![](img/SFXBankPlayerWalk.png)
+
+Now add **all the other sound effects** in the same way. Keep the `Limit` and `Volume Adjust` to the default values. The final `sfx_bank` should look like this:
+
+![](img/SFXBankDone.png)
 
 
 
-## Play SFX
+### Task: Filling out the Play SFX methods
+Let's now fill out the missing parts of the `play_sfx...` methods, so that we can use them in the next section to play actual sounds.
+
+Try to **fill them out yourself**, here are a few notes:
+- Use the `sfx_settings` variable for `stream`(use the `get_clip()` method), `volume`, and `unit_size`
+- To add a parameter to a function call in the finished signal call, use the `bind()` function
+- All three function will be very similar. They only will differ by a few lines.
+
+> aside positive
+> Some of you might say, that creating an `AudioStreamPlayer` node for each played SFX and destroying it after the sound stop is wasteful. I agree with you and in a different game that plays a lot of SFXs a better approach such as `AudioStreamPlayer` pooling should be used. However, the performance impact should not be noticeable if you keep the number of played SFX under 100 per second (rough estimate).
+
+
+## Solution: `play_sfx()` methods
 Duration: hh:mm:ss
 
-### Player Walk
-#### physics could work but no
-#### bone attachments yes
+```GDScript
+# Plays a sfx sound based on type (no 3D sound)
+func play_sfx(type : SFX_TYPE) -> void:
+    # Check and get the settings
+    if not sfx_bank.has(type): return
+    var sfx_settings : SFXSettings = sfx_bank[type]
 
-### Player Jump
+    # Handle sfx limit
+    if sfx_settings.is_over_limit(): return
+    sfx_settings.change_count(1)
+
+    # Create AudioStreamPlayer
+    var audio_player : AudioStreamPlayer = AudioStreamPlayer.new()
+    add_child(audio_player)
+
+    # Set params of AudioStreamPlayer
+    audio_player.bus = SFX_BUS
+    audio_player.stream = sfx_settings.get_clip()
+    audio_player.volume_db = sfx_settings.volume_adjust
+    audio_player.finished.connect(audio_player.queue_free)
+    audio_player.finished.connect(sfx_settings.change_count.bind(-1))
+
+    audio_player.play()
+
+# Same as play_sfx but plays the audio at location -> 3D sound
+func play_sfx_at_location(type : SFX_TYPE, location : Vector3) -> void:
+    # Check and get the settings
+    if not sfx_bank.has(type): return
+    var sfx_settings : SFXSettings = sfx_bank[type]
+
+    # Handle sfx limit
+    if sfx_settings.is_over_limit(): return
+    sfx_settings.change_count(1)
+
+    # Create AudioStreamPlayer
+    var audio_player : AudioStreamPlayer3D = AudioStreamPlayer3D.new()
+    add_child(audio_player)
+
+    # Set params of AudioStreamPlayer (+ location)
+    audio_player.bus = SFX_BUS
+    audio_player.position = location
+    audio_player.stream = sfx_settings.get_clip()
+    audio_player.volume_db = sfx_settings.volume_adjust
+    audio_player.unit_size = sfx_settings.unit_size
+    audio_player.finished.connect(audio_player.queue_free)
+    audio_player.finished.connect(sfx_settings.change_count.bind(-1))
+
+    audio_player.play()
+
+# Same as play_sfx_at_location() but parents the audioplayer to a node for moving audio
+func play_sfx_as_child(type : SFX_TYPE, parent : Node) -> void:
+    # Check and get the settings
+    if not sfx_bank.has(type): return
+    var sfx_settings : SFXSettings = sfx_bank[type]
+
+    # Handle sfx limit
+    if sfx_settings.is_over_limit(): return
+    sfx_settings.change_count(1)
+
+    # Create AudioStreamPlayer (+ parent)
+    var audio_player : AudioStreamPlayer3D = AudioStreamPlayer3D.new()
+    parent.add_child(audio_player)
+
+    # Set params of AudioStreamPlayer
+    audio_player.bus = SFX_BUS
+    audio_player.stream = sfx_settings.get_clip()
+    audio_player.volume_db = sfx_settings.volume_adjust
+    audio_player.unit_size = sfx_settings.unit_size
+    audio_player.finished.connect(audio_player.queue_free)
+    audio_player.finished.connect(sfx_settings.change_count.bind(-1))
+
+    audio_player.play()
+```
+
+
+## Make the Game Play SFX
+Duration: hh:mm:ss
+
+Now the setup of the `AudioManager` is complete, and we can use it to play actual SFX sounds in the game.
+
+### Player Jumping
+
+#### Jump
+Let's start easy with the player jump. **Open** the `player_controller_3d.gd` script, navigate to the `jump()` function and add this line to the end:
+
+```GDScript
+func _jump() -> void:
+    ...
+    AudioManager.play_sfx_as_child(AudioManager.SFX_TYPE.PLAYER_JUMP, self)
+```
+
+#### Double Jump
+The double jump will work in the same way. Navigate to the `double_jump()` function and add this line at the end:
+
+```GDScript
+func _double_jump() -> void:
+    AudioManager.play_sfx_as_child(AudioManager.SFX_TYPE.PLAYER_DOUBLE_JUMP, self)
+```
+
+Try out, if the sounds work by **playing the game** and **jumping**.
 
 ### Player Damaged
+This sound will be very similar to the last one. Just **place the line** in the correct spot just before the HP change line.
+
+```GDScript
+func receive_damage(value : float, from : Node3D):
+    ...
+
+	AudioManager.play_sfx_as_child(AudioManager.SFX_TYPE.PLAYER_DAMAGED, self)
+	GlobalState.player_stats.curr_health -= value
+    ...
+```
 
 ### Player Shooting
+Same as the last few headers, we will just add this line to the end of the `_shoot()` function:
+
+```GDScript
+func _shoot() -> void:
+    ...
+    AudioManager.play_sfx_at_location(AudioManager.SFX_TYPE.PLAYER_SHOOT, shoot_point.global_position)
+```
+
+### Player Walk
+The walking of the player is a bit more tricky. There are several ways to do it.
+
+#### Using Animations
+One way that you can do this is to **reimport** the animations with `Custom Tracks` enabled. Then **adding** a `Call Method` tracks with **calls to play the SFX** at the exact moment the feet touch the ground.
+
+However, since we are using a `BlendTree2D` for the walking animation all 4 calls from the 4 animations that are blended are called. Ideally, we would only want the `Call Method` track of the animation with the biggest weight to be called, but even with this approach walking diagonally would not sound right.
+
+#### Using Physics
+The other way, which we will implement, is to place colliders at the bottom of the feet of the player and play SFX upon collision with the ground.
+
+1. **Open** the `player_3d.tscn` scene
+2. **Add** a `BoneAttachment3D` as the child of the `Skeleton3D`
+3. **Set** the `Bone Name` property to `RightFoot_end`
+4. **Add** an `Area3D` node as a child of the `BoneAttachment3D`
+5. **Add** an `CollisionShape3D` node as a child of the `Area3D`
+6. **Set** the `Shape` property to a `New BoxShape3D` with the size of `(0.001, 0.002, 0.001)`
+7. **Connect** the `body_entered()` signal of the `Area3D` to a new function in the `player_controller_3d.gd` script
+8. **Put** this line into the function:
+    ```GDScript
+    AudioManager.play_sfx_as_child(AudioManager.SFX_TYPE.PLAYER_WALK, self)
+    ```
+
+Repeat other foot
+
+new result picture
+
+This is how the resulting setup should look like:
+
+![](img/FootCollider.png)
+
+
+TODO other foot
+
+
+
+This way is more realistic, but it can still have some issues, such as:
+- Producing more sounds than should be played in certain situations.
+- Might not be possible to do depending on the walking animation.
+
+
+bone attachments yes
 
 ### Collectible Gather
 

@@ -38,14 +38,13 @@ func _time_change() -> void:
 
 
 func _toggle_music() -> void:
-	pass
-	#if Input.is_key_pressed(KEY_F4):
-		#if AudioManager.music_stream_player.is_playing():
-			#print("DEBUG: Stopped music")
-			#AudioManager.stop_music(5)
-		#else:
-			#print("DEBUG: Started music")
-			#AudioManager.play_music(5)
+	if Input.is_key_pressed(KEY_F4):
+		if AudioManager.music_stream_player.is_playing():
+			print("DEBUG: Stopped music")
+			AudioManager.stop_music(5)
+		else:
+			print("DEBUG: Started music")
+			AudioManager.play_music(5)
 
 func _quick_save() -> void:
 	if Input.is_key_pressed(KEY_F5):
