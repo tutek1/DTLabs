@@ -265,6 +265,10 @@ func _update_hp() -> void:
     hp_bar.tint_progress = hp_gradient.sample(hp_ratio)
 ```
 
+> aside positive
+> Health bars don't have to be only on the screen. **Diegetic health bars** are health bars that are present in the world in a realistic and believable way (not just spacial UI). For example, in my game I will use the **robots backpack** as a health indicator.
+>
+> <img src="img/1BatteryFull.png" width="179"/> <img src="img/2BatteryMid.png" width="200"/> <img src="img/3BatteryLow.png" width="184"/>
 
 ## Collectible HUD
 Duration: hh:mm:ss
