@@ -18,6 +18,8 @@ func state_enter(enemy : GroundEnemyFSM) -> void:
 	projectile.position = enemy.global_position
 	enemy.get_tree().current_scene.add_child(projectile)
 	
+	AudioManager.play_sfx_at_location(AudioManager.SFX_TYPE.GE_SHOOT, enemy.global_position)
+	
 	enemy.set_can_shoot(false)
 
 func state_physics_process(enemy : GroundEnemyFSM, delta : float) -> void:

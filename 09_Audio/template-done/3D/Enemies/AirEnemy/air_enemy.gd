@@ -110,6 +110,7 @@ func _check_collisions() -> void:
 
 # Damagable Group function
 func damage(value : float, node : Node3D) -> void:
+	AudioManager.play_sfx_at_location(AudioManager.SFX_TYPE.AE_DAMAGED, global_position)
 	health -= value
 	if health < 0:
 		queue_free()

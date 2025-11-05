@@ -7,28 +7,24 @@ Feedback Link: https://forms.gle/J8eeuQAJ3wMY1Wnq7
 
 # Lab09 - Audio
 
-## Overview TODO
+## Overview
 Duration: hh:mm:ss
 
-This lab will focus on learning about 
-
-Then we will learn about 
+This lab will focus on learning about **audio** in Godot. We will have a brief overview of how Godot deals with audio, play audio using a simple player and an `AudioManager`, play music, and look at how footstep sounds can be implemented. 
 
 In a bullet point format, we will:
-- Look at the **changes I made** in the project such as.
-- **Import** 
-- Learn about 
-- Look at the 
-- Implement 
-- Learn how to create 
-- Use the 
-- Lastly, look at 
+- Look at the **audio folder** I added to the project.
+- Learn about **audio buses** and **audio nodes**.
+- **Play a simple** audio using the `AudioStreamPlayer3D` node.
+- Look at the `AudioManager` I prepared and **implement** `play_sfx...` methods.
+- Use the `play_sfx...` methods to **play the player SFX**.
+- Learn about 2 methods of how **footstep sounds** can be played.
+- Lastly, we will make the **enemies play SFX**.
 
-Here is the template for this lab. Please download it, there are scripts, models, and scenes needed for the Behavior Trees and Steering Behaviors.
+Here is the template for this lab. Please download it, there are scripts, audio clips, and scenes needed for the implementation of the audio playing.
 <button>
   [Template Project](https://cent.felk.cvut.cz/courses/39HRY/godot/09_Audio/template.zip)
 </button>
-
 
 
 ## Audio Basics
@@ -124,7 +120,7 @@ The last thing we need to change is to make the sound loop.
 
 
 
-## Complex Audio using an `AudioManager` TODO
+## Complex Audio using an `AudioManager`
 Duration: hh:mm:ss
 
 Simply playing audio with audio players, like we did in the last section, is a good practice for playing looping sounds (ambience) without any complex logic. Playing SFX like the player walking, enemy shooting, or music can be done in the same way but making an `AudioManager` with helpful methods is the recommended approach.
@@ -339,7 +335,7 @@ One way that you can do this is to **reimport** the animations with `Custom Trac
 However, since we are using a `BlendTree2D` for the walking animation all 4 calls from the 4 animations that are blended are called. Ideally, we would only want the `Call Method` track of the animation with the biggest weight to be called, but even with this approach walking diagonally would not sound right.
 
 #### Using Physics
-The other way, which we will implement, is to place colliders at the bottom of the feet of the player and play SFX upon collision with the ground.
+The other way, which we will implement, is to **place colliders at the bottom of the feet** of the player and play SFX upon collision with the ground.
 
 1. **Open** the `player_3d.tscn` scene
 2. **Add** a `BoneAttachment3D` as the child of the `Skeleton3D`
@@ -353,40 +349,72 @@ The other way, which we will implement, is to place colliders at the bottom of t
     AudioManager.play_sfx_as_child(AudioManager.SFX_TYPE.PLAYER_WALK, self)
     ```
 
-Repeat other foot
+Now, please **repeat the process** for the other foot. This is how the final setup should look like now:
 
-new result picture
-
-This is how the resulting setup should look like:
-
-![](img/FootCollider.png)
+![](img/FeetDone.png)
 
 
-TODO other foot
-
-
-
-This way is more realistic, but it can still have some issues, such as:
+This way of playing footsteps sounds is more realistic, but it can still have some issues, such as:
 - Producing more sounds than should be played in certain situations.
 - Might not be possible to do depending on the walking animation.
 
+> aside negative
+> Normally, we would have to set the correct `Collision Mask` and `Layer`, but in our case the default is correct.
 
-bone attachments yes
 
 ### Collectible Gather
+Let's now return to a simpler audio playing and fill out the rest of the sounds. **Navigate** to the `collectible_touched()` function a put this line there:
 
-### `GroundEnemy` - Damage
+```GDScript
+func collectible_touched(collectible : Collectible) -> void:
+    ...
+    AudioManager.play_sfx_at_location(AudioManager.SFX_TYPE.COLLECTIBLE, collectible.position)
+```
 
-### `GroundEnemy` - Shooting
+Here, we want to use the `play_sfx_at_location` with the location of the collectible and not set it as the child of the collectible since it will be destroyed before the sound will finish playing.
 
-### `AirEnemy` - Damage
+### The `GroundEnemy` Sounds
+In codelab 5 and 6 we created 2 versions of the `GroundEnemy`, **FSM** and **Beehave**, but we will only implement the **Beehave** variant, since that version is present in the debug scene and the implementations will not differ.
+
+#### Shooting
+Let's add a sound, which will play when the enemy shoots a projectile.
+1. **Open** the `bh_shoot.gd` script
+2. **Place** this line **before** the `return SUCCESS`
+
+    ```GDScript
+    AudioManager.play_sfx_at_location(AudioManager.SFX_TYPE.GE_SHOOT, enemy.global_position)
+    ```
+
+#### Damaged
+Now, we will add a sound that will play upon receiving damage.
+1. **Open** the `ground_enemy_bh.gd`
+2. **Place** this line as the **first line** of the `damage()` function
+    ```GDScript
+    AudioManager.play_sfx_at_location(AudioManager.SFX_TYPE.GE_DAMAGED, global_position)
+    ```
+
+> aside positive
+> In both of these SFX we use the `play_sfx_at_location()` instead of the `play_sfx_as_child()` because the enemy could die while playing the sound, which would cut the sound short.
+
+
+### The `AirEnemy` Sounds
+Similar to the last audio, we will add a sound to play upon the **enemy taking damage**.
+1. **Open** the `air_enemy.gd`
+2. **Place** this line as the **first line** of the `damage()` function
+    ```GDScript
+    AudioManager.play_sfx_at_location(AudioManager.SFX_TYPE.AE_DAMAGED, global_position)
+    ```
+
+### Result
+Now that all the sounds that I prepared are being played let's see how the result looks like. Play the game or watch the following video:
+
+<video id=kI2c7S7K4Zw></video>
+
+As you can see, the sound effects change how the game feels and plays. Having an audio feedback to shooting and dealing damage makes the game feel much **more reactive** to the players actions. Try to watch the video **with** and **without** sound to see the difference.
 
 
 
-
-
-
-## Recap TODO
+## Recap
 Duration: hh:mm:ss
 
 ### Feedback
@@ -400,25 +428,26 @@ I would be very grateful if you could take a moment to fill out a **very short f
 
 ### Recap
 Let's look at what we did in this lab.
-- We looked at the **changes I made** in the project such as:
-    - s
-    - s
-    - s
-- Then, we 
-- Next, we looked at 
-- We looked at the 3 types 
-- The second part of the codelab looked closely 
-- We implemented 
-- We made a little detour into 
-- After that, we used 
-- Lastly, we looked at 
-
+- First, we looked at the `Audio` folder that I added
+- Next, we learned what **audio buses** are how they are used in Godot
+- We created the **audio bus** setup that we needed
+- Then, we learned about all the **Audio nodes** that Godot has.
+- After the intro, we made simple **3D spacial audio** play and **reimported audio to loop**.
+- Next, we looked at the `AudioManager`, `SFXSettings`, and how to **play music**.
+- Then, we implemented the `play_sfx_...` **methods**.
+- With that complete, we used these methods to **play SFX of the player and enemies**.
+- Lastly, we learned how to play **footstep sounds realistically**.
 
 ### Note on Audacity
-X
+If you are wondering, where I found the SFX used in this codelab, I made them myself. I used the free program `Audacity`, where I recorded noises that I made with stuff on my desk and my mouth. Then I edited these audio clips to sound more robotic. The whole process is very easy, and I recommend looking into it if you are interested.
+
+<video id=MjusZESiLiw></video>
+
+### Note on sfxr.me 
+Alternatively if it matches the theme of your game, you can use [jsfxr](https://sfxr.me) or [bfxr](https://www.bfxr.net) websites to create sound effects. These sites let you easily create 8-bit SFX.
 
 ### Note on Freesound.org
-X
+The last alternative, and the place where I found the **ambient** and **music** tracks, is [Freesound](https://freesound.org). Here you can download free sounds and music to use in your projects. However, be careful to **check the license of the sound/music** that you are downloading. Some tracks are limited for personal use, some for noncommercial use, and some are even free to distribute.
 
 ### Project Download
 If you want to see what the finished template looks like after this lab, you can download it here:

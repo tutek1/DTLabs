@@ -18,6 +18,14 @@
 [ext_resource type="AudioStream" uid="uid://jmt6r5bhn2kw" path="res://Audio/SFX/AirEnemy/air_enemy_damaged.wav" id="15_lyn0w"]
 [ext_resource type="AudioStream" uid="uid://dbm6puw5j8rv2" path="res://Audio/test_sound.wav" id="16_gp4fw"]
 
+[sub_resource type="Resource" id="Resource_jbas2"]
+script = ExtResource("2_dxlp5")
+audio_clips = Array[AudioStream]([ExtResource("16_gp4fw")])
+limit = -1
+volume_adjust = 0.0
+unit_size = 10.0
+metadata/_custom_type_script = "uid://dey5cre1u7u4f"
+
 [sub_resource type="Resource" id="Resource_gmqh2"]
 script = ExtResource("2_dxlp5")
 audio_clips = Array[AudioStream]([ExtResource("3_acx60"), ExtResource("4_fi7yh"), ExtResource("5_dbmpi"), ExtResource("6_6rtll"), ExtResource("7_7d3ng")])
@@ -85,14 +93,6 @@ metadata/_custom_type_script = "uid://dey5cre1u7u4f"
 [sub_resource type="Resource" id="Resource_xnepa"]
 script = ExtResource("2_dxlp5")
 audio_clips = Array[AudioStream]([ExtResource("15_lyn0w")])
-limit = -1
-volume_adjust = 0.0
-unit_size = 10.0
-metadata/_custom_type_script = "uid://dey5cre1u7u4f"
-
-[sub_resource type="Resource" id="Resource_jbas2"]
-script = ExtResource("2_dxlp5")
-audio_clips = Array[AudioStream]([ExtResource("16_gp4fw")])
 limit = -1
 volume_adjust = 0.0
 unit_size = 10.0

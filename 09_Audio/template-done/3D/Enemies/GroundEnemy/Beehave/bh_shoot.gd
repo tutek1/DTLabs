@@ -25,4 +25,6 @@ func tick(actor, blackboard: Blackboard):
 	projectile.position = enemy.global_position
 	enemy.get_tree().current_scene.add_child(projectile)
 	
+	AudioManager.play_sfx_at_location(AudioManager.SFX_TYPE.GE_SHOOT, enemy.global_position)
+	
 	return SUCCESS

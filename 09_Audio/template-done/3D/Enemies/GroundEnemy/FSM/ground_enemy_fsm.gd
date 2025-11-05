@@ -42,7 +42,6 @@ func _movement(delta : float) -> void:
 	var target_pos : Vector3 = navigation_agent_3d.get_next_path_position()
 	var distance_to_target : Vector3 = target_pos - global_position
 	
-	
 	var direction : Vector3 = distance_to_target.normalized()
 	direction = direction.normalized()
 	velocity.x = direction.x * speed
@@ -139,6 +138,7 @@ func rotate_enemy(delta: float, direction : Vector3) -> void:
 
 # Damagable Group function
 func damage(value : float, node : Node3D) -> void:
+	AudioManager.play_sfx_at_location(AudioManager.SFX_TYPE.GE_DAMAGED, global_position)
 	health -= value
 	if health < 0:
 		queue_free()

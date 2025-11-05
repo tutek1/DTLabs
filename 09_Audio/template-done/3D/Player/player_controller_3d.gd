@@ -218,6 +218,7 @@ func _animation_tree_update() -> void:
 func collectible_touched(collectible : Collectible) -> void:
 	GlobalState.player_stats.collectible_count += 1
 	collectible_gathered.emit()
+	AudioManager.play_sfx_at_location(AudioManager.SFX_TYPE.COLLECTIBLE, collectible.position)
 
 # Sets a control variable if the _movement() function should be run or not
 func set_do_movement(value : bool, delay : float = 0) -> void:
@@ -277,5 +278,5 @@ func _on_interact_area_body_exited(body: Node3D) -> void:
 		print(body.name + " exitted interact area")
 		_interact_node_in_area = null
 
-func _took_a_step(body):
-	pass # Replace with function body.
+func _took_a_step(body : Node3D) -> void:
+	AudioManager.play_sfx_as_child(AudioManager.SFX_TYPE.PLAYER_WALK, self)
