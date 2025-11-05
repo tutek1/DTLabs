@@ -438,12 +438,17 @@ Let's look at what we did in this lab.
 - With that complete, we used these methods to **play SFX of the player and enemies**.
 - Lastly, we learned how to play **footstep sounds realistically**.
 
+> aside positive
+> During the design of this codelab and the creation of the `AudioManager`, I took inspiration from this video:
+>
+> <video id=Egf2jgET3nQ></video>
+
 ### Note on Audacity
 If you are wondering, where I found the SFX used in this codelab, I made them myself. I used the free program `Audacity`, where I recorded noises that I made with stuff on my desk and my mouth. Then I edited these audio clips to sound more robotic. The whole process is very easy, and I recommend looking into it if you are interested.
 
 <video id=MjusZESiLiw></video>
 
-### Note on sfxr.me 
+### Note on 8-bit SFX 
 Alternatively if it matches the theme of your game, you can use [jsfxr](https://sfxr.me) or [bfxr](https://www.bfxr.net) websites to create sound effects. These sites let you easily create 8-bit SFX.
 
 ### Note on Freesound.org
