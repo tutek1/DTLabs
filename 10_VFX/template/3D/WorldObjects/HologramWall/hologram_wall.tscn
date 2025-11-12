@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3 uid="uid://dqqkep83huimo"]
+
+[ext_resource type="Shader" uid="uid://ubu37k5qwym8" path="res://VFX/Shaders/Hologram/hologram_dist_shader.tres" id="1_83t6l"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pucke"]
+size = Vector3(0.1, 5, 6)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ephoj"]
+render_priority = 0
+shader = ExtResource("1_83t6l")
+shader_parameter/HologramAmount = -1.0
+shader_parameter/VertexGlitchSpeed = 0.0
+shader_parameter/VertexGlitchAmount = 0.0
+shader_parameter/PlayerPos = Vector3(0, 0, 0)
+shader_parameter/HologramColor = Color(0, 3, 0, 1)
+shader_parameter/BaseAlpha = 0.0
+shader_parameter/ScanLineSize = 0.075
+shader_parameter/HologramScrollSpeed = 0.2
+shader_parameter/FresnelPower = 2.0
+shader_parameter/AlphaPower = 10.0
+shader_parameter/Roughness = 0.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_s4h5t"]
+material = SubResource("ShaderMaterial_ephoj")
+size = Vector3(0.1, 5, 6)
+
+[node name="HologramWall" type="StaticBody3D" groups=["NavMeshSource"]]
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_pucke")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D"]
+mesh = SubResource("BoxMesh_s4h5t")

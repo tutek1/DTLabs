@@ -1,0 +1,29 @@
+[gd_scene load_steps=6 format=3 uid="uid://b20m6c0e0bfdu"]
+
+[ext_resource type="Texture2D" uid="uid://comnt7ncjtyv" path="res://3D/Player/Projectile/GORODITH_player_projectile.png" id="1_3hiqw"]
+[ext_resource type="Script" uid="uid://cp242theocpbc" path="res://3D/Player/Projectile/player_projectile.gd" id="1_ogipj"]
+[ext_resource type="ArrayMesh" uid="uid://c3hgiimvpslvk" path="res://3D/Player/Projectile/GORODITH_player_projectile.obj" id="2_ogipj"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ogipj"]
+albedo_texture = ExtResource("1_3hiqw")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_of2vy"]
+radius = 0.3
+
+[node name="PlayerProjectile" type="Area3D"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+collision_layer = 2
+collision_mask = 13
+script = ExtResource("1_ogipj")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_ogipj")
+mesh = ExtResource("2_ogipj")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_of2vy")
+
+[node name="LifeTimer" type="Timer" parent="."]
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="LifeTimer" to="." method="_on_life_timer_timeout"]
