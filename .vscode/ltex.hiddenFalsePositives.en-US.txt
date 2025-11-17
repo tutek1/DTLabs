@@ -153,3 +153,4 @@
 {"rule":"ENGLISH_WORD_REPEAT_RULE","sentence":"^\\QCall Method - used to call methods/function during the animation ⇾ can be used as animation events\nBezier Curve - used to animate any property, but using a curve editor instead of a dope sheet\nAudio Playback - used to play sound during an animation\nAnimation Playback - used to sequence the animations of other animation player nodes in a scene, for example, in cut scenes\\E$"}
 {"rule":"COMMA_PARENTHESIS_WHITESPACE","sentence":"^\\QSet it like this .\\E$"}
 {"rule":"EN_DIACRITICS_REPLACE_ORTHOGRAPHY_BEZIER_CURVE","sentence":"^\\QI first set the keyframes the same way as we did with the \\E(?:Dummy|Ina|Jimmy-|Dummy-|Maniquí-|Maniquíes-)[0-9]+\\Q, and then I switched to the bezier curve editor to make the animation a bit more interesting.\\E$"}
+{"rule":"WHITESPACE_RULE","sentence":"^\\QFor example, in my game I will use the robots backpack as a health indicator.\\E$"}
