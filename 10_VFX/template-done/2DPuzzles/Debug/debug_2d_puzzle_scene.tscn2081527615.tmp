@@ -1,0 +1,60 @@
+[gd_scene load_steps=6 format=4 uid="uid://cp740ldwmrs6i"]
+
+[ext_resource type="TileSet" uid="uid://dlp4ruuh7j2ya" path="res://2DPuzzles/2d_puzzles_tiles.tres" id="1_8p32w"]
+[ext_resource type="Script" uid="uid://dasr2cxl3d1ta" path="res://2DPuzzles/Puzzle/Gates/gate.gd" id="2_6mguw"]
+[ext_resource type="Script" uid="uid://cads3kqdgygj8" path="res://2DPuzzles/Puzzle/puzzle_manager.gd" id="2_cgmcl"]
+[ext_resource type="Texture2D" uid="uid://clkft3d0fgj36" path="res://2DPuzzles/Sprites/spritesheet_puzzles.png" id="2_ev3ew"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ev3ew"]
+size = Vector2(88, 82)
+
+[node name="Debug2dPuzzleScene" type="Node2D" node_paths=PackedStringArray("ground_tilemap", "cableOFF_tilemap", "cableON_tilemap", "IO_tilemap")]
+script = ExtResource("2_cgmcl")
+ground_tilemap = NodePath("TileMapGround")
+cableOFF_tilemap = NodePath("TileMapCablesOFF")
+cableON_tilemap = NodePath("TileMapCablesON")
+IO_tilemap = NodePath("TileMapIO")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(24, 7)
+zoom = Vector2(2, 2)
+
+[node name="TileMapGround" type="TileMapLayer" parent="."]
+texture_filter = 1
+tile_map_data = PackedByteArray("AAD+//7/AAAGAAIAAAD+////AAAGAAIAAAD///7/AAAGAAIAAAAAAP7/AAAGAAIAAAABAP7/AAAHAAIAAAABAP//AAAHAAIAAAD/////AAAGAAIAAAD+/wAAAAAGAAIAAAD//wAAAAAGAAIAAAAAAAAAAAAGAAIAAAABAAAAAAAHAAIAAAACAAAAAAAHAAIAAAACAP//AAAHAAIAAAACAP7/AAAHAAIAAAADAP7/AAAHAAIAAAADAP//AAAHAAIAAAADAAAAAAAHAAIAAAADAAEAAAAHAAIAAAACAAEAAAAHAAIAAAABAAEAAAAHAAIAAAAAAAEAAAAGAAIAAAD//wEAAAAGAAIAAAD+/wEAAAAGAAIAAAD+/wIAAAAGAAIAAAD//wIAAAAGAAIAAAAAAAIAAAAGAAIAAAABAAIAAAAHAAIAAAACAAIAAAAHAAIAAAADAAIAAAAHAAIAAAAEAAIAAAAHAAIAAAAEAAEAAAAGAAIAAAAEAAAAAAAGAAIAAAAEAP//AAAGAAIAAAAEAP7/AAAHAAIAAAAEAP3/AAAHAAIAAAADAP3/AAAHAAIAAAACAP3/AAAHAAIAAAABAP3/AAAHAAIAAAAAAP3/AAAHAAIAAAD///3/AAAHAAIAAAD+//3/AAAHAAIAAAD9//3/AAAHAAIAAAD8//3/AAAHAAIAAAD8//7/AAAHAAIAAAD8////AAAHAAIAAAD8/wAAAAAHAAIAAAD8/wEAAAAHAAIAAAD8/wIAAAAHAAIAAAD9/wIAAAAGAAIAAAD9/wEAAAAGAAIAAAD9/wAAAAAGAAIAAAD9////AAAGAAIAAAD9//7/AAAGAAIAAAAFAP3/AAAHAAIAAAAFAP7/AAAHAAIAAAAFAP//AAAGAAIAAAAFAAAAAAAGAAIAAAAFAAEAAAAGAAIAAAAFAAIAAAAHAAIAAAAFAAMAAAAHAAIAAAAEAAMAAAAHAAIAAAADAAMAAAAHAAIAAAACAAMAAAAHAAIAAAABAAMAAAAHAAIAAAAAAAMAAAAHAAIAAAD//wMAAAAHAAIAAAD+/wMAAAAHAAIAAAD9/wMAAAAHAAIAAAD8/wMAAAAHAAIAAAD7/wMAAAAHAAIAAAD7/wIAAAAHAAIAAAD7/wEAAAAHAAIAAAD7/wAAAAAHAAIAAAD7////AAAHAAIAAAD7//7/AAAHAAIAAAD7//3/AAAHAAIAAAAGAAMAAAAHAAIAAAAGAAIAAAAHAAIAAAAGAAEAAAAHAAIAAAAGAP//AAAHAAIAAAAGAP7/AAAHAAIAAAAGAP3/AAAHAAIAAAAAAP//AAAGAAIAAAAHAP3/AAAHAAIAAAAHAP7/AAAHAAIAAAAHAP//AAAHAAIAAAAHAAAAAAAHAAIAAAAHAAIAAAAHAAIAAAAHAAMAAAAHAAIAAAAGAAAAAAAHAAIAAAAHAAEAAAAHAAIAAAA=")
+tile_set = ExtResource("1_8p32w")
+
+[node name="TileMapCablesOFF" type="TileMapLayer" parent="."]
+texture_filter = 1
+tile_map_data = PackedByteArray("AAD8////AAADAAEAAQAGAAAAAAACAAEAAQD9////AAAGAAAAAQD/////AAAGAAAAAQD+////AAAGAAAAAQD8/wEAAAADAAEAAQABAP//AAACAAEAAQD///7/AAAHAAEAAQD+//7/AAAHAAEAAQD9//7/AAAEAAAAAQD9/wIAAAAEAAEAAQD+/wIAAAAGAAAAAQD//wIAAAAGAAAAAQAAAAIAAAAFAAEAAQAAAP7/AAAFAAAAAQAEAP//AAAEAAAAAQAEAAAAAAAAAAEAAQAEAAEAAAAEAAEAAQAFAAEAAAAFAAEAAQAFAAAAAAAAAAEAAQAFAP//AAAFAAAAAQADAAAAAAADAAEAAQABAAEAAAACAAEAAQAAAP//AAAGAAAAAQD9/wEAAAAHAAEAAQD+/wEAAAAHAAEAAQD//wEAAAAHAAEAAQAAAAEAAAAHAAEAAQA=")
+tile_set = ExtResource("1_8p32w")
+
+[node name="TileMapCablesON" type="TileMapLayer" parent="."]
+texture_filter = 1
+tile_set = ExtResource("1_8p32w")
+
+[node name="TileMapIO" type="TileMapLayer" parent="."]
+texture_filter = 1
+tile_map_data = PackedByteArray("AAAGAAAAAAAGAAMAAAD8////AAAGAAQAAAD8/wEAAAAGAAQAAAA=")
+tile_set = ExtResource("1_8p32w")
+
+[node name="Gates" type="Node2D" parent="."]
+
+[node name="AndGate" type="StaticBody2D" parent="Gates" node_paths=PackedStringArray("tilemap_cables")]
+position = Vector2(32, -32)
+script = ExtResource("2_6mguw")
+tilemap_cables = NodePath("../../TileMapCablesOFF")
+input1_coords = Vector2i(0, -1)
+input2_coords = Vector2i(0, 1)
+output_coords = Vector2i(4, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gates/AndGate"]
+position = Vector2(48, 48)
+shape = SubResource("RectangleShape2D_ev3ew")
+
+[node name="Sprite2D" type="Sprite2D" parent="Gates/AndGate"]
+texture_filter = 1
+texture = ExtResource("2_ev3ew")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 64, 96, 96)

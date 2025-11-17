@@ -1,0 +1,230 @@
+[gd_scene load_steps=28 format=3 uid="uid://8sbvl7rcejq5"]
+
+[ext_resource type="Script" uid="uid://bsumix7xtjux1" path="res://3D/Player/player_controller_3d.gd" id="1_d17s7"]
+[ext_resource type="PackedScene" uid="uid://b4ueia53ak6r0" path="res://3D/Player/GORODITH_Player_anim.fbx" id="2_d17s7"]
+[ext_resource type="Material" uid="uid://d1xu766jnbqqd" path="res://3D/Player/Material/player_material.tres" id="3_lfm5r"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hn7em"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_d17s7"]
+size = Vector3(0.001, 0.002, 0.001)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lfm5r"]
+size = Vector3(0.001, 0.002, 0.001)
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_w2xrt"]
+animation = &"Armature|Connect"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jmp7f"]
+animation = &"Armature|Connect"
+play_mode = 1
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_46t1g"]
+animation = &"Armature|Fall"
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_xq0gp"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_aeiil"]
+animation = &"Armature|Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_hk7my"]
+animation = &"Armature|Jump"
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_ig8db"]
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_46t1g"]
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_avbpx"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_xq0gp"]
+animation = &"Armature|WalkForward"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ig8db"]
+animation = &"Armature|WalkBackwards"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_avbpx"]
+animation = &"Armature|WalkRight"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_djpnq"]
+animation = &"Armature|WalkLeft"
+
+[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_djpnq"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_xq0gp")
+blend_point_0/pos = Vector2(0, 1)
+blend_point_1/node = SubResource("AnimationNodeAnimation_ig8db")
+blend_point_1/pos = Vector2(0, -1)
+blend_point_2/node = SubResource("AnimationNodeAnimation_avbpx")
+blend_point_2/pos = Vector2(1, 0)
+blend_point_3/node = SubResource("AnimationNodeAnimation_djpnq")
+blend_point_3/pos = Vector2(-1, 0)
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_46t1g"]
+graph_offset = Vector2(-428, 93)
+nodes/Fall/node = SubResource("AnimationNodeAnimation_46t1g")
+nodes/Fall/position = Vector2(160, 400)
+nodes/FallBlend/node = SubResource("AnimationNodeBlend2_xq0gp")
+nodes/FallBlend/position = Vector2(420, 120)
+nodes/Idle/node = SubResource("AnimationNodeAnimation_aeiil")
+nodes/Idle/position = Vector2(-420, 80)
+nodes/Jump/node = SubResource("AnimationNodeAnimation_hk7my")
+nodes/Jump/position = Vector2(-120, 400)
+nodes/JumpBlend/node = SubResource("AnimationNodeBlend2_ig8db")
+nodes/JumpBlend/position = Vector2(160, 120)
+nodes/TimeScale/node = SubResource("AnimationNodeTimeScale_46t1g")
+nodes/TimeScale/position = Vector2(-360, 300)
+nodes/WalkBlend/node = SubResource("AnimationNodeBlend2_avbpx")
+nodes/WalkBlend/position = Vector2(-120, 120)
+nodes/WalkSpace2D/node = SubResource("AnimationNodeBlendSpace2D_djpnq")
+nodes/WalkSpace2D/position = Vector2(-580, 360)
+nodes/output/position = Vector2(780, 140)
+node_connections = [&"FallBlend", 0, &"JumpBlend", &"FallBlend", 1, &"Fall", &"JumpBlend", 0, &"WalkBlend", &"JumpBlend", 1, &"Jump", &"TimeScale", 0, &"WalkSpace2D", &"WalkBlend", 0, &"Idle", &"WalkBlend", 1, &"TimeScale", &"output", 0, &"FallBlend"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_xq0gp"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_yrgra"]
+advance_mode = 2
+advance_expression = "_connected"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ryaqj"]
+switch_mode = 2
+advance_mode = 2
+advance_expression = "not _connected"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_1x7iy"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_46t1g"]
+states/Armature|Connect/node = SubResource("AnimationNodeAnimation_w2xrt")
+states/Armature|Connect/position = Vector2(626, 200)
+states/Armature|Disconnect/node = SubResource("AnimationNodeAnimation_jmp7f")
+states/Armature|Disconnect/position = Vector2(324, 200)
+states/FreeMoveBlendTree/node = SubResource("AnimationNodeBlendTree_46t1g")
+states/FreeMoveBlendTree/position = Vector2(466, 95)
+transitions = ["Start", "FreeMoveBlendTree", SubResource("AnimationNodeStateMachineTransition_xq0gp"), "FreeMoveBlendTree", "Armature|Connect", SubResource("AnimationNodeStateMachineTransition_yrgra"), "Armature|Connect", "Armature|Disconnect", SubResource("AnimationNodeStateMachineTransition_ryaqj"), "Armature|Disconnect", "FreeMoveBlendTree", SubResource("AnimationNodeStateMachineTransition_1x7iy")]
+graph_offset = Vector2(-105, -22)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_x3b60"]
+size = Vector3(2, 1, 1.5)
+
+[node name="Player" type="CharacterBody3D"]
+collision_layer = 2
+collision_mask = 13
+floor_max_angle = 1.0472
+platform_floor_layers = 4294967287
+script = ExtResource("1_d17s7")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_hn7em")
+
+[node name="Mesh" parent="." instance=ExtResource("2_d17s7")]
+transform = Transform3D(-2.18557e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.18557e-08, 0, -1, 0)
+
+[node name="Skeleton3D" parent="Mesh/Armature" index="0"]
+bones/0/position = Vector3(0, 0, 0.0117924)
+bones/0/rotation = Quaternion(0.707107, 8.42937e-08, 8.42937e-08, 0.707107)
+bones/0/scale = Vector3(1, 1, 1)
+bones/1/rotation = Quaternion(0.0345694, 0.0548881, -0.00386752, 0.997886)
+bones/1/scale = Vector3(1, 1, 0.999999)
+bones/3/position = Vector3(-0.000499998, 0.0107497, -0.0105217)
+bones/3/rotation = Quaternion(0.99018, -0.00864906, -0.00342191, -0.139488)
+bones/5/position = Vector3(-0.000447049, -0.000234075, -0.00350103)
+bones/5/rotation = Quaternion(0.999951, -6.06494e-19, 0.00990513, 6.12273e-17)
+bones/6/rotation = Quaternion(0, -0.0110111, 0, 0.999939)
+bones/6/scale = Vector3(1, 1, 1)
+bones/8/position = Vector3(-0.000447051, -0.000234075, 0.00350103)
+bones/8/rotation = Quaternion(0.999952, -5.99422e-19, 0.00978963, 6.12274e-17)
+bones/9/rotation = Quaternion(-0.0348675, -0.0108936, -0.000302832, 0.999333)
+bones/9/scale = Vector3(1, 1, 1)
+bones/11/rotation = Quaternion(0.706465, -0.706465, 0.0301203, 0.0301202)
+bones/11/scale = Vector3(1, 1, 1)
+
+[node name="GORODITH_player" parent="Mesh/Armature/Skeleton3D" index="0"]
+surface_material_override/0 = ExtResource("3_lfm5r")
+
+[node name="BoneAttachment3D" type="BoneAttachment3D" parent="Mesh/Armature/Skeleton3D" index="1"]
+transform = Transform3D(0.993945, 0.0115136, 0.109277, 0.109812, -0.0685682, -0.991583, -0.00392377, 0.99758, -0.0694173, 8.30743e-05, -0.000494743, 0.0358155)
+bone_name = "Head_end"
+bone_idx = 2
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Mesh/Armature/Skeleton3D/BoneAttachment3D"]
+transform = Transform3D(0.019985, 6.26769e-05, 0.000772013, -4.26062e-05, 0.0199932, -0.000520232, -0.000773382, 0.000518198, 0.0199783, -0.0031352, -0.00267318, -0.00376591)
+light_color = Color(1, 0.7, 0, 1)
+light_energy = 0.5
+omni_range = 0.1
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="Mesh/Armature/Skeleton3D/BoneAttachment3D"]
+transform = Transform3D(0.019985, 6.26769e-05, 0.000772013, -4.26062e-05, 0.0199932, -0.000520232, -0.000773382, 0.000518198, 0.0199783, -0.00282703, -0.00291803, 0.00421105)
+light_color = Color(1, 0.7, 0, 1)
+light_energy = 0.5
+omni_range = 0.111
+
+[node name="LookAtModifier3D" type="LookAtModifier3D" parent="Mesh/Armature/Skeleton3D" index="2"]
+target_node = NodePath("../../../../GunTarget")
+bone_name = "GunBone"
+bone = 11
+forward_axis = 2
+primary_rotation_axis = 2
+use_angle_limitation = true
+symmetry_limitation = true
+primary_limit_angle = 6.28319
+primary_damp_threshold = 1.0
+secondary_limit_angle = 6.28319
+secondary_damp_threshold = 1.0
+
+[node name="BoneAttachment3D2" type="BoneAttachment3D" parent="Mesh/Armature/Skeleton3D" index="3"]
+transform = Transform3D(-0.51949, -0.831554, 0.196592, -0.0727292, 0.272268, 0.959469, -0.851376, 0.484137, -0.201919, -0.0104806, -0.00904067, 0.0185089)
+bone_name = "GunBone_end"
+bone_idx = 12
+
+[node name="ShootPoint" type="Node3D" parent="Mesh/Armature/Skeleton3D/BoneAttachment3D2"]
+
+[node name="BoneAttachment3D3" type="BoneAttachment3D" parent="Mesh/Armature/Skeleton3D" index="4"]
+transform = Transform3D(0.999998, -4.97404e-14, -0.00221232, 0.00221233, 1.19209e-07, 0.999997, 2.63687e-10, -1, 1.19209e-07, -0.00044705, 0.00350103, 0.000424712)
+bone_name = "RightFoot_end"
+bone_idx = 7
+
+[node name="Area3D" type="Area3D" parent="Mesh/Armature/Skeleton3D/BoneAttachment3D3"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Mesh/Armature/Skeleton3D/BoneAttachment3D3/Area3D"]
+shape = SubResource("BoxShape3D_d17s7")
+
+[node name="BoneAttachment3D4" type="BoneAttachment3D" parent="Mesh/Armature/Skeleton3D" index="5"]
+transform = Transform3D(0.999998, 4.30504e-07, -0.00222164, 0.00221627, -0.0696951, 0.997566, -0.000154408, -0.997568, -0.0696949, -0.000447048, -0.00389554, 0.000438476)
+bone_name = "LeftFoot_end"
+bone_idx = 10
+
+[node name="Area3D" type="Area3D" parent="Mesh/Armature/Skeleton3D/BoneAttachment3D4"]
+transform = Transform3D(1, 2.01526e-17, 0, -3.38813e-21, 1, -9.09495e-15, 2.32831e-10, 9.09493e-15, 1, -2.91038e-11, 8.14162e-06, -4.65661e-10)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Mesh/Armature/Skeleton3D/BoneAttachment3D4/Area3D"]
+shape = SubResource("BoxShape3D_lfm5r")
+
+[node name="AnimationTree" type="AnimationTree" parent="Mesh"]
+tree_root = SubResource("AnimationNodeStateMachine_46t1g")
+advance_expression_base_node = NodePath("../..")
+anim_player = NodePath("../AnimationPlayer")
+parameters/FreeMoveBlendTree/FallBlend/blend_amount = 0.0
+parameters/FreeMoveBlendTree/JumpBlend/blend_amount = 0.0
+parameters/FreeMoveBlendTree/TimeScale/scale = 2.0
+parameters/FreeMoveBlendTree/WalkBlend/blend_amount = 0.0
+parameters/FreeMoveBlendTree/WalkSpace2D/blend_position = Vector2(-0.321613, 0.671171)
+
+[node name="InteractArea" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00126171, 7.15256e-07, -1.38019)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractArea"]
+shape = SubResource("BoxShape3D_x3b60")
+
+[node name="GunTarget" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0668404, 0.848085, -2.10876)
+
+[node name="ShootCooldown" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="body_entered" from="Mesh/Armature/Skeleton3D/BoneAttachment3D3/Area3D" to="." method="_took_a_step"]
+[connection signal="body_entered" from="InteractArea" to="." method="_on_interact_area_body_entered"]
+[connection signal="body_exited" from="InteractArea" to="." method="_on_interact_area_body_exited"]
+
+[editable path="Mesh"]

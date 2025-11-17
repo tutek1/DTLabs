@@ -1,0 +1,51 @@
+[gd_scene load_steps=7 format=3 uid="uid://dr5pmov4vk1tx"]
+
+[ext_resource type="Texture2D" uid="uid://vf8ajisqfxfc" path="res://VFX/Particles/foot_particles.png" id="1_4ayly"]
+
+[sub_resource type="Curve" id="Curve_of2vy"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_7j73m"]
+curve = SubResource("Curve_of2vy")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_of2vy"]
+particle_flag_rotate_y = true
+emission_shape = 3
+emission_box_extents = Vector3(0.3, 0.1, 0.1)
+angle_min = -720.0
+angle_max = 720.0
+inherit_velocity_ratio = 1.0
+direction = Vector3(0, 1, 0)
+spread = 30.0
+initial_velocity_min = 2.0
+initial_velocity_max = 2.0
+angular_velocity_min = -720.0
+angular_velocity_max = 720.0
+scale_min = 0.8
+scale_max = 1.2
+scale_curve = SubResource("CurveTexture_7j73m")
+turbulence_noise_scale = 9.884
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7j73m"]
+transparency = 1
+albedo_texture = ExtResource("1_4ayly")
+texture_filter = 0
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_u7ajf"]
+material = SubResource("StandardMaterial3D_7j73m")
+size = Vector2(0.3, 0.3)
+
+[node name="FootParticles" type="GPUParticles3D"]
+emitting = false
+amount = 4
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.9
+process_material = SubResource("ParticleProcessMaterial_of2vy")
+draw_pass_1 = SubResource("QuadMesh_u7ajf")
