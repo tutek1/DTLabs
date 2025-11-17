@@ -14,6 +14,8 @@ enum SFX_TYPE
 	GE_DAMAGED,
 	GE_SHOOT,
 	AE_DAMAGED,
+	PLAYER_HOLO_ON,
+	PLAYER_HOLO_OFF,
 }
 
 @export var sfx_bank : Dictionary[SFX_TYPE, SFXSettings]

@@ -48,6 +48,7 @@ signal collectible_gathered
 @onready var shoot_cooldown : Timer = $ShootCooldown
 @onready var double_jump_particles : GPUParticles3D = $DoubleJumpParticles
 @onready var damage_particles : GPUParticles3D = $DamageParticles
+@onready var mesh_instance : MeshInstance3D = $Mesh/Armature/Skeleton3D/GORODITH_player
 
 const ENEMY_LAYER = 4
 
@@ -57,6 +58,7 @@ var _can_be_damaged : bool = true
 var _interact_node_in_area : Node3D
 var _controllable : bool = true
 var _connected : bool
+var _is_hologram : bool = false
 
 func _physics_process(delta : float) -> void:
 	_movement(delta)
@@ -233,6 +235,21 @@ func _animation_tree_update() -> void:
 	# BlendSpace2D walking timescale
 	var walkscale : float = (local_velocity.length() / GlobalState.player_stats.speed) * walk_mult
 	animation_tree["parameters/FreeMoveBlendTree/TimeScale/scale"] = walkscale
+
+func _hologram() -> void:
+	if not GlobalState.player_stats.has_hologram: return
+	if _is_hologram: return
+	if not Input.is_action_just_pressed("hologram_switch"): return
+	
+	# TODO
+	# Toggle _is_hologram ON
+	# Save the old material .get_surface_override_material()
+	# Play Hologram ON Sound
+	# Turn ON the hologram effect
+	# Wait for a set while
+	# Play Hologram OFF Sound
+	# Reset material to old one
+	# Toggle _is_hologram OFF
 
 # Updates the count and emits a signal
 func collectible_touched(collectible : Collectible) -> void:

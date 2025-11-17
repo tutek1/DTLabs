@@ -16,4 +16,3 @@ func pulse_grayscale(amount : float, fade_in : float, wait_time : float, fade_ou
 	_grayscale_tween.chain()\
 	.tween_property(grayscale_rect.material, "shader_parameter/amount", 0, fade_out)\
 	.set_delay(wait_time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
-	
