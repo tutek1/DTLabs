@@ -27,8 +27,80 @@ Here is the template for this lab. Please download it, there are scripts, shader
 </button>
 
 
-## TODO
+## Changes in the Project TODO
 Duration: hh:mm:ss
+
+### Object Hologram Shader
+
+### Secret Box for Hologram
+
+### Level Manager
+
+### VFX Manager
+
+### Particle Sprites
+
+
+
+## Fullscreen Effect
+Duration: hh:mm:ss
+
+### VFX Manager
+
+### `Canvas` and `ColorRect`
+
+### Grayscale Shader
+
+[link link link](https://docs.godotengine.org/en/stable/tutorials/shaders/shader_reference/shading_language.html)
+
+### Player On-hit Effect
+
+
+## Hologram Shader - Visual
+Duration: hh:mm:ss
+
+### Setup
+
+#### Shader
+
+#### Test Object
+
+### Scan lines
+
+### Fresnel Effect
+
+### Vertex Glitch
+
+### Glow in scene
+
+
+## Hologram Shader - Logic
+Duration: hh:mm:ss
+
+input done
+
+### Hologram in `GlobalState`
+
+### Hologram Player Function
+
+### Hologram Wall Setup
+
+### Secret Box Setup
+
+### Set up `LevelManager`
+
+
+
+## Particles
+Duration: hh:mm:ss
+
+### Double Jump Particles
+
+### Walking Particles
+
+### Damage Particles
+
+### Enemy Flying Particles
 
 
 
