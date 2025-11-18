@@ -104,3 +104,10 @@ Mixamo
 PlayerStats
 savefile
 Fullscreen
+hologramable
+fullscreen
+Vulkan
+framebuffer
+jsfxr
+bfxr
+Freesound

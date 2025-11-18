@@ -647,7 +647,6 @@ camera_pivot = NodePath("../CameraPivot")
 player = NodePath("../Player")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
-visible = false
 navigation_mesh = SubResource("NavigationMesh_oikrr")
 
 [node name="NavigationLink3D" type="NavigationLink3D" parent="NavigationRegion3D"]

@@ -1,6 +1,50 @@
-[gd_scene load_steps=2 format=3 uid="uid://c0njbavxi5qqm"]
+[gd_scene load_steps=5 format=3 uid="uid://c0njbavxi5qqm"]
 
 [ext_resource type="Script" uid="uid://uyc3hnq8y0ey" path="res://VFX/vfx_manager.gd" id="1_knxo0"]
+[ext_resource type="Texture2D" uid="uid://bvpr4mp6msm8x" path="res://icon.svg" id="2_knxo0"]
+
+[sub_resource type="Shader" id="Shader_knxo0"]
+code = "shader_type canvas_item;
+
+uniform float amount : hint_range(0.0, 1.0, 0.01);
+
+uniform sampler2D screen_texture : hint_screen_texture, repeat_disable, filter_nearest;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	vec4 color = texture(screen_texture, SCREEN_UV);
+	float avg = (color.r + color.g + color.b) / 3.0f;
+	vec4 grayscale = vec4(avg, avg, avg, 1.0f);
+	COLOR = grayscale;
+}
+
+//void light() {
+//	// Called for every pixel for every light affecting the CanvasItem.
+//	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v8q5b"]
+shader = SubResource("Shader_knxo0")
+shader_parameter/amount = 0.0
 
 [node name="VFXManager" type="Node"]
 script = ExtResource("1_knxo0")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="GrayscaleRect" type="ColorRect" parent="CanvasLayer"]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_v8q5b")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(310, -15)
+texture = ExtResource("2_knxo0")
