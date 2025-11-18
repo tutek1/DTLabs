@@ -540,7 +540,7 @@ Let's look at the `air_enemy.tscn` file in `3D/Enemies/AirEnemy`.
 
 ![](img/AirEnemy.png)
 
-This is our enemy, which in the game world represents the **malware that attacked the computer**, that the player needs to clear out (see [GDD]("https://github.com/tutek1/DTLabs/blob/main/GDD.pdf"). Now let's take a look at the script `air_enemy.gd` and the `_physics_process()` to see what it does.
+This is our enemy, which in the game world represents the **malware that attacked the computer**, that the player needs to clear out (see [GDD]("https://github.com/tutek1/DTLabs/blob/main/GDD.pdf")). Now let's take a look at the script `air_enemy.gd` and the `_physics_process()` to see what it does.
 
 ```GDScript
 func _physics_process(delta : float) ⇾ void:
