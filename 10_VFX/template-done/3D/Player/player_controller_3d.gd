@@ -270,6 +270,7 @@ func receive_damage(value : float, from : Node3D):
 	if not _can_be_damaged: return
 	_can_be_damaged = false
 	
+	VFXManager.pulse_grayscale(OHG_amount, OHG_fade_in, OHG_wait_time, OHG_fade_out)
 	AudioManager.play_sfx_as_child(AudioManager.SFX_TYPE.PLAYER_DAMAGED, self)
 	GlobalState.player_stats.curr_health -= value
 	if GlobalState.player_stats.curr_health <= 0:

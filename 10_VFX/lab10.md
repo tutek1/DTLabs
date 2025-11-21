@@ -28,7 +28,7 @@ Here is the template for this lab. Please download it, there are scripts, shader
 
 
 
-## Changes in the Project TODO
+## Changes in the Project
 Duration: hh:mm:ss
 
 Since the last codelab, I have added and changed a few things in our game, which we will use today.
@@ -130,6 +130,11 @@ Now we will add a `CanvasLayer` node, which will make all its 2D children displa
 4. **Rename** the `ColorRect` to `GrayscaleRect`
 5. **Right-click** the `GrayscaleRect` and **Select** the `Access as Unique Name`
 
+> aside negative
+> Be sure to set the correct name `GrayscaleRect` or else the underlying code in `vfx_manager.gd` will not work.
+
+
+### Debug sprite
 For testing purposes let's also add an image so that we can see the effect.
 
 1. **Add** a `Sprite2D` node as a child of the `VFXManager`
@@ -138,6 +143,8 @@ For testing purposes let's also add an image so that we can see the effect.
 
 ![](img/GodotKuk.png)
 
+> aside positive
+> If you want the fullscreen effect to also work on the `PlayerHUD`, you need to set the `Layer` variable of the effects `CanvasLayer` to a **higher** number that the `Layer` of the `PlayerHUD` canvas.
 
 ### Grayscale Shader - Setup
 Let's now create the grayscale shader.
@@ -193,7 +200,7 @@ void fragment() {
 }
 ...
 ```
-The `SCREEN_UV` is a variable that holds the `UV` coordinates of the pixel on the screen.
+- `SCREEN_UV` is a automatically set variable that holds the `UV` coordinates of the pixel on the screen.
 
 The last line in the fragment shader sets the `COLOR` variable, which is the final pixel color, to the sampled color. If you save the shader file (`CTRL + S`), you should now see that the `GrayscaleRect` is transparent in the scene.
 
@@ -208,7 +215,7 @@ To make the color grayscale, we can easily average all the RGB channels, create 
 ```C
 ...
 void fragment() {
-    ...
+    vec4 color = texture(screen_texture, SCREEN_UV);
     float avg = (color.r + color.g + color.b) / 3.0f;
     vec4 grayscale = vec4(avg, avg, avg, 1.0f);
     COLOR = grayscale;
@@ -220,12 +227,28 @@ void fragment() {
 > You can index vectors in shaders with any of these `(x, y, z, w)`, `(r, g, b, a)`, or `(s, t, p, q)`, the result is the same.
 
 #### Control the Grayscale
-TODO
+I would like to control the grayscale effect with a variable, that can be set from the CPU-side (for example activate it when getting hit).
 
+```C
+shader_type canvas_item;
 
+uniform float amount : hint_range(0.0, 1.0, 0.01);
+...
 
+void fragment() {
+    ...
+    COLOR = mix(color, grayscale, amount);  // Change the previous COLOR = ... line
+}
+```
+- `hint_range(start, end, step)` changes the way the variable is shown in the editor to a slider
+- `mix()` function is the same as `lerp()` in GDScript
 
+Now, if you navigate to `GrayscaleRect` in the **scene view** and look at the **inspector**, you can change the `amount` variable:
 
+![](img/ShaderParam.gif)
+
+#### The whole shader code
+Here is the whole shader code:
 
 ```C
 shader_type canvas_item;
@@ -244,27 +267,71 @@ void fragment() {
 	vec4 grayscale = vec4(avg, avg, avg, 1.0f);
 	COLOR = mix(color, grayscale, amount);
 }
-
-//void light() {
-//	// Called for every pixel for every light affecting the CanvasItem.
-//	// Uncomment to replace the default light processing function with this one.
-//}
-
 ```
 
-
-
 ### Player On-hit Effect
+Let's play the effect when the player gets hit. I have already prepared a handy function for us to use in the `vfx_manager.gd` script.
+
+#### Clean-up
+First, we need to clean up the `vfx_manager.tscn` scene.
+
+1. **Select** the `GrayscaleRect` node in the **scene hierarchy**
+1. **Set** the `amount` property of the **grayscale shader** to `0`
+2. **Delete** the `Sprite2D` node with the Godot icon
+
+#### Pulse the grayscale effect
+Let's now navigate to the `player_controller_3d.gd` script and play the grayscale effect when the player gets hit. I have already prepared the function that will interact with the shader and the variables (prefix `OHG`) of the effect in the player.
+
+**Navigate** to the `receive_damage()` function and **add** the following line above the `AudioManager.play...` line:
+
+```GDScript
+VFXManager.pulse_grayscale(OHG_amount, OHG_fade_in, OHG_wait_time, OHG_fade_out)
+```
+
+#### The result
+Playing the game now, you should see the grayscale effect working, when you get hit.
+
+![](img/GrayscaleInEffect.gif)
+
+
+#### Override
+An interesting effect emerges when you set the `OHG_amount` parameter of the player to a higher number than `1`. **Open** the `player.tscn` scene and **change** the `OHG_amount` parameter to `1.5`.
+
+![](img/OHGAmount.png)
+
+You should see this effect:
+
+![](img/GrayscaleOverride.gif)
+
+
+> aside positive
+> Making shaders is a bit of an **artistic process**. If you had asked me to make this shader effect (override variant), I would not know how to do that. However, through **experimentation** and **tinkering** with the grayscale shader making this effect was easy.
+
+
 
 
 ## Hologram Shader - Visual
 Duration: hh:mm:ss
 
-### Setup
+Creating shaders using code is efficient and performant but for more artistic people a bit too complex and unintuitive, that is why **Visual Shaders** exist. They are a node-based system in which you can easily create shaders. While **not as performant** (in very large graphs) and a **little less capable** than "code" shaders, they can be used for **quick and easy prototyping** or **making simple effects**.
 
-#### Shader
+![](img/VisualShader.png)
+
+Let's learn how to use the **visual shaders** and create a hologram effect for the player.
+
+### Setup
+First, we will need to set up a few things.
 
 #### Test Object
+We will create a **testing object** with the shader applied, so that we can see the changes that we will be doing in the shader in real time.
+1. **Go** to the `debug_scene_3d.tscn` scene
+2. **Add** a new `MeshInstance3D` node as child of the **root**
+3. **Set** the `Mesh` property as a `New CapsuleMesh`
+4. **Move** the `MeshInstance3D` out of the ground
+
+![](img/TestingCapsule.png)
+
+#### Material and Shader
 
 ### Scan lines
 
