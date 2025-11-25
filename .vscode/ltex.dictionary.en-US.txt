@@ -111,3 +111,6 @@ framebuffer
 jsfxr
 bfxr
 Freesound
+Scanlines
+scanlines
+scanline

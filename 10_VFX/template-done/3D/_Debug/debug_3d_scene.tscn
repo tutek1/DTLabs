@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://chnffv2lmano5"]
+[gd_scene load_steps=53 format=3 uid="uid://chnffv2lmano5"]
 
 [ext_resource type="Script" uid="uid://bc5a35wsiwcvy" path="res://3D/Levels/level_manager.gd" id="1_0v0jw"]
 [ext_resource type="PackedScene" uid="uid://44guktn5iwdy" path="res://3D/WorldObjects/resistor.tscn" id="1_oikrr"]
@@ -21,11 +21,13 @@
 [ext_resource type="PackedScene" uid="uid://hplefwvgliy6" path="res://UI/PlayerHUD/hud.tscn" id="19_t1pn0"]
 [ext_resource type="PackedScene" uid="uid://da6wb2nfv0gmc" path="res://3D/WorldObjects/Collectible/collectible.tscn" id="20_gw1uw"]
 [ext_resource type="PackedScene" uid="uid://byh0a2vnett5q" path="res://3D/Enemies/GroundEnemy/Beehave/ground_enemy_bh.tscn" id="21_0v0jw"]
+[ext_resource type="Shader" uid="uid://deic5fielefgo" path="res://VFX/Shaders/Hologram/hologram_shader.tres" id="22_0e4a3"]
 
 [sub_resource type="Environment" id="Environment_ndwkr"]
 ambient_light_source = 2
 ambient_light_color = Color(0.494118, 0.494118, 0.494118, 1)
 tonemap_white = 0.37
+glow_enabled = true
 fog_enabled = true
 fog_light_color = Color(0.0666667, 0.145098, 0.0745098, 1)
 volumetric_fog_density = 0.0
@@ -167,7 +169,18 @@ script = ExtResource("12_xbdsv")
 predict_mult = 1.0
 metadata/_custom_type_script = "uid://cu1ach3o062mc"
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g1oyg"]
+render_priority = 0
+shader = ExtResource("22_0e4a3")
+shader_parameter/VertexGlitchSpeed = 0.0
+shader_parameter/VertexGlitchAmount = 0.2
+shader_parameter/HologramColor = Color(0, 1.3, 0, 1)
+shader_parameter/ScanLineSpeed = 0.3
+shader_parameter/ScanLineSize = 0.075
+shader_parameter/FresnelPower = 4.0
+
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_0v0jw"]
+material = SubResource("ShaderMaterial_g1oyg")
 
 [node name="Debug3dScene" type="Node3D"]
 script = ExtResource("1_0v0jw")
@@ -676,11 +689,12 @@ steerings = Array[ExtResource("11_vdnx2")]([SubResource("Resource_vdnx2"), SubRe
 
 [node name="GroundEnemyBeehave" parent="." instance=ExtResource("21_0v0jw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.41741, 0)
+visible = false
 collision_mask = 7
 patrol_points = Array[Vector3]([Vector3(3.46, 1, -2.975), Vector3(36.425, 1, -37.265), Vector3(-24.995, 5, -25.53)])
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.97534, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 3.68202, 0)
 mesh = SubResource("CapsuleMesh_0v0jw")
 
 [connection signal="body_entered" from="Enviroment/2DPlatforming/Sprite3D/Area3D" to="Enviroment/2DPlatforming/Sprite3D" method="_on_area_3d_body_entered"]

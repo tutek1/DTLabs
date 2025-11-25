@@ -323,7 +323,7 @@ Let's learn how to use the **visual shaders** and create a hologram effect for t
 First, we will need to set up a few things.
 
 #### Test Object
-We will create a **testing object** with the shader applied, so that we can see the changes that we will be doing in the shader in real time.
+We will create a **testing object** with the shader applied, so that we can see the current state of the shader during the creation.
 1. **Go** to the `debug_scene_3d.tscn` scene
 2. **Add** a new `MeshInstance3D` node as child of the **root**
 3. **Set** the `Mesh` property as a `New CapsuleMesh`
@@ -332,14 +332,166 @@ We will create a **testing object** with the shader applied, so that we can see 
 ![](img/TestingCapsule.png)
 
 #### Material and Shader
+Let's set a material of the `MeshInstance3D` and create the shader.
+1. **Select** the `MeshInstance3D`
+2. **Click** the `Mesh` property in the **Inspector** to open it
+3. **Set** the `Material` to a `New ShaderMaterial`
+4. **Click** the `Material` property to open it
+5. **Set** the `Shader` property to a `New Shader`
+6. **Set up** the dialog window as such:
+    ![](img/CreateVisualShader.png)
+7. **Double-click** the created shader in `VFX/Hologram/hologram_shader.tres`
 
-### Scan lines
+### Scanlines
+The hologram effect is composed of several effects. We will start off with making the scanlines, that are present on holographic objects.
+
+#### Basic lines
+Copy this setup:
+
+![](img/BaseScanLines.png)
+- `Input` (`vertex`) - position of the vertex in camera space
+- `Vector Decompose` - allows you to use only parts of a vector, in our case `y` since we want the lines on the `Y-axis`
+- `FloatOp` (`Remainder`) - works as the `%` modulo operator, making the transparency periodically fade
+- `Output ` (`Alpha`) - adjusts the transparency of the object
+
+The setup creates this effect:
+
+<img src="img/BaseScanLinesResult.png" width="300"/>
+
+#### World Space
+You might have noticed, that the effect "stays" with the camera. That is because we use `Vertex` input, which is in the **Camera space**.
+
+<img src="img/BaseScanMoveCamera.gif" width="300"/>
+
+Let's move the effect to **World space** by getting the correct coordinates from the `Vertex Shader`. We will do this by using a `Varying`, which is a variable type that gets **interpolated** from the `Vertex stage` to the `Fragment stage` similarly to the normal vector, position, color, etc.
+
+1. **Switch** to the `Vertex` shader in the **top left** of the **Shader Editor**
+2. **Press** the `Manage Varyings` button and **Press** the `Add Varying` button 
+    <img src="img/ManageVaryings.png" width="500"/>
+3. **Set** the `Type` to `Vector3`, **name** to `WorldPos`, and **Press** the `Create` button
+4. **Recreate** this setup in the `Vertex Shader`:
+    <img src="img/VaryingSetter.png" width="500"/>
+5. **Change** the `Input` (`vertex`) node in the **Fragment Shader** to a `VaryingGetter`
+    <img src="img/VaryingGetter.png" width="500"/>
+
+Now the effect is correctly positioned in **World space** and does not warp under weird angles. It also "stays in place" meaning, that moving/rotating the object moves the effect as such:
+
+<img src="img/WorldSpaceHolo.gif" width="600"/>
+
+#### Scanlines adjustment
+Let's make the size of the scanline size settable from **outside the shader** and make the effect more **pronounced**. In the `Fragment Shader`:
+
+1. **Add** a `FloatParameter` node and **set it up** like this:
+    <img src="img/Parameter.png" width="400"/>
+
+2. **Add** a `Remap` node and **set it up** it like this:
+    <img src="img/Remap.png" width="600"/>
+
+    - This takes the input value from `[0.0 - 0.075]` range to `[0.0 - 1.0]`, basically normalizing it.
+3. **Add** a `FloatOp` (`Pow`) node and **set it up** like this:
+    <img src="img/PowNode.png" width="600"/>
+
+    - This makes the transparent and nontransparent parts more equal.
+
+This should be the resulting look:
+
+<img src="img/ScanlinesDone.png" width="300"/>
+
+#### Moving scanlines
+Right now, the scanlines are static and look a bit boring. Let's make the scanlines move with the `Input` (`time`) node and controllable with a parameter from outside the shader.
+
+**Adjust** the scanline setup in the `Fragment Shader` like this:
+
+![](img/ScanLineMoveSetup.png)
+
+> aside positive
+> The highlighted nodes are the new ones added.
+
+This makes the hologram effect move on the `Y-axis` based on the `FloatParameter`:
+
+<img src="img/ScanLinesMoveResult.gif" width="300"/>
+
+
+### Hologram Color
+Let's take a short break from more complex nodes and create the **color of the hologram**.
+
+**Recreate** this setup:
+
+<img src="img/HologramColor.png" width="800"/>
+
+> aside positive
+> You can use the `Reroute` node to **arrange** the lines in a more clear way like I did.
+
+This node setup interpolates from the `Input` (`color`) to the `HologramColor` using the `Mix` node. The interpolation is done with the `alpha` channel of the `HologramColor`.
 
 ### Fresnel Effect
+We will enhance the hologram with one more effect. The **Fresnel effect** is the strongest on edges of objects, where the angle between the `view vector` (camera forward) and the `normal vector` of the surface. Here is an example, where the **whiter** the color is, the stronger the effect is:
+
+<img src="img/Fresnel.png" width="200"/>
+
+
+#### Fresnel Hologram
+Let's use the Fresnel effect to make the hologram more interesting. **Add** the **highlighted** nodes to the setup:
+
+<img src="img/FresnelSetup.png" width="800"/>
+
+This is the resulting look. In my opinion, the addition of Fresnel makes the hologram feel more enclosed.
+
+<img src="img/FresnelResult.png" width="200"/>
+
+
+> aside positive
+> The **Fresnel effect** is normally used to add specular highlights on the edges of objects. However, as you can see, it can be used for many other uses.
 
 ### Vertex Glitch
+The last effect of the hologram is **Vertex glitch**. We will move the vertices of the model in "random" ways to simulate the instability of holograms.
+
+#### Basic noise texture setup
+To offset the vertices "randomly", we will use a noise texture, which is essentially a controlled randomness. We will only offset the `y` coordinate to make this tutorial a bit easier to digest. The effect will still look good.
+
+1. **Switch** to the `Vertex shader` in the **Shader Editor**
+2. **Add** a `Texture2D` node
+3. **Set** the middle parameter of the `Texture2D` node to a `New NoiseTexture2D`
+
+    <img src="img/NoiseTexture.png" width="200"/>
+
+4. **Set** the `Noise` parameter in the **Inspector** to a `New FastNoiseLite`
+5. **Replicate** the following setup to adjust the position of the vertices (highlighted nodes are new):
+<img src="img/BaseVertexGlitch.png" width="500"/>
+
+> aside negative
+> We need to use the `Input` (`vertex`) from the `Varying` setup so that we force the compiled code to send the **unchanged** vertex to the `Varying`. If we had used another `Input` (`vertex`) node it would have used the displaced vertex position and the glitch effect would not have been visible.
+
+This basic setup moves the vertices up. 
+
+<img src="img/BaseDisplace.png" width="250"/>
+
+
+#### Controlled noise texture
+This does not look so good. Let's first `remap` the noise from `[0.0 - 1.0]` to `[-1.0 - 1.0]` so that we don't just move the vertices **up** but also **down**. We will also add a `FloatParameter` to **control the amount** of vertex glitch.
+
+**Add/Change** these highlighted nodes to the `Vertex shader`:
+
+<img src="img/StaticComplexVertexGlitch.png" width="700"/>
+
+#### Moving noise texture
+This looks a bit better, but it would be nice if the **vertex glitch effect** moved. We can do that by adjusting the `uv` input of the `Texture2D` node, which controls which pixel of the texture is sampled.
+
+**Add** these highlighted nodes to the `Vertex shader`:
+
+<img src="img/MovingNoiseTexture.png" width="700"/>
+
+> aside positive
+> We use the `Input` (`vertex`) instead of the `Input` (`uv`) because of the special the player model is made (duplicate vertices). To fit the `vertex` position (`Vector3`) to the `uv` input of the `Texture2D` I decided to just add all the parts together with the `z-axis` being added to both `x` and `y`.
 
 ### Glow in scene
+The last small thing, that we will do on the visual side, is to add a glow effect to the scene.
+
+1. **Go** into the `WorldEnvironment` node in the `debug_scene_3d.tscn`
+2. **Change** the `Glow` property to `On`
+3. **Change** the `Hologram Color` property of the testing object (`MeshInstance3D`) using the **RAW** tab to a value over the standard range, for example: `(0, 1.3, 0)`
+
+The last setting makes the hologram glow more. Here is the final shader result:
 
 
 ## Hologram Shader - Logic
