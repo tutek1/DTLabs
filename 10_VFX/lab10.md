@@ -482,17 +482,45 @@ This looks a bit better, but it would be nice if the **vertex glitch effect** mo
 <img src="img/MovingNoiseTexture.png" width="700"/>
 
 > aside positive
-> We use the `Input` (`vertex`) instead of the `Input` (`uv`) because of the special the player model is made (duplicate vertices). To fit the `vertex` position (`Vector3`) to the `uv` input of the `Texture2D` I decided to just add all the parts together with the `z-axis` being added to both `x` and `y`.
+> We use the `Input` (`vertex`) instead of the `Input` (`uv`) because of the special way the player model is made (duplicate vertices). To fit the `vertex` position (`Vector3`) to the `uv` input of the `Texture2D` I decided to just add all the parts together with the `z-axis` being added to both `x` and `y`.
 
 ### Glow in scene
-The last small thing, that we will do on the visual side, is to add a glow effect to the scene.
+Let's make our hologram **glow** to add a bit more juice.
 
 1. **Go** into the `WorldEnvironment` node in the `debug_scene_3d.tscn`
 2. **Change** the `Glow` property to `On`
-3. **Change** the `Hologram Color` property of the testing object (`MeshInstance3D`) using the **RAW** tab to a value over the standard range, for example: `(0, 1.3, 0)`
+3. **Change** the `Hologram Color` property of the testing object (`MeshInstance3D`) using the **RAW** tab, to a value over the standard range, for example: `(0, 1.2, 0)`
 
-The last setting makes the hologram glow more. Here is the final shader result:
+The color exaggeration makes the hologram glow more.
 
+### Shader Flags
+You can also change the `Shader Flags` and `Modes` to adjust the rendering behavior of the object. For example toggling `Depth Prepass Alpha` will make the hologram **cast shadows** (needed for shadows due to the transparency).
+
+<img src="img/FlagsAndModes.png" width="300"/>
+
+### Do not Receive Shadows
+The last thing I want to change is that currently the hologram receives shadows, which doesn't really make sense. We can either toggle `On` the `Unshaded` flag, but this would **remove the glow** effect, or we can **set** the `emission` property in the `Fragment Shader`. If we set it to the same value as the `albedo` it will override the shadows.
+
+Simply **connect** to last node that goes to `albedo` to also go into `emission` like this:
+
+<img src="img/Emission.png" width="600"/>
+
+### The Result
+
+Here is the final shader **visual**:
+
+<img src="img/HologramVisualDone.gif" width="400"/>
+
+Here is the `Vertex Shader` **setup**:
+
+<img src="img/FullVertexShader.png" width="4000"/>
+
+Here is the `Fragment Shader` **setup**:
+
+<img src="img/FullFragmentShader.png" width="4000"/>
+
+> aside positive
+> If the image is too small, since the codelab framework downscales the image, **Right-click** and **Select** the `Open Image in a New Tab` option.
 
 ## Hologram Shader - Logic
 Duration: hh:mm:ss

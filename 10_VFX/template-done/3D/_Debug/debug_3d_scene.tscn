@@ -172,12 +172,12 @@ metadata/_custom_type_script = "uid://cu1ach3o062mc"
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_g1oyg"]
 render_priority = 0
 shader = ExtResource("22_0e4a3")
-shader_parameter/VertexGlitchSpeed = 0.0
-shader_parameter/VertexGlitchAmount = 0.2
-shader_parameter/HologramColor = Color(0, 1.3, 0, 1)
-shader_parameter/ScanLineSpeed = 0.3
+shader_parameter/VertexGlitchSpeed = 0.4
+shader_parameter/VertexGlitchAmount = 0.03
+shader_parameter/HologramColor = Color(0, 1.4, 0, 1)
+shader_parameter/ScanLineSpeed = 0.4
 shader_parameter/ScanLineSize = 0.075
-shader_parameter/FresnelPower = 4.0
+shader_parameter/FresnelPower = 7.0
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_0v0jw"]
 material = SubResource("ShaderMaterial_g1oyg")
@@ -694,7 +694,7 @@ collision_mask = 7
 patrol_points = Array[Vector3]([Vector3(3.46, 1, -2.975), Vector3(36.425, 1, -37.265), Vector3(-24.995, 5, -25.53)])
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 3.68202, 0)
+transform = Transform3D(-0.814115, 0.0101347, 0.580614, 0, 0.999848, -0.0174524, -0.580703, -0.0142083, -0.813991, 0, 2.262, 0)
 mesh = SubResource("CapsuleMesh_0v0jw")
 
 [connection signal="body_entered" from="Enviroment/2DPlatforming/Sprite3D/Area3D" to="Enviroment/2DPlatforming/Sprite3D" method="_on_area_3d_body_entered"]
