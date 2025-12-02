@@ -525,11 +525,65 @@ Here is the `Fragment Shader` **setup**:
 ## Hologram Shader - Logic
 Duration: hh:mm:ss
 
-input done
+The visual side of the shader is done. Let's now make the player turn into a hologram.
+// TODO maybe wall and box
 
 ### Hologram in `GlobalState`
+First, we will add a new `bool` to track if the player has already obtained the **Hologram ability**.
+
+1. **Open** the `player_stats.gd` script
+2. **Add** this line under the `has_double_jump` variable:
+    ```GDScript
+    @export var has_hologram : bool = true
+    ```
+
+> aside negative
+> Let's currently keep it set to `true`, since we will be **implementing the ability**. Later on, in the full game it will be set to `false` until the player finds the ability.
+
+### Hologram Player Material
+Now, we will **create a new material** for the player, which will be **swapped** with the normal one, upon activating the hologram.
+
+#### Create and Set/up the material
+1. **Open** the `player.tscn` scene
+2. **Select** the `GORODITH_player` node (`MeshInstance3D`)
+3. **Set** the `Surface Material Override` to a `New ShaderMaterial`
+4. **Set** the `Shader` of the material to the `hologram_shader.tres` shader
+5. **Change** the `Shader Parameters` as such:
+    - `Vertex Glitch Speed` = `5`
+    - `Vertex Glitch Amount` = `0.002`
+
+![](img/PlayerShader.png)
+
+> aside negative
+> While editing the **shader parameters**, the effect is best to seen in the `debug_scene_3d.tscn`, since for some reason the effect is more exaggerated in the `player.tscn` scene.
+
+
+#### Save the Material
+Let's save the hologram material, so that we can then swap it with the normal one.
+
+1. **Right-Click** the `Material` in the `Surface Material Override`
+2. **Select** the `Save As...` option
+3. **Navigate** to the folder `res://3D/Player/Material`
+4. **Name** the material `player_hologram.tres` and **Save** it
+5. Don't forget to **Set** the players material back to the `player_material.tres`
+
 
 ### Hologram Player Function
+We will now get into the main logic of the hologram ability.
+
+**Open** the `player_controller_3d.gd` script and **navigate** to the `_hologram()` function. This is the current state:
+
+![](img/HologramFunction.png)
+
+- Has the player gained the **Hologram Ability**?
+- Isn't the Hologram already **active**?
+- Is the Hologram **Button pressed**?
+
+
+> aside positive
+> I have already added the `hologram_switch` button to the **Input map**.
+
+input done
 
 ### Hologram Wall Setup
 

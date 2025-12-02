@@ -18,6 +18,7 @@ extends Resource
 
 @export_group("Abilities")
 @export var has_double_jump : bool = true
+@export var has_hologram : bool = true
 
 @export_category("Progression")
 @export var collectible_count : int = 0

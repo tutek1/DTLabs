@@ -316,5 +316,5 @@ func _on_interact_area_body_exited(body: Node3D) -> void:
 		print(body.name + " exitted interact area")
 		_interact_node_in_area = null
 
-func _took_a_step(body : Node3D) -> void:
+func _took_a_step(_body : Node3D) -> void:
 	AudioManager.play_sfx_as_child(AudioManager.SFX_TYPE.PLAYER_WALK, self)

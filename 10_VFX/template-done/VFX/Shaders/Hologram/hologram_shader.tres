@@ -131,7 +131,7 @@ texture = SubResource("NoiseTexture2D_sni7h")
 
 [resource]
 code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_disabled;
 
 
 // Varyings
@@ -340,7 +340,8 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-1073, -338.708)
+graph_offset = Vector2(-170.055, -81.2808)
+modes/specular = 2
 varyings/WorldPos = "0,4"
 nodes/vertex/0/position = Vector2(180, 160)
 nodes/vertex/2/node = SubResource("VisualShaderNodeVaryingSetter_sni7h")
@@ -379,7 +380,7 @@ nodes/vertex/21/node = SubResource("VisualShaderNodeFloatParameter_61lep")
 nodes/vertex/21/position = Vector2(-1540, 560)
 nodes/vertex/22/node = SubResource("VisualShaderNodeFloatOp_0qqmb")
 nodes/vertex/22/position = Vector2(-1240, 460)
-nodes/vertex/connections = PackedInt32Array(3, 0, 5, 0, 5, 0, 2, 0, 9, 0, 8, 1, 8, 0, 0, 0, 11, 0, 12, 0, 15, 0, 17, 0, 19, 0, 16, 0, 6, 0, 11, 0, 12, 0, 9, 1, 13, 0, 12, 1, 17, 2, 19, 1, 17, 0, 20, 0, 17, 1, 20, 1, 20, 0, 19, 0, 21, 0, 22, 1, 14, 0, 22, 0, 22, 0, 16, 1, 4, 0, 8, 0, 4, 0, 5, 1, 16, 0, 6, 0)
+nodes/vertex/connections = PackedInt32Array(3, 0, 5, 0, 5, 0, 2, 0, 9, 0, 8, 1, 8, 0, 0, 0, 11, 0, 12, 0, 15, 0, 17, 0, 19, 0, 16, 0, 6, 0, 11, 0, 12, 0, 9, 1, 13, 0, 12, 1, 17, 2, 19, 1, 17, 0, 20, 0, 17, 1, 20, 1, 20, 0, 19, 0, 21, 0, 22, 1, 14, 0, 22, 0, 22, 0, 16, 1, 4, 0, 5, 1, 16, 0, 6, 0, 4, 0, 8, 0)
 nodes/fragment/0/position = Vector2(400, 120)
 nodes/fragment/3/node = SubResource("VisualShaderNodeVectorDecompose_veeop")
 nodes/fragment/3/position = Vector2(-1180, 320)

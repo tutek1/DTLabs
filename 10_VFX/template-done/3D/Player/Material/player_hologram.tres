@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bdnsoxewo3e5f"]
+
+[ext_resource type="Shader" uid="uid://deic5fielefgo" path="res://VFX/Shaders/Hologram/hologram_shader.tres" id="1_4xnla"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_4xnla")
+shader_parameter/VertexGlitchSpeed = 5.0
+shader_parameter/VertexGlitchAmount = 0.002
+shader_parameter/HologramColor = Color(0, 1, 0, 1)
+shader_parameter/ScanLineSpeed = 0.3
+shader_parameter/ScanLineSize = 0.075
+shader_parameter/FresnelPower = 4.0
