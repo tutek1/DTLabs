@@ -1,8 +1,10 @@
-[gd_scene load_steps=28 format=3 uid="uid://8sbvl7rcejq5"]
+[gd_scene load_steps=33 format=3 uid="uid://8sbvl7rcejq5"]
 
 [ext_resource type="Script" uid="uid://bsumix7xtjux1" path="res://3D/Player/player_controller_3d.gd" id="1_d17s7"]
+[ext_resource type="Material" uid="uid://bdnsoxewo3e5f" path="res://3D/Player/Material/player_hologram.tres" id="2_46t1g"]
 [ext_resource type="PackedScene" uid="uid://b4ueia53ak6r0" path="res://3D/Player/GORODITH_Player_anim.fbx" id="2_d17s7"]
 [ext_resource type="Material" uid="uid://d1xu766jnbqqd" path="res://3D/Player/Material/player_material.tres" id="3_lfm5r"]
+[ext_resource type="Texture2D" uid="uid://celgws0phmdxl" path="res://VFX/Particles/cloud_particles.png" id="5_xq0gp"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hn7em"]
 
@@ -108,6 +110,29 @@ graph_offset = Vector2(-105, -22)
 [sub_resource type="BoxShape3D" id="BoxShape3D_x3b60"]
 size = Vector3(2, 1, 1.5)
 
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_46t1g"]
+particle_flag_rotate_y = true
+angle_min = -720.0
+angle_max = 720.0
+direction = Vector3(0, -1, 0)
+spread = 30.0
+initial_velocity_min = 4.0
+initial_velocity_max = 6.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_46t1g"]
+transparency = 1
+albedo_texture = ExtResource("5_xq0gp")
+texture_filter = 0
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_xq0gp"]
+material = SubResource("StandardMaterial3D_46t1g")
+size = Vector2(0.3, 0.3)
+
 [node name="Player" type="CharacterBody3D"]
 collision_layer = 2
 collision_mask = 13
@@ -115,6 +140,7 @@ floor_max_angle = 1.0472
 platform_floor_layers = 4294967287
 script = ExtResource("1_d17s7")
 OHG_amount = 1.5
+hologram_material = ExtResource("2_46t1g")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_hn7em")
@@ -123,20 +149,19 @@ shape = SubResource("CapsuleShape3D_hn7em")
 transform = Transform3D(-2.18557e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.18557e-08, 0, -1, 0)
 
 [node name="Skeleton3D" parent="Mesh/Armature" index="0"]
-bones/0/position = Vector3(0, 0, 0.0117938)
+bones/0/position = Vector3(0, 0, 0.0117765)
 bones/0/rotation = Quaternion(0.707107, 8.42937e-08, 8.42937e-08, 0.707107)
 bones/0/scale = Vector3(1, 1, 1)
-bones/1/rotation = Quaternion(1.06324e-05, 0.00347331, -0.000244737, 0.999994)
+bones/1/rotation = Quaternion(-0.00232366, 6.50523e-19, -5.54005e-10, 0.999997)
 bones/1/scale = Vector3(1, 1, 0.999999)
 bones/3/position = Vector3(-0.000499998, 0.0107497, -0.0105217)
-bones/3/rotation = Quaternion(0.997317, -0.00244302, -0.00179432, -0.0731457)
+bones/3/rotation = Quaternion(0.991107, -0.125527, 0.0427004, -0.0112272)
 bones/5/position = Vector3(-0.000447049, -0.000234075, -0.00350103)
-bones/5/rotation = Quaternion(0.999951, -6.06494e-19, 0.00990513, 6.12273e-17)
-bones/6/rotation = Quaternion(0, -0.0110117, 0, 0.999939)
+bones/5/rotation = Quaternion(0.995069, -0.0986878, 0.00985678, 0.000977564)
+bones/6/rotation = Quaternion(0.00148142, -0.0108556, -0.168392, 0.985659)
 bones/6/scale = Vector3(1, 1, 1)
 bones/8/position = Vector3(-0.000447051, -0.000234075, 0.00350103)
 bones/8/rotation = Quaternion(0.999952, -5.99422e-19, 0.00978963, 6.12274e-17)
-bones/9/rotation = Quaternion(-0.050061, -0.0108894, -0.000434927, 0.998687)
 bones/9/scale = Vector3(1, 1, 1)
 bones/11/rotation = Quaternion(0.706465, -0.706465, 0.0301203, 0.0301202)
 bones/11/scale = Vector3(1, 1, 1)
@@ -145,7 +170,7 @@ bones/11/scale = Vector3(1, 1, 1)
 surface_material_override/0 = ExtResource("3_lfm5r")
 
 [node name="BoneAttachment3D" type="BoneAttachment3D" parent="Mesh/Armature/Skeleton3D" index="1"]
-transform = Transform3D(0.999976, 0.000489545, 0.0069468, 0.00694682, -1.96838e-05, -0.999975, -0.000489396, 1, -2.3084e-05, 3.53222e-06, -1.4403e-07, 0.0358344)
+transform = Transform3D(1, 4.20775e-14, 2.38418e-07, 2.38416e-07, 0.0046472, -0.999988, -1.10799e-09, 0.999989, 0.00464719, 1.02091e-15, 3.3529e-05, 0.035817)
 bone_name = "Head_end"
 bone_idx = 2
 
@@ -175,14 +200,14 @@ secondary_limit_angle = 6.28319
 secondary_damp_threshold = 1.0
 
 [node name="BoneAttachment3D2" type="BoneAttachment3D" parent="Mesh/Armature/Skeleton3D" index="3"]
-transform = Transform3D(-0.519466, -0.831567, 0.1966, -0.0727305, 0.272272, 0.959468, -0.85139, 0.484112, -0.201917, -0.0104807, -0.00904064, 0.0185101)
+transform = Transform3D(-0.519752, -0.831413, 0.196496, -0.0727157, 0.272222, 0.959483, -0.851217, 0.484405, -0.201945, -0.0104796, -0.009041, 0.0184949)
 bone_name = "GunBone_end"
 bone_idx = 12
 
 [node name="ShootPoint" type="Node3D" parent="Mesh/Armature/Skeleton3D/BoneAttachment3D2"]
 
 [node name="BoneAttachment3D3" type="BoneAttachment3D" parent="Mesh/Armature/Skeleton3D" index="4"]
-transform = Transform3D(0.999998, -4.97404e-14, -0.00221354, 0.00221354, 1.19209e-07, 0.999997, 2.63832e-10, -1, 1.19209e-07, -0.00044705, 0.00350103, 0.000426147)
+transform = Transform3D(0.990115, 0.140238, -0.00219397, 0.00221586, 7.21775e-08, 0.999997, 0.140238, -0.990118, -0.000310675, -0.000728256, 0.00350103, 0.000571369)
 bone_name = "RightFoot_end"
 bone_idx = 7
 
@@ -192,7 +217,7 @@ bone_idx = 7
 shape = SubResource("BoxShape3D_d17s7")
 
 [node name="BoneAttachment3D4" type="BoneAttachment3D" parent="Mesh/Armature/Skeleton3D" index="5"]
-transform = Transform3D(0.999997, 1.16997e-06, -0.0022272, 0.00221615, -0.1, 0.994985, -0.000221557, -0.994987, -0.0999998, -0.000447043, -0.00406708, 0.00045452)
+transform = Transform3D(0.999997, -4.2635e-14, -0.00221586, 0.00221586, 1.19209e-07, 0.999997, 2.64137e-10, -1, 1.19209e-07, -0.00044705, -0.00350103, 0.000408811)
 bone_name = "LeftFoot_end"
 bone_idx = 10
 
@@ -223,6 +248,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0668404, 0.848085, -2.10876
 
 [node name="ShootCooldown" type="Timer" parent="."]
 one_shot = true
+
+[node name="DoubleJumpParticles" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0.3)
+amount = 16
+lifetime = 0.6
+explosiveness = 0.9
+process_material = SubResource("ParticleProcessMaterial_46t1g")
+draw_pass_1 = SubResource("QuadMesh_xq0gp")
 
 [connection signal="body_entered" from="Mesh/Armature/Skeleton3D/BoneAttachment3D3/Area3D" to="." method="_took_a_step"]
 [connection signal="body_entered" from="InteractArea" to="." method="_on_interact_area_body_entered"]

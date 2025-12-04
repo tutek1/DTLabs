@@ -305,6 +305,9 @@ func set_controllable(value : bool) -> void:
 	_controllable = value
 	velocity = Vector3.ZERO
 
+func get_is_hologram() -> bool:
+	return _is_hologram
+
 func _on_interact_area_body_entered(body: Node3D) -> void:
 	if body.is_in_group("Interactable"):
 		print(body.name + " entered interact area")

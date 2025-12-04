@@ -69,6 +69,7 @@ func _physics_process(delta : float) -> void:
 	_interact()
 	_update_gun_target()
 	_shoot()
+	_hologram()
 	
 	_check_collisions(delta)
 	move_and_slide()
@@ -241,15 +242,29 @@ func _hologram() -> void:
 	if _is_hologram: return
 	if not Input.is_action_just_pressed("hologram_switch"): return
 	
-	# TODO
-	# Toggle _is_hologram ON
-	# Save the old material .get_surface_override_material()
-	# Play Hologram ON Sound
+	# Toggle
+	_is_hologram = true
+	
+	# Save old material
+	var old_material : Material = mesh_instance.get_surface_override_material(0)
+	
+	# Play hologram SFX
+	AudioManager.play_sfx_as_child(AudioManager.SFX_TYPE.PLAYER_HOLO_ON, self)
+	
 	# Turn ON the hologram effect
+	mesh_instance.set_surface_override_material(0, hologram_material)
+	
 	# Wait for a set while
+	await get_tree().create_timer(hologram_time).timeout
+	
 	# Play Hologram OFF Sound
+	AudioManager.play_sfx_as_child(AudioManager.SFX_TYPE.PLAYER_HOLO_OFF, self)
+	
 	# Reset material to old one
+	mesh_instance.set_surface_override_material(0, old_material)
+	
 	# Toggle _is_hologram OFF
+	_is_hologram = false
 
 # Updates the count and emits a signal
 func collectible_touched(collectible : Collectible) -> void:
@@ -305,6 +320,9 @@ func set_connect_anim_bool(value : bool) -> void:
 func set_controllable(value : bool) -> void:
 	_controllable = value
 	velocity = Vector3.ZERO
+
+func get_is_hologram() -> bool:
+	return _is_hologram
 
 func _on_interact_area_body_entered(body: Node3D) -> void:
 	if body.is_in_group("Interactable"):

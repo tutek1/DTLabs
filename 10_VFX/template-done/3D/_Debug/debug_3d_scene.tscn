@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=3 uid="uid://chnffv2lmano5"]
+[gd_scene load_steps=54 format=3 uid="uid://chnffv2lmano5"]
 
 [ext_resource type="Script" uid="uid://bc5a35wsiwcvy" path="res://3D/Levels/level_manager.gd" id="1_0v0jw"]
 [ext_resource type="PackedScene" uid="uid://44guktn5iwdy" path="res://3D/WorldObjects/resistor.tscn" id="1_oikrr"]
@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://bxrrrw1iqiee7" path="res://3D/Enemies/AirEnemy/air_enemy.tscn" id="10_kai6n"]
 [ext_resource type="PackedScene" uid="uid://1ps1fcn15ft3" path="res://3D/_Debug/debug_draw_path.tscn" id="11_7xjr7"]
 [ext_resource type="Script" uid="uid://q0fjp3ypmwdd" path="res://3D/Enemies/AirEnemy/Steering/steering_behavior.gd" id="11_vdnx2"]
+[ext_resource type="PackedScene" uid="uid://btnklcu53tyn1" path="res://3D/WorldObjects/HologramWall/secret_box.tscn" id="12_g1oyg"]
 [ext_resource type="Script" uid="uid://cu1ach3o062mc" path="res://3D/Enemies/AirEnemy/Steering/pursue.gd" id="12_xbdsv"]
 [ext_resource type="Script" uid="uid://c8gax33ifuogc" path="res://3D/Enemies/AirEnemy/Steering/collision_avoidance.gd" id="13_itcoc"]
 [ext_resource type="Script" uid="uid://c3wds62fiwue6" path="res://3D/Enemies/AirEnemy/Steering/hover.gd" id="14_vdnx2"]
@@ -182,8 +183,9 @@ shader_parameter/FresnelPower = 7.0
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_0v0jw"]
 material = SubResource("ShaderMaterial_g1oyg")
 
-[node name="Debug3dScene" type="Node3D"]
+[node name="Debug3dScene" type="Node3D" node_paths=PackedStringArray("player")]
 script = ExtResource("1_0v0jw")
+player = NodePath("Player")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_ndwkr")
@@ -649,6 +651,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.4244, 11.0301, -43.5616)
 
 [node name="Collectible16" parent="Enviroment/Collectibles" instance=ExtResource("20_gw1uw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.1371, 11.0301, -38.1695)
+
+[node name="Collectible17" parent="Enviroment/Collectibles" instance=ExtResource("20_gw1uw")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 24, 1.5, 34)
+
+[node name="Collectible18" parent="Enviroment/Collectibles" instance=ExtResource("20_gw1uw")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 24, 1.5, 38)
+
+[node name="Collectible19" parent="Enviroment/Collectibles" instance=ExtResource("20_gw1uw")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 24, 3.5, 36)
+
+[node name="SecretBox" parent="Enviroment" instance=ExtResource("12_g1oyg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 3.53, 36)
 
 [node name="CameraPivot" parent="." node_paths=PackedStringArray("camera_target") instance=ExtResource("6_vdnx2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.8935, 14.1815, 2.42364)

@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://dqqkep83huimo"]
+[gd_scene load_steps=6 format=3 uid="uid://dqqkep83huimo"]
 
 [ext_resource type="Shader" uid="uid://ubu37k5qwym8" path="res://VFX/Shaders/Hologram/hologram_dist_shader.tres" id="1_83t6l"]
+[ext_resource type="Script" uid="uid://b4jgpau14hr6h" path="res://3D/WorldObjects/HologramWall/hologram_wall.gd" id="1_tlftr"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_pucke"]
 size = Vector3(0.1, 5, 6)
@@ -24,8 +25,9 @@ shader_parameter/Roughness = 0.0
 material = SubResource("ShaderMaterial_ephoj")
 size = Vector3(0.1, 5, 6)
 
-[node name="HologramWall" type="StaticBody3D" groups=["NavMeshSource"]]
+[node name="HologramWall" type="StaticBody3D" groups=["Hologramable", "NavMeshSource"]]
 collision_mask = 0
+script = ExtResource("1_tlftr")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_pucke")

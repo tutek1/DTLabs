@@ -571,32 +571,276 @@ Let's save the hologram material, so that we can then swap it with the normal on
 ### Hologram Player Function
 We will now get into the main logic of the hologram ability.
 
-**Open** the `player_controller_3d.gd` script and **navigate** to the `_hologram()` function. This is the current state:
+**Open** the `player_controller_3d.gd` script and **navigate** to the `_hologram()` function. 
+
+#### Current state
+This is the current state:
 
 ![](img/HologramFunction.png)
 
+The function just checks the necessary conditions that need to be met:
 - Has the player gained the **Hologram Ability**?
 - Isn't the Hologram already **active**?
 - Is the Hologram **Button pressed**?
 
-
 > aside positive
 > I have already added the `hologram_switch` button to the **Input map**.
 
-input done
+Feel free to **try and complete** the function using the comments or **fill the function** step by step using the subsections below.
 
-### Hologram Wall Setup
 
-### Secret Box Setup
+#### Toggle `_is_hologram` ON
+This variable helps us keep track if the player **is in the hologram state** or not.
 
-### Set up `LevelManager`
+```GDScript
+_is_hologram = true
+```
 
+#### Save Old Material
+We need to **remember** what (non-hologram) material the player had before, so that we can **set it again later**.
+
+```GDScript
+var old_material : Material = mesh_instance.get_surface_override_material(0)
+```
+
+#### Play Hologram ON Sound
+I prepared a **hologram turning ON** sound. If you didn't complete the **Lab09** on audio, you can easily play it using my `AudioManager` as such:
+
+```GDScript
+AudioManager.play_sfx_as_child(AudioManager.SFX_TYPE.PLAYER_HOLO_ON, self)
+```
+
+#### Turn ON the Hologram Effect
+We can do that by setting the `Surface Override Material` property of the `MeshInstance3D`:
+
+```GDScript
+mesh_instance.set_surface_override_material(0, hologram_material)
+```
+
+#### Wait for a set while
+We could use a `Timer` node as the child of the player, but since the hologram effect will not be used very frequently (max once every few seconds), we can use the `get_tree().create_timer(...)`, which creates a new `Timer` node and destroys it after timeout.
+
+```GDScript
+await get_tree().create_timer(hologram_time).timeout
+```
+
+#### Play Hologram OFF Sound
+Same as the **Play Hologram ON Sound** but with different SFX (`PLAYER_HOLO_OFF`):
+
+```GDScript
+AudioManager.play_sfx_as_child(AudioManager.SFX_TYPE.PLAYER_HOLO_OFF, self)
+```
+
+#### Reset Material to the Old One
+Same as the **Turn ON the Hologram Effect** but with the `old_material`:
+
+```GDScript
+mesh_instance.set_surface_override_material(0, old_material)
+```
+
+#### Toggle `_is_hologram` OFF
+The hologram effect ended so we toggle the state variable.
+
+```GDScript
+_is_hologram = false
+```
+
+#### The full function
+```GDScript
+func _hologram() -> void:
+    if not GlobalState.player_stats.has_hologram: return
+    if _is_hologram: return
+    if not Input.is_action_just_pressed("hologram_switch"): return
+
+    # Toggle
+    _is_hologram = true
+
+    # Save old material
+    var old_material : Material = mesh_instance.get_surface_override_material(0)
+
+    # Play hologram SFX
+    AudioManager.play_sfx_as_child(AudioManager.SFX_TYPE.PLAYER_HOLO_ON, self)
+
+    # Turn ON the hologram effect
+    mesh_instance.set_surface_override_material(0, hologram_material)
+
+    # Wait for a set while
+    await get_tree().create_timer(hologram_time).timeout
+
+    # Play Hologram OFF Sound
+    AudioManager.play_sfx_as_child(AudioManager.SFX_TYPE.PLAYER_HOLO_OFF, self)
+
+    # Reset material to old one
+    mesh_instance.set_surface_override_material(0, old_material)
+
+    # Toggle _is_hologram OFF
+    _is_hologram = false
+```
+
+#### Set the Material
+One last thing we need to do, is to set the `@export` variable of `hologram_material` of the player.
+
+**Set** the `Hologram Material` property of the `Player` script in the `player.tscn` scene:
+
+![](img/HologramMaterialExportSet.png)
+
+#### The result
+Here is the result. The `gif` shows, what happens when the `1` **key** is pushed. It toggles the hologram `ON` and after a while it toggles itself `OFF`. Feel free to **try it yourself** in the project.
+
+![](img/HologramPlayerLogicDone.gif)
+
+
+### Secret Box
+Currently, the **hologram ability** is useless to the player, but we will change that. I prepared a special scene called `secret_box.tscn` in the folder `3D/WorldObjects/`. This scene hosts a special `HologramWall` scene, which will interact with the players' hologram.
+
+<img src="img/SecretBox.png" width="500"/>
+
+
+### Hologram Wall Set up
+The effect of the hologram wall needs to **know the position of the player**. Making all hologram walls depend on the player is not a good idea, since the game could crash once the player does not exist in the scene. We will do that by putting the `HologramWall` node into a special group and then the `LevelManager` will find all of them and set the player reference upon the start of the scene.
+
+**Set** the root of the `hologram_wall.tscn` scene to a new **Global Group** called `Hologramable`:
+
+![](img/HologramableGroup.png)
+
+
+### Set-up in `debug_3d_scene.tscn`
+First, we need to add the `secret_box.tscn` scene to the scene.
+
+1. **Add** the `secret_box.tscn` scene as a child of the `Environment` node
+2. **Move** the `SecretBox` node to position `(22, 3.53, 36)`
+3. **Place** a few `collectible.tscn` scenes into the box as a reward for the player
+
+#### `LevelManager` script
+Currently, the script is basically empty. Let's fill it out.
+
+1. **Open** the `level_manager.gd` script in `3D/Levels/`
+2. **Change** the script like this:
+```GDScript
+class_name LevelManager
+extends Node
+
+@export var player : PlayerController3D
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+    var hologramables : Array[Node] = get_tree().get_nodes_in_group("Hologramable")
+
+    for node in hologramables:
+        if node.has_method("set_player_ref"):
+            node.set_player_ref(player)
+        else:
+            push_warning("Node %s tagged as `Hologramable` without `set_player_ref` function!" % [node.name])
+
+```
+3. **Set** a reference to the player in the **inspector** of the `Debug3dScene` node (it has the `LevelManager` script)
+![](img/PlayerRefManager.png)
+
+### The result
+Playing the game now, you should be able to press the `1` button to turn the **player into a hologram**. In this hologram state, you should be able to walk through the front wall of the `SecretBox` a collect the collectibles on the inside.
+
+![](img/HologramCompleted.gif)
+
+> aside positive
+> The hologram wall has a special variant of the `hologram_shader.tres` that we created. If you are interested how it works you can look into the `hologram_dist_shader.tres` file.
 
 
 ## Particles
 Duration: hh:mm:ss
 
+Let's move away from shaders and explore another area of VFX. This section is about **particle effects**. These effects are composed of **particles (3D models or Sprites)**, which are **spawned (emitted)** in a given shape and behave in a set way. I think it will become clearer as we dive deeper into this section.
+
+### Particle Nodes
+There are quite a few nodes:
+
+- <img src="img/CPUParticles2D.png" width="25"/> `CPUParticles2D` / <img src="img/CPUParticles3D.png" width="25"/> `CPUParticles3D` - 2D and 3D variants of particle systems that are simulated on the `CPU`, should generally be only used on **older devices**.
+- <img src="img/GPUParticles2D.png" width="25"/> `GPUParticles2D` / <img src="img/GPUParticles3D.png" width="25"/> `GPUParticles3D` - 2D and 3D variants of particle systems that are simulated on the `GPU` using **hardware acceleration**. They are **much faster** since the `GPU` is made for tasks like these. We will use these to **create all the effects**.
+- `GPUParticleAttractor3D` - Special nodes, that **attract nearby particles**. Useful for particles that interact with the environment or the player. **We will not use these nodes in this codelab.**
+
+![](img/GPUAttractors.png)
+
+- `GPUParticleCollider3D` - Special nodes, that act as **colliders for nearby particles**, not letting them pass though. Useful for particles that interact with the environment or the player. **We will not use these nodes in this codelab.**
+
+![](img/GPUCollider.png)
+
 ### Double Jump Particles
+The first particle effect, that we will look into, is making the player emit **steam particles** when double jumping, which compliments the steam release sound, that is played.
+
+#### Add a <img src="img/GPUParticles3D.png" width="25"/> `GPUParticles3D` node
+1. **Open** the `player.tscn` scene
+2. **Add** a `GPUParticles3D` node as a child of the root
+3. **Rename** the node to `DoubleJumpParticles` (important!) 
+4. **Move** the node to `(0, -0.2, 0.3)`, so that it is at the bottom of the backpack
+
+#### Add a basic `ProcessMaterial`
+The particles behave based on a `ProcessMaterial`, where almost everything can be set. We will set all the properties later on, let's just add a basic one, so that we can see the particles in the next step.
+
+1. **Set** the `ProcessMaterial` property to a `New ParticleProcessMaterial`
+
+#### Add a `Draw Pass`
+A draw pass tells the `GPUParticles3D`, what kind of object we would like the particles to be. This can be a 3D mesh, or in our case just a `Quad` with a sprite.
+
+1. **Set** the property of `Draw Passes/Pass 1` to a `New QuadMesh`
+    - **Gray quads should start falling down.**
+2. **Open** the `QuadMesh` and **Set** the `Size` property to `(0.3, 0.3)`
+    - **The quads are now smaller.**
+3. **Set** the `Material` property to a `New StandardMaterial3D`
+    - **The quads are lighter, and we can change the material.**
+4. **Open** the `Material` and **Set** the `Albedo/Texture` property to `cloud_particles.png`
+    - **The quads have the cloud particles texture.**
+5. **Set** the `Transparency/Transparency` property to `Alpha`
+    - **The particles have a transparent background.**
+6. **Set** the `Sampling/Filter` property to `Nearest`
+    - **The particles are pixel perfect. There is no blurring using linear interpolation.**
+7. **Set** the `Billboard/Mode` property to `Particle Billboard`
+    - **The particles always face the camera under any angle.**
+8. **Set** the `Billboard/Keep Scale` property to `On`
+    - **Has no visual effect on the particles for now, will be useful later.**
+
+This should be the result after the setup:
+
+<img src="img/DoubleJumpParticleFall.gif" width="300"/>
+
+#### `GPUParticles3D` Parameters
+Let's now go from the top of the **inspector** of the `DoubleJumpParticles` and change various settings, that control the **emission of the particles**.
+
+1. **Set** the `Amount` property to `16`.
+    - **More particles per second are emitted.**
+2. **Set** the `Time/Lifetime` property to `0.6`
+    - **The particles are deleted earlier.**
+3. **Set** the `Time/Explosiveness` to `0.9`
+    - **The particles are emitted more as a burst than a constant stream.**
+
+<img src="img/DoubleJumpParticleBurst.gif" width="300"/>
+
+
+#### `Particle Flags` and `Spawn` Categories
+Let's now go into the `ProcessMaterial` property and change the `Particle Flags` and `Spawn` category properties to change the spawn behavior of the particle.
+
+1. **Set** the `Particle Flags/Rotate Y` to `On`
+    - **This allows the particles to be rotated.**
+2. **Set** the `Spawn/Angle/Angle/min` to `-720` and `Spawn/Angle/Angle/max` to `720`
+    - **This makes the particles spawn with a random rotation and hides the monotony of the sprite a bit.**
+3. **Set** the `Spawn/Initial Velocity/min` to `4` and `Spawn/Initial Velocity/max` to `6`
+    - **The particles now shoot to right of the player. Each particle has a random velocity between** `4` **and** `6`.
+4. **Set** the `Spawn/Velocity/Direction` to `(0, -1.0, 0)`
+    - **The particles now shoot downwards instead of right. This adjusts the direction of the** `Initial Velocity`.
+5. **Set** the `Spawn/Velocity/Spread` to `30`
+    - **The particles now shoot in a tighter cone from the emission point. This controls the maximum angle difference allowed from the** `Spawn/Velocity/Direction`.
+
+<img src="img/DoubleJumpParticleSpawn.gif" width="300"/>
+
+#### `Animated Velocity` and `Accelerations` Categories
+Now, we will change properties in the `Animated Velocity` category to make the particle spin and then change properties in the `Accelerations` to slow the particles down.
+
+1.
+    -
+2.
+    -
+3.
+    -
+4.
+    -
 
 ### Walking Particles
 
