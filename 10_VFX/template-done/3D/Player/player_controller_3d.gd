@@ -41,6 +41,11 @@ signal collectible_gathered
 @export var hologram_tween_time : float = 0.2
 @export var hologram_time : float = 1.5
 
+@export_group("Particles")
+@export_subgroup("Walking Particles")
+@export var foot_particles : PackedScene
+@export var foot_particles_offset : Vector3
+
 @onready var animation_tree : AnimationTree = $Mesh/AnimationTree
 @onready var look_at_modifier_3d : LookAtModifier3D = $Mesh/Armature/Skeleton3D/LookAtModifier3D
 @onready var gun_target : Node3D = $GunTarget
@@ -150,6 +155,8 @@ func _double_jump() -> void:
 	_has_double_jumped = true
 	velocity.y = GlobalState.player_stats.jump_force
 	AudioManager.play_sfx_as_child(AudioManager.SFX_TYPE.PLAYER_DOUBLE_JUMP, self)
+	double_jump_particles.restart()
+	double_jump_particles.emitting = true
 
 # Interacts with node in the interact area 3D
 func _interact() -> void:
@@ -237,6 +244,7 @@ func _animation_tree_update() -> void:
 	var walkscale : float = (local_velocity.length() / GlobalState.player_stats.speed) * walk_mult
 	animation_tree["parameters/FreeMoveBlendTree/TimeScale/scale"] = walkscale
 
+# Checks and enables the hologram effect of the player
 func _hologram() -> void:
 	if not GlobalState.player_stats.has_hologram: return
 	if _is_hologram: return
@@ -281,9 +289,17 @@ func set_do_movement(value : bool, delay : float = 0) -> void:
 	await get_tree().create_timer(delay).timeout
 	_do_movement = value
 
+# Used to receive damage from the environment or enemies
 func receive_damage(value : float, from : Node3D):
 	if not _can_be_damaged: return
 	_can_be_damaged = false
+	
+	# Damage Particles
+	var process_material : ParticleProcessMaterial = damage_particles.process_material
+	process_material.direction = -to_local(from.global_position).normalized()
+	process_material.direction.y = 0.1
+	damage_particles.restart()
+	damage_particles.emitting = true
 	
 	VFXManager.pulse_grayscale(OHG_amount, OHG_fade_in, OHG_wait_time, OHG_fade_out)
 	AudioManager.play_sfx_as_child(AudioManager.SFX_TYPE.PLAYER_DAMAGED, self)
@@ -313,6 +329,7 @@ func receive_damage(value : float, from : Node3D):
 	collision_mask += ENEMY_LAYER
 	_can_be_damaged = true
 
+# Function for the AnimationTree to use
 func set_connect_anim_bool(value : bool) -> void:
 	_connected = value
 
@@ -321,12 +338,12 @@ func set_controllable(value : bool) -> void:
 	_controllable = value
 	velocity = Vector3.ZERO
 
+# Getter of _is_hologram bool
 func get_is_hologram() -> bool:
 	return _is_hologram
 
 func _on_interact_area_body_entered(body: Node3D) -> void:
 	if body.is_in_group("Interactable"):
-		print(body.name + " entered interact area")
 		_interact_node_in_area = body
 
 func _on_interact_area_body_exited(body: Node3D) -> void:
@@ -334,5 +351,11 @@ func _on_interact_area_body_exited(body: Node3D) -> void:
 		print(body.name + " exitted interact area")
 		_interact_node_in_area = null
 
+# Signal function called by feet colliders
 func _took_a_step(_body : Node3D) -> void:
 	AudioManager.play_sfx_as_child(AudioManager.SFX_TYPE.PLAYER_WALK, self)
+	var particles : GPUParticles3D = foot_particles.instantiate()
+	add_child(particles)
+	particles.position = foot_particles_offset
+	particles.finished.connect(particles.queue_free)
+	particles.emitting = true

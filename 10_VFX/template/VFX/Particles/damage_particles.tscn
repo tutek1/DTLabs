@@ -1,0 +1,52 @@
+[gd_scene load_steps=7 format=3 uid="uid://bh317lwfvkneo"]
+
+[ext_resource type="Texture2D" uid="uid://beefcsv88jce0" path="res://VFX/Particles/bolt_particles.png" id="1_uaxch"]
+
+[sub_resource type="Curve" id="Curve_l181h"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.199074, 1), 0.0, 0.0, 0, 0, Vector2(0.800926, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_a5r6t"]
+curve = SubResource("Curve_l181h")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_l181h"]
+emission_shape = 3
+emission_box_extents = Vector3(0.25, 0.5, 0.25)
+angle_min = -720.0
+angle_max = 720.0
+direction = Vector3(-1, 0, 0)
+spread = 20.0
+initial_velocity_min = 10.0
+initial_velocity_max = 10.0
+angular_velocity_min = -720.0
+angular_velocity_max = 720.0
+radial_velocity_min = 2.99998
+radial_velocity_max = 2.99998
+scale_curve = SubResource("CurveTexture_a5r6t")
+anim_speed_min = 3.0
+anim_speed_max = 3.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a5r6t"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("1_uaxch")
+texture_filter = 0
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 2
+particles_anim_v_frames = 1
+particles_anim_loop = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_ud3nw"]
+material = SubResource("StandardMaterial3D_a5r6t")
+size = Vector2(0.25, 0.25)
+
+[node name="DamageParticles" type="GPUParticles3D"]
+emitting = false
+amount = 20
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.9
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_l181h")
+draw_pass_1 = SubResource("QuadMesh_ud3nw")
