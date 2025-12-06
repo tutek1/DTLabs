@@ -89,7 +89,7 @@ A health indicator can be done in many different ways. You can use simple text (
 
 1. **Add** a `TextureProgressBar` node as a child of the `HUD`
 2. **Rename** it to `HPBar`
-3. **Set** all the textures in the `Textures` category (`Under` → `hp_bar_under.png`, etc.)
+3. **Set** all the textures in the `Textures` category (`Under` ⇾ `hp_bar_under.png`, etc.)
 4. **Set** the `Texture` ⇾ `Filter` property to `Nearest` (disabling linear interpolation of the textures)
 5. **Set** the `Value` to `50` (so that the fill is visible)
 
@@ -699,7 +699,7 @@ Let's start by creating a **game name** and the **three buttons**. To keep all t
 #### Anchor Problem
 You might notice that even though we set the `Anchor Preset` of the `VBoxContainer` to `Center`, it is **not in the center of the screen**. The `Anchor Preset` option sets the position of the `Control` node (all 2D UI nodes) in relation to its parent `Control` node.
 
-If we look at the `Control` parent node → `MainMenu`, we can see that its size is `(0, 0)`, and it is aligned to the `Top Left`. We want the `MainMenu` to encompass the whole screen, and we can do it easily, without setting exact values of the screen.
+If we look at the `Control` parent node ⇾ `MainMenu`, we can see that its size is `(0, 0)`, and it is aligned to the `Top Left`. We want the `MainMenu` to encompass the whole screen, and we can do it easily, without setting exact values of the screen.
 
 - **Set** the `Anchor Preset` of the `MainMenu` to `Full Rect`.
 
