@@ -47,7 +47,7 @@ I prepared a testing object for the hologram shader. It's a white box, where one
 The manager handles playing fullscreen VFX. We will add it to `Autoload` and use it to add the fullscreen grayscale effect to the game. Now it just has a tweening function to pulse the grayscale effect, which is not yet implemented.
 
 ### Particle Sprites
-The last thing I added are the sprites that will be used for the particle effects, which we will create in the second part of the codelab.
+The last thing I added are the sprites that will be used for the particle effects, which we will create in the second part of the codelab. They are just small `64x64` textures.
 
 <img src="img/AirEnemyParticles.png" width="60"/> <img src="img/BoltParticles.png" width="120"/> <img src="img/CloudParticles.png" width="60"/> <img src="img/FootParticles.png" width="60"/> 
 
@@ -763,7 +763,7 @@ There are quite a few nodes:
 
 ![](img/GPUCollider.png)
 
-### Double Jump Particles
+### Double Jump - Basic Particle Effect Setup
 The first particle effect, that we will look into, is making the player emit **steam particles** when double jumping, which compliments the steam release sound, that is played.
 
 #### Add a <img src="img/GPUParticles3D.png" width="25"/> `GPUParticles3D` node
@@ -830,26 +830,131 @@ Let's now go into the `ProcessMaterial` property and change the `Particle Flags`
 
 <img src="img/DoubleJumpParticleSpawn.gif" width="300"/>
 
-#### `Animated Velocity` and `Accelerations` Categories
+#### `Animated Velocity`, `Accelerations`, and `Display` Categories
 Now, we will change properties in the `Animated Velocity` category to make the particle spin and then change properties in the `Accelerations` to slow the particles down.
 
-1.
-    -
-2.
-    -
-3.
-    -
-4.
-    -
+1. **Set** the `Animated Velocity/Angular Velocity/min` to `-150` and `Animated Velocity/Angular Velocity/max` to `150`
+    - **The particles now slightly rotate during their lifetime.**
+2. **Set** the `Accelerations/Gravity` to `(0, -2, 0)`
+    - **The particles do not fall as fast and are more floaty as steam should be.** 
+3. **Set** the `Accelerations/Linear Accel/min` to `-18` and `Accelerations/Linear Accel/max` to `-18`
+    - **This slows down the acceleration of the particles.**
+4. **Set** the `Accelerations/Linear Accel/Accel Curve` to a `New CurveTexture` and set it like this:
+    - <img src="img/AccelCurve.png" width="200"/>
+    - **This makes the previous slow-down setting to be applied gradually.**
+5. **Set** the `Display/Scale/min` to `0.8` and `Display/Scale/max` to `1.2`
+    - **The scale of particles is now randomized between 0.8 and 1.2.**
+6. **Set** the `Disply/Scale/Scale Curve` to a `New CurveTexture` and set it like this:
+    - <img src="img/ScaleCurve.png" width="200"/>
+    - **The particles now start smaller, then go full size, and scale-down before disappearing.** 
 
-### Walking Particles
+#### The Visual Result
+Here is how the particle effect looks like now:
 
-### Damage Particles
+<img src="img/CloudParticlesDone.gif" width="300"/>
 
-### Enemy Flying Particles
+#### Play the Effect on Double Jump
+Last thing we need to do is to actually play the particle effect when the player double jumps. Let's first change the effect, so that it **only plays once**:
+
+1. **Toggle** the `Time/One-Shot` property of the `DoubleJumpParticles` node
+2. **Add** these two lines at the end of the `func double_jump()` function in the `player_controller_3d.gd` script:
+    ```GDScript
+    double_jump_particles.restart()
+    double_jump_particles.emitting = true
+    ```
+
+![](img/CloudInScene.gif)
+
+> aside positive
+> We **restart** the particles so that if particles from a previously played double jump still exist, they are deleted and new ones are played. As to why this is done, more will be explained in the next subsection.
+
+### Walking Particles - Creating Particle Nodes
+Making the player emit particles when walking is a bit more complex. Sadly, we **cannot just simply play** a particle effect when we want to. We need to wait for the previous emission to complete first. To combat this, I have prepared the `GPUParticles3D` node as a separate scene, and we will **create a new emitter of particles** each time the player takes a step.
+
+**Go** into the `_took_a_step()` function in the `player_controller_3d.gd` script and **add** these lines at the **end**:
+```GDScript
+func _took_a_step(_body : Node3D) -> void:
+    ...
+    var particles : GPUParticles3D = foot_particles.instantiate()
+    add_child(particles)
+    particles.position = foot_particles_offset
+    particles.finished.connect(particles.queue_free)
+    particles.emitting = true
+```
+- First, we **instantiate** a new `GPUParticles3D` node and **add** it as a child
+- Then, we set the position to be at the feet
+- Next, we connect the `finished` signal of the particle node to its own `queue_free()` function. This will delete the node once the effect stops playing.
+- Lastly, we start emitting the particles.
 
 
+Now **set** the `@export` variable `Particles/Walking Particles/Foot Particles Offset` to `(0, -0.9, 0)` to make the particles emit at the feet of the player.
 
+![](img/WalkParticles.gif)
+
+> aside positive
+> This approach of **creating and deleting nodes** is standard procedure and should not pose a big performance impact. However, having a **pool of several** `GPUParticle3D` **nodes** that are reused when needed should be a better approach in case, that the performance becomes critical.
+
+### Damage Particles - Setting Particle Parameters
+Let's use the already prepared `DamageParticles` node and learn how you can easily set particle parameters from code, to make them more responsive. I want the effect's `Spawn/Velocity/Direction` to be set based on the direction the damage came from.
+
+1. **Go** into the `player_controller_3d.gd` into the `receive_damage()` function
+2. **Put** this code above the `VFXManager...` and `AudioManager...` lines:
+    ```GDScript
+    # Damage Particles
+    var process_material : ParticleProcessMaterial = damage_particles.process_material
+    process_material.direction = -to_local(from.global_position).normalized()
+    process_material.direction.y = 0.1
+    damage_particles.restart()
+    damage_particles.emitting = true
+    ```
+- **Get** the `ParticleProcessMaterial` resource.
+- **Set** the `direction` to the direction from the enemy to the player.
+- **Set** the `direction.y` to `0.1` to make the effect pop upwards a bit.
+- **Restart** and **Emit** the particles.
+
+![](img/DamageParticles.gif)
+
+
+### Enemy Flying Particles - Constantly Emitting Particles
+Another way to use particles, is to have them **constantly emit**, making a trail effect. Let's create a trail of particles behind the `AirEnemy`, that slowly disappear after time.
+
+#### The Setup
+1. **Open** the `air_enemy.tscn` scene
+2. **Add** a new `GPUParticles3D` node as a child of the root
+3. **Set** the `ProcessMaterial` to a `New ParticleProcessMaterial`
+4. **Set** the `Draw Passes/Pass 1` to a `New QuadMesh`
+5. **Set** the `Size` of the `QuadMesh` to `(0.25, 0.25)`
+6. **Set** the `Material` of the `QuadMesh` to a `New StandardMaterial`
+7. **Set** these properties of the `StandardMaterial`:
+    - `Transparency/Transparency` = `Alpha`
+    - `Vertex Color/Use as Albedo` = `On`
+    - `Albedo/Texture` = `air_enemy_particles.png`
+    - `Sampling/Filter` = `Nearest`
+    - `Billboard/Mode` = `Particle Billboard`
+    - `Billboard/Keep Scale` = `On`
+
+#### The Effect
+1. **Set** the `Time/Lifetime` to `3.0 s`
+2. **Set** the `Amount` to `64`
+3. Now in the `ParticleProcessMaterial` **set** these properties and **watch** how they change the effect:
+    - `Spawn/Position/Emission Shape` = `Sphere`
+    - `Spawn/Angle/min` and `max` = `-720` and `720`
+    - `Spawn/Velocity/Direction` = `(0, 1, 0)`
+    - `Spawn/Velocity/Spread` = `30`
+    - `Spawn/Velocity/Initial Velocity/min` and `max` = `0.2` and `0.2`
+    - `Animated Vecocity/Angular Velocity/min` and `max` = `200` and `400`
+    - `Accelerations/Gravity` = `(0, 0, 0)`
+    - `Display/Scale Curve`
+        <img src="img/ScaleCurveEnemy.png" width="200"/>
+    - `Display/Hue Variation/Variation/max` = `0.1`
+    - `Turbulance/Enabled` = `On`
+    - `Turbulance/Noise Scale` = `4`
+
+Now the effect should look like this, giving the enemy a more dangerous feel:
+
+![](img/EnemyStatic.gif)
+
+![](img/EnemyDynamic.gif)
 
 ## Recap
 Duration: hh:mm:ss
@@ -877,7 +982,7 @@ Let's look at what we did in this lab.
 
 
 ### Note on X
-
+7
 
 ### Project Download
 If you want to see what the finished template looks like after this lab, you can download it here:

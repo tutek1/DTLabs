@@ -703,7 +703,6 @@ steerings = Array[ExtResource("11_vdnx2")]([SubResource("Resource_vdnx2"), SubRe
 
 [node name="GroundEnemyBeehave" parent="." instance=ExtResource("21_0v0jw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.41741, 0)
-visible = false
 collision_mask = 7
 patrol_points = Array[Vector3]([Vector3(3.46, 1, -2.975), Vector3(36.425, 1, -37.265), Vector3(-24.995, 5, -25.53)])
 

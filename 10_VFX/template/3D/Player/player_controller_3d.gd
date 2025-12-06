@@ -41,6 +41,12 @@ signal collectible_gathered
 @export var hologram_tween_time : float = 0.2
 @export var hologram_time : float = 1.5
 
+@export_group("Particles")
+@export_subgroup("Walking Particles")
+@export var foot_particles : PackedScene
+@export var foot_particles_offset : Vector3
+
+
 @onready var animation_tree : AnimationTree = $Mesh/AnimationTree
 @onready var look_at_modifier_3d : LookAtModifier3D = $Mesh/Armature/Skeleton3D/LookAtModifier3D
 @onready var gun_target : Node3D = $GunTarget
