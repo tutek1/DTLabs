@@ -10,22 +10,20 @@ Feedback Link: https://forms.gle/J8eeuQAJ3wMY1Wnq7
 ## Overview
 Duration: hh:mm:ss
 
-This lab will focus on learning about 
+This lab will focus on learning about **visual effects (VFX)**. We will start with creating a **grayscale screen overlay** using code. Then move on to making a **hologram shader** for the player using **visual shaders**. In the second part of the codelab, we will dive into **particle effects**. We will add a **double jump**, **walking**, **player damage**, and **enemy flying** particles.
+
 
 In a bullet point format, we will:
-- Look at the 
-- Learn about 
-- **Play a simple** 
-- Look at the 
-- Use the 
-- Learn about 2 methods 
-- Lastly, we will make
+- Look at the **changes and new files** I added to the project 
+- Learn about the **GPU rendering pipeline** to see, which parts can be influenced.
+- Implement a simple **grayscale overlay effect** using shader code.
+- Go step-by-step and create the visual and logic sides of a **hologram shader** using visual shaders.
+- Look at another part of **VFX** ⇾ **Particle Effects**
 
 Here is the template for this lab. Please download it, there are scripts, shaders, sprites, and scenes needed for the implementation of the audio playing.
 <button>
   [Template Project](https://cent.felk.cvut.cz/courses/39HRY/godot/10_VFX/template.zip)
 </button>
-
 
 
 ## Changes in the Project
@@ -970,19 +968,21 @@ I would be very grateful if you could take a moment to fill out a **very short f
 
 ### Recap
 Let's look at what we did in this lab.
-- First, we looked at 
-- Next, we learned what 
-- We created the 
-- Then, we learned about all the 
-- After the intro, we made 
-- Next, we looked at the 
-- Then, we implemented the 
-- With that complete, we used these methods 
-- Lastly, we learned how to 
+- First, we looked at the **changes and new files** in the project.
+- Then, we learned about the **GPU rendering pipeline** to see, which parts can be influenced.
+- Next, we created a simple **grayscale screen overlay** shader with code.
+- Step-by-step we created the **hologram shader** using the **visual shader** workflow:
+    - Adding scanlines
+    - Adding color
+    - Adding the Fresnel Effect
+    - Adding Vertex Glitch effect using noise
+- Then, we made the shader useful by making the player be able to **activate a hologram form** and **walk through special hologram walls**.
+- After this part, we looked at another part of VFX, which are **Particle Effects**.
+- We went and designed the **double jump particles** and made them **play** at the correct time.
+- Then, we implemented the **creation and deletion** of the **walking particles**.
+- Next, with the **damage particles**, we learned how to set the parameters of **particles** on-to-go.
+- Lastly, we designed the `AirEnemy` **particles**, that the enemy constantly emits. 
 
-
-### Note on X
-7
 
 ### Project Download
 If you want to see what the finished template looks like after this lab, you can download it here:
