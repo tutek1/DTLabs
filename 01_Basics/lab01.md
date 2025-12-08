@@ -32,7 +32,7 @@ First, before we download the Godot Engine, we need to choose a language. Each G
 This tutorial will use the **standard** version and **GDScript**, a Python-like scripting language designed specifically for the Godot Engine. It is possible to use **C#** and **GDScript** interchangeably in one project (with some minor restrictions), but this tutorial will be done entirely in **GDScript** for simplicity.
 
 > aside positive
-> To maximise performance of a project, you would ideally use **C#** for complex algorithms (such as pathfinding or other complex calculations) and **GDScript** for interfacing with the engine and calling engine functions.  
+> To maximize performance of a project, you would ideally use **C#** for complex algorithms (such as pathfinding or other complex calculations) and **GDScript** for interfacing with the engine and calling engine functions.  
 
 > aside negative
 > Currently the **.NET** version of Godot **does not** support web builds of the game.
@@ -318,7 +318,7 @@ I would be very grateful if you could take a moment to fill out a **very short f
 </button>
 
 > aside positive
-This entire course, as well as the game we are creating, is part of my master's thesis.
+> This entire course, as well as the game we are creating, is part of my master's thesis.
 
 ### Recap
 Let's look at what we did in this lab.
