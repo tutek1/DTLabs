@@ -10,7 +10,7 @@ Feedback Link: https://forms.gle/J8eeuQAJ3wMY1Wnq7
 ## Introduction
 Duration: hh:mm:ss
 
-This tutorial should provide a surface-level overview of how to use the open-source game engine **Godot Engine** to make games. It won't cover everything there is to cover and will only show a few ways how to program/create game mechanics and systems. If any of the discussed topics catch your interest, I suggest that you look up other, more detailed tutorials that cover the topic in more depth.
+This tutorial provides a surface-level overview of how to use the open-source game engine **Godot Engine** to make games. It won't cover everything, and will only show a few ways to program/create game mechanics and systems. If any of the discussed topics pique your interest, I suggest looking up other, more detailed tutorials that cover the topic in greater depth.
 
 In this first lab, we will cover:
 - Downloading the **Godot Engine**
@@ -29,7 +29,7 @@ First, before we download the Godot Engine, we need to choose a language. Each G
 - **Standard** (supports **GDScript** language)
 - **.NET** (supports **GDScript** and **C#** language)
 
-This tutorial will use the **standard** version and **GDScript**, which is a Python-like scripting language made specifically for Godot. It is possible to use **C#** and **GDScript** interchangeably in one project (with some minor restrictions), but this tutorial will be done entirely in **GDScript** for simplicity.
+This tutorial will use the **standard** version and **GDScript**, a Python-like scripting language designed specifically for the Godot Engine. It is possible to use **C#** and **GDScript** interchangeably in one project (with some minor restrictions), but this tutorial will be done entirely in **GDScript** for simplicity.
 
 > aside positive
 > To maximise performance of a project, you would ideally use **C#** for complex algorithms (such as pathfinding or other complex calculations) and **GDScript** for interfacing with the engine and calling engine functions.  
@@ -39,7 +39,7 @@ This tutorial will use the **standard** version and **GDScript**, which is a Pyt
 
 
 ### Engine Version
-This tutorial will be done using the engine version `4.4.1`, and I suggest you do the same, but any newer version can be used.
+This tutorial will use the engine version `4.4.1`. I suggest using the same version so that you can closely follow the tutorial. However, any newer version could also be used.
 
 Please download the Godot engine using the following link and place it into a folder of your liking:
 <button>
@@ -47,17 +47,17 @@ Please download the Godot engine using the following link and place it into a fo
 </button>
 
 > aside negative
-> Beware that the differences in major Godot versions may be significant. So if you plan on using a newer version, not all things said in this tutorial might be completely correct.  
+> Beware that the differences in major Godot versions may be significant. Therefore, if you plan to use a newer version, not all information presented in this tutorial may be entirely accurate.  
 
 > aside positive
-> I recommend using the **newest** stable version for your own projects.
+> I recommend using the **latest** stable version for your own projects.
 
 
 
 ## The Project
 Duration: hh:mm:ss
 
-In this tutorial, we will be making a game about a robot that goes inside a computer to fight off malware that has infected the computer. It will mainly be a **3D platformer** with seamless **2D platforming and puzzle** sections. The complete **Game Design Document** (perhaps to inspire your own GDD) can be found here: [GDD]("https://github.com/tutek1/DTLabs/blob/main/GDD.pdf")
+In this tutorial, we will create a game about a robot that resides within a computer and fights off malware that has infected it. It will primarily be a **3D platformer** with seamless **2D platforming and puzzle** sections. The complete **Game Design Document** (perhaps to inspire your own GDD) can be found here: [GDD]("https://github.com/tutek1/DTLabs/blob/main/GDD.pdf")
 
 ### Getting and running the template
 Each lab will have a template project, which we will fill out together. This lab's template can be downloaded here:
@@ -77,13 +77,13 @@ Each lab will have a template project, which we will fill out together. This lab
 ## Godot UI
 Duration: hh:mm:ss
 
-Now that you have the project open, it might be a bit overwhelming to orient yourself in the **Godot UI**, so let's take a look at it.
+Now that you have the project open, it may be overwhelming to orient yourself in the **Godot UI**. Let's take a look at it.
 
 ![](img/GodotUI.png)
 
 1. This is the **Scene hierarchy**. Here, you will see all the Nodes (basic building blocks) in the current scene and how they are composed in the scene. There is also a second tab with the import settings of assets.
-2. This is the **Scene view**. It is visible because in `6.` the **3D tab** is selected. This is the main way you can look around and preview the scene you are making.
-3. This is the **FileSystem**. It shows you all the files, folders, and assets that are present in the root folder of the project.
+2. This is the **Scene view**. It is visible because in `6.` the **3D tab** is selected. This window is the primary way to navigate in the scene and preview the changes you are making.
+3. This is the **FileSystem**. It displays all files, folders, and assets present in the project's root folder.
 4. This window has multiple functionalities. 
     - It has the **Output** console, where you will see the messages you print during play mode.
     - The **Debugger**, where you can find all the information about the performance, errors, warnings, networking, etc.
@@ -98,10 +98,10 @@ Now that you have the project open, it might be a bit overwhelming to orient you
 
 7. This is the **Play** panel. We will be mainly interested in:
     - The first button starts the full game (a set main scene)
-    - The next 2 buttons pause and stop the game
+    - The following 2 buttons pause and stop the game
     - The fifth button starts the game with the currently open scene.
 
-Don't worry if you feel lost. We will go through all these parts in much more detail later. This is just an overview.
+Don't worry if you feel lost. We will go through all these parts in much more detail later. This subsection is just an overview.
 
 
 
@@ -111,10 +111,10 @@ Duration: hh:mm:ss
 > aside negative
 > If you don't see the testing scene in the scene view (the one in the video below), here is how to open it. In the **FileSystem** window, open the folder `3D/Debug` and double-click the `debug_3d_scene.tscn` file. 
 
-In this section, we will learn several ways to move in the 3D scene view (2D handles in a very similar way). Now there are 2 most commonly used ways to move in the scene view:
+In this section, we will learn several ways to move in the 3D scene view (2D handles in a very similar way). Now, there are two most commonly used ways to move in the scene view:
 
 ### Middle Mouse Button (MMB)
-You can hold the **middle mouse button** to move in different ways in the scene. Watch this video, which shows the 3 basic movements outlined below.
+You can hold the **middle mouse button** to move in different ways in the scene. Watch this video, which shows the three basic movements outlined below.
 <video id=wXRXxe11oss></video>
 
 - `MMB` - Rotate around a point
@@ -160,7 +160,7 @@ Now with the `Resistor` selected and in view, you can move it, rotate it, or sca
 
 
 ### Object duplication
-Our scene is looking a little sad, so let's add more resistors. **Select** the `Resistor` node in the **scene hierarchy** and press `CTRL+D` to duplicate. Now repeat this step and **move, scale,** and **rotate** them to make the scene look nicer.
+Our scene is looking a little sad, so let's add more resistors. **Select** the `Resistor` node in the **scene hierarchy** and press `CTRL+D` to duplicate. Now repeat this step and **move, scale,** and **rotate** them to make the scene look better.
 
 Try to use all **three ways** described above to manipulate the objects.
 
@@ -168,7 +168,7 @@ Try to use all **three ways** described above to manipulate the objects.
 > You can select multiple resistors and duplicate all of them at once. So that you don't have to duplicate them one by one.
 
 
-If you played with the scale of objects or moved some of them up or down, you might have noticed that they are no longer placed precisely on the ground. They are either above/below the ground or partway in the ground. You can use:
+If you played with the scale of objects or moved some of them up or down, you might have noticed that they are no longer placed precisely on the ground. They are either above/below the ground or partly inside the ground. You can use:
 - `PAGEDOWN` key to snap an object to the ground.
 - `SHIFT+G` and then click to place it on any surface.
 
@@ -177,15 +177,15 @@ When you are happy with the scene, you can continue. Mine looks like this:
 ![](img/DebugScenePopulated.png)
 
 ### World Environment
-The visual look of a game is very important. Let's change the World Environment node and play around with the visual style of the scene.
+The visual look of a game is critical. Let's modify the `WorldEnvironment` node and experiment with the scene's visual style.
 
 ![](img/WorldEnvironment.png)
 
 1. **Select** the `World Environment` node in the **scene hierarchy**.
 2. **Click** on the Environment Resource box
-3. **Change** the settings of the world to your liking. Many settings can be changed here; try to play with them.
+3. **Change** the settings of the world to your liking. You can adjust many settings here; try experimenting with them.
 
-You can look up what each setting does in the [documentation](https://docs.godotengine.org/en/stable/classes/class_environment.html#class-environment) of Godot. If you feel lost or confused, don't dwell on it too much and move to the next section.
+You can look up what each setting does in the [documentation](https://docs.godotengine.org/en/stable/classes/class_environment.html#class-environment) of Godot. If you feel lost or confused, please don't dwell on it; instead, you can just move on to the next section.
 
 
 
@@ -195,9 +195,9 @@ Duration: hh:mm:ss
 Let's now dive a bit into the theory behind **nodes**, **trees**, and **the scene hierarchy**.
 
 ### Nodes
-Nodes are the basic building blocks of a scene. You can think of nodes as ingredients in a recipe, which have a singular purpose. One node might handle showing the Mesh/Sprite of the player, one might handle the collision shape, etc. There are many types of nodes with different functionalities, and by combining them, you create complex systems.
+Nodes are the basic building blocks of a scene. You can think of nodes as ingredients in a recipe, which have a singular purpose. One node might handle displaying the Mesh/Sprite of the player, while another might handle the collision shape, and so on. There are many types of nodes with different functionalities, and by combining them, complex systems can be created.
 
-Each node can only have **one script** attached, which further supports that each node only has one functionality. 
+Each node can only have **one script** attached, which further supports the notion that each node has only one functionality. 
 
 ### Scene Hierarchy
 In the image below (from the documentation), you can see that some nodes are "inside" others. This **tree-like** structure follows the logical ordering of the nodes and their functionalities. For example:
@@ -224,7 +224,7 @@ This hierarchy also propagates many properties from **parent** to **children**.
 ## Add your own object
 Duration: hh:mm:ss
 
-One of the last things I would like to cover in this intro lab is how to **create your own object** with collisions (it will come in handy later). So let's make a bigger version of the resistor.
+One of the last things I would like to cover in this intro lab is how to **create your own object** with collisions (it will come in handy later). Let's make a larger version of the resistor.
 
 ### StaticBody3D
 Since the resistor will not move, let's add a `StaticBody3D` node.
@@ -251,7 +251,7 @@ A mesh is a representation of a 3D object composed of vertices/points and triang
 ![](img/Mesh.png)
 
 
-Now there is a white cube placed on the ground. Let's make it big and change its color.
+Now, a white cube is placed on the ground. Let's make it big and change its color.
 
 ![](img/MeshManipulation.png)
 1. **Click** the cube mesh in the **inspector**
@@ -261,7 +261,7 @@ Now there is a white cube placed on the ground. Let's make it big and change its
 5. You can see the **resulting mesh**
 
 ### CollisionShape3D
-If we want the objects to have collisions, we need to define what collision shape they have. In simple objects such as cubes or spheres, the shape will be the same as the mesh. However, in more complex objects, the collision shape is approximated with multiple simpler shapes.
+If we want the objects to have collisions, we need to define the shape of their collider. In simple objects such as cubes or spheres, the shape will be the same as the mesh. However, in more complex objects, the collision shape is approximated with multiple simpler shapes.
 
 With the mesh present, we can see that the `StaticBody3D` has a warning next to it.
 ![](img/StaticBodyWarning.png)
@@ -277,7 +277,7 @@ The warning tells us that the `StaticBody3D` needs a **collision shape**. Let's 
 Now you have a cube with collisions. 
 
 ### Saving the object as a scene
-Having this new cube **saved** as a reusable object will be useful. Imagine you have 20 of them in a scene, and you want to change some property on all of them. Normally, you would have to go and individually change every single one. This would be inefficient and time-consuming.
+Having this new cube **saved** as a reusable object will be helpful. Imagine you have 20 cubes in a scene, and you want to change some property on all of them. Usually, you would have to go and change each one individually. This process would be inefficient and time-consuming.
 
 If we instead **save** the object as a scene, then all **changes made** to the scene will be **propagated** to every instance of the scene. Let's save the `Big Resistor` as a scene.
 
@@ -297,7 +297,7 @@ Now, with the `BigResistor` scene saved, you can **instantiate/add** more copies
 2. **Drag-and-drop** the saved scene file `big_resistor.tscn` from the **FileSystem** tab into the **scene view**
 
 > aside negative
-> Don't forget to put the newly created resistor as a child of the `Environment` node. This keeps our scene clean and easy to navigate.
+> Don't forget to put the newly created resistor as a child of the `Environment` node. Keeping our scene clean is crucial for easy navigation.
 
 ### Bonus
 If you are up to the challenge, with the `big_resistor.tscn` scene open, you can add the yellow "cables" with collision shapes to the sides in the same way as we added the main cube (with `CollisionShape3D` and `MeshInstance3D`). Here is what my solution looks like:
@@ -312,13 +312,13 @@ If you are up to the challenge, with the `big_resistor.tscn` scene open, you can
 Duration: hh:mm:ss
 
 ### Feedback
-I would be very grateful if you could take a moment to fill out a **very short feedback form** (it takes less than a minute). Your feedback will prove very useful for my master thesis, where I will use it to evaluate the work I have done.
+I would be very grateful if you could take a moment to fill out a **very short feedback form** (it takes less than a minute). Your feedback will prove very useful for my master's thesis, where I will use it to evaluate the work I have done.
 <button>
   [Google Forms](https://forms.gle/xcsTDRJH2sjiuCjP7)
 </button>
 
 > aside positive
-> This whole course and the game we are making are a part of my master thesis.
+This entire course, as well as the game we are creating, is part of my master's thesis.
 
 ### Recap
 Let's look at what we did in this lab.
