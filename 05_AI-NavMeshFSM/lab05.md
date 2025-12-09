@@ -29,7 +29,7 @@ Here is the template for this lab. Please **download it**. There are new folders
 ## Project Changes
 Duration: hh:mm:ss
 
-I have made quite a few changes since the last codelab. Most notably, I added **comments** to most of the code, changed the **main 3D scene** to accommodate the theme of this lab, and added **3D models** for the enemy and projectile. More on that later on.
+I have made several changes since the last codelab. Most notably, I added **comments** to most of the code, changed the **main 3D scene** to accommodate the theme of this lab, and added **3D models** for the enemy and projectile. More on that later on.
 
 ### global_debug.gd
 One of the more important additions is the `global_debug.gd` script. You can make use of it during playtime by pressing these keys:
@@ -37,14 +37,14 @@ One of the more important additions is the `global_debug.gd` script. You can mak
 - `F2` - slows down time by 1/2
 - `F3` - speeds up time by 2
 
-Having a script like this in your project is **extremely useful** for fast and easy **debugging**. Moreover, you can easily expand it to solve your project-specific debugging issues. I **recommend** copying it into your project if you plan on using Godot. 
+Having a script like this in your project is **extremely useful** for fast and easy **debugging**. Moreover, you can easily expand it to solve your project-specific debugging issues. I **recommend** copying it into your project if you plan to use Godot. 
 
 However, firstly, we need to learn about **Singletons** and **Autoload**!
 
 ### Singleton Pattern and Autoload
 The Singleton pattern is a software design pattern that **restricts a class**, so that there cannot be more than a **singular instance** of it. In most other game engines, you would have to use Singletons for scripts like the `global_debug.gd`.
 
-In **Godot,** you could also use Singletons, but there is an easier way. Godot allows you to set **scripts** or even **node trees** as **Autoload**. If you add a node/script as **Autoload**, it will be automatically created and added above the scene tree upon start. This makes the node accessible from anywhere, which is useful for many reasons. The usual **Godot Lifecycle** functions are still run.
+In **Godot**, you can also use Singletons, but there is an easier way. Godot allows you to set **scripts** or even **node trees** as **Autoload**. If you add a node/script as **Autoload**, it will be automatically created and added above the scene tree upon start. This makes the node accessible from anywhere, which is useful for many reasons. The standard **Godot Lifecycle** functions are still executed.
 
 Let's add the `global_debug.gd` as an **Autoload**:
 1. **Open** the `Project Settings`
@@ -61,7 +61,7 @@ The result should look like this:
 
 
 ### Globals in Remote Scene Tree View
-Now, if you **run the game** and press the keys outlined above, they should do their job. While running the game, you can switch the scene hierarchy to `Remote` mode. This allows you to see the **current state of the scene** as the game runs. This is useful for looking at node properties in **real time**. Looking at it now, we can see that the autoloaded `GlobalDebug` node sits as a **sibling** to the current 3D scene.
+Now, if you **run the game** and press the keys outlined above, they should function as intended. While running the game, you can switch the scene hierarchy to `Remote` mode. This allows you to see the **current state of the scene** as the game runs. This is useful for viewing node properties in **real time**. Looking at it now, we can see that the autoloaded `GlobalDebug` node sits as a **sibling** to the current 3D scene.
 
 ![](img/AutoloadInAction.png)
 
@@ -76,7 +76,7 @@ Autoload/Singletons are very useful for **tracking global values** (max reached 
 ## NavMesh
 Duration: hh:mm:ss
 
-Imagine you have an NPC character**, and you want them to navigate through a **maze**. We need to know where they **can and cannot walk** and then somehow **plan a path** through the maze. We can solve this problem easily with a **NavMesh** and a **NavMeshAgent**:
+Imagine you have an NPC character**, and you want them to navigate through a **maze**. We need to know where they **can and cannot walk**, and then somehow **plan a path** through the maze. We can solve this problem easily with a **NavMesh** and a **NavMeshAgent**:
 
 - **NavMesh** is a simplified representation of the environment using convex polygons that defines which areas of an environment are traversable by **NavMeshAgents**.
 - **NavMeshAgent** uses the **NavMesh** and a pathfinding algorithm like `A*` to plan a path from point A to point B.
