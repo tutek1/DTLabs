@@ -10,7 +10,7 @@ Feedback Link: https://forms.gle/J8eeuQAJ3wMY1Wnq7
 ## Overview
 Duration: hh:mm:ss
 
-This lab will move away a bit from the previous one. We will look at how to make a basic **2D platformer**. We will connect this 2D platformer to our 3D game in the next lab.
+This lab will deviate slightly from the previous one. We will explore how to create a basic **2D platformer**. We will connect this 2D platformer to our 3D game in the next lab.
 
 Today, we will look over:
 - What is a **sprite sheet/atlas**
@@ -39,14 +39,14 @@ Let's take a look at the template project that I provided. If you look in the **
 ### Folder management
 The way you structure the folders in your project is very important. Many people have folders based on **file type** (`Scripts`, `Art`, `Scenes`, `Sounds`, etc.). This can be quick and useful to find something in smaller projects or folders. I will use this approach in the `2DPlatforming` part of the project, since it will be a small minigame.
 
-The other approach, which you can see in the `3D` folder, is to split everything based on the **type of the game object**. I personally like this approach better, since it is more **logical** and **scalable**.
+The other approach, which you can see in the `3D` folder, is to split everything based on the **type of the game object**. I personally prefer this approach better, as it is more **logical** and **scalable**.
 
 ### Folder colors
-Another important thing is to stay organized. I recommend setting colors to the main folders (3D and 2DPlatforming) in the **FileSystem**. You can do it like this with a `right-click`:
+Another important thing is to stay organized. I recommend setting colors to the main folders (`3D` and `2DPlatforming`) in the **FileSystem**. You can do it like this with a `right-click`:
 
 ![](img/FolderColor.png)
 
-Personally, in this project, it would be nice to color the **3D** folder red and the **2D** folder blue, since 3D nodes are red and 2D nodes are blue. Like this:
+Personally, in this project, it would be nice to color the **3D** folder red and the **2D** folder blue, since 3D nodes are typically represented in red and 2D nodes are typically represented in blue. Like this:
 
 ![](img/FolderColorDone.png)
 
@@ -60,7 +60,7 @@ Now open the `debug_2d_scene.tscn` and switch to the **2D tab**
 Duration: hh:mm:ss
 
 ### Sprite Sheets/Atlases
-**Sprite sheets** or **sprite atlases** are a way of storing 2D drawn images. In games, where the environment can be built in a **grid** (Super Mario, Terraria, Core Keeper, etc.), it is a useful way to save memory, draw calls to the GPU, and reduce the number of image files.
+**Sprite sheets** or **sprite atlases** are a way of storing 2D drawn images. In games where the environment can be built on a **grid** (Super Mario, Terraria, Core Keeper, etc.), it is a useful way to save memory, reduce draw calls to the GPU, and decrease the number of image files.
 
  The main rules for sprite sheets are:
 - One sprite sheet is **one image**
@@ -130,9 +130,10 @@ Now let's paint the collision shapes. Please follow the steps in this video:
 ## TileMapLayer
 Duration: hh:mm:ss
 
-With the tileset set up, let's learn how to use it. A `TileSet` can be used in a `TileMapLayer`. There can be multiple layers in a scene. This is useful when you need, for example:
+With the tileset set up, let's learn how to use it. A `TileSet` can be used in a `TileMapLayer`. A scene can have multiple layers. This is useful when you need, for example:
 - A background below all terrain
 - Decoration on top of the terrain
+- The player and enemies between the last two layers
 - etc.
 
 ### Add a layer
@@ -178,7 +179,7 @@ Let's also rename the second collision layer/mask to **"Player"** and change the
 
 
 ### Sprite2D setup
-A sprite is basically an image/texture that is shown on the screen. Sprites in Godot allow us to use a **"region"** of an image. We will use this to get the player sprite from the `spritesheet.png` file. With the `Sprite2D` node **selected**:
+A sprite is essentially an image or texture displayed on the screen. Sprites in Godot allow us to use a **"region"** of an image. We will use this to get the player sprite from the `spritesheet.png` file. With the `Sprite2D` node **selected**:
 1. Add the `spritesheet.png` to the property `Texture`
 2. Enable **Region** in the dropdown
 3. Use the **Edit Region** button or manually set the `x`, `y`, `w`, and `h` properties to the ones in the picture.
@@ -187,14 +188,14 @@ A sprite is basically an image/texture that is shown on the screen. Sprites in G
 
 
 ### Pixel-art filtering
-When you use high-quality textures in your game, `Linear` filtering (similar to blur) makes the textures look better and not flicker at distances (for more information, look up **mipmaps**).
+When you use high-quality textures in your game, `Linear` filtering (similar to blur) enhances the appearance of the textures and prevents them from flickering at distances (for more information, refer to **mipmaps**).
 
-Our 2D platforming game uses pixel art. If we look at the tilemap and player close-up, we can see that it is blurry. To change this, **select** both the `Player` and `TileMapLayer` nodes and in the **Inspector** change the `Texture -> Filter` settings like so:
+Our 2D platforming game uses pixel art. If we examine the tilemap and player close-up, we can see that they are blurry. To change this, **select** both the `Player` and `TileMapLayer` nodes and in the **Inspector** change the `Texture/Filter` settings like so:
 
 ![](img/NearestLinear.png)
 
 > aside positive
-> The default setting in Godot is to **Inherit** the texture filtering from the parent. The top node uses the filtering setting from **project settings**, which by default is `Linear`.
+> The default setting in Godot is to **Inherit** the texture filtering from the parent. The top node uses the filtering setting from **project settings**, which is set to `Linear` by default.
 
 
 ### CollisionShape2D setup
@@ -222,7 +223,7 @@ Since the script that will control our player will be very similar to the 3D pla
 2. **Rename** it to `player_controller_2d.gd` and move it to a folder `2DPlatforming/Scripts`
 3. **Attach** the script to the `Player` node
 
-Now, as a practice, try to rewrite the new script so that it works with the `CharacterBody2D` and in 2 dimensions. The next section will have the **solution** of this task.
+Now, as a practice, try to rewrite the new script so that it works with the `CharacterBody2D` and in 2 dimensions. The next section presents the **solution** of this task.
 
 > aside positive
 > **Tip 1:** If the jump or gravity behaves weirdly, remember that in 2D in Godot, the **up-direction** is `-Y`.
@@ -306,7 +307,7 @@ func _double_jump() -> void:
 ```
 
 > aside positive
-> **Note 1:** In the `_movement()` function, in the part that "clamps" the max speed, I used the `sign` function. This gives us `+1` or `-1` depending on whether we are going left or right, which is basically what the `normalize()` did in 3D.
+> **Note 1:** In the `_movement()` function, in the part that "clamps" the max speed, I used the `sign` function. This gives us `+1` or `-1`, depending on whether we are going left or right, which is essentially what the `normalize()` function does in 3D.
 
 > aside positive
 > **Note 2:** In the `_movement()` function, in the part that dampens the velocity, I decided to `clamp` the dampening coefficient. This only ensures that it remains between `0` and `1`, even in cases where the dampening is very strong. I also recommend adding this to the 3D controller just to be sure.
@@ -319,7 +320,7 @@ Duration: hh:mm:ss
 
 If you placed the **jump pad tile** into the environment, you might notice that it does not work. This is because we have not given the tile any functionality.
 
-One option would be to make it a **separate scene**, code a script that would **detect** the player, and **apply** force to the player.
+One option would be to create a **separate scene**, write a script that **detects** the player, and **applies** force to the player.
 
 The second and much easier option is to **paint** the physics property of `linear_velocity` to the tile in the `TileSet`. This will **apply** velocity to every movable body that is touching the tile. (Only if the tile has the body's collision layer enabled in the collision mask).
 
@@ -342,7 +343,7 @@ Now, if you play the game and step on the **jump pad**, the player will be pushe
 ## Functional Electric Cables/Spikes
 Duration: hh:mm:ss
 
-Now let's look at the **electric cable** sprites that are in the sprite sheet. I want them to act like spikes in any other 2D platforming games. You might also notice that there are several cable tiles. That is because they are a part of an animation, and we will learn how to create an **animated tile** out of them.
+Now let's look at the **electric cable** sprites in the sprite sheet. I want them to act like spikes in any other 2D platforming games. You might also notice that there are several cable tiles. That is because they are a part of an animation, and we will learn how to create an **animated tile** out of them.
 
 ### Animated Tile
 First, we need to keep only the first sprite as a tile, since the other 3 tiles are only the animation of the first one. So with the `TileSet` open:
@@ -386,7 +387,7 @@ Now, to detect the collision, the electric cables need a collision shape. Add it
 ### Process Collisions
 Now we need to go through all the **collisions** of the player, to see if the player collided with a tile that has the **Custom Data** "DamageOnTouch" set.
 
-To find a collision that occurred in this frame in the `CharacterBody2D` class, we can call the `get_slide_collision(idx)` function. However, this function needs to be called **AFTER** the function `move_and_slide()`, since `move_and_slide()` handles the collisions.
+To find a collision that occurred in this frame in the `CharacterBody2D` class, we can call the `get_slide_collision(idx)` function. However, this function needs to be called **AFTER** the `move_and_slide()` function, since `move_and_slide()` handles the collisions.
 
 Add a call to a function `_process_new_collision()` after the `move_and_slide()` call. Now add the following function at the end of the script:
 
@@ -419,7 +420,7 @@ For now, we just print **"cable collision"**. **Place** some cables in the scene
 
 
 ### Reset on collision
-You can decide what happens when the player touches the cables. For now, before we add the **2DPlatforming** game to the **3D** game, I want to just reset the scene.
+You can decide what happens when the player touches the cables. For now, before we add the **2D Platforming** game to the **3D** game, I want to just reset the current scene.
 
 We can do this by changing the `print` line to:
 ```GDScript
@@ -430,7 +431,7 @@ If you try to jump on the cables now, you can see that it works. The more observ
 
 `player_controller_2d.gd:75 @ _process_new_collision(): Parameter "found" is null.`
 
-Looking at the code, the issue might not be so obvious. The problem arises if there are **multiple collisions** with the cables in one frame. The first collision **resets** the scene, and then the other collisions try to interact with the deleted scene. To fix this, we can easily **add** a
+Upon examining the code, the issue may not be immediately apparent. The problem arises if there are **multiple collisions** with the cables within a single frame. The first collision **resets** the scene, and then the other collisions try to interact with the deleted scene. To fix this, we can easily **add** a
 ```GDScript
 return
 ```
@@ -443,7 +444,7 @@ statement after the scene reload line.
 ## Correct Viewport Scale
 Duration: hh:mm:ss
 
-Right now, if you change the **window size**, the size of objects stays the same on the monitor. You might think that this is what we want, but consider someone with a bigger monitor resolution. In this case, the player would see much more/less of the game world. Let's change it in the **Project Settings**. Watch this video and follow it step by step:
+Currently, if you change the **window size**, the size of objects remains the same on the monitor. You might think that this is what we want, but consider someone with a bigger monitor resolution. In this case, the player would see much more/less of the game world. Let's change it in the **Project Settings**. Watch this video and follow it step by step:
 
 <video id=srwBrfGeiKs></video>
 
@@ -455,13 +456,13 @@ Right now, if you change the **window size**, the size of objects stays the same
 Duration: hh:mm:ss
 
 ### Feedback
-I would be very grateful if you could take a moment to fill out a **very short feedback form** (it takes less than a minute). Your feedback will prove very useful for my master thesis, where I will use it to evaluate the work I have done.
+I would be very grateful if you could take a moment to fill out a **very short feedback form** (it takes less than a minute). Your feedback will prove very useful for my master's thesis, where I will use it to evaluate the work I have done.
 <button>
   [Google Forms](https://forms.gle/xcsTDRJH2sjiuCjP7)
 </button>
 
 > aside positive
-> This whole course and the game we are making are a part of my master thesis.
+> This entire course, as well as the game we are creating, is part of my master's thesis.
 
 ### Recap
 Let's look at what we did in this lab.
@@ -471,7 +472,7 @@ Let's look at what we did in this lab.
 - Next, I tasked you to create a **2D player controller**
 - Then we made the **jump pad** functional using the `Linear Velocity` property in tiles
 - We added **electric cables**, which reset the level on touch, while learning about **Custom Data** in tiles and how to get them.
-- Lastly, we set up the camera to **correctly scale** with the window size
+- Lastly, we set up the camera to **scale correctly** with the window size
 
 
 If you want to see what the finished template looks like after this lab, you can download it here:
