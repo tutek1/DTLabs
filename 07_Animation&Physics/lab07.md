@@ -12,7 +12,7 @@ Duration: hh:mm:ss
 
 This lab will focus on learning about the three ways of making/using **Animations**. We will create the animation behavior of our player character, shooting, and a moving platform.
 
-Then we will learn about **Physics** and make the player interact with `RigidBody3D` nodes. We will also check out **joints**, which can be used to make complex physics behavior.
+Then we will learn about **Physics** and make the player interact with `RigidBody3D` nodes. We will also check out **joints**, which can be used to create complex physics behavior.
 
 In a bullet point format, we will:
 - Look at the **changes I made** in the project, such as.
@@ -36,15 +36,15 @@ Duration: hh:mm:ss
 Since the last template, I have added and changed quite a few things in our game.
 
 ### 2D Puzzle
-Quite a large addition is the 2D puzzle section. It works similarly to the **platforming section** except you use the mouse to play it. You can take a look at the code and node setup if you are interested in how games that are controlled with a mouse work.
+Quite a significant addition is the 2D puzzle section. It works similarly to the **platforming section** except you use the mouse to play it. You can take a look at the code and node setup if you are interested in how games that are controlled with a mouse work.
 
 ![](img/Puzzle2D.png)
 
 ### Player Stats
-Some player parameters (`speed`, `jump_force`, `health`, `can_double_jump`, etc.) will change during gameplay through the upgrade system. To easily handle changes, saving, and loading of these parameters, I created a `Resource` class called **PlayerStats** that has all of these parameters. This way, the stats of the player can be changed on the go.
+Some player parameters (`speed`, `jump_force`, `health`, `can_double_jump`, etc.) will change during gameplay through the upgrade system. To efficiently handle changes, saving, and loading of these parameters, I created a `Resource` class called **PlayerStats** that has all of these parameters. This way, the stats of the player can be changed on the go.
 
 > aside negative
-> Some parameters, that do not change (`rotation_speed`, `gravity`, `acceleration`, etc.), are still present as `@export` parameters of the player class.
+> Some parameters that do not change (`rotation_speed`, `gravity`, `acceleration`, etc.) are still present as `@export` parameters of the player class.
 
 ### Player, Broken pin, Cylinder, and Cube models
 I made the model for the **Player** in **MagicaVoxel** and then rigged, weight-painted, and animated the model in **Blender**. We will use the model in the first part of the codelab, focusing on animation.
@@ -71,7 +71,7 @@ Let's open the `player.tscn` scene and set up the player model.
 ### Put the Player in the Correct Place
 As you can see, the player is not in the right place. The capsule collider is way off, and the `InteractArea`, which signals the front of the player, is on the side.
 
-Please **rotate** and **move** the `Mesh` node to match the collider. This is the before and after image:
+Please **rotate** and **move** the `Mesh` node to match the collider. Here is the before and after image:
 
 <img src="img/PlayerWrongPlace.png" width="332"/>
 <img src="img/PlayerRightPlace.png" width="380"/>
@@ -133,7 +133,7 @@ First, the bones of the model need to be created and connected. The skeleton doe
 The bones work in the same way as the nodes in a **hierarchy**. By transforming the parent bone, all the child bones are also transformed in the same way. An example can be seen in the GIF below, where rotating the `LegBone` also rotates the `FootBone`. 
 
 ### Step 2: Weight Painting
-Next, you need to define which vertices react to which bones of the model, and how strongly they react to them. This is done with the process of **Weight Painting**, where you automatically or manually paint each vertex ranging from **blue** (no influence) to **red** (maximum influence) for each bone.
+Next, you need to define which vertices react to which bones of the model, and how strongly they respond to their transforms. Defining it is done using the process of **Weight Painting**, where you automatically or manually paint each vertex ranging from **blue** (no influence) to **red** (maximum influence) for each bone.
 
 Here you can see the weight painting of the right leg and foot of the player:
 
@@ -157,13 +157,13 @@ Here you can see the keyframes (gray and yellow dots) of all the bones for the p
 ![](img/KeyframesWalk.png)
 
 ### Final Note
-**Skeletal Animation** is a very useful technique to create natural moving models and is a much deeper topic. If you are interested in 3D modelling or procedural animation, I recommend looking up more sources. This brief overview will be sufficient for us to use them in this codelab.
+**Skeletal Animation** is a powerful technique to create natural moving models and is a much deeper topic. If you are interested in 3D modelling or procedural animation, I recommend looking up more sources. This brief overview will be sufficient for us to use them in this codelab.
 
 
 ## Animation Tree (Premade Animations)
 Duration: hh:mm:ss
 
-In the first half of this codelab, we will look at 3 different ways to make and use animations. The first one is working with animations created in another software, such as `Blender` or others.
+In the first half of this codelab, we will look at 3 different ways to make and use animations. The first one is working with animations created in other software, such as `Blender`, `Autodesk Maya`, or others.
 
 
 ### `AnimationTree`
@@ -175,8 +175,8 @@ The tree has a property of `Tree Root`, which can be set to create the behavior.
 
 - ❌ **`AnimationRootNode`** is just an abstract class that all other animation node classes inherit from. Does nothing as the `Tree Root`.
 - ✔️ **`AnimationNodeBlendTree`** is a canvas in which you can connect nodes to blend animations.
-- 🟡 **`AnimationNodeBlendSpace1D`** is a 1D axis that interpolates between several animations based on a value `[0.0 - 1.0]`. It can be used, but it is very limited.
-- 🟡 **`AnimationNodeBlendSpace2D`** is the same as the 1D version, however you blend/interpolate in 2D space. Again, it can be used, but it is very limited.
+- 🟡 **`AnimationNodeBlendSpace1D`** is a 1D axis that interpolates between several animations based on a value `[0.0 - 1.0]`. It can be used, but the use case is minimal.
+- 🟡 **`AnimationNodeBlendSpace2D`** is the same as the 1D version, however you blend/interpolate in 2D space. Again, it can be used, but the use case is minimal.
 - ✔️ **`AnimationNodeStateMachine`** is a visual state machine, similar to the one we created in one of the previous codelabs, but specialized for animation.
 - ❌ **`AnimationNodeAnimation`** a single animation. Useless as the root, since you can achieve this behavior by setting a fixed animation in the `AnimationPlayer`.
 
@@ -198,10 +198,10 @@ With the state machine open, we can see the `Start` node, which is the initial s
 <img src="img/StateMachineUsage.gif" width="500"/>
 
 > aside positive
-> Selecting a transition, many things can be set in the **Inspector** such as `Priority`, `Switch Mode`, `Transition Conditions`, etc. More on that later.
+> Selecting a transition, many things can be set in the **Inspector** such as `Priority`, `Switch Mode`, `Transition Conditions`, etc. I'll talk about that later.
 
 ### Blend tree
-If you followed the steps in the GIF above, please **clear the state machine** and let's fill it out properly.
+If you followed the steps in the GIF above, please **clear the state machine** and let's fill it out correctly.
 
 1. **Add** a `BlendTree` node.
 2. **Rename** the node to `FreeMoveBlend`.
@@ -211,7 +211,7 @@ If you followed the steps in the GIF above, please **clear the state machine** a
 The `BlendTree` editor should now be open, with a single `Output` node. You can navigate this space by holding the middle-mouse button and dragging.
 
 #### What is a `BlendTree`?
-A `BlendTree` is a special node that allows us to blend different animations based on the values of parameters (0.0–1.0), which can be set in code. The functionality is best shown by an example. Let's create a `BlendTree` for our player character.
+A `BlendTree` is a special node that allows us to blend different animations based on the values of parameters (0.0–1.0), which can be set in code. An example best shows the functionality. Let's create a `BlendTree` for our player character.
 
 #### Filling out the `BlendTree`
 Please **recreate** the setup seen in the picture below.
@@ -229,7 +229,7 @@ The `BlendSpace2D` node is a bit more complex, and we will look into it more clo
 > This configuration of animations has an inherited priority to them. For example, the `FallBlend` will override any animation that comes before it.
 
 ### Walking animation using `BlendSpace2D`
-`BlendSpace2D` is useful when you want to animate an action that takes place in 2D, meaning that the animation should slightly differ based on some parameter (velocity in our case). For example, I did not create the animations for walking diagonally, but I don't need to because I can just blend the `WalkForward` and `WalkRight` animations. 
+`BlendSpace2D` is useful when you want to animate an action that takes place in 2D, meaning that the animation should slightly differ based on some parameter (velocity in our case). For example, I did not create the animations for walking diagonally, and I don't need to because I can just blend the `WalkForward` and `WalkRight` animations. 
 
 1. **Set** the `WalkBlend` value to `1` (so that we can see the preview)
 2. **Click** the `Open Editor` button in the `BlendSpace2D` node.
@@ -255,7 +255,7 @@ If you had tried to play the game, the animations would not have worked. That's 
 **Open** the `player_controller_3D.gd` script and find the function `_animation_tree_update()` (should be around line 168). This function will be responsible for setting all the **animation blend values**. 
 
 #### Blending the falling animation
-Let's start with the `FallBlend`. We want the falling animation to play only when the `velocity.y` of our player is lower than `0`. The animation should also not play **as strongly** when the player starts to fall. That will be done by multiplying the force by some small number, for example, around `0.1`. This is the code for the `FallBlend`:
+Let's start with the `FallBlend`. We want the falling animation to play only when the `velocity.y` of our player is lower than `0`. The animation should also not play **as strongly** when the player starts to fall. That will be done by multiplying the force by some small number, for example, around `0.1`. This is the code to calculate and set the `FallBlend`:
 
 ```GDScript
 # Blend amount Fall
@@ -271,7 +271,7 @@ The path of the parameter to set can be found in the **Inspector** while the `An
 
 <img src="img/AnimTreeParams.png" width="300"/>
 
-The setting of other parameters works similarly, so I won't go through them in detail. Here is the full code of the `_animation_tree_update()` function:
+The setting of other parameters works similarly so that I won't go through them in detail. Here is the complete code of the `_animation_tree_update()` function:
 
 ```GDScript
 func _animation_tree_update():
@@ -298,7 +298,7 @@ func _animation_tree_update():
 ```
 
 #### `TimeScale` node
-Trying out the animations in play mode, one thing becomes clear. The walking animations need to be faster. This can be done with a `TimeScale` node.
+Trying out the animations in play mode, one thing becomes clear. The walking animations need to be faster, which can be done with a `TimeScale` node.
 
 1. **Open** the `AnimationTree` panel.
 2. **Open** the `FreeMoveBlendTree`.
@@ -325,8 +325,8 @@ Ok, so now with the `FreeMoveBlendTree` complete, let's go back to the `Root` of
 #### Fill out the Root State Machine
 1. **Add** a new node of type `Animation` ⇾ `Armature|Connect`.
 2. **Create** a transition from the `FreeMoveBlendTree` to the new state node.
-3. **Add** another new state of type `Animation` ⇾ `Armature|Connect` and rename it to `Armature|Disconnect`
-4. **Select** the new state and change the `Play Mode` in the **Inspector** to `Backward`
+3. **Add** another new state of type `Animation` ⇾ `Armature|Connect` and rename it to `Armature|Disconnect`.
+4. **Select** the new state and change the `Play Mode` in the **Inspector** to `Backward`.
 5. **Create** a transition from the `Armature|Connect` node to the `Armature|Disconnect`.
 6. **Select** the transition and set the `Switch Mode` in the **Inspector** to `At End`.
 7. **Create** a transition from the `Armature|Disconnect` node to the `FreeMoveBlendTree`.
@@ -340,9 +340,9 @@ Ok, so now with the `FreeMoveBlendTree` complete, let's go back to the `Root` of
 > `Play Mode` ⇾ `Backward` makes the animation play in reverse
 
 #### Connect Parameter
-The current configuration will just loop between the three states. We want the animations to play when the player **enters** and **exits** the 2D puzzle. To make this possible, I already created a function `set_connect_anim_bool(value : bool)` in the `player_controller_3d.gd` script, and you need to fill it out.
+The current configuration will loop between the three states. We want the animations to play when the player **enters** and **exits** the 2D puzzle. To make this possible, I already created a function `set_connect_anim_bool(value : bool)` in the `player_controller_3d.gd` script, and you need to fill it out.
 
-**Create** a variable of type `bool` called `_connected` and set it in the `set_connect_anim_bool(value : bool)` function. This should be the result:
+**Create** a variable of type `bool` called `_connected` and set it in the `set_connect_anim_bool(value : bool)` function. This code should be the result:
 
 ```GDScript
 ...
@@ -354,7 +354,7 @@ func set_connect_anim_bool(value : bool) -> void:
 ```
 
 #### Transition Parameter
-To use the `_connected` parameter in the `AnimationTree`, we first need to set the `Advance Expression Base Node` in the **Inspector**. This makes the variables and parameters of the player script available in the `AnimationTree`. Please **set** the parameter to the `Player` node as such:
+To use the `_connected` parameter in the `AnimationTree`, we first need to set the `Advance Expression Base Node` in the **Inspector**. Making the variables and parameters of the player script available in the `AnimationTree`. Please **set** the parameter to the `Player` node as such:
 
 <img src="img/AdvancedExpressionBaseNode.png" width="300"/>
 
@@ -374,7 +374,7 @@ This makes the `AnimationTree` work directly with the variable of `_connected`, 
 ## Skeleton Modifiers (Procedural Animations)
 Duration: hh:mm:ss
 
-Another way of creating animations is using code. There are many ways you can code animations, but we will look at how we can use bones of an already existing skeleton to **influence objects**, and **create responsive (procedural) animations**. Here are some examples:
+Another way of creating animations is using code. There are many ways you can code animations. Still, we will look at how we can use bones of an already existing skeleton to **influence objects**, and **create responsive (procedural) animations**. Here are some examples:
 - Placing the feet of a character precisely on the ground so that they do not float or clip inside the ground.
 - Keeping the hands of a character from going through walls by influencing the bones and pushing them away.
 - Making the head/gun look in the same direction as the camera.
@@ -383,9 +383,9 @@ Another way of creating animations is using code. There are many ways you can co
 - and many more ...
 
 > aside negative
-> To save time in this section, I already made all the necessary references to nodes through the `@onready` annotation beforehand. Therefore, it is important to keep the names of the nodes the same as the codelab outlines!
+> To save time in this section, I already made all the necessary references to nodes through the `@onready` annotation beforehand. Therefore, it is essential to keep the names of the nodes the same as the codelab outlines!
 
-### Light in eyes `BoneAttachment3D`
+### Lights in the eyes `BoneAttachment3D`
 We will first make the player's eyes glow using point lights (`OmniLight` in Godot).
 
 1. **Add** two `OmniLight3D` nodes as children of the `Skeleton3D`
@@ -432,7 +432,7 @@ Now the only thing left to do is to move the actual `GunTarget` based on the dir
 2. **Uncomment** the `_update_gun_target()` function
 3. **Delete** the `pass` line
 
-This code **moves the target** based on set parameters such as `gun_point_offset`, `gun_point_depth`, etc. However, it also **changes the** `influence` of the modifier in such a way that the influence is lower when looking backwards. This makes the gun not clip inside the player. 
+This code **moves the target** based on set parameters such as `gun_point_offset`, `gun_point_depth`, etc. However, it also **changes the** `influence` of the modifier in such a way that the influence is almost `0` when looking backwards. The result is that the gun does not clip inside the player. 
 
 ![](img/GunMoving.gif)
 
@@ -449,7 +449,7 @@ Now that our gun rotates to where we are looking, it would be nice to actually *
 ![](img/PlayerProjectile.png)
 
 #### The Shoot Point
-Either we can calculate it using the bone transform, which is a bit too complex, or we can use another `BoneAttachment3D` node with a `Node3D`, which will be easier and will allow us to more easily tweak the precise spawn point in space. Let's do the second variant:
+Either we can calculate it using the bone transform, which is a bit too complex, or we can use another `BoneAttachment3D` node with a `Node3D`, which will be easier and will allow us to tweak the precise spawn point in space more easily. Let's do the second variant:
 
 1. **Add** a `BoneAttachment3D` node as a child of the `Skeleton3D` (should be called `BoneAttachment3D2`)
 2. **Set** the `Bone Name` to `GunBone_end`
@@ -465,7 +465,7 @@ Another node we need is a `Timer` node that will handle the cooldown of shooting
 2. **Rename** it to `ShootCooldown`
 3. **Set** the property `One Shot` to `On`
 
-If a timer is set as `One Shot`, it means that once it runs out, it won't start again on its own, which is exactly what we need since we only want to start the timer once the player fires their gun.
+If a timer is set as `One Shot`, it means that once it runs out, it won't start again on its own, which is precisely what we need since we only want to start the timer once the player fires their gun.
 
 #### The Input Map
 The next thing we need to do is add a new input to the `InputMap` for shooting.
@@ -475,7 +475,7 @@ The next thing we need to do is add a new input to the `InputMap` for shooting.
 3. **Add** a new action called `shoot` and add a keybinding of `Right Mouse Button`
 
 #### The `_shoot()` function
-The last thing that needs to be done is to **uncomment** the `_shoot()` function in `player_controller_3d.gd`. Here is the full function just to be sure:
+The last thing that needs to be done is to **uncomment** the `_shoot()` function in `player_controller_3d.gd`. Here is the changed function just to be sure:
 
 ```GDScript
 func _shoot() -> void:
@@ -525,7 +525,7 @@ The shooting is nice, but in the current state, it is useless, since the enemies
 > Usually in other programming languages, we would create an `Interface` that every damageable object would extend. In our case, since Godot does not have `Interfaces`, we will set a rule for ourselves that every object with the `Damageable` group will implement a function `damage(value : float, node : Node3D) -> void`.
 
 ### Skeleton Inverse Kinematics Showcase
-Godot also has a special node for **inverse kinematics**. It is a bit more complex and not that applicable for our game, so I am only going to showcase how it works on a simple example.  
+Godot also has a special node for **inverse kinematics**. It is more complex and not applicable to our game, so I am only going to showcase how it works on a simple example.  
 
 #### Node setup
 First, you need to add the `SkeletonIK` node and set the `Root` and `Tip` bones, then the node to be followed (`Target`) also needs to be set. For our example, I will use the right leg of the player like this:
@@ -546,17 +546,18 @@ Of course, you can then set rotation limits for the bones by implementing your o
 
 > aside negative
 > In the version of Godot that we are using (4.4.1), the `SkeletonIK` node is deprecated and will be replaced by a `SkeletonModifier` node in a future release, but it is ok to use for now.
+> Edit: The reworked inverse kinematics `IKModifier3D` should be part of [Godot 4.6](https://godotengine.org/article/dev-snapshot-godot-4-6-dev-4/#animation-add-skeletonmodifier3d-iks-as-ikmodifier3d) once it is released.
 
 
 
 ## Moving Platform (In-engine animations)
 Duration: hh:mm:ss
 
-The last way to make animations, which I want to show you, is **creating them in the engine** itself. This is useful for creating simple animations, such as moving platforms, UI animations, visual effects, etc.
+The last way to make animations, which I want to show you, is **creating them in the engine** itself, which is useful for creating simple animations, such as moving platforms, UI animations, visual effects, etc.
 
 
 ### Moving Platform Node Type
-We will create a moving platform that will move the player. I have already created a basic platform and placed it in our `debug_3d_scene.tscn`. So please open the scene and find the `AnimatedPlatform` node.
+We will create a moving platform that will move the player. I have already made a basic platform and placed it in our `debug_3d_scene.tscn`. So please open the scene and find the `AnimatedPlatform` node.
 
 The platform is a node type of `AnimatableBody3D`. This node is similar to the `StaticBody3D`, except that while it is moved manually using code or animations, it affects other physics bodies correctly (collisions, linear and angular velocity estimation, etc.).
 
@@ -569,7 +570,7 @@ To create an animation, we first need to add an `AnimationPlayer` node, which wi
 3. **Open** the `Animation` tab on the bottom panel
 
 > aside positive
->In more complex cases, we would create an `AnimationTree` to handle the behavior, but in our case, the platform will just play one animation in a loop.
+> In more complex cases, we would create an `AnimationTree` to handle the behavior, but in our case, it is enough to let the platform play the one animation in a loop.
 
 ### The Animation
 With the animation window open, let's create a new animation:
@@ -636,8 +637,10 @@ You can add another track for rotation (`Bezier Curve`) to make the animation a 
 >   - `Path3D` with `PathFollow3D`, which are used for 3D position and rotation
 
 
-### Why the player rides the platform?
-You might have noticed that the player gets moved and rotated by the platform as it is animated in a correct way. This is due to the player node being of type `CharacterBody3D`, which has the `Moving Platform` ⇾ `Floor Layers` set to use all layers as moving platforms by default.
+### Why does the player ride the platform?
+You might have noticed that the player is moved and rotated by the platform correctly. This happens due to the player node being of type `CharacterBody3D`, which has the `Moving Platform/Floor Layers` set to use all layers as moving platforms by default.
+
+This setting makes the player inherit the `velocity` and `angular_velocity` of bodies in the `Moving Platform/Floor Layers` layer on which they are standing.
 
 
 
@@ -647,13 +650,13 @@ Duration: hh:mm:ss
 
 This second part of the codelab will focus on physics, more precisely, rigidbody physics. A rigidbody (`RigidBody3D` in Godot) is a 3D physics body that is moved by a physics simulation.
 
-`RigidBody3D` implements full 3D physics. It cannot be controlled directly. Instead, you must **apply forces** to it (gravity, impulses, etc.), and the physics simulation will calculate the resulting movement, rotation, react to collisions, and affect other physics bodies in its path.
+`RigidBody3D` implements complete 3D physics. It cannot be controlled directly. Instead, you must **apply forces** to it (gravity, impulses, etc.), and the physics simulation will calculate the resulting movement, rotation, react to collisions, and affect other physics bodies in its path.
 
 ### `CharacterBody3D` and `RigidBody3D` Interaction Problem
-Right now, if you try to push the cubes present in the scene, they are stiff and do not move. This is the basic behavior when you set collision layers and masks in such a way that the player (`CharacterBody3D`) and the cube (`RigidBody3D`) collide with each other. Here is the behavior for different configurations:
+Right now, if you try to push the cubes present in the scene, they are stiff and do not move. This behavior is the default when you set collision layers and masks in such a way that the player (`CharacterBody3D`) and the cube (`RigidBody3D`) collide with each other. Here is the behavior for different configurations:
 
 #### Player ❌ Cube ❌
-Disabling the player layers in the cube masks and vice versa makes both bodies not interact with each other. The player simply walks through the cube.
+Disabling the player layers in the cube masks and vice versa makes both bodies not interact with each other. The player walks through the cube.
 
 <img src="img/NoCollisionPlayerCollision.png" width="150"/> <img src="img/NoCollisionCubeCollision.png" width="148"/>
 
@@ -688,7 +691,7 @@ Now, I prepared a function called `_check_collisions(delta : float)` in the `pla
 > I also set the name of the fourth collision layer to `RigidBodies`.
 
 #### Push Direction
-First, we need to know which way to push the rigidbody we collided with. This can be achieved simply by getting the **normal vector** of the collision.
+First, we need to know which way to push the rigidbody we collided with. We can get this information by getting the **normal vector** of the surface at the collision point.
 
 ```GDScript
 var push_direction : Vector3 = -collision.get_normal()
@@ -719,7 +722,7 @@ collider.apply_impulse(force * delta, pos_offset)
 ```
 
 #### The Result
-The player and cube `mass` parameter can be adjusted to make the interactions feel different. Here is the full code of the function:
+The player and cube `mass` parameter can be adjusted to make the interactions feel different. Here is the complete code of the function:
 
 ```GDScript
 func _check_collisions(delta : float) -> void:
@@ -739,7 +742,7 @@ func _check_collisions(delta : float) -> void:
             collider.apply_impulse(force * delta, pos_offset)
 ```
 
-This is the resulting behavior the code produces:
+The resulting behavior the code produces:
 
 ![](img/RigidBodyResult.gif)
 
@@ -773,7 +776,7 @@ This section will look at one type of **physics joints**, which can be used to c
 **Open** the `broken_pin.tscn` scene located in `3D/WorldObjects/BrokenPin/`.
 
 ### Colliders
-Firstly, to use our seesaw, we need to add a collider to the `RigidBody3D` called `SeeSaw` so that it is able to collide with the environment and the player. With more complex shapes than just cubes and spheres, you generally have **3 options** for creating the collider. We will go through all of them, and I will show you how you can create them.
+Firstly, to use our seesaw, we need to add a collider to the `RigidBody3D` called `SeeSaw` so that it is able to collide with the environment and the player. With more complex shapes than just cubes and spheres, you generally have **3 options** for creating the collider. We will go through all of them, and I will show you how you can make them.
 
 #### Trimesh collider / Concave collider
 The most computationally expensive option, but the most precise, is to create a collider that is **identical to the mesh**. This option is only really used for precise terrain collision in landscapes (expansive lower-poly terrain and/or mountains). Most modern engines also **DO NOT support** this type of collider on a **non-static body**.
@@ -787,7 +790,7 @@ To create this type of collider in Godot, simply:
 3. **Select** the `Create Collision Shape...` option
 4. **Keep** `placement` = `Sibling` and `type` = `Trimesh` ⇾ **Create**
 
-As you can see, this type of collider is extremely detailed (depends on the mesh) and, for our case **wasteful**.
+As you can see, this type of collider is highly detailed (depends on the mesh) and, for our case **wasteful**.
 
 ![](img/Trimesh.png)
 
@@ -803,7 +806,7 @@ The **process of creation** is the same, except you select `type` = `Single Conv
 
 ![](img/Convex.png)
 
-This collider type is also **not suitable for our case**, since the precision is not good for the specific shape of the broken pin. It can be useful for complex objects that are hard to create as a **composite collider**.
+This collider type is also **not suitable for our case**, since the precision is not suitable for the specific shape of the broken pin. It can be useful for complex objects that are hard to create as a **composite collider**.
 
 
 #### Composite collider
@@ -816,7 +819,7 @@ A composite collider is not really a collider type. It is more like a **method o
 
 ![](img/CompositeCollider.png)
 
-This collider setup uses **only two** **`BoxShape3D`** colliders, which is very **computationally cheap**, and **quite precise**. Although the small details of the mesh are lost to the collision detection with this setup, it is sometimes better not to introduce these details since the physics in game engines can be more buggy with more details.
+This collider setup uses **only two** **`BoxShape3D`** colliders, which is very **computationally cheap**, and **quite precise**. Although the small details of the mesh are lost to the collision detection with this setup, it is sometimes better not to introduce these details since the physics simulation in game engines can get buggy and complex quickly with more detailed meshes.
 
 > aside positive
 > I used these values for the two `CollisionShape3D` nodes:
@@ -839,7 +842,7 @@ Here is how the seesaw should behave now. As you can see in the GIF, the seesaw 
 However, using `Axis Lock` does not produce the desired behavior, which I wanted, and has many quirks, such as not being able to lock outside the main XYZ axes.
 
 > aside positive
-> `Axis Lock` is a useful tool not only for making seesaws, but also for many different mechanisms.
+> `Axis Lock` is a valuable tool not only for making seesaws, but also for many different mechanisms.
 
 ### Hinge Joint
 The proper and more robust way to create a physics object like a seesaw or doors is to use a `HingeJoint`. A `HingeJoint3D` node works by pinning two `PhysicsBody3D` nodes (parent class of all bodies) in a single point and restricting their movement to one rotation axis.
@@ -876,12 +879,12 @@ Here is the resulting behavior of the broken pin seesaw, which will act as a **s
 
 
 #### Hinge on two cubes
-You can also connect two rigidbodies to each other, like I did here with two cubes:
+You can also connect two rigidbodies to each other, as I did here with two cubes:
 
 ![](img/CubeHinge.gif)
 
 > aside positive
-> It is also possible to add more `HingeJoint3D` (or other joints) nodes to create a chain of several objects all connected to each other.
+> It is also possible to add more `HingeJoint3D` (or other joints) nodes to create a chain of several objects all connected.
 
 
 
@@ -904,7 +907,7 @@ Many other joint types can be used. The selection of `2D` and `3D` joints also d
 
 
 #### `PinJoint2D`
-- Attaches two 2D physics bodies at a single point, allowing them to freely rotate.
+- Attaches two 2D physics bodies at a single point, allowing them to rotate freely.
 - Useful for chains, swinging objects like chandeliers, bridges, etc.
 
 > aside positive
@@ -985,7 +988,7 @@ The spring option makes the rigidbody behave like being attached to a spring. We
 > You can hover over all the parameters to see what each one does.
 
 #### The result
-Here is the resulting bouncy platform. Feel free to play around with all the parameters to see what each does and how it influences the platform.
+Here is the resulting bouncy platform. Please feel free to play around with all the parameters to see what each does and how it affects the platform.
 
 ![](img/Platform.gif)
 
@@ -995,13 +998,13 @@ Here is the resulting bouncy platform. Feel free to play around with all the par
 Duration: hh:mm:ss
 
 ### Feedback
-I would be very grateful if you could take a moment to fill out a **very short feedback form** (it takes less than a minute). Your feedback will prove very useful for my master thesis, where I will use it to evaluate the work I have done.
+I would be very grateful if you could take a moment to fill out a **very short feedback form** (it takes less than a minute). Your feedback will prove very useful for my master's thesis, where I will use it to evaluate the work I have done.
 <button>
   [Google Forms](https://forms.gle/xcsTDRJH2sjiuCjP7)
 </button>
 
 > aside positive
-> This whole course and the game we are making are a part of my master thesis.
+> This entire course, as well as the game we are creating, is part of my master's thesis.
 
 ### Recap
 Let's look at what we did in this lab.
@@ -1026,7 +1029,7 @@ Let's look at what we did in this lab.
 
 
 ### Note on Animations
-Creating animations is quite a difficult and lengthy endeavor. If you want **professional animations and character models** ready to be used, I suggest checking out [Mixamo](https://www.mixamo.com/#/?page=1&type=Character) from `Adobe`. The characters and animations are free to use even in commercial products. 
+Creating animations is quite a lengthy and challenging endeavor. If you want **professional animations and character models** ready to be used, I suggest checking out [Mixamo](https://www.mixamo.com/#/?page=1&type=Character) from `Adobe`. The characters and animations are free to use even in commercial products. 
 
 ### Project Download
 If you want to see what the finished template looks like after this lab, you can download it here:
