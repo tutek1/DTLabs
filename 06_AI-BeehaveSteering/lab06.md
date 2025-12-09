@@ -32,7 +32,7 @@ Here is the template for this lab. Please download it. There are scripts, models
 ## Behavior Trees (BT)
 Duration: hh:mm:ss
 
-When it comes to creating an AI character in a videogame, there are many known ways/architectures that you can use. For example:
+When it comes to creating an AI character in a video game, there are many known ways/architectures that you can use. For example:
 - easy but restrictive **Simple reactive planning** (bunch of if-else statements, that only react to the current environment)
 - more complex **Finite-State Machine** (becoming less and less clear the more states and transitions you add)
 - easily modifiable **Behavior Tree** (forcing you to learn to think about AI differently)
@@ -44,18 +44,18 @@ The choice of the architecture always depends on the complexity of the character
 > Behavior Trees are **very powerful** once you know how to use them. The ability to represent them visually makes them easy to debug. Most popular games use them. Here are a few notable examples:
 > - **GTA V** - pedestrian NPCs reacting to players actions
 > - **The Sims** - each Sim manages their needs and interacts with objects
-> - **Kingdom Come: Deliverance** - with their life-like NPC behavior
+> - **Kingdom Come: Deliverance I/II** - with their life-like NPC behavior
 > - Nearly all modern AAA games using the Unity Engine, the Unreal Engine, or other in-house engines use Behavior Trees
 
 
 
 ### What are ![](img/TreeIcon.png) Behavior Trees?
-Behavior trees are an alternative way of creating AI for videogames. The whole behavior of the AI is divided into a **tree structure with many nodes**, which can have various types and purposes. The tree is run from **the root** and when there are sibling nodes, they are run left ⇾ right, or top ⇾ bottom (depends on the orientation of the tree).
+Behavior trees are an alternative way of creating AI for video games. The whole behavior of the AI is divided into a **tree structure with many nodes**, which can have various types and purposes. The tree is run from **the root** and when there are sibling nodes, they are run left ⇾ right, or top ⇾ bottom (depends on the orientation of the tree).
 
 When a node is run, it **must return the state** that it is in. A node can be in one of these three states:
 - `SUCCESS` - Signals to the parent that the node has executed the action successfully.
 - `FAILURE` - Signals to the parent that the node failed to execute the action.
-- `RUNNING` - Signals to the parent that the node is still performing the execution. This pauses the tree traversal, and the node will be run again next frame/tick. This is used for actions that take some time to complete.
+- `RUNNING` - Signals to the parent that the node is still performing the execution, pausing the tree traversal. The node will be rerun next frame/tick. This return value can be used for actions that take some time to complete.
 
 There are 3 base node types:
 - **Composite** - has more than one child, and the state return value depends on the children
@@ -70,13 +70,13 @@ Let's look at how the two most basic composite nodes work.
 Sequence node runs all child nodes one by one until **one has failed or all have succeeded**:
 - Child node return `SUCCESS` ⇾ run the next child node ⇾ no more child nodes to run ⇾ return `SUCCESS`
 - Child node return `FAILURE` ⇾ return `FAILURE`
-- Child node return `RUNNING` ⇾ return `RUNNING` (next frame/tick the child node is run again)
+- Child node return `RUNNING` ⇾ return `RUNNING` (next frame/tick the child node is rerun)
 
 #### ![](img/Selector.png) SelectorComposite
 Similar to sequence, the selector node runs all child nodes one by one until **one has succeeded or all have failed**:
 - Child node return `FAILURE` ⇾ run the next child node ⇾ no more child nodes to run ⇾ return `FAILURE`
 - Child node return `SUCCESS` ⇾ return `SUCCESS`
-- Child node return `RUNNING` ⇾ return `RUNNING` (next frame/tick the child node is run again)
+- Child node return `RUNNING` ⇾ return `RUNNING` (next frame/tick the child node is rerun)
 
 
 ### Example Behavior Tree
@@ -94,7 +94,7 @@ Here, the goal of the tree is to perform actions so that the character **goes th
 6. **`RootSequence`** ⇾ `SUCCESS`, which means that the tree executed successfully
 
 > aside positive
-> If a node returned **`RUNNING`** in the example above, the tree would be **"stuck" and continuously run** the node until it would return `SUCCESS` or `FAILURE`
+> If a node returned **`RUNNING`** in the example above, the tree would be **"stuck" and continuously run** the node until it returned `SUCCESS` or `FAILURE`.
 
 Try to walk through the tree with **other scenarios** (the door is only closed, or it has a broken lock). You should find that the tree adapts to the situation, and if something were to go wrong, you would be able to see which node/action had failed ⇾ easy debugging.
 
@@ -115,7 +115,7 @@ Behavior Trees use a **Blackboard** to store this information. Every node can **
 ## Beehave Installation, Project Setup 
 Duration: hh:mm:ss
 
-The Godot Engine does not support Behavior Trees out of the box. To use them, you either need to code them yourself or use a plugin. I have chosen the **Beehave** plugin, which implements Behavior Trees. The plugin is not perfect and has a few quirks and visual glitches. However, having live visual debugging is perfect for our educational purposes.
+The Godot Engine does not support Behavior Trees out of the box. To use them, you either need to code them yourself or use a plugin. I have chosen the **Beehave** plugin, which implements Behavior Trees. The plugin is not perfect and has a few quirks and visual glitches. However, having live visual debugging is ideal for our educational purposes.
 
 
 ![](img/BeehaveLogo.png)
@@ -130,14 +130,14 @@ I have already installed the plugin to save time. However, some more complex plu
 I have created a copy of the `GroundEnemyFSM` called `GroundEnemyBH` and replaced it in the `debug_3d_scene.tscn` scene. All relevant scripts and scenes can be found in the `3D/Enemies/GroundEnemy/Beehave/` folder. Please **open** the `ground_enemy_bh.gd` script and let's go through it:
 - At the top, there are all the **`@export` variables** from the `GroundEnemyFSM` and all the FSM states. These variables are declared here in the enemy because they are not dynamic data (during play time, they do not change).
 - Then, there are several `enums`:
-    - **`BB_VAR`** - These are all the keys for the **Blackboard variables**, that we will need. Normally, you would use strings as keys, but I feel like that leads to many bugs due to typos.
+    - **`BB_VAR`** - These are all the keys for the **Blackboard variables**, that we will need. Normally, you would use strings as keys, but that leads to many bugs due to typos.
     - **`ROTATE_MODE`** - You might have noticed that in the FSM version, our enemy rotated differently in each state. For simplicity, I decided to delegate the job back to the main enemy script, and the Behavior Tree will only switch to the mode that should be currently running.
     - **`ACTIONS`** - This will be used to easily detect what action (Patrol, Chase) the enemy is currently in. We will use it to detect that we started chasing the player and play the "pop-up" tween animation. 
 - The `_ready()` function sets the **default values** of all the Blackboard variables.
 - Rest of the script is pretty much the same as the FSM variant, except for **storing and loading dynamic variables**, where the Blackboard is used.
 
 > aside positive
-> **Setting** and **Getting** the values of the Blackboard can be easily done with `blackboard.set_value(key, value)` and `blackboard.get_value(key)`
+> **Setting** and **Getting** the values of the `Blackboard` can be easily done with `blackboard.set_value(key, value)` and `blackboard.get_value(key)`
 
 
 ### `bh_...` scripts
@@ -150,7 +150,7 @@ Now **open** the `ground_enemy_bh.tscn`. The scene is pretty much the same as th
 Let's create a basic Beehave setup, so that in the next section, we can start making the behavior already.
 1. **Add** a `Blackboard` node as a child of the `GroundEnemyBeehave`
 2. **Add** a `BeehaveTree` node as a child of the `GroundEnemyBeehave`
-3. **Set** the property of `Blackboard` in the `BeehaveTree` node the `Blackboard` node
+3. **Set** the property of `Blackboard` in the `BeehaveTree` node to the `Blackboard` node
 
 <img src="img/GroundEnemyBHSetup.png" width="350"/>
 <img src="img/BeehaveTreeNodeSetup.png" width="400"/>
@@ -162,7 +162,7 @@ Let's create a basic Beehave setup, so that in the next section, we can start ma
 ## BT - Patrolling Behavior
 Duration: hh:mm:ss
 
-Let's start by creating the **Patrolling behavior** of the enemy, since that is an easy place to start. In **Beehave**, the Behavior Tree is built with nodes in the **Scene Hierarchy**. This works because the **Scene Hierarchy** is a tree-like structure with nodes and children. Don't worry about how adding the Chase behavior will work for now.
+Let's start by creating the **Patrolling behavior** of the enemy, since that is an easy place to start. In **Beehave**, the Behavior Tree is built with nodes in the **Scene Hierarchy**, since the **Scene Hierarchy** is a tree-like structure with nodes and children. Don't worry about how adding the Chase behavior will work for now.
 
 ### ![](img/Sequence.png) Patrol Sequence
 If you think about the behavior of **Patrolling**, it is a **Sequence** of actions (Go to point ⇾ Wait until there ⇾ Update index ⇾ Go to next point ⇾ ...). By that logic, we should use a `SequenceComposite` node as the root of the tree. The `BeehaveTree` in `ground_enemy_bh.tscn` will be the **parent of the root of the tree**.
@@ -258,7 +258,7 @@ func tick(actor, blackboard: Blackboard):
 > - `after_run()` - called after it ticks and returns `SUCCESS` or `FAILURE`
 
 
-Let's complete it. First, we need to get the **current index of the patrol point**. To do this, we need to interface with the **Blackboard**, where we store this index.
+Let's go ahead and finish it. First, we need to get the **current index of the patrol point**. To do this, we need to interface with the **Blackboard**, where we store this index.
 ```GDScript
 var patrol_point_idx : int = blackboard.get_value(GroundEnemyBH.BB_VAR.PATROL_POINT_IDX)
 ```
@@ -275,7 +275,7 @@ Now, if you play the game, the enemy should patrol in the same way as the `Groun
 <video id=VawO4Iq8NW0></video>
 
 > aside negative
-> Changing the `Tick Rate` property to a higher number makes the tree update less often, making it easier for us to see what is really happening. However, this makes the waiting nodes (used in later sections) wait that much longer. This is probably a bug in the plugin.
+> Changing the `Tick Rate` property to a higher number makes the tree update less often, making it easier for us to see what is really happening. However, this makes the waiting nodes (used in later sections) wait that much longer, which is probably a bug in the plugin.
 
 
 > aside positive
@@ -299,14 +299,14 @@ Now we would like to **choose** between these two sequences. For this, we can us
     - **Name** `ActionSelector`
     - **Script** default
 
-Put the `ChaseSequence` as the **first child** of the `ActionSelector` and the `PatrolSequence` as the **second child**. This should be the setup now:
+Put the `ChaseSequence` as the **first child** of the `ActionSelector` and the `PatrolSequence` as the **second child**. Here is the current setup:
 
 ![](img/ActionSelector.png)
 
 
 
 ### **Chase Conditions**
-If you remember how the ![](img/SelectorSmall.png) `Selector` node works, it only runs the first child that returns `SUCCESS`. So if we add conditions that check the **visibility and closeness** of the player, as children of the ![](img/SequenceSmall.png) `ChaseSequence`, it will ensure that **Chase Behavior** is only run when the player is seen and close enough, otherwise the **Patrol Behavior** will be run.
+If you remember how the ![](img/SelectorSmall.png) `Selector` node works, it only runs the first child that returns `SUCCESS`, if we add conditions that check the **visibility and closeness** of the player, as children of the ![](img/SequenceSmall.png) `ChaseSequence`, it will ensure that **Chase Behavior** is only run when the player is seen and close enough, otherwise the **Patrol Behavior** will be run.
 
 - **Node** ![](img/ConditionSmall.png) `ConditionLeaf` child of ![](img/SequenceSmall.png) `ChaseSequence` 
     - **Name** `IsPlayerSeen`
@@ -318,7 +318,7 @@ If you remember how the ![](img/SelectorSmall.png) `Selector` node works, it onl
 
 
 ### **Task: Condition**
-Now open the `bh_is_player_close_enough.gd` script and try to **fill it out yourself using the TODO text**. Once you think you are done, look at the **code at the bottom of the page** for the solution.
+Now open the `bh_is_player_close_enough.gd` script and try to **fill it out yourself using the TODO text**. Once you think you are done, please take a look at the **code at the bottom of the page** for the solution.
 
 ### **Rotate Mode**
 If the sequence gets this far, it means the conditions are true, and we have "entered" the `ChaseState` (speaking in FSM terms). We should switch the **Rotate Mode** of the enemy to match the FSM version of the enemy:
@@ -334,7 +334,7 @@ If the sequence gets this far, it means the conditions are true, and we have "en
 Now all that is left to do is to **set the target** of the `NavigationAgent` to the **player position**. However, similar to the FSM version, we want to do that only every so often. To do **timed or repeated** actions in the Beehave Tree, we can use the ![](img/CooldownSmall.png) `CooldownDecorator` node, which works like this:
 - Executes its child until it either returns `SUCCESS` or `FAILURE`, after which it will start an internal timer and return `FAILURE` until the timer is complete.
 
-However, having just the ![](img/CooldownSmall.png) `CooldownDecorator` node and an ![](img/Action.png) `ActionLeaf` node with **target setting** as a child, would not work, due to the **timer returning** `FAILURE` while waiting. This would cause the ![](img/SequenceSmall.png) `ChaseSequence` to **fail**, and the **Patrol subtree would run**. To circumvent this, we can **"ignore" the result** of the ![](img/CooldownSmall.png) `CooldownDecorator` node and act as if it would always return `SUCCESS`. Achieving this can be done using the ![](img/SucceederSmall.png) `AlwaysSucceedDecorator` as a parent of the ![](img/CooldownSmall.png) `CooldownDecorator` node.
+However, having just the ![](img/CooldownSmall.png) `CooldownDecorator` node and an ![](img/Action.png) `ActionLeaf` node with **target setting** as a child, would not work, due to the **timer returning** `FAILURE` while waiting, which would cause the ![](img/SequenceSmall.png) `ChaseSequence` to **fail**, and the **Patrol subtree would run**. To circumvent this, we can **"ignore" the result** of the ![](img/CooldownSmall.png) `CooldownDecorator` node and act as if it would always return `SUCCESS`. Achieving this can be done using the ![](img/SucceederSmall.png) `AlwaysSucceedDecorator` as a parent of the ![](img/CooldownSmall.png) `CooldownDecorator` node.
 
 - **Node** ![](img/SucceederSmall.png) `AlwaysSucceedDecorator` child of ![](img/SequenceSmall.png) `ChaseSequence` 
     - **Name** `SuccessCooldownChasePointSet`
@@ -353,13 +353,13 @@ However, having just the ![](img/CooldownSmall.png) `CooldownDecorator` node and
 
 
 ### **Reactive Composites**
-Play the game now, when the enemy sees the player in the middle of **going from one patrol point to another**, they react to the player only **after reaching the patrol point**. This is due to the ![](img/UntilFailSmall.png) `UntilNotOnPatrolPoint` node, which is `RUNNING` until the patrol point is reached. To fix this and make our enemy more "reactive", we can use a **special variant** of the ![](img/SelectorSmall.png) `SelectorComposite`.
+Play the game now, when the enemy sees the player in the middle of **going from one patrol point to another**, they react to the player only **after reaching the patrol point**. This issue happens due to the ![](img/UntilFailSmall.png) `UntilNotOnPatrolPoint` node, which is `RUNNING` until the patrol point is reached. To fix this and make our enemy more "reactive", we can use a **special variant** of the ![](img/SelectorSmall.png) `SelectorComposite`.
 
 1. **Right-click** the ![](img/SelectorSmall.png) `ActionSelector`
 2. **Select** the option `Change Type`
 3. **Choose** the ![](img/SelectorReactiveSmall.png) `SelectorReactiveComposite`
 
-This version of the ![](img/SelectorSmall.png) `SelectorComposite` works in the same way, except for when a node returns `RUNNING`. Normally, you would just tick the `RUNNING` child again, but the ![](img/SelectorReactiveSmall.png) `SelectorReactiveComposite` node, first **ticks all the previous children again**. In our case, it checks the conditions of the **Chase Behavior** almost every tick, which makes the enemy react immediately.
+This version of the ![](img/SelectorSmall.png) `SelectorComposite` works in the same way, except for when a node returns `RUNNING`. Normally, you would tick the `RUNNING` child again, but the ![](img/SelectorReactiveSmall.png) `SelectorReactiveComposite` node, first **ticks all the previous children again**. In our case, it checks the conditions of the **Chase Behavior** almost every tick, which makes the enemy react immediately.
 
 Playing the game now, the enemy should be as reactive as the FSM variant.
 
@@ -438,7 +438,7 @@ Playing the chase enter tweens is a bit trickier, since we do not have `OnSubTre
     - **Property** `Value` = `Chase`
     - **Between** nodes ![](img/ConditionSmall.png) `IsPlayerCloseEnough` and ![](img/Action.png) `SetRotateModeHalfHalf`
 
-Next, we will add a ![](img/SelectorSmall.png) `Selector` to choose between a condition "Are we in the chase state?" and playing the tweens. This will make the tweens play only if the agent action is not Chase ⇾ played only on chase enter.
+Next, we will add a ![](img/SelectorSmall.png) `Selector` to choose between a condition "Are we in the chase state?" and playing the tweens. This setup will make the tweens play only if the agent action is not Chase ⇾ played only on chase enter.
 
 - **Node** ![](img/SelectorSmall.png) `SelectorComposite` child of ![](img/SequenceSmall.png) `ChaseSequence`
     - **Name** `OnEnterChaseSelector`
@@ -459,7 +459,7 @@ Now the enemy pops up and back down (enter chase tweens) when it starts to see t
 To make the enemy's behavior the same as the FSM version, you can also add the node ![](img/Action.png) `EnterChaseTweens` as a child of the ![](img/SequenceSmall.png) `ShootRotateSequence`, which will make the enemy do the tween when shooting.
 
 ### Behavior Trees - Ending
-As we saw in these few sections, behavior trees are very modular and require you to think about AI in a bit of a different way. They are mostly useful for more complex AIs than the one we created, but you can use them however you like.
+As we saw in these few sections, behavior trees are very modular and require you to think about AI differently. They are primarily used for more complex AIs than the one we created, but you can use them however you like.
 
 Here is a video showcasing the complete behavior tree and enemy behavior that we created during this codelab:
 
@@ -472,12 +472,12 @@ Duration: hh:mm:ss
 
 What can you use if you do not want or cannot use **Navigation Meshes** for navigation (too expensive, too dynamic environment, too rigid movement, flying enemies, etc.)?
 
-One might come up with a navigation variant that simply **moves the "enemy" towards the player**. This is a good start, which closely mimics the **Seek** behavior that Steering behaviors define and can be expanded to create very complex AI behaviors.
+One might come up with a navigation variant that **moves the "enemy" towards the player**. This approach is a good start, which closely mimics the **Seek** behavior that Steering behaviors define and can be expanded to create very complex AI behaviors.
 
 ### What are Steering Behaviors? 
 They are a form of navigation that is inspired by the movement of **flocks of birds** and **schools of fish** created by Craig W. Reynolds ([Academic Paper](https://www.red3d.com/cwr/steer)). 
 
-For simplicity, I will in this refer to the agent controlled by the steering as **Boid** and to steering behaviors as **Steerings**.
+For simplicity, I will in this refer to the agent controlled by the Steering as **Boid** and to steering behaviors as **Steerings**.
 
 ### How does Steering work?
 1. Each boid can have **any number of Steering behaviors**.
@@ -540,7 +540,7 @@ Let's look at the `air_enemy.tscn` file in `3D/Enemies/AirEnemy`.
 
 ![](img/AirEnemy.png)
 
-This is our enemy, which in the game world represents the **malware that attacked the computer**, that the player needs to clear out (see [GDD]("https://github.com/tutek1/DTLabs/blob/main/GDD.pdf")). Now let's take a look at the script `air_enemy.gd` and the `_physics_process()` to see what it does.
+This is our enemy, which in the game world represents a piece of the **malware that attacked the computer**, that the player needs to clear out (see [GDD]("https://github.com/tutek1/DTLabs/blob/main/GDD.pdf")). Now let's take a look at the script `air_enemy.gd` and the `_physics_process()` to see what it does.
 
 ```GDScript
 func _physics_process(delta : float) ⇾ void:
@@ -760,7 +760,7 @@ This steering force is responsible for the enemy to **avoid running into walls**
 It works by checking for any obstacles in the direction of the velocity, taking the most threatening one (the closest one), and steering away from its middle point.
 
 #### Implementation details
-One key detail of the implementation is that in Godot, a shapecast cannot be done in code the same way a raycast can be done (see `Hover`). I solved this issue by creating a shapecasting node in code and adding it to the enemy. This makes sure that we get all the points, from which the closest one is taken, and the enemy is repelled by them.
+One key detail of the implementation is that in Godot, a shapecast cannot be done in code the same way a raycast can be done (see `Hover`). I solved this issue by creating a shapecasting node in code and adding it to the enemy, which makes sure that we get all the points, from which the closest one is taken, and they repel the enemy.
 
 
 ### Arrival
@@ -773,7 +773,7 @@ When outside the `slowing_radius`, the force is the same as `Seek`. While inside
 
 
 ### My own steering: Hover
-I wanted the `AirEnemy` to float up and down, so I created this steering. It raycasts below the enemy, and when it is low enough, it floats up until a set height is reached. This also helps the enemy not get stuck as much behind objects.
+I wanted the `AirEnemy` to float up and down, so I created this steering. It raycasts below the enemy, and when it is low enough, it floats up until a set height is reached. The floating also helps the enemy not get stuck as much behind objects.
 
 
 ### Preview
@@ -785,7 +785,7 @@ I recommend that you just run the project and experiment with different combinat
 > Note the **differences** between `Seek` and `Pursue` in the last two runs of the game. With `Pursue`, it is much harder to circle the enemy.
 
 > aside negative
-> Beware that you need to **stop and run the game again** when you make a change in the steering. This is probably a bug in the current version of Godot.
+> Beware that you need to **stop and rerun the game** when you make a change in the steering, which is probably a bug in the current version of Godot.
 
 Here is a list of what the debug shapes mean, so that you get a better idea of what is really going on:
 - **Green Arrow** - `AirEnemy` velocity
@@ -806,13 +806,13 @@ Here is a list of what the debug shapes mean, so that you get a better idea of w
 Duration: hh:mm:ss
 
 ### Feedback
-I would be very grateful if you could take a moment to fill out a **very short feedback form** (it takes less than a minute). Your feedback will prove very useful for my master thesis, where I will use it to evaluate the work I have done.
+I would be very grateful if you could take a moment to fill out a **very short feedback form** (it takes less than a minute). Your feedback will prove very useful for my master's thesis, where I will use it to evaluate the work I have done.
 <button>
   [Google Forms](https://forms.gle/xcsTDRJH2sjiuCjP7)
 </button>
 
 > aside positive
-> This whole course and the game we are making are a part of my master thesis.
+> This entire course, as well as the game we are creating, is part of my master's thesis.
 
 ### Recap
 Let's look at what we did in this lab.
