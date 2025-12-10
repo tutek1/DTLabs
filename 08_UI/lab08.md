@@ -41,7 +41,7 @@ To remember the amount of traces collected, I added a variable for this in the `
 ### `player_stats.gd` change
 Since we will be adding the **main menu** and a **save and load system**, I decided to move the variable of the player `player_stats` to a new autoload script.
 
-This script is called `GlobalState` and is located in the `Global` folder. It will be responsible for loading, saving, and holding the current state (or save) of the game. The script is added as autoload, so it can be used from everywhere.
+This script is called `GlobalState` and is located in the `Global` folder. It will be responsible for loading, saving, and holding the current state (or save) of the game. The script is added as an autoload, so it can be used from everywhere.
 
 > aside positive
 > **Reminder:** `player_stats.gd` resource script holds the current stats of the player (health, jump, speed, damage, etc.), and the player script uses the values from it.
@@ -179,7 +179,7 @@ The `HPBar` is now functional, but there are still some things that need to be d
 
 
 ### Anchors and Position
-One of the most important settings for UI is the ability to anchor it. Anchors basically say how the **UI elements should behave** with respect to **the aspect ratio** of the screen.
+One of the most essential features of UI nodes is the ability to anchor them. Anchors basically say how the **UI elements should behave** with respect to **the aspect ratio** of the screen.
 
 #### How to change anchors
 To change the anchors, you can either:
@@ -233,7 +233,7 @@ func _update_hp() -> void:
 
 
 ### Bug Fix
-The current implementation has one small bug. Until the player takes damage, the `HPBar` keeps displaying as half full. To fix this, simply **add** a call to the `_update_hp()` in the `_ready()` function of the `hud.gd` script.
+The current implementation has one minor bug. Until the player takes damage, the `HPBar` keeps displaying as half full. To fix this, simply **add** a call to the `_update_hp()` in the `_ready()` function of the `hud.gd` script.
 
 ```GDScript
 func _ready() -> void:
@@ -266,7 +266,7 @@ func _update_hp() -> void:
 ```
 
 > aside positive
-> Health bars don't have to be only on the screen. **Diegetic health bars** are health bars that are present in the world in a realistic and believable way (not just spacial UI). For example, in my game I will use the **robots backpack** as a health indicator.
+> Health bars don't have to be only on the screen. **Diegetic health bars** are health bars that are present in the world realistically and believably (not just 3D UI). For example, in my game, I will also use the **robot's backpack** as a health indicator.
 >
 > <img src="img/1BatteryFull.png" width="179"/> <img src="img/2BatteryMid.png" width="200"/> <img src="img/3BatteryLow.png" width="184"/>
 
@@ -290,7 +290,7 @@ I want the texture and label (text with a number) to be located one after anothe
 2. **Set** the `Custom Minimum Size` to `(112.0, 112.0)` (to make the sprite larger)
 3. **Set** the `Texture` ⇾ `Filter` property to `Nearest`
 
-This makes the `TextureRect` have a **texture**, **bigger**, and render as **pixel art**.
+This setup makes the `TextureRect` have a **texture**, **be bigger**, and render as **pixel art**.
 
 #### `Label` Settings
 1. **Set** the `Text` to `0`
@@ -305,10 +305,10 @@ This makes the `Label` **visible**, so that we easily set it, **formats the text
 
 
 ### Put the `HPBar` and `CollectibleCounter` Together
-I would like to move the **collectible counter** to be on the right of the `HPBar`. We could set the anchor to `Bottom Left` and offset it manually. However, this is very error-prone and could hinder us in the future if we wanted to change some aspects of the UI.
+I want to move the **collectible counter** to the right of the `HPBar`. We could set the anchor to `Bottom Left` and offset it manually. However, this is very error-prone and could hinder us in the future if we wanted to change some aspects of the UI.
 
 #### The Horizontal Container
-Similarly to when we wanted the collectible label and texture to be above each other, we will use a `HBoxContainer` (`H` since we want a horizontal list).
+Similarly to when we wanted the collectible label and texture to be above each other, we will use an `HBoxContainer` (`H` since we want a horizontal list).
 
 1. **Add** a `HBoxContainer` as a child of the `HUD`
 2. **Set** the `Anchor Preset` to `Bottom Left`
@@ -334,7 +334,7 @@ The reason is that the `Control` node has a size of `0` on the `X-axis`. We cann
 3. **Set** the `Anchor Preset` of the `HPBar` to `Center`
 
 #### Alignment of `CollectibleVBox`
-Ok, now it looks much better. One small tweak I would like to implement is that the `CollectibleCounter` should be positioned at the very bottom of the screen.
+Ok, now it looks much better. One minor tweak I would like to implement is that the `CollectibleCounter` should be positioned at the very bottom of the screen.
 
 1. **Set** the `Alignment` property of `CollectibleVBox` node to `End`
 
@@ -366,7 +366,7 @@ Then, let's **add a signal** to the top of the player script, so that other node
 signal collectible_gathered
 ```
 
-Lastly, we need to **emit the signal** when the collectible is touched. Here is the full function:
+Lastly, we need to **emit the signal** when the collectible is touched. Here is the complete function:
 ```GDScript
 # Updates the count and emits a signal
 func collectible_touched(collectible : Collectible) -> void:
@@ -405,7 +405,7 @@ Play the game and:
 
 ![](img/Collectibles.gif)
 
-Here is the full code of the `hud.gd` script:
+Here is the complete code of the `hud.gd` script:
 ```GDScript
 extends CanvasLayer
 
@@ -445,7 +445,7 @@ As a bonus exercise, I would like to implement the `CollectibleCounter` to **mov
 ### Setup
 
 #### Reference
-First, we need to have a reference to the whole `CollectibleVBox`, which represents the whole counter.
+First, we need to have a reference to the whole `CollectibleVBox`, which represents the entire counter.
 
 1. **Right-click** the `CollectibleVBox` node and **select** the `Access as Unique Name` option
 2. **Add** a reference to it by **CTRL + drag** to script or **copy** this line:
@@ -557,7 +557,7 @@ if _malware_state == MalwareStates.UP:
 - The state also needs to be updated accordingly
 
 ### One small problem
-Currently, the animation of the counter seems to work correctly. However, let's say the counter is set to stay up for `3 seconds`, if a collectible is picked up and another one is picked up after `2.9 seconds`, the timer will still move down after `0.1 seconds` instead of waiting an additional `3` seconds. We will fix this be **remembering the number of collectibles**.
+Currently, the animation of the counter seems to work correctly. However, let's say the counter is set to stay up for `3 seconds`, if a collectible is picked up and another one is picked up after `2.9 seconds`, the timer will still move down after `0.1 seconds` instead of waiting an additional `3` seconds. We will fix this by remembering the number of collectibles**.
 
 ```GDScript
 func _update_collectible_counter() -> void:
@@ -584,7 +584,7 @@ func _update_collectible_counter() -> void:
 The counter animation should work correctly now. Here is how it looks:
 ![](img/CollectiblesBonus.gif)
 
-Here is the full `hud.gd` code with all the previous changes:
+Here is the whole `hud.gd` code with all the previous changes:
 ```GDScript
 extends CanvasLayer
 
@@ -682,16 +682,16 @@ This section will focus on creating a working **Main Menu** using the UI system 
 Please **open** the `UI/MainMenu/main_menu.tscn` scene.
 
 ### What is already present?
-I have already created a basic UI scene (`Control` node as the root) with a background created from a randomized tilemap, which I have previously used for the **2D puzzle sections**. 
+I have already created a basic UI scene (`Control` node as the root) with a background made from a randomized tilemap, which I have previously used for the **2D puzzle sections**. 
 
-I also made a basic empty script with the headers of functions, which will be called by all the different main menu buttons.
+I also made a basic empty script with the headers of functions, which all the different main menu buttons will call.
 
 > aside positive
 > For more information on how to do this, you can check out the **Lab03 - 2D Platformer** lab, which goes in depth on `TileMaps`.
 
 
 ### Buttons - UI
-Let's start by creating a **game name** and the **three buttons**. To keep all these nodes aligned properly, we will use a `VBoxContainer` for this whole middle section.
+Let's start by creating a **game name** and the **three buttons**. To keep all these nodes appropriately aligned, we will use a `VBoxContainer` for this whole middle section.
 
 1. **Add** a new `VBoxContainer` node as a child of the `MainMenu` node
 2. **Set** the `Anchor Preset` to `Center`
@@ -764,7 +764,7 @@ The final look of the main menu should look like this:
 ## Main Menu Logic
 Duration: hh:mm:ss
 
-The visual side of the main menu is complete. Let's now make it functional.
+The visual side of the main menu is complete. Let's go ahead and make it functional now.
 
 ### Button Signals
 The First step is to connect the `pressed()` signals of the buttons to the prepared functions in `main_menu.gd`. We will start with the **first button**.
@@ -816,7 +816,7 @@ func save_game() -> int:
 > There are many ways we can save and load the game. If your game needs to save extra info, like nodes in a scene with their properties, you can use [this tutorial](https://docs.godotengine.org/en/stable/tutorials/io/saving_games.html) from the documentation of Godot. 
 
 ### Exit Game Button
-The last button to make functional is the **exit game button**. This will also be very straightforward:
+The last button to make functional is the **exit game button**, which will also be very straightforward:
 
 ```GDScript
 func _exit_game() -> void:
@@ -836,13 +836,13 @@ Here is a video showing just that:
 Duration: hh:mm:ss
 
 ### Feedback
-I would be very grateful if you could take a moment to fill out a **very short feedback form** (it takes less than a minute). Your feedback will prove very useful for my master thesis, where I will use it to evaluate the work I have done.
+I would be very grateful if you could take a moment to fill out a **very short feedback form** (it takes less than a minute). Your feedback will prove very useful for my master's thesis, where I will use it to evaluate the work I have done.
 <button>
   [Google Forms](https://forms.gle/xcsTDRJH2sjiuCjP7)
 </button>
 
 > aside positive
-> This whole course and the game we are making are a part of my master thesis.
+> This entire course, as well as the game we are creating, is part of my master's thesis.
 
 ### Recap
 Let's look at what we did in this lab.
