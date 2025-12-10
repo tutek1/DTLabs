@@ -311,7 +311,7 @@ You should see this effect:
 ## Hologram Shader - Visual
 Duration: hh:mm:ss
 
-Creating shaders using code is efficient and performant, but for more artistic people, it can be a bit too complex and unintuitive. That is why **Visual Shaders** exist. They are a node-based system that allows you to create shaders very intuitively. While **not as performant** (with huge graphs) and a **little less capable** than "code" shaders, they can be used for **quick and easy prototyping** or **creating simple effects**.
+Creating shaders using code is efficient and performant, but for more artistic people, it can be a bit too complex and unintuitive. That is why **Visual Shaders** exist. They are a node-based system that allows you to create shaders very intuitively. While **not as performant** (with massive graphs) and a **little less capable** than "code" shaders, they can be used for **quick and easy prototyping** or **creating simple effects**.
 
 ![](img/VisualShader.png)
 
@@ -391,7 +391,7 @@ Let's make the size of the scanline settable from **outside the shader** and mak
 
     - This makes the transparent and non-transparent parts more equal.
 
-This should be the resulting look:
+Here is the resulting look:
 
 <img src="img/ScanlinesDone.png" width="300"/>
 
@@ -433,7 +433,7 @@ Let's utilise the Fresnel effect to make the hologram more interesting. **Add** 
 
 <img src="img/FresnelSetup.png" width="800"/>
 
-This is the resulting look. In my opinion, the addition of Fresnel makes the hologram feel more enclosed.
+Here is the resulting look. In my opinion, the addition of Fresnel makes the hologram look better and feel more enclosed.
 
 <img src="img/FresnelResult.png" width="200"/>
 
@@ -535,7 +535,7 @@ First, we will add a new `bool` to track if the player has already obtained the 
     ```
 
 > aside negative
-> Let's keep it set to `true` for now, since we will be **implementing the ability**. Later on, in the full game, it will be set to `false` until the player finds the ability.
+> Let's keep it set to `true` for now, since we will be **implementing the ability**. Later on, in the complete game, it will be set to `false` until the player finds the ability.
 
 ### Hologram Player Material
 Now, we will **create a new material** for the player, which will be **swapped** with the normal one upon activating the hologram.
@@ -912,7 +912,7 @@ Let's use the already prepared `DamageParticles` node and learn how you can easi
 
 
 ### Enemy Flying Particles - Constantly Emitting Particles
-Another way to use particles is to have them **constantly emit**, making a trail effect. Let's create a trail of particles behind the `AirEnemy`, that slowly disappear after time.
+Another way to use particles is to have them **constantly emit**, making a trail effect. Let's create a trail of particles behind the `AirEnemy` that slowly disappear over time.
 
 #### The Setup
 1. **Open** the `air_enemy.tscn` scene
