@@ -43,13 +43,13 @@ I added a yellow-colored folder `Audio` with all the necessary stuff needed for 
 
 
 ### Audio Bus
-Every audio that is played in Godot must be played on an **Audio Bus**. The most common use case for having multiple buses is to play each audio type (music, SFX, ambient, voices...) on a separate audio bus. This allows you to set the volume, solo/mono, etc., for each audio type, as is done in almost all games.
+Every audio that is played in Godot must be played on an **Audio Bus**. The most common use case for having multiple buses is to play each audio type (music, SFX, ambient, voices...) on a separate audio bus. Allowing you to set the volume, solo/mono, etc., for each audio type, as is done in almost all games.
 
 #### Definition
 *An audio bus (also called an audio channel) can be considered a place that audio is channeled through on the way to playback through a device's speakers. Audio data can be modified and re-routed by an audio bus.* - [Godot Documentation](https://docs.godotengine.org/en/latest/tutorials/audio/audio_buses.html)
 
 #### Godot Bus Layout
-In Godot, you can find the Audio Bus settings at the bottom of the editor next to the `Debugger` tab. This is how it looks in our template:
+In Godot, you can find the Audio Bus settings at the bottom of the editor next to the `Debugger` tab. Here is how it looks in our template:
 
 ![](img/AudioBusDefault.png)
 
@@ -64,7 +64,7 @@ We will create a very standard audio bus setup. Please **recreate the audio buse
 > Make sure to **name the buses the same** as I did, since I already connected audio sliders to these bus names, more on that later on.
 
 > aside positive
-> **Bus routing** can be used to composite different buses. In our case, we will just route all the buses to the `Master Bus`. This way, the `Master Bus` will control the volume of all the other buses. 
+> **Bus routing** can be used to composite different buses. In our case, we will route all the buses to the `Master Bus`. This way, the `Master Bus` will control the volume of all the other buses. 
 
 
 ### Audio Nodes
@@ -75,7 +75,7 @@ To play and listen to audio, Godot provides several audio nodes. Here is a brief
 
 
 ### Debug Audio Sliders
-For our convenience, I also created debug audio sliders for each audio bus and placed them on the player HUD, so that we can easily adjust the audio levels during this codelab.
+For our convenience, I also created debug audio sliders for each audio bus. I placed them on the player HUD so that we can easily adjust the audio levels during this codelab.
 
 ![](img/DebugAudioSliders.png)
 
@@ -91,11 +91,11 @@ Let's first create a simple audio player without the use of the `AudioManager`. 
 
 1. **Add** an `AudioStreamPlayer3D` node as a child of the `PuzzleSection`
 2. **Set** the `Stream` property to `beep_boop_ambient.wav`
-3. **Set** the `Autoplay` property to `On`, which makes the sound automatically play on starting the game
+3. **Set** the `Autoplay` property to `On`, which makes the sound automatically play when starting the game
 4. **Set** the `Bus` to `Ambient`
 
 #### Distance Attenuation
-The attenuation of sound over distances is an important effect that makes sounds believable. To set how the sound is attenuated with distance, the `AudioStreamPlayer3D` node offers these parameters:
+The attenuation of sound over distances is a significant effect that makes sounds believable. To set how the sound is attenuated with distance, the `AudioStreamPlayer3D` node offers these parameters:
 - `Attenuation Mode` - changes the way the audio gets quieter with distance (linear, quadratic, logarithmic)
 - `Unit Size` - factor of the attenuation, higher values make the sound hearable over larger distances
 - `Max Distance` - works in tandem with `Attenuation Mode`, sets the maximum distance the sound can be heard from, and linearly makes the sound quieter
@@ -123,7 +123,7 @@ The last thing we need to change is to make the sound loop.
 ## Complex Audio using an `AudioManager`
 Duration: hh:mm:ss
 
-Simply playing audio with audio players, like we did in the last section, is a good practice for playing looping sounds (ambience) without any complex logic. Playing SFX like the player walking, enemy shooting, or music can be done in the same way, but making an `AudioManager` with helpful methods is the recommended approach.
+Simply playing audio with audio players, as we did in the last section, is a good practice for playing looping sounds (ambience) without any complex logic. Playing SFX like the player walking, enemy shooting, or music can be done in the same way, but making an `AudioManager` with helpful methods is the recommended approach.
 
 ### Overview of `AudioManager`
 Let's now look at the `AudioManager` I prepared.
@@ -161,7 +161,7 @@ Now, try to **run the game** and **press** `F4`. The music should slowly fade in
 We will quickly look over the `SFXSettings` so that we can then work with the parameters of each SFX.
 
 ![](img/SFXSettings.png)
-- `audio_clips` - All the clips that correspond to the SFX (useful for having variants of often-repeating sounds)
+- `audio_clips` - Array of all the clips that correspond to the SFX (practical for having variants of often-repeating sounds)
 - `limit` - The maximum number of instances of the SFX that can be playing at once.
 - `volume_adjust` - Volume of the SFX for quick changes without needing to change the sound file
 - `unit_size` - Same as the `AudioStreamPlayer3D` parameter
@@ -170,7 +170,7 @@ We will quickly look over the `SFXSettings` so that we can then work with the pa
 - `func is_over_limit()` - Simple check if there aren't too many instances of the SFX playing
 
 ### Fill the `sfx_bank`
-The setup is now almost complete. We need to only fill out the `sfx_bank` with the `SFXSettings`. **Open** the `audio_manager.tscn` scene, **select** the `AudioManager` node, and **click** the `Dictionary[int, SFXSettings]` in the **Inspector**.
+The setup is now almost complete. We need only to fill out the `sfx_bank` with the `SFXSettings`. **Open** the `audio_manager.tscn` scene, **select** the `AudioManager` node, and **click** the `Dictionary[int, SFXSettings]` in the **Inspector**.
 
 1. **Set** the `New Key` to `Player Walk`
 2. **Set** the `New Value` to a `New SFXSettings`
@@ -318,7 +318,7 @@ func receive_damage(value : float, from : Node3D):
 ```
 
 ### Player Shooting
-Same as the last few headers, we will just add this line to the end of the `_shoot()` function:
+Same as the last few headers, we will add this line to the end of the `_shoot()` function:
 
 ```GDScript
 func _shoot() -> void:
@@ -332,7 +332,7 @@ The walking of the player is a bit trickier. There are several ways to do it.
 #### Using Animations
 One way that you can do this is to **reimport** the animations with `Custom Tracks` enabled. Then **adding** a `Call Method` tracks with **calls to play the SFX** at the exact moment the feet touch the ground.
 
-However, since we are using a `BlendTree2D` for the walking animation, all 4 calls from the 4 animations that are blended are called. Ideally, we would only want the `Call Method` track of the animation with the biggest weight to be called, but even with this approach, walking diagonally would not sound right.
+However, since we are using a `BlendTree2D` for the walking animation, all 4 calls from the 4 animations that are blended are called. Ideally, we would only want the `Call Method` track of the animation with the biggest weight to be called, but even with this approach, walking diagonally would be problematic.
 
 #### Using Physics
 The other way, which we will implement, is to **place colliders at the bottom of the feet** of the player and play SFX upon collision with the ground.
@@ -349,7 +349,7 @@ The other way, which we will implement, is to **place colliders at the bottom of
     AudioManager.play_sfx_as_child(AudioManager.SFX_TYPE.PLAYER_WALK, self)
     ```
 
-Now, please **repeat the process** for the other foot. This is how the final setup should look now:
+Now, please **repeat the process** for the other foot. Here is how the final setup should look now:
 
 ![](img/FeetDone.png)
 
@@ -410,7 +410,7 @@ Now that all the sounds that I prepared are being played, let's see what the res
 
 <video id=kI2c7S7K4Zw></video>
 
-As you can see, the sound effects change how the game feels and plays. Having audio feedback to shooting and dealing damage makes the game feel much **more reactive** to the player's actions. Try to watch the video **with** and **without** sound to see the difference.
+As you can see, the sound effects change how the game feels and plays. Having audio feedback to shooting and dealing damage makes the game feel much **more reactive** to the player's actions. Please watch the video **with** and **without** sound to see the difference.
 
 
 
@@ -418,13 +418,13 @@ As you can see, the sound effects change how the game feels and plays. Having au
 Duration: hh:mm:ss
 
 ### Feedback
-I would be very grateful if you could take a moment to fill out a **very short feedback form** (it takes less than a minute). Your feedback will prove very useful for my master thesis, where I will use it to evaluate the work I have done.
+I would be very grateful if you could take a moment to fill out a **very short feedback form** (it takes less than a minute). Your feedback will prove very useful for my master's thesis, where I will use it to evaluate the work I have done.
 <button>
   [Google Forms](https://forms.gle/xcsTDRJH2sjiuCjP7)
 </button>
 
 > aside positive
-> This whole course and the game we are making are a part of my master thesis.
+> This entire course, as well as the game we are creating, is part of my master's thesis.
 
 ### Recap
 Let's look at what we did in this lab.
@@ -444,7 +444,7 @@ Let's look at what we did in this lab.
 > <video id=Egf2jgET3nQ></video>
 
 ### Note on Audacity
-If you are wondering where I found the SFX used in this codelab, I made them myself. I used the free program `Audacity`, where I recorded noises that I made with stuff on my desk and my mouth. Then I edited these audio clips to sound more robotic. The whole process is very easy, and I recommend looking into it if you are interested.
+If you are wondering where I found the SFX used in this codelab, I made them myself. I used the free program `Audacity`, where I recorded noises that I made with stuff on my desk and my mouth. Then I edited these audio clips to sound more robotic. The whole process is not that difficult, and I recommend looking into it if you are interested.
 
 <video id=MjusZESiLiw></video>
 
@@ -452,7 +452,7 @@ If you are wondering where I found the SFX used in this codelab, I made them mys
 Alternatively, if it matches the theme of your game, you can use [jsfxr](https://sfxr.me) or [bfxr](https://www.bfxr.net) websites to create sound effects. These sites let you easily create 8-bit SFX.
 
 ### Note on Freesound.org
-The last alternative, and the place where I found the **ambient** and **music** tracks, is [Freesound](https://freesound.org). Here you can download free sounds and music to use in your projects. However, be careful to **check the license of the sound/music** that you are downloading. Some tracks are limited for personal use, some for noncommercial use, and some are even free to distribute.
+The last alternative, and the place where I found the **ambient** and **music** tracks, is [Freesound](https://freesound.org). Here you can download free sounds and music to use in your projects. However, please be careful to **check the license of the sound/music** that you are downloading. Some tracks are limited for personal use, some for noncommercial use, and some are even free to distribute.
 
 ### Project Download
 If you want to see what the finished template looks like after this lab, you can download it here:
