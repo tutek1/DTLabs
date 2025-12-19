@@ -1,6 +1,6 @@
 summary: Extra Materials
 id: export
-categories: 
+categories: TODO
 status: Published
 authors: Ondřej Kyzr
 Feedback Link: https://forms.gle/J8eeuQAJ3wMY1Wnq7
@@ -16,28 +16,61 @@ The materials are split up into **sections** based on the topic.
 
 
 
-## Godot Basics
+## Godot Documentation
 
-Godot Intro
-https://docs.godotengine.org/en/stable/getting_started/introduction/index.html
+### Introduction
+This is the introduction page of the **Godot Documentation**, which hosts pages about concepts such as `Key Concepts`, `GDScript Basics`, `Interface`, and `Design Philosophy`. 
 
-Step by step basics
-https://docs.godotengine.org/en/stable/getting_started/step_by_step/index.html
+[Introduction](https://docs.godotengine.org/en/stable/getting_started/introduction/index.html)
 
-Your first 2D game
-https://docs.godotengine.org/en/stable/getting_started/first_2d_game/index.html
+> aside positive
+> Recommended for a brief overview of the most basic concepts and philosophy of Godot.
 
-Your first 3D game
-https://docs.godotengine.org/en/stable/getting_started/first_3d_game/index.html
+### Step by step
+Continuation of the previous tutorial with pages about `Nodes`, `Scenes`, `Creating the first script`, `Player Input`, and `Signals`
 
-From unity to Godot
-https://docs.godotengine.org/en/3.1/getting_started/editor/unity_to_godot.html
+[Step by step](https://docs.godotengine.org/en/stable/getting_started/step_by_step/index.html)
+
+> aside positive
+> Recommended for a refresher on basic building blocks of Godot.
+
+### Your first 2D game
+A basic tutorial about making a simple 2D game loop.
+
+[Your first 2D game](https://docs.godotengine.org/en/stable/getting_started/first_2d_game/index.html)
+
+> aside positive
+> A good staring point for making a basic 2D game, getting to know the Godot workflow.
+
+### Your first 3D game
+A basic tutorial about making a simple 3D game loop.
+
+[Your first 3D game](https://docs.godotengine.org/en/stable/getting_started/first_3d_game/index.html)
+
+> aside positive
+> A good staring point for making a basic 3D game, getting to know the Godot workflow.
+
+### From Unity to Godot Engine
+Old but useful guide for people coming from the **Unity Engine** to **Godot**.
+
+[From Unity to Godot Engine](https://docs.godotengine.org/en/3.1/getting_started/editor/unity_to_godot.html)
+
+> aside positive
+> Good for people already familiar with game development in the **Unity Engine**, that want to learn **Godot**.
+
+
 
 
 ## Programming & Best Practices
 
-Cross language scripting for C#
-https://docs.godotengine.org/en/stable/tutorials/scripting/cross_language_scripting.html
+### Cross-language scripting
+A basic cross language scripting guide to combine `GDScript` and `C#` in a single project.
+
+[Cross-language scripting](https://docs.godotengine.org/en/stable/tutorials/scripting/cross_language_scripting.html)
+
+> aside positive
+> Recommended for advanced users that want to take advantage of the speed of `C#` for more complex algorithms.
+
 
 ### How to program in Godot - GDScript Tutorial
 An **extensive overview** of the whole `GDScript` programming language. From simple **data types** and **loops** to **signals**, **classes**, **inheritance**, and **node concepts** such as "call down, signal up".
@@ -112,40 +145,88 @@ A brief overview of the **basic math needed for developing games**. Topics inclu
 
 
 ## Audio Materials
-AudioManager - https://www.youtube.com/watch?v=Egf2jgET3nQ
 
-Creating SFX - https://www.youtube.com/watch?v=MjusZESiLiw
+### How I do Sound Effects in Godot
+A good look a how an `AudioManager` could be implemented in **Godot** with a practical example. This video inspired the `AudioManager` we use in the **Audio codelab**.
+
+<video id=Egf2jgET3nQ></video>
+
+> aside positive
+> I recommend this video for people wanting to know more about **handling sound effects a music** in games.
+
+
+### How to make SOUND EFFECTS for GAMES - EASY TUTORIAL
+An easy and quick guide how you can **create sound effect** in a free program called `Audacity`.
+
+<video id=MjusZESiLiw></video>
+
+> aside positive
+> An excellent video for people with missing sound effects in their game. The whole process is very easy, and I recommend it for almost everyone.
 
 
 
 
 ## UI Materials
-In-Depth UI - https://www.youtube.com/watch?v=KOyREJu1P3I
+
+### A Guide to Creating USER INTERFACE in Godot 4.3+
+An in-depth tutorial on creating a `Menu` with **buttons**, **settings**, **score**, **tutorial**, etc.
+
+<video id=KOyREJu1P3I></video>
+
+> aside positive
+> This tutorial is good for someone who wants to get to know UI a bit more than we covered in the codelabs.
+
+
+TODO more
 
 
 
 
 ## Animations & Visuals
-Animation Tree State Machine Setup w/ Conditions & BlendSpace2D - Godot 4 Resource Gatherer Tutorial https://www.youtube.com/watch?v=WrMORzl3g1U
 
-Lighting in godot - https://www.youtube.com/watch?v=aRdiiWpA0AA
+### Animation Tree State Machine Setup w/ Conditions & BlendSpace2D - Godot 4 Resource Gatherer Tutorial
+This video focuses on the `AnimationTree` and `AnimationBlendTrees` with nice examples.
 
+<video id=WrMORzl3g1U></video>
 
+### Lighting in Godot for Beginners
+A very good video about lighting scenes in Godot and in general. Shows you good examples and all the options you have, when it comes to lighting.
+
+<video id=aRdiiWpA0AA></video>
+
+> aside positive
+> I recommend this video to most people because we didn't really go in-depth into lighting in the codelabs. 
 
 
 ## Multiplayer Materials
+This whole section is about making **online multiplayer games** and I only recommend it to people who are interested in making them.
 
-Docs
-https://docs.godotengine.org/en/stable/tutorials/networking/high_level_multiplayer.html
+### Add Multiplayer to your Godot Game!
+This video takes a 2D platforming game from **Brackeys** and adds a multiplayer to it.
 
-MP on 2d
-youtu.be/V4a_J38XdHk?si=wewcoZBJTgAtLDR9
+<video id=V4a_J38XdHk></video>
+
+> aside positive
+> I recommend this video to someone who already has a singleplayer game and want to make it multiplayer.
+
+
+### High-level multiplayer
+A great page in the Godot Documentation about making a functional multiplayer game in Godot. It is a bit more technical, but you should be able to follow it.
+
+[High-level multiplayer](https://docs.godotengine.org/en/stable/tutorials/networking/high_level_multiplayer.html)
+
+
 
 
 ## Debugging Materials
-Your own debug tool (similar to global_debug script but better) - https://www.youtube.com/watch?v=L3Eed5HEnuQ
 
+### The Fastest way I've found to Test my Games
+This video shows how you can create and use your own debugging tools (similar to `GlobalDebug` in the codelabs) but much better and more complex.
 
+<video id=L3Eed5HEnuQ></video>
+
+> aside positive
+> Generally recommended for everyone, since it makes debugging and testing your games that much easier.
 
 
 ## Feedback

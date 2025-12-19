@@ -116,3 +116,4 @@ scanlines
 scanline
 downscales
 Gimbal
+singleplayer
