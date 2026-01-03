@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-22LY0XCR8B"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-22LY0XCR8B');
+    </script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Godot Engine - HRY (FEE CTU) - Labs Homepage</title>
+  <style>
+    /* Colab-like minimalist styling */
+    :root{
+      --bg:#f6f7fb;
+      --card:#ffffff;
+      --accent:#478CBF; /* Google blue-ish */
+      --muted:#6b7280;
+      --glass: rgba(255,255,255,0.6);
+      --shadow: 0 6px 18px rgba(20,24,34,0.08);
+      font-family: Inter, Roboto, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial;
+    }
+    html,body{height:100%;margin:0;background:var(--bg);color:#111827}
+    .topbar{
+      background:linear-gradient(90deg,var(--accent),#4f8ef7);
+      color:white;padding:18px 28px;display:flex;align-items:center;gap:16px;box-shadow:0 2px 8px rgba(17,24,39,0.08);
+    }
+    .brand{display:flex;align-items:center;gap:12px;font-weight:600}
+    .logo{width:44px;height:44px;border-radius:8px;background:rgba(255,255,255,0.14);display:flex;align-items:center;justify-content:center}
+    .logo svg{width:26px;height:26px}
+    .container{max-width:1100px;margin:28px auto;padding:0 20px}
+    .intro{background:linear-gradient(180deg,rgba(255,255,255,0.9),rgba(255,255,255,0.8));padding:18px;border-radius:12px;box-shadow:var(--shadow);display:flex;gap:18px;align-items:center}
+    .intro h1{margin:0;font-size:20px}
+    .intro p{margin:6px 0 0;color:var(--muted)}
+    .controls{display:flex;gap:12px;align-items:center;margin-top:18px}
+    .search{flex:1}
+    input[type="search"]{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #e6e9ef;background:white;box-shadow:none;font-size:14px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:18px}
+    .card{background:var(--card);padding:14px;border-radius:12px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px}
+    .card h3{margin:0;font-size:16px}
+    .card p{margin:0;color:var(--muted);font-size:13px}
+    .card .meta{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+    .btn{background:var(--accent);color:white;padding:8px 12px;border-radius:8px;text-decoration:none;font-weight:600;font-size:13px}
+    .small{font-size:12px;color:var(--muted)}
+    footer{margin:28px 0 70px;color:var(--muted);text-align:center}
+    .chip{background:#eef6ff;border-radius:999px;padding:6px 10px;font-weight:600;color:var(--accent);font-size:13px}
+    a.subject-link{color:white;text-decoration:underline;opacity:0.95}
+    @media (max-width:520px){.topbar{padding:12px}.intro{flex-direction:column;align-items:flex-start}.brand{font-size:14px}}
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/Godot_icon.svg" alt="Godot icon" style="width: 50px; height: 50px; background-color: #f6f7fb; border-radius: 8px;">
+      </div>
+      Godot Engine Labs <span style="margin-left:8px;opacity:0.95;font-weight:600"> HRY FEE CTU</span>
+    </div>
+    <div style="margin-left:auto;display:flex;gap:12px;align-items:center">
+      <span class="chip">Alternative to the Unity Labs</span>
+      <a class="subject-link" href="https://cw.fel.cvut.cz/b251/courses/b4b39hry/start" target="_blank" rel="noopener">Course page of HRY (FEE CTU)</a>
+    </div>
+  </div>
+
+  <main class="container">
+    <section class="intro">
+      <div style="flex:1">
+        <h1>Labs Homepage</h1>
+        <p>Welcome to the homepage hosting the Godot labs created for the course <strong>HRY</strong> taught at FEE CTU. This course covers topics needed to create video games in the Godot Engine as an alternative to the Unity course used. Topics include: basics of the engine, player and camera controls, 2D/3D platformers, artificial intelligence in games (not LLMs), animations, physics, UI, audio a visual effects.</p>
+      </div>
+    </section>
+
+    <div class="controls">
+      <div class="search">
+        <input id="q" type="search" placeholder="Search for keywords (for example: 'CharacterBody3D' or 'AI')" oninput="filterCards()">
+      </div>
+      <div>
+        <button class="btn" onclick="resetFilter()">Reset Filter</button>
+      </div>
+    </div>
+
+    <section class="grid" id="cards">
+      <!-- Cards for each lesson -->
+
+      <article class="card" data-title="01_Basics, basics, Installation, Basics, GDScript, Navigation, Nodes, StaticBody3D, Engine UI, 3D" style="display: flex; flex-direction: column; min-height: 140px;">
+        <h3>01 - Basics</h3>
+        <p>Intro to Godot: engine user interface, scenes, nodes, GDScript, and creating simple objects.</p>
+        <div class="meta" style="margin-top: auto;">
+          <span class="small" style="margin-right: 5px;">Basics needed for all next labs</span>
+          <a class="btn" href="01_Basics/index.html" target="_blank" rel="noopener" style="min-width: 60px; height: 25px; display:flex; align-items: center; justify-content: center;">Open lab</a>
+        </div>
+      </article>
+
+      <article class="card" data-title="02_Player, Player controls, 3D, CharacterBody3D, 3D Player Controller, Camera3D, Materials, GDScript" style="display: flex; flex-direction: column; min-height: 140px;">
+        <h3>02 - Player Controller and Camera</h3>
+        <p>Input, movement, jump, double jump, collisions, and a basic smooth third-person camera.</p>
+        <div class="meta" style="margin-top: auto;">
+          <span class="small" style="margin-right: 5px;">Two player controllers and Camera</span>
+          <a class="btn" href="02_Player/index.html" target="_blank" rel="noopener" style="min-width: 60px; height: 25px; display: flex; align-items: center; justify-content: center;">Open lab</a>
+        </div>
+      </article>
+
+      <article class="card" data-title="03_Platformer2D, platformer 2d, 2D, Tilemap, Tileset, Sprite, 2D Player Controller, CharacterBody2D" style="display: flex; flex-direction: column; min-height: 140px;">
+        <h3>03 - 2D Platformer</h3>
+        <p>Tilemaps, spritesheets, 2D player controller, sprites, and 2D level design.</p>
+        <div class="meta" style="margin-top: auto;">
+          <span class="small" style="margin-right: 5px;">Example 2D game</span>
+          <a class="btn" href="03_Platformer2D/index.html" target="_blank" rel="noopener" style="min-width: 60px; height: 25px; display: flex; align-items: center; justify-content: center;">Open lab</a>
+        </div>
+      </article>
+
+      <article class="card" data-title="04_2DPlatformIn3D, 2D in 3D, 2D, 3D, SubViewport, Area3D, Camera3D" style="display: flex; flex-direction: column; min-height: 140px;">
+        <h3>04 - 2D Platformer in 3D</h3>
+        <p>Implementation of 2D platformer in 3D using Viewports.</p>
+        <div class="meta" style="margin-top: auto;">
+          <span class="small" style="margin-right: 5px;">2D platformer in 3D</span>
+          <a class="btn" href="04_2DPlatformIn3D/index.html" target="_blank" rel="noopener" style="min-width: 60px; height: 25px; display: flex; align-items: center; justify-content: center;">Open lab</a>
+        </div>
+      </article>
+
+      <article class="card" data-title="05_AI-NavMeshFSM, Globals, AI, artificial intelligence, NavMesh, 3D, FSM, Plugin, Projectile" style="display: flex; flex-direction: column; min-height: 140px;">
+        <h3>05 - AI: NavMesh & FSM</h3>
+        <p>Navigation: NavMesh, pathfinding.</p>
+        <p>Enemy behavior: FSM (finite-state machine) implementation.</p>
+        <div class="meta" style="margin-top: auto;">
+          <span class="small" style="margin-right: 5px;">Enemy AI and Navigation</span>
+          <a class="btn" href="05_AI-NavMeshFSM/index.html" target="_blank" rel="noopener" style="min-width: 60px; height: 25px; display: flex; align-items: center; justify-content: center;">Open lab</a>
+        </div>
+      </article>
+
+      <article class="card" data-title="06_AI-BeehaveSteering, AI, artificial intelligence, Behavior Trees, Beehave, NavMesh, 3D, Plugin, Steering Behaviors, Steerings, Seek, Pursue" style="display: flex; flex-direction: column; min-height: 140px;">
+        <h3>06 - AI: Behavior Trees a Steering</h3>
+        <p>Navigation: Steering, seek, pursue, CollisionAvoidance.</p>
+        <p style="margin-bottom: 4px;">Enemy Behavior: Beehave plugin, design Behavior Trees (BT).</p>
+        <div class="meta" style="margin-top: auto;">
+          <span class="small" style="margin-right: 5px;">Advanced Enemy AI and Navigation</span>
+          <a class="btn" href="06_AI-BeehaveSteering/index.html" target="_blank" rel="noopener" style="min-width: 60px; height: 25px; display: flex; align-items: center; justify-content: center;">Open lab</a>
+        </div>
+      </article>
+
+      <article class="card" data-title="07_Animation&Physics, Animation, Physics, Colliders, 3D, Models, Joints, Animation Tree, Skeleton, Bones, Light" style="display: flex; flex-direction: column; min-height: 140px;">
+        <h3>07 - Animation & Physics</h3>
+        <p>Animation: Animation tree, animation blending, skeletal/procedural/in-engine animations.</p>
+        <p style="margin-bottom: 4px;">Physics: Rigidbodies, physical properties of bodies, RigidBody3D and CharacterBody3D interaction.</p>
+        <div class="meta" style="margin-top: auto;">
+          <span class="small" style="margin-right: 5px;">Player animations and Physics interactions.</span>
+          <a class="btn" href="07_Animation%26Physics/index.html" target="_blank" rel="noopener" style="min-width: 60px; height: 25px; display: flex; align-items: center; justify-content: center;">Open lab</a>
+        </div>
+      </article>
+
+      <article class="card" data-title="08_Uživatelské, UI, Canvas, Slider, Label, Alignment, Anchors, Container, Gradient, Progress Bar, Health, Collectibles, Tween" style="display: flex; flex-direction: column; min-height: 140px;">
+        <h3>08 - UI</h3>
+        <p>User interface: Heads-up display (HUD) with a HP bar and a Collectibles counter. Discussion and example of diegetic elements. Main menu with saving/loading.</p>
+        <div class="meta" style="margin-top: auto;">
+          <span class="small" style="margin-right: 5px;">Functional UI HUD and Main Menu</span>
+          <a class="btn" href="08_UI/index.html" target="_blank" rel="noopener" style="min-width: 60px; height: 25px; display: flex; align-items: center; justify-content: center;">Open lab</a>
+        </div>
+      </article>
+
+      <article class="card" data-title="09_Audio, zvuk, Audio, Audio Manager, Audio Bus, Audio Stream, Audio Listener, Tween, SFX, Music" style="display: flex; flex-direction: column; min-height: 140px;">
+        <h3>09 - Audio</h3>
+        <p>Overview of all kinds of audio playing using simple nodes and an AudioManager.</p>
+        <div class="meta" style="margin-top: auto;">
+          <span class="small" style="margin-right: 5px;">Playing SFX and Music</span>
+          <a class="btn" href="09_Audio/index.html" target="_blank" rel="noopener" style="min-width: 60px; height: 25px; display: flex; align-items: center; justify-content: center;">Open lab</a>
+        </div>
+      </article>
+
+      <article class="card" data-title="10_VFX, VFX, Shader, Visual Shader, GLSL, Fullscreen Effect, Hologram, Noise, Particles, Tween" style="display: flex; flex-direction: column; min-height: 140px;">
+        <h3>10 - VFX</h3>
+        <p>Creating visual effects using shaders (Fullscreen recolor), visual shaders (Player Hologram), particle emitters, noise, and much more.</p>
+        <div class="meta" style="margin-top: auto;">
+          <span class="small" style="margin-right: 5px;">Adding game juice</span>
+          <a class="btn" href="10_VFX/index.html" target="_blank" rel="noopener" style="min-width: 60px; height: 25px; display: flex; align-items: center; justify-content: center;">Open lab</a>
+        </div>
+      </article>
+
+      <article class="card" data-title="Extra Materials" style="display: flex; flex-direction: column; min-height: 140px;">
+        <h3>Extra Materials</h3>
+        <p>Bonus materials on all sorts of topics. Recommended for everyone to check out.</p>
+        <div class="meta" style="margin-top: auto;">
+          <span class="small" style="margin-right: 5px;">Check me out --></span>
+          <a class="btn" href="ExtraMaterials/index.html" target="_blank" rel="noopener" style="min-width: 60px; height: 25px; display: flex; align-items: center; justify-content: center;">Open lab</a>
+        </div>
+      </article>
+
+    </section>
+
+    <footer>
+      <div>© FEE CTU - Godot Labs for the HRY course.</div>
+      <div style="margin-top:6px">Godot Engine Labs Author: Ondřej Kyzr</div>
+    </footer>
+  </main>
+
+  <script>
+    function filterCards(){
+      const q = document.getElementById('q').value.toLowerCase();
+      const cards = document.querySelectorAll('#cards .card');
+      cards.forEach(c => {
+        const txt = c.getAttribute('data-title').toLowerCase();
+        c.style.display = txt.includes(q) ? 'flex' : 'none';
+      });
+    }
+    function resetFilter(){document.getElementById('q').value='';filterCards();}
+    // accessibility: allow Enter on search to focus first visible link
+    document.getElementById('q').addEventListener('keydown', (e)=>{
+      if(e.key==='Enter'){
+        const first = document.querySelector('#cards .card:not([style*="display: none"]) a');
+        if(first) first.focus();
+      }
+    });
+  </script>
+</body>
+</html>
