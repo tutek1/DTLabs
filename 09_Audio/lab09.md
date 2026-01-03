@@ -1,6 +1,6 @@
 summary: UI
 id: export
-categories: Audio, Audio Manager, Audio Bus, Audio Stream, Audio Listener, Tween
+categories: Audio, Audio Manager, Audio Bus, Audio Stream, Audio Listener, Tween, SFX, Music
 status: Published
 authors: Ondřej Kyzr
 Feedback Link: https://forms.gle/J8eeuQAJ3wMY1Wnq7
