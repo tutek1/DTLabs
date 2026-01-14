@@ -117,7 +117,16 @@ This video is similar to the last one but only 4 minutes in length, giving a ver
 > aside positive
 > I recommend this video to **almost everyone**, since you never know how could `Custom Resources` help you develop your game.
 
+## Physics Materials
+Duration: hh:mm:ss
 
+### How to Make Ragdolls in Godot 4 - Godot 4 Tutorial
+A **short tutorial** on how to create ragdolls of skeletons in Godot 4.
+
+<video id=Rzoz2YDrDlQ></video>
+
+> aside positive
+> I recommend this video for those who want to use ragdolls in their project.
 
 
 ## Math Materials
