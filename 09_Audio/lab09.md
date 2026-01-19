@@ -14,7 +14,7 @@ This lab will focus on learning about **audio** in Godot. We will have a brief o
 
 In a bullet point format, we will:
 - Look at the **audio folder** I added to the project.
-- Learn about **audio buses** and **audio nodes**.
+- Learn about **audio busses** and **audio nodes**.
 - **Play a simple** audio using the `AudioStreamPlayer3D` node.
 - Look at the `AudioManager` I prepared and **implement** `play_sfx...` methods.
 - Use the `play_sfx...` methods to **play the player SFX**.
@@ -43,7 +43,7 @@ I added a yellow-colored folder `Audio` with all the necessary stuff needed for 
 
 
 ### Audio Bus
-Every audio that is played in Godot must be played on an **Audio Bus**. The most common use case for having multiple buses is to play each audio type (music, SFX, ambient, voices...) on a separate audio bus. Allowing you to set the volume, solo/mono, etc., for each audio type, as is done in almost all games.
+Every audio that is played in Godot must be played on an **Audio Bus**. The most common use case for having multiple busses is to play each audio type (music, SFX, ambient, voices...) on a separate audio bus. Allowing you to set the volume, solo/mono, etc., for each audio type, as is done in almost all games.
 
 #### Definition
 *An audio bus (also called an audio channel) can be considered a place that audio is channeled through on the way to playback through a device's speakers. Audio data can be modified and re-routed by an audio bus.* - [Godot Documentation](https://docs.godotengine.org/en/latest/tutorials/audio/audio_buses.html)
@@ -56,15 +56,15 @@ In Godot, you can find the Audio Bus settings at the bottom of the editor next t
 There is a single "Master" audio bus present through which all audio is played by default. You can set many things for each bus, such as the **volume**, **audio effects**, or **route bus** through another one (dropdown at the bottom).
 
 #### Our Setup
-We will create a very standard audio bus setup. Please **recreate the audio buses** as seen in the following picture:
+We will create a very standard audio bus setup. Please **recreate the audio busses** as seen in the following picture:
 
 ![](img/AudioBusSetup.png)
 
 > aside negative
-> Make sure to **name the buses the same** as I did, since I already connected audio sliders to these bus names, more on that later on.
+> Make sure to **name the busses the same** as I did, since I already connected audio sliders to these bus names, more on that later on.
 
 > aside positive
-> **Bus routing** can be used to composite different buses. In our case, we will route all the buses to the `Master Bus`. This way, the `Master Bus` will control the volume of all the other buses. 
+> **Bus routing** can be used to composite different busses. In our case, we will route all the busses to the `Master Bus`. This way, the `Master Bus` will control the volume of all the other busses. 
 
 
 ### Audio Nodes
@@ -429,7 +429,7 @@ I would be very grateful if you could take a moment to fill out a **very short f
 ### Recap
 Let's look at what we did in this lab.
 - First, we looked at the `Audio` folder that I added
-- Next, we learned what **audio buses** are and how they are used in Godot
+- Next, we learned what **audio busses** are and how they are used in Godot
 - We created the **audio bus** setup that we needed
 - Then, we learned about all the **Audio nodes** that Godot has.
 - After the intro, we made simple **3D spacial audio** play and **reimported audio to loop**.
