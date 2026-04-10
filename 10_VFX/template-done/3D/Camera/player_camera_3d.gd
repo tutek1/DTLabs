@@ -60,6 +60,7 @@ func set_user_rotation_control(value : bool, fixed_rotation : Vector3 = rotation
 
 func set_temp_target(target : Node3D) -> void:
 	_temp_target = target
+	_accumulated_rot = Vector2.ZERO
 
 func get_camera() -> Camera3D:
 	return camera_3d
