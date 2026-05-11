@@ -69,7 +69,7 @@ Duration: hh:mm:ss
 Let's open the `player.tscn` scene and set up the player model.
 
 ### Put the Player in the Correct Place
-As you can see, the player is not in the right place. The capsule collider is way off, and the `InteractArea`, which signals the front of the player, is on the side.
+As you can see, the player is not in the right place. The capsule collider is way off, and the `InteractArea`, which should be in front of the player, but it is on the side.
 
 Please **rotate** and **move** the `Mesh` node to match the collider. Here is the before and after image:
 
@@ -145,12 +145,12 @@ Here you can see the weight painting of the right leg and foot of the player:
 > Note that in the "knee" area, both bones have the same influence. You could say that the influence of the bones "cross-fades".
 
 ### Step 3: Posing
-The last step is to transform the bones into poses. You can see in the GIF below how the model reacts to moving the bones.
+Now you can transform the bones into poses. You can see in the GIF below how the model reacts to moving the bones.
 
 <img src="img/SkeletonAnim.gif" width="450"/>
 
 ### Step 4: Animation
-Animations are made by capturing these poses in **keyframes** at set times. You can think of keyframes as the desired **transforms of the bones** of the model. The final animation is then only a sequence of these keyframes. The animation is then played by interpolating from one keyframe to another, creating a seamless motion, while storing only a fraction of the data.
+The last step is to make the animations by capturing these poses in **keyframes** at set times. You can think of keyframes as the desired **transforms of the bones** of the model. The final animation is then only a sequence of these keyframes. The animation is then played by interpolating from one keyframe to another, creating a seamless motion, while storing only a fraction of the data.
 
 Here you can see the keyframes (gray and yellow dots) of all the bones for the player during the `WalkForward` animation:
 
@@ -648,7 +648,7 @@ This setting makes the player inherit the `velocity` and `angular_velocity` of b
 ## Rigidbody Physics
 Duration: hh:mm:ss
 
-This second part of the codelab will focus on physics, more precisely, rigidbody physics. A rigidbody (`RigidBody3D` in Godot) is a 3D physics body that is moved by a physics simulation.
+This second part of the codelab will focus on physics, more precisely, rigidbody physics. A rigidbody (`RigidBody3D` in 3D in Godot) is a physics body that is moved by the physics simulation of the engine.
 
 `RigidBody3D` implements complete 3D physics. It cannot be controlled directly. Instead, you must **apply forces** to it (gravity, impulses, etc.), and the physics simulation will calculate the resulting movement, rotation, react to collisions, and affect other physics bodies in its path.
 

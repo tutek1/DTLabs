@@ -266,7 +266,7 @@ func _update_hp() -> void:
 ```
 
 > aside positive
-> Health bars don't have to be only on the screen. **Diegetic health bars** are health bars that are present in the world realistically and believably (not just 3D UI). For example, in my game, I will also use the **robot's backpack** as a health indicator.
+> Health bars don't have to be only on the screen. **Diegetic health bars** are health bars that are present in the world realistically and believably (not just 3D UI). For example, in the final game, I will additionally use the **robot's backpack** as a health indicator. Here is a mockup:
 >
 > <img src="img/1BatteryFull.png" width="179"/> <img src="img/2BatteryMid.png" width="200"/> <img src="img/3BatteryLow.png" width="184"/>
 

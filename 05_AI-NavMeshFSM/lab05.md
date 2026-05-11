@@ -76,7 +76,7 @@ Autoload/Singletons are very useful for **tracking global values** (max reached 
 ## NavMesh
 Duration: hh:mm:ss
 
-Imagine you have an NPC character**, and you want them to navigate through a **maze**. We need to know where they **can and cannot walk**, and then somehow **plan a path** through the maze. We can solve this problem easily with a **NavMesh** and a **NavMeshAgent**:
+Imagine you have an **NPC character**, and you want them to navigate through a **maze**. We need to know where they **can and cannot walk**, and then somehow **plan a path** through the maze. We can solve this problem easily with a **NavMesh** and a **NavMeshAgent**:
 
 - **NavMesh** is a simplified representation of the environment using convex polygons that defines which areas of an environment are traversable by **NavMeshAgents**.
 - **NavMeshAgent** uses the **NavMesh** and a pathfinding algorithm like `A*` to plan a path from point A to point B.
@@ -354,8 +354,7 @@ Let's first outline a few definitions that will hold for our implementation (and
 - The enemy **starts in one** defined state.
 - States can be **changed** (transitioned from one to another) only upon **meeting set conditions**.
 - When a state is **entered**, its `state_enter()` **function is called**.
-- When the enemy is **in a state**, each **process tick**, it
-s `state_process()` **function is called**.
+- When the enemy is **in a state**, each **process tick**, the states `state_process()` **function is called**.
 - When a state is **exited**, its `state_exit()` **function is called**.
 
 
