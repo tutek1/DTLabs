@@ -109,7 +109,7 @@ I only changed the `Max Distance` to `30m`, but feel free to change the paramete
 The last thing we need to change is to make the sound loop.
 
 1. **Select** the `beep_boop_ambient.wav` sound file in the **FileSystem**
-2. **Switch** to the `Import` tab in the **Scene Hierarchy**
+2. **Switch** to the `Import` tab next to the **Scene Hierarchy**
 3. **Set** the `Loop Mode` to `Forward`
 4. **Press** the `Reimport` button
 
@@ -126,7 +126,7 @@ Duration: hh:mm:ss
 Simply playing audio with audio players, as we did in the last section, is a good practice for playing looping sounds (ambience) without any complex logic. Playing SFX like the player walking, enemy shooting, or music can be done in the same way, but making an `AudioManager` with helpful methods is the recommended approach.
 
 ### Overview of `AudioManager`
-Let's now look at the `AudioManager` I prepared.
+Let's now look at the `AudioManager` I prepared. You can open the script in `Audio/audio_manager.gd` to follow along.
 
 #### SFX settings and SFX bank
 The first thing the `AudioManager` hosts is an `enum` for all the different SFX that can be played. These `enums` are used as keys in the `sfx_bank`, which has the settings for each SFX.
@@ -190,7 +190,7 @@ Now add **all the other sound effects** in the same way. Keep the `Limit` and `V
 
 
 ### Task: Filling out the Play SFX methods
-Let's now fill out the missing parts of the `play_sfx...` methods, so that we can use them in the next section to play actual sounds.
+Let's now fill out the missing parts of the `play_sfx...` methods in the `Audio/audio_manager.gd` script, so that we can use them in the next section to play actual sounds.
 
 Try to **fill them out yourself**. Here are a few notes:
 - Use the `sfx_settings` variable for `stream`(use the `get_clip()` method), `volume`, and `unit_size`
@@ -337,7 +337,7 @@ However, since we are using a `BlendTree2D` for the walking animation, all 4 cal
 #### Using Physics
 The other way, which we will implement, is to **place colliders at the bottom of the feet** of the player and play SFX upon collision with the ground.
 
-1. **Open** the `player_3d.tscn` scene
+1. **Open** the `player.tscn` scene
 2. **Add** a `BoneAttachment3D` as the child of the `Skeleton3D`
 3. **Set** the `Bone Name` property to `RightFoot_end`
 4. **Add** an `Area3D` node as a child of the `BoneAttachment3D`
