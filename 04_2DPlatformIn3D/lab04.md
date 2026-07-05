@@ -12,7 +12,7 @@ Duration: hh:mm:ss
 
 This lab will combine the 2D minigame created in the previous lab with the 3D game we were making before. We will do this using `SubViewports` and learn how to use them.
 
-Today, we will look over:
+In this lab, we will look over:
 - See the **changes** I made from the last lab and save the **2D player scene**
 - How to set up a `SubViewport` and **view a 2D scene in 3D**
 - Learn about **signals**, how to **create** them and **use** them
