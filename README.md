@@ -3,7 +3,9 @@ A repository for the source files of the Godot labs used by the HRY course on CT
 
 
 ## How to run
-Here is a step-by-step guide on how to compile and host the codelabs:
+The labs are hosted on the official course website: [Godot HRY course](https://cent.felk.cvut.cz/courses/39HRY/godot/)
+
+Alternatively, here is a step-by-step guide on how to compile and host the codelabs locally:
 1. Install the `claat` command line tool from [claat](https://github.com/googlecodelabs/tools/tree/main/claat)
 2. Enter a folder with a lab (e.g. `DTLabs\01_Basics`)
 3. Compile using the command `claat export .\lab01.md`(put the correct lab number instead of 01)
