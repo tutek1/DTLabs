@@ -26,6 +26,9 @@ Here is the template for this lab. Please download it. There are scripts, audio 
   [Template Project](https://cent.felk.cvut.cz/courses/39HRY/godot/09_Audio/template.zip)
 </button>
 
+> aside positive
+> The complete demo version of the game, that I continued working on after the last lab can be found and played here: [https://tutek1.itch.io/gorodith](https://tutek1.itch.io/gorodith).
+
 
 ## Audio Basics
 Duration: hh:mm:ss
@@ -459,3 +462,6 @@ If you want to see what the finished template looks like after this lab, you can
 <button>
   [Template Done Project](https://cent.felk.cvut.cz/courses/39HRY/godot/09_Audio/template-done.zip)
 </button>
+
+> aside positive
+> The complete demo version of the game, that I continued working on after the last lab can be found and played here: [https://tutek1.itch.io/gorodith](https://tutek1.itch.io/gorodith).

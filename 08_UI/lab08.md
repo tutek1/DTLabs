@@ -24,6 +24,9 @@ Here is the template for this lab. Please **download it**, there are scripts, mo
   [Template Project](https://cent.felk.cvut.cz/courses/39HRY/godot/08_UI/template.zip)
 </button>
 
+> aside positive
+> The complete demo version of the game, that I continued working on after the last lab can be found and played here: [https://tutek1.itch.io/gorodith](https://tutek1.itch.io/gorodith).
+
 
 ## Changes Made in the Project
 Duration: hh:mm:ss
@@ -871,3 +874,6 @@ If you want to see what the finished template looks like after this lab, you can
 <button>
   [Template Done Project](https://cent.felk.cvut.cz/courses/39HRY/godot/08_UI/template-done.zip)
 </button>
+
+> aside positive
+> The complete demo version of the game, that I continued working on after the last lab can be found and played here: [https://tutek1.itch.io/gorodith](https://tutek1.itch.io/gorodith).

@@ -59,6 +59,9 @@ Duration: hh:mm:ss
 
 In this tutorial, we will create a game about a robot that resides within a computer and fights off malware that has infected it. It will primarily be a **3D platformer** with seamless **2D platforming and puzzle** sections. The complete **Game Design Document** (perhaps to inspire your own GDD) can be found here: [GDD]("https://github.com/tutek1/DTLabs/blob/main/GDD.pdf")
 
+> aside positive
+> The complete demo version of the game, that I continued working on after the last lab can be found and played here: [https://tutek1.itch.io/gorodith](https://tutek1.itch.io/gorodith).
+
 ### Getting and running the template
 Each lab will have a template project, which we will fill out together. This lab's template can be downloaded here:
 <button>

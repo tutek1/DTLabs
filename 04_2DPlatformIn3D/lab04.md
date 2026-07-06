@@ -26,6 +26,8 @@ Here is the template for this lab. Please download it, there are new scenes and 
   [Template Project](https://cent.felk.cvut.cz/courses/39HRY/godot/04_2DPlatformIn3D/template.zip)
 </button>
 
+> aside positive
+> The complete demo version of the game, that I continued working on after the last lab can be found and played here: [https://tutek1.itch.io/gorodith](https://tutek1.itch.io/gorodith).
 
 
 
@@ -916,3 +918,6 @@ If you want to see what the finished template looks like after this lab, you can
 <button>
   [Template Done Project](https://cent.felk.cvut.cz/courses/39HRY/godot/04_2DPlatformIn3D/template-done.zip)
 </button>
+
+> aside positive
+> The complete demo version of the game, that I continued working on after the last lab can be found and played here: [https://tutek1.itch.io/gorodith](https://tutek1.itch.io/gorodith).

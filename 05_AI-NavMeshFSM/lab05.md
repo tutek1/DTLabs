@@ -24,6 +24,9 @@ Here is the template for this lab. Please **download it**. There are new folders
   [Template Project](https://cent.felk.cvut.cz/courses/39HRY/godot/05_AI-NavMeshFSM/template.zip)
 </button>
 
+> aside positive
+> The complete demo version of the game, that I continued working on after the last lab can be found and played here: [https://tutek1.itch.io/gorodith](https://tutek1.itch.io/gorodith).
+
 
 
 ## Project Changes
@@ -969,3 +972,6 @@ If you want to see what the finished template looks like after this lab, you can
 
 Or you can watch this video to see how the completed enemy behaves:
 <video id=fse6tLpUbwI></video>
+
+> aside positive
+> The complete demo version of the game, that I continued working on after the last lab can be found and played here: [https://tutek1.itch.io/gorodith](https://tutek1.itch.io/gorodith).
